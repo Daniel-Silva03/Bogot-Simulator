@@ -1,0 +1,457 @@
+<title>Bogotá Sintética</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#e9ece7; --surface:#f7f9f6; --surface-2:#dfe4dd;
+  --ink:#16211c; --ink-2:#48564f; --ink-3:#7d8b83;
+  --line:#c8d0c8; --line-soft:#d8ded7;
+  --teja:#b2452c; --paramo:#2f6b5e; --cielo:#5a7d93;
+  --focus:#b2452c;
+  --shadow:0 1px 2px rgba(22,33,28,.07), 0 8px 24px -12px rgba(22,33,28,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0d1512; --surface:#151f1a; --surface-2:#1e2b25;
+    --ink:#e7ece8; --ink-2:#a7b5ac; --ink-3:#77857c;
+    --line:#2b3a33; --line-soft:#223029;
+    --teja:#e07a5c; --paramo:#63b09c; --cielo:#8fb2c7;
+    --focus:#e07a5c;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0d1512; --surface:#151f1a; --surface-2:#1e2b25;
+  --ink:#e7ece8; --ink-2:#a7b5ac; --ink-3:#77857c;
+  --line:#2b3a33; --line-soft:#223029;
+  --teja:#e07a5c; --paramo:#63b09c; --cielo:#8fb2c7;
+  --focus:#e07a5c;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1320px; margin:0 auto; padding-inline:16px; padding-block:clamp(24px,4vw,52px);
+      display:flex; flex-direction:column; gap:28px}
+
+/* ---------- encabezado ---------- */
+header{display:flex; flex-direction:column; gap:14px; max-width:68ch}
+.eyebrow{font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--teja)}
+h1{font-family:'Fraunces',Georgia,serif; font-weight:400; font-size:clamp(34px,6vw,58px);
+   line-height:1.02; margin:0; letter-spacing:-.015em; text-wrap:balance}
+h1 em{font-style:italic; color:var(--paramo)}
+.sub{margin:0; color:var(--ink-2); font-size:clamp(15px,1.6vw,17px); max-width:62ch}
+
+/* ---------- cifras ---------- */
+.cifras{display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.cifra{flex:1 1 150px; padding:16px 20px 16px 0; display:flex; flex-direction:column; gap:2px}
+.cifra + .cifra{padding-left:20px; border-left:1px solid var(--line-soft)}
+.cifra b{font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:clamp(24px,3.4vw,32px);
+  line-height:1.05; font-variant-numeric:tabular-nums}
+.cifra span{font-size:12.5px; color:var(--ink-3); line-height:1.35}
+
+/* ---------- tablero ---------- */
+.tablero{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:22px; align-items:start}
+@media (max-width:860px){ .tablero{grid-template-columns:1fr} }
+
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:4px}
+.mapa-caja{position:relative; overflow:hidden}
+svg.mapa{display:block; width:100%; height:auto; touch-action:manipulation}
+/* vector-effect: sin esto el ancho de trazo se mide en unidades del viewBox,
+   que aquí son grados de longitud (~0,25 de ancho total): un trazo de 0,7
+   taparía el mapa entero. */
+.loc{stroke:var(--surface); stroke-width:.7; vector-effect:non-scaling-stroke;
+     stroke-linejoin:round; cursor:pointer; transition:fill .35s ease, opacity .2s ease}
+.loc:hover{opacity:.82}
+.loc.sel{stroke:var(--ink); stroke-width:1.6}
+.agente{pointer-events:none}
+.etq{font-family:'Archivo',sans-serif; fill:var(--ink); paint-order:stroke;
+     stroke:var(--surface); stroke-width:2.5px; vector-effect:non-scaling-stroke;
+     pointer-events:none; text-anchor:middle; font-weight:500}
+#capaEtq{opacity:0; transition:opacity .25s}
+#capaEtq.on{opacity:1}
+
+/* controles */
+.barra{display:flex; flex-wrap:wrap; gap:8px; padding:12px 14px; border-bottom:1px solid var(--line-soft)}
+.grupo{display:flex; border:1px solid var(--line); border-radius:3px; overflow:hidden}
+button{font:inherit; font-size:12.5px; color:var(--ink-2); background:var(--surface);
+  border:0; padding:6px 11px; cursor:pointer; transition:background .15s, color .15s}
+button + button{border-left:1px solid var(--line)}
+button:hover{background:var(--surface-2); color:var(--ink)}
+button[aria-pressed="true"]{background:var(--ink); color:var(--surface)}
+button:focus-visible{outline:2px solid var(--focus); outline-offset:-2px}
+
+.leyenda{display:flex; align-items:center; gap:10px; padding:10px 14px; border-top:1px solid var(--line-soft);
+  font-size:12px; color:var(--ink-3); flex-wrap:wrap}
+.rampa{height:9px; flex:1 1 130px; min-width:110px; border-radius:2px; border:1px solid var(--line-soft)}
+.rampa-lab{font-family:'IBM Plex Mono',monospace; font-size:11px; font-variant-numeric:tabular-nums}
+
+/* ---------- inspector ---------- */
+.insp{padding:18px 20px 20px; display:flex; flex-direction:column; gap:16px}
+.insp h2{font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:26px; margin:0; line-height:1.1}
+.insp .cod{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-3); letter-spacing:.08em}
+.filas{display:flex; flex-direction:column; gap:0; margin:0}
+.fila{display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-top:1px solid var(--line-soft); font-size:13.5px}
+.fila dt{color:var(--ink-2); margin:0}
+.fila dd{margin:0; font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums; text-align:right}
+.comp{display:flex; flex-direction:column; gap:12px}
+.comp h3{margin:0; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); font-weight:600}
+.bars{display:flex; flex-direction:column; gap:5px}
+.bar{display:grid; grid-template-columns:96px 1fr 34px; align-items:center; gap:8px; font-size:12px}
+.bar i{font-style:normal; color:var(--ink-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bar u{text-decoration:none; height:7px; border-radius:1px; background:var(--paramo); display:block; min-width:1px}
+.bar b{font-family:'IBM Plex Mono',monospace; font-weight:400; font-size:11.5px; color:var(--ink-3); text-align:right;
+  font-variant-numeric:tabular-nums}
+
+.banda{position:relative; height:34px; margin-top:2px}
+.banda .esc{position:absolute; inset:auto 0 0 0; height:5px; background:var(--surface-2); border-radius:3px}
+.banda .ruido{position:absolute; bottom:0; height:5px; background:var(--cielo); opacity:.55; border-radius:3px}
+.banda .pt{position:absolute; bottom:-3px; width:2px; height:11px; background:var(--teja)}
+.banda .cd{position:absolute; bottom:-3px; width:2px; height:11px; background:var(--ink-3)}
+.banda .tick{position:absolute; bottom:8px; font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-3)}
+
+/* ---------- aviso ---------- */
+.aviso{border:1px solid var(--line); border-left:3px solid var(--teja); border-radius:3px;
+  background:var(--surface); padding:18px 20px; display:flex; flex-direction:column; gap:10px}
+.aviso h3{margin:0; font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:20px; line-height:1.15}
+.aviso p{margin:0; color:var(--ink-2); font-size:14px; max-width:78ch}
+.aviso code{font-family:'IBM Plex Mono',monospace; font-size:12.5px; background:var(--surface-2);
+  padding:1px 5px; border-radius:2px}
+
+footer{border-top:1px solid var(--line); padding-top:16px; color:var(--ink-3); font-size:12.5px;
+  display:flex; flex-direction:column; gap:5px}
+footer b{font-weight:500; color:var(--ink-2)}
+
+@media (prefers-reduced-motion:reduce){ *{transition:none !important; animation:none !important} }
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Bogotá Social Simulator · Fase 9 · Capa visual</p>
+  <h1>Mil personas sintéticas, <em>puestas sobre la ciudad</em></h1>
+  <p class="sub">Cada punto es un agente del simulador: edad, sexo, estrato, educación y opinión salen de microdatos reales.
+     El mapa es la geometría oficial de Catastro Distrital. Todavía no hay simulación aquí: esto es la ciudad y su población,
+     antes de que nada se mueva.</p>
+</header>
+
+<section class="cifras" id="cifras"></section>
+
+<section class="tablero">
+  <div class="panel mapa-caja">
+    <div class="barra">
+      <div class="grupo" role="group" aria-label="Capa">
+        <button data-capa="poblacion" aria-pressed="true">Población</button>
+        <button data-capa="agentes" aria-pressed="false">Agentes</button>
+        <button data-capa="opinion" aria-pressed="false">Opinión</button>
+      </div>
+      <div class="grupo" role="group" aria-label="Extensión">
+        <button data-vista="urbana" aria-pressed="true">Urbana</button>
+        <button data-vista="total" aria-pressed="false">Con Sumapaz</button>
+      </div>
+      <div class="grupo" role="group" aria-label="Nombres">
+        <button id="btnEtq" aria-pressed="false">Nombres</button>
+      </div>
+    </div>
+    <div id="lienzo"></div>
+    <div class="leyenda" id="leyenda"></div>
+  </div>
+
+  <div class="panel insp" id="insp"></div>
+</section>
+
+<section class="aviso" id="aviso"></section>
+
+<footer>
+  <p><b>Geometría:</b> Unidad Administrativa Especial de Catastro Distrital, capa <code>Localidad</code>, simplificada a ~70 m para dibujo.</p>
+  <p><b>Población:</b> 1.000 agentes sintéticos, versión <code>v0.3-DI-M1</code>; marginal territorial de población de 18 años o más.</p>
+  <p><b>Advertencia de método:</b> la posición de cada punto dentro de su localidad es aleatoria. El modelo no tiene geografía por debajo de la localidad; los puntos no son domicilios.</p>
+</footer>
+
+</div>
+
+<script id="datos" type="application/json">/*__DATOS__*/</script>
+<script>
+(() => {
+const D = JSON.parse(document.getElementById('datos').textContent);
+const L = D.localidades, C = D.ciudad;
+const fmt = n => n.toLocaleString('es-CO');
+const f1 = n => n.toLocaleString('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1});
+const f2 = n => n.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* ---------- proyección ---------- */
+const lat0 = 4.6, k = Math.cos(lat0*Math.PI/180);
+const px = lon => lon*k, py = lat => -lat;
+const bbox = codes => {
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
+  L.filter(l=>!codes || codes.includes(l.codigo)).forEach(l=>{
+    const partes = l.geometry.type==='Polygon' ? [l.geometry.coordinates] : l.geometry.coordinates;
+    partes.forEach(p=>p.forEach(r=>r.forEach(([lo,la])=>{
+      const X=px(lo), Y=py(la);
+      if(X<x0)x0=X; if(X>x1)x1=X; if(Y<y0)y0=Y; if(Y>y1)y1=Y;
+    })));
+  });
+  return [x0,y0,x1,y1];
+};
+const URB = L.map(l=>l.codigo).filter(c=>c!=='20');
+const VIS = { urbana: bbox(URB), total: bbox(null) };
+
+const dPath = geom => {
+  const partes = geom.type==='Polygon' ? [geom.coordinates] : geom.coordinates;
+  let d='';
+  partes.forEach(p=>p.forEach(r=>{
+    r.forEach(([lo,la],i)=>{ d += (i?'L':'M') + px(lo).toFixed(5) + ' ' + py(la).toFixed(5); });
+    d += 'Z';
+  }));
+  return d;
+};
+
+/* ---------- escalas de color ---------- */
+const mez = (a,b,t) => a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+// secuencial verde-páramo → teja, pasando por arena
+const RAMPA = [[233,238,232],[186,206,190],[131,173,155],[ 79,134,120],[ 43, 92, 82]];
+const RAMPA_OP = [[ 90,125,147],[152,178,192],[228,224,214],[214,150,124],[178, 69, 44]];
+const interp = (ramp,t) => {
+  t = Math.max(0,Math.min(1,t));
+  const s = t*(ramp.length-1), i = Math.min(ramp.length-2, Math.floor(s));
+  return rgb(mez(ramp[i],ramp[i+1],s-i));
+};
+
+let capa='poblacion', vista='urbana', escalaOp='real', sel=null, etq=false;
+
+const maxPob = Math.max(...L.map(l=>l.poblacion_18mas||0));
+const opMin = Math.min(...L.filter(l=>l.opinion_media!=null).map(l=>l.opinion_media));
+const opMax = Math.max(...L.filter(l=>l.opinion_media!=null).map(l=>l.opinion_media));
+
+function colorDe(l){
+  if(capa==='poblacion') return interp(RAMPA, Math.sqrt((l.poblacion_18mas||0)/maxPob));
+  if(capa==='opinion'){
+    if(l.opinion_media==null) return 'var(--surface-2)';
+    const [a,b] = escalaOp==='real' ? [C.escala[0],C.escala[1]] : [opMin,opMax];
+    return interp(RAMPA_OP, (l.opinion_media-a)/(b-a));
+  }
+  return 'var(--surface-2)';
+}
+
+/* ---------- dibujo ---------- */
+const NS='http://www.w3.org/2000/svg';
+const lienzo = document.getElementById('lienzo');
+const svg = document.createElementNS(NS,'svg');
+svg.setAttribute('class','mapa'); svg.setAttribute('role','img');
+svg.setAttribute('aria-label','Mapa de las 20 localidades de Bogotá');
+const gLoc = document.createElementNS(NS,'g');
+const gAg  = document.createElementNS(NS,'g'); gAg.setAttribute('class','agente');
+const gEtq = document.createElementNS(NS,'g'); gEtq.id='capaEtq';
+svg.append(gLoc,gAg,gEtq); lienzo.append(svg);
+
+const rutas = {}, etiquetas = {};
+L.forEach(l=>{
+  const p = document.createElementNS(NS,'path');
+  p.setAttribute('d', dPath(l.geometry));
+  p.setAttribute('class','loc');
+  p.setAttribute('tabindex','0');
+  p.setAttribute('role','button');
+  p.setAttribute('aria-label', l.nombre);
+  p.addEventListener('click', ()=>seleccionar(l.codigo));
+  p.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault(); seleccionar(l.codigo);} });
+  gLoc.append(p); rutas[l.codigo]=p;
+
+  const t = document.createElementNS(NS,'text');
+  t.setAttribute('class','etq');
+  t.setAttribute('x', px(l.centroide[0]).toFixed(4));
+  t.setAttribute('y', py(l.centroide[1]).toFixed(4));
+  t.textContent = l.nombre;
+  gEtq.append(t); etiquetas[l.codigo]=t;
+});
+
+const puntos = D.agentes.map(a=>{
+  const c = document.createElementNS(NS,'circle');
+  c.setAttribute('cx', px(a[0]).toFixed(5));
+  c.setAttribute('cy', py(a[1]).toFixed(5));
+  c.setAttribute('r','0.0016');
+  c.setAttribute('fill','var(--teja)');
+  c.setAttribute('fill-opacity','.72');
+  gAg.append(c);
+  return c;
+});
+
+function encuadre(){
+  // En la vista urbana Sumapaz se oculta: es el 78 % del área del Distrito y el
+  // 0,04 % de su población adulta, y dejarlo dibujado hunde la ciudad construida
+  // en una esquina del encuadre.
+  const ver20 = vista === 'total';
+  rutas['20'].style.display = ver20 ? '' : 'none';
+  etiquetas['20'].style.display = ver20 ? '' : 'none';
+  const l20 = L.find(l=>l.codigo==='20');
+  for(let i=l20.indice_puntos[0]; i<l20.indice_puntos[1]; i++) puntos[i].style.display = ver20 ? '' : 'none';
+
+  const [x0,y0,x1,y1] = VIS[vista];
+  const m = (x1-x0)*0.03;
+  svg.setAttribute('viewBox', `${x0-m} ${y0-m} ${x1-x0+2*m} ${y1-y0+2*m}`);
+  const esc = (x1-x0+2*m);
+  puntos.forEach(c=>c.setAttribute('r', (esc*0.0032).toFixed(6)));
+  gEtq.querySelectorAll('.etq').forEach(t=>t.setAttribute('font-size',(esc*0.019).toFixed(4)));
+  svg.style.aspectRatio = `${x1-x0+2*m} / ${y1-y0+2*m}`;
+}
+
+function pintar(){
+  L.forEach(l=>{
+    rutas[l.codigo].setAttribute('fill', colorDe(l));
+    rutas[l.codigo].classList.toggle('sel', l.codigo===sel);
+  });
+  gAg.style.display = capa==='agentes' ? '' : 'none';
+  gEtq.classList.toggle('on', etq);
+  leyenda();
+}
+
+/* ---------- leyenda ---------- */
+function leyenda(){
+  const el = document.getElementById('leyenda');
+  if(capa==='agentes'){
+    el.innerHTML = `<span>1.000 agentes. Cada punto es una persona sintética; su posición dentro de la localidad es aleatoria.</span>`;
+    return;
+  }
+  const ramp = capa==='poblacion' ? RAMPA : RAMPA_OP;
+  const stops = Array.from({length:9},(_,i)=>interp(ramp,i/8)).join(',');
+  if(capa==='poblacion'){
+    el.innerHTML = `<span class="rampa-lab">0</span>
+      <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
+      <span class="rampa-lab">${fmt(maxPob)}</span>
+      <span>personas de 18 años o más</span>`;
+  }else{
+    const [a,b] = escalaOp==='real' ? [C.escala[0],C.escala[1]] : [opMin,opMax];
+    el.innerHTML = `<span class="rampa-lab">${f2(a)}</span>
+      <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
+      <span class="rampa-lab">${f2(b)}</span>
+      <span class="grupo" style="margin-left:auto">
+        <button data-esc="real" aria-pressed="${escalaOp==='real'}">Escala 1–5</button>
+        <button data-esc="rango" aria-pressed="${escalaOp!=='real'}">Escala al rango</button>
+      </span>`;
+    el.querySelectorAll('[data-esc]').forEach(b=>b.addEventListener('click',()=>{
+      escalaOp = b.dataset.esc==='real' ? 'real' : 'rango'; pintar(); aviso();
+    }));
+  }
+}
+
+/* ---------- inspector ---------- */
+function barras(obj, total, orden){
+  const claves = orden ? orden.filter(k=>k in obj) : Object.keys(obj);
+  const max = Math.max(...claves.map(k=>obj[k]), 1);
+  return `<div class="bars">` + claves.map(k=>
+    `<div class="bar"><i>${k}</i><u style="width:${(obj[k]/max*100).toFixed(1)}%"></u><b>${obj[k]}</b></div>`
+  ).join('') + `</div>`;
+}
+
+function seleccionar(cod){ sel = (sel===cod) ? null : cod; pintar(); inspector(); }
+
+function inspector(){
+  const el = document.getElementById('insp');
+  if(!sel){
+    el.innerHTML = `
+      <p class="cod">Ciudad completa</p>
+      <h2>Bogotá D.C.</h2>
+      <dl class="filas">
+        <div class="fila"><dt>Localidades</dt><dd>20</dd></div>
+        <div class="fila"><dt>Población 18+</dt><dd>${fmt(L.reduce((s,l)=>s+(l.poblacion_18mas||0),0))}</dd></div>
+        <div class="fila"><dt>Agentes sintéticos</dt><dd>${fmt(C.n_agentes)}</dd></div>
+        <div class="fila"><dt>Opinión media</dt><dd>${f2(C.opinion_media)} / 5</dd></div>
+        <div class="fila"><dt>Desviación dentro de cada localidad</dt><dd>${f2(C.sd_dentro)}</dd></div>
+        <div class="fila"><dt>Desviación entre localidades</dt><dd>${f2(C.sd_entre)}</dd></div>
+      </dl>
+      <p style="margin:0;color:var(--ink-2);font-size:13.5px">
+        Haz clic en una localidad para ver su composición. La dispersión <b>dentro</b> de una localidad es
+        ${(C.sd_dentro/C.sd_entre).toFixed(1)} veces la dispersión <b>entre</b> localidades: dos vecinos de cuadra
+        se parecen entre sí mucho menos de lo que se parecen dos localidades.</p>`;
+    return;
+  }
+  const l = L.find(x=>x.codigo===sel);
+  const c = l.composicion || {};
+  const dif = l.opinion_media!=null ? l.opinion_media - C.opinion_media : null;
+  const signif = (l.opinion_ee!=null && dif!=null) ? Math.abs(dif) > 2*l.opinion_ee : null;
+
+  // banda de ruido en escala 1-5
+  const a=C.escala[0], b=C.escala[1], pos = v => ((v-a)/(b-a)*100);
+  const banda = l.opinion_ee!=null ? `
+    <div class="banda">
+      <span class="tick" style="left:0">${a}</span>
+      <span class="tick" style="right:0">${b}</span>
+      <span class="esc"></span>
+      <span class="ruido" style="left:${pos(l.opinion_media-2*l.opinion_ee).toFixed(2)}%;width:${(pos(l.opinion_media+2*l.opinion_ee)-pos(l.opinion_media-2*l.opinion_ee)).toFixed(2)}%"></span>
+      <span class="cd" style="left:${pos(C.opinion_media).toFixed(2)}%" title="media de la ciudad"></span>
+      <span class="pt" style="left:${pos(l.opinion_media).toFixed(2)}%" title="media de la localidad"></span>
+    </div>` : '';
+
+  el.innerHTML = `
+    <p class="cod">LOCALIDAD ${l.codigo}</p>
+    <h2>${l.nombre}</h2>
+    <dl class="filas">
+      <div class="fila"><dt>Población 18+</dt><dd>${fmt(l.poblacion_18mas)}</dd></div>
+      <div class="fila"><dt>Peso en la ciudad</dt><dd>${(l.share*100).toFixed(2)} %</dd></div>
+      <div class="fila"><dt>Agentes (observados / esperados)</dt><dd>${l.n_agentes} / ${f1(l.esperado)}</dd></div>
+      ${l.opinion_media!=null?`<div class="fila"><dt>Opinión media</dt><dd>${f2(l.opinion_media)} / 5</dd></div>`:''}
+      ${l.opinion_ee!=null?`<div class="fila"><dt>Error estándar (con efecto de diseño ${f2(D.deff)})</dt><dd>± ${f2(l.opinion_ee)}</dd></div>`:''}
+      ${dif!=null?`<div class="fila"><dt>Diferencia con la ciudad</dt><dd>${dif>=0?'+':'−'}${f2(Math.abs(dif))}</dd></div>`:''}
+    </dl>
+    ${banda}
+    ${signif!=null?`<p style="margin:0;font-size:13px;color:var(--ink-2)">
+      ${signif
+        ? `Esta diferencia <b>sí</b> supera el doble de su error estándar.`
+        : `La media de ${l.nombre} <b>no</b> se distingue de la media de la ciudad: la barra azul es el margen de ruido, y la marca gris (ciudad) cae dentro.`}</p>`:''}
+    ${c.edad?`<div class="comp"><h3>Edad</h3>${barras(c.edad,l.n_agentes,['18-29','30-44','45-59','60+'])}</div>`:''}
+    ${c.sexo?`<div class="comp"><h3>Sexo</h3>${barras(c.sexo,l.n_agentes)}</div>`:''}
+    ${c.estrato?`<div class="comp"><h3>Estrato</h3>${barras(c.estrato,l.n_agentes)}</div>`:''}
+    ${c.educacion?`<div class="comp"><h3>Nivel educativo</h3>${barras(c.educacion,l.n_agentes,['Ninguno/primaria','Secundaria','Técnico/tecnológico','Universitario o más'])}</div>`:''}`;
+}
+
+/* ---------- cifras y aviso ---------- */
+function cifras(){
+  const pob = L.reduce((s,l)=>s+(l.poblacion_18mas||0),0);
+  document.getElementById('cifras').innerHTML = [
+    [fmt(pob), 'personas de 18 años o más en Bogotá (marginal territorial del proyecto)'],
+    ['20', 'localidades, geometría oficial de Catastro Distrital'],
+    [fmt(C.n_agentes), 'agentes sintéticos ubicados, uno por punto'],
+    [(C.fraccion_ruido*100).toFixed(0)+' %', 'de la diferencia de opinión entre localidades es ruido muestral, no diferencia real']
+  ].map(([b,s])=>`<div class="cifra"><b>${b}</b><span>${s}</span></div>`).join('');
+}
+
+function aviso(){
+  const estirada = escalaOp!=='real' && capa==='opinion';
+  document.getElementById('aviso').innerHTML = `
+    <h3>${estirada ? 'Esto es exactamente el mapa que no hay que publicar' : 'Por qué la capa de opinión se ve casi plana'}</h3>
+    <p>Las 20 medias de opinión van de <code>${f2(opMin)}</code> a <code>${f2(opMax)}</code> sobre una escala de 1 a 5.
+       Con 1.000 agentes, el error estándar de cada media —corregido por el efecto de diseño medido en la Encuesta de
+       Percepción Ciudadana (<code>${f2(D.deff)}</code>)— es de ±${f2(Math.min(...L.filter(l=>l.opinion_ee!=null).map(l=>l.opinion_ee)))} a
+       ±${f2(Math.max(...L.filter(l=>l.opinion_ee!=null).map(l=>l.opinion_ee)))}.
+       Al descontar ese ruido, la dispersión real entre localidades que queda es <code>${f2(C.sd_entre_real)}</code>:
+       <b>el ${(C.fraccion_ruido*100).toFixed(0)} % de lo que se ve es error de muestreo</b>.</p>
+    <p>${estirada
+      ? 'Con la escala estirada al rango observado, la misma ciudad aparece partida en dos. Ningún dato cambió: solo se estiró el color sobre 0,69 puntos de una escala de 4. Esa es la razón por la que este tablero trae las dos escalas y no deja la estirada por defecto.'
+      : 'Por eso la escala va de 1 a 5, el rango real de la pregunta, y no del mínimo al máximo observado. Prueba el botón «Escala al rango» en la leyenda para ver el mismo mapa con la escala estirada: es el gráfico más vendedor y el más engañoso que puede salir de este proyecto.'}</p>`;
+}
+
+/* ---------- eventos ---------- */
+document.querySelectorAll('[data-capa]').forEach(b=>b.addEventListener('click',()=>{
+  capa = b.dataset.capa;
+  document.querySelectorAll('[data-capa]').forEach(o=>o.setAttribute('aria-pressed', String(o===b)));
+  pintar(); aviso();
+}));
+document.querySelectorAll('[data-vista]').forEach(b=>b.addEventListener('click',()=>{
+  vista = b.dataset.vista;
+  document.querySelectorAll('[data-vista]').forEach(o=>o.setAttribute('aria-pressed', String(o===b)));
+  encuadre();
+}));
+document.getElementById('btnEtq').addEventListener('click', e=>{
+  etq = !etq; e.currentTarget.setAttribute('aria-pressed', String(etq)); pintar();
+});
+
+encuadre(); pintar(); inspector(); cifras(); aviso();
+})();
+</script>

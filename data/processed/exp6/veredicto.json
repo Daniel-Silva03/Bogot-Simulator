@@ -1,0 +1,43 @@
+{
+  "S1_algun_mecanismo_hace_la_joroba": {
+    "pasa": false,
+    "proporcion_por_familia": {
+      "cognicion_motivada": 0.0,
+      "contraccion": 0.0,
+      "friedkin_johnsen": 0.0
+    },
+    "umbral": 0.05,
+    "variacion_sd_observada": [
+      0.2376,
+      -0.0326,
+      -0.0066,
+      -0.148
+    ]
+  },
+  "S2_el_baseline_acierta_media_y_sd": {
+    "pasa": true,
+    "max_error_media": 1.3322676295501878e-15,
+    "max_error_sd": 8.841255221270217e-07
+  },
+  "S3_los_de_solo_u_ajustan_peor_que_en_exp4": {
+    "pasa": true,
+    "mejor_w1_por_anio": 0.1739,
+    "referencia_exp4_por_anio": 0.0883
+  },
+  "S4_gamma_negativo_primero_positivo_despues": {
+    "pasa": true,
+    "gamma_mediano_por_tramo": {
+      "2017": -0.01262,
+      "2019": 0.0044,
+      "2021": 0.00088,
+      "2023": 0.02107
+    }
+  },
+  "S5_ningun_mecanismo_le_gana_al_baseline": {
+    "pasa": true,
+    "mejor_mecanismo": 0.6956,
+    "mejor_baseline_u_gamma": 0.5786,
+    "margen_pct": -20.2,
+    "mejor_modelo_con_mecanismo": "cm_a0.3_l0.3_k3.0_r0.9"
+  }
+}

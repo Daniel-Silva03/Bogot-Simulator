@@ -1,0 +1,22 @@
+{
+  "P1_nivel": {
+    "pasa": false,
+    "movimiento_max_simulado": 0.0398,
+    "recorrido_observado": 0.2581,
+    "razon": 6.5
+  },
+  "P2_dispersion": {
+    "pasa": false,
+    "mejor_error_sd": 0.0692
+  },
+  "P3_no_monotonia": {
+    "pasa": false,
+    "observado_tiene_minimo_interior": true,
+    "corridas_con_minimo_interior": 0,
+    "corridas_totales": 720
+  },
+  "P4_colas": {
+    "pasa": false,
+    "corridas_con_maximo_interior_cola_baja": 0
+  }
+}

@@ -1,0 +1,11 @@
+# Normaliza finales de línea: el repo guarda LF, Windows revisa CRLF.
+* text=auto
+
+*.py      text diff=python
+*.md      text
+*.yaml    text
+*.yml     text
+*.csv     text
+*.json    text
+*.geojson text
+*.html    text

@@ -1,0 +1,41 @@
+{
+  "R1_gana_a_friedkin_johnsen": {
+    "pasa": true,
+    "mejor_cognicion_motivada": 0.2817,
+    "mejor_friedkin_johnsen": 0.2978,
+    "mediana_cognicion_motivada": 0.418,
+    "mediana_friedkin_johnsen": 0.3151
+  },
+  "R2_contraccion_tardia": {
+    "pasa": true,
+    "proporcion_corridas_tardias": 0.0525,
+    "umbral_proporcion": 0.05,
+    "corridas_tardias": 102,
+    "corridas": 1944,
+    "tardias_en_friedkin_johnsen": 0,
+    "tardias_en_contraccion": 0,
+    "perfil_observado": [
+      0.0326,
+      0.0066,
+      0.148
+    ]
+  },
+  "R3_gana_al_control_sin_red": {
+    "pasa": true,
+    "mejor_cognicion_motivada": 0.2817,
+    "mejor_contraccion_sin_red": 0.3463,
+    "margen_pct": 18.7
+  },
+  "R4_bimodalidad": {
+    "pasa_en_las_mejores": true,
+    "bimodalidad_max_en_las_5_mejores": 0.4178,
+    "pct_malla_evaluable_que_fragmenta": 4.8,
+    "corridas_evaluables": 1702,
+    "corridas": 1944
+  },
+  "R5_error_de_dispersion": {
+    "pasa": false,
+    "mejor_error_sd": 0.0495,
+    "referencia_experimento_4": 0.0453
+  }
+}

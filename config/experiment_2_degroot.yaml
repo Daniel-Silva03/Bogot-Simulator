@@ -1,0 +1,40 @@
+# config/experiment_2.yaml
+#
+# Experimento 2 de RESEARCH.md (sección 50): ¿cuánto importa la estructura
+# de la red de interacción?
+#
+# Misma población, mismo modelo de opinión, misma opinión inicial. Lo único
+# que cambia entre configuraciones es el generador de red y sus parámetros.
+# El resultado de esto es lo que cierra A07 (PROJECT_CONTEXT.md).
+
+experiment_id: "exp2_baseline_degroot_v1"
+
+# Población ponderada (D14). La v1 se produjo con muestreo aleatorio simple
+# y arrastra el sobre-muestreo territorial de Multipropósito.
+poblacion: "data/processed/poblacion_sintetica_v2.csv"
+n_agentes: 1000
+
+# DeGroot: baseline obligatorio (A11). Sin parámetros libres.
+
+opinion_model: "degroot"
+
+n_pasos: 100
+n_runs: 200
+seed_base: 42
+
+# Escala de la variable de opinión (confianza institucional, 1-5). Fijarla
+# explícitamente hace que el índice de Esteban-Ray sea comparable entre
+# configuraciones: sin esto se usaría el rango observado de cada corrida, y
+# una que converge a consenso tendría bins mucho más finos que una dispersa.
+rango_opinion: [1, 5]
+
+guardar_series: true
+
+# 3 + 3 + 12 = 18 configuraciones. k̄ ya no es un rango supuesto: la ECP mide
+# la red cercana de Bogotá en media 5,35 / mediana 4 (D15), así que el barrido
+# se centra en 5 con 4 y 8 como sensibilidad. h sigue siendo un barrido de
+# sensibilidad sin objetivo empírico — NETWORK SPECIFICATION.md §2.1 y §5.1.
+network_sweep:
+  - {tipo: "aleatoria",   k_promedio: [4, 5, 8]}
+  - {tipo: "homofilica",  k_promedio: [4, 5, 8]}
+  - {tipo: "territorial", k_promedio: [4, 5, 8], h: [5, 10, 20, 50]}

@@ -1,0 +1,29 @@
+# Segundo escenario de ejemplo — una variable de cinco categorías.
+#
+# Sirve para ver el motor sobre un ítem de encuesta típico, donde la grilla
+# tiene cinco opciones y las barras del informe son legibles una por una.
+
+nombre: "Polarización sin cambio de nivel"
+descripcion: >
+  La confianza promedio no se mueve, pero la población se separa: la
+  dispersión crece un 8 % anual durante tres años. Es el escenario que más
+  cuesta imaginar mirando solo promedios, y el que el simulador sirve para
+  hacer visible.
+
+poblacion: data/processed/poblacion_epc2014.csv
+columna: opinion_t0
+etiqueta_variable: "Gestión del alcalde (escala 1-5)"
+
+corridas: 200
+semilla: 7
+
+periodos:
+  - etiqueta: "Año 1"
+    nivel:      {cambio: 0.0, incertidumbre: 0.05}
+    dispersion: {cambio: +0.10, incertidumbre: 0.03}
+  - etiqueta: "Año 2"
+    nivel:      {cambio: 0.0, incertidumbre: 0.06}
+    dispersion: {cambio: +0.10, incertidumbre: 0.04}
+  - etiqueta: "Año 3"
+    nivel:      {cambio: 0.0, incertidumbre: 0.07}
+    dispersion: {cambio: +0.10, incertidumbre: 0.05}

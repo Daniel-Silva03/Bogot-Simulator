@@ -1,0 +1,33 @@
+# Escenario de ejemplo — Bogotá Social Simulator
+#
+# Un escenario NO es una predicción. Es un supuesto declarado cuyas
+# consecuencias distribucionales calcula el motor. Los siete experimentos
+# pre-registrados del proyecto establecieron que no hay mecanismo de opinión
+# identificable con los datos disponibles, así que el nivel y la dispersión
+# los pone quien escribe este archivo, no el modelo.
+
+nombre: "Caída sostenida de la confianza institucional"
+descripcion: >
+  Tres años de deterioro continuo del nivel de confianza, del orden del que
+  se observó entre 2013 y 2017 en la ECP (−0,10 puntos por año), con la
+  dispersión creciendo levemente: la población no solo confía menos, también
+  se divide más. La incertidumbre declarada refleja que ninguno de los dos
+  números se conoce, se suponen.
+
+poblacion: data/processed/poblacion_ecp2013.csv
+columna: opinion_t0
+etiqueta_variable: "Confianza institucional (índice 1-5)"
+
+corridas: 200
+semilla: 42
+
+periodos:
+  - etiqueta: "Año 1"
+    nivel:      {cambio: -0.10, incertidumbre: 0.04}
+    dispersion: {cambio: +0.02, incertidumbre: 0.02}
+  - etiqueta: "Año 2"
+    nivel:      {cambio: -0.10, incertidumbre: 0.05}
+    dispersion: {cambio: +0.02, incertidumbre: 0.02}
+  - etiqueta: "Año 3"
+    nivel:      {cambio: -0.10, incertidumbre: 0.06}
+    dispersion: {cambio: +0.02, incertidumbre: 0.03}

@@ -1,0 +1,10 @@
+pandas
+numpy
+scikit-learn
+pyarrow
+pyyaml
+
+# Mesa NO es una dependencia. ARCHITECTURE.md preveía construir el ABM sobre
+# Mesa; al quedar los modelos de opinión vectorizados se decidió no hacerlo
+# (DI-E1, docstring de src/experiments/runner.py). Se deja anotado para que
+# nadie lo reinstale por inercia.

@@ -1,0 +1,76 @@
+# ---------------------------------------------------------------------------
+# Bogotá Social Simulator — qué NO va al repositorio
+#
+# Regla de fondo: el repositorio lleva el CÓDIGO y la DOCUMENTACIÓN. Los datos
+# se quedan afuera y se regeneran desde sus fuentes (ver docs/DATA_SPECIFICATION.md
+# y docs/DATA_INVENTORY.md). Razones, en orden de importancia:
+#
+#   1. Confidencialidad. Los estudios del CNC no salen del equipo, ni siquiera
+#      agregados, mientras no haya autorización explícita (R10, PROJECT_CONTEXT §32).
+#   2. Terceros. Los microdatos del DANE y de Bogotá Cómo Vamos son públicos EN SU
+#      FUENTE; duplicarlos acá no aporta y complica la trazabilidad de versiones.
+#   3. Tamaño. em2021.csv pesa 1,25 GB — GitHub rechaza archivos de más de 100 MB.
+# ---------------------------------------------------------------------------
+
+# --- entornos y caché de Python ---
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- editor y sistema operativo ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- instaladores y binarios sueltos ---
+*.exe
+*.msi
+*.dmg
+*.zip
+
+# --- salidas de corridas y copias de trabajo (se regeneran) ---
+experiments_output/
+docs_out/
+build/
+Claude outputs/
+
+# --- notebooks: el contenido sí, la salida ejecutada no ---
+notebooks/**/*.nbconvert.ipynb
+
+# ===========================================================================
+# DATOS — se excluye todo y se vuelven a incluir solo las rutas publicables.
+# Si agregás una excepción nueva, agregá también su carpeta padre: git no
+# entra a una carpeta excluida, así que un archivo no se puede rescatar si su
+# carpeta está fuera.
+# ===========================================================================
+data/**
+
+# marginal territorial (fuente pública: proyecciones DANE-SDP)
+!data/external/
+!data/external/marginal_localidad_18mas.csv
+
+# geometría oficial de localidades (fuente pública: Catastro Distrital)
+!data/external/geo/
+!data/external/geo/**
+
+# el producto de la capa visual: paquete de datos + página autocontenida
+!data/processed/
+!data/processed/viz/
+!data/processed/viz/**
+
+# veredictos de los experimentos: son el registro de qué se pre-registró y
+# qué salió. Pesan kilobytes y son el resultado, no el dato.
+!data/processed/exp*/
+!data/processed/exp*/veredicto.json
+
+# --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
+data/external/cnc/
+data/raw/cnc/

@@ -1,0 +1,32 @@
+{
+  "Q1_mecanismo_gana_al_nulo": {
+    "pasa": true,
+    "mejor_w1_con_mecanismo": 0.2954,
+    "mejor_w1_traslacion_pura": 0.3517,
+    "mejora_relativa_pct": 16.0
+  },
+  "Q2_dispersion": {
+    "pasa": false,
+    "mejor_error_sd_con_mecanismo": 0.0733,
+    "mejor_error_sd_traslacion": 0.1485,
+    "umbral": 0.05
+  },
+  "Q3_perfil_de_contraccion_tardio": {
+    "pasa": true,
+    "corridas_con_perfil_tardio": 294,
+    "corridas_totales": 5040,
+    "perfil_observado": [
+      0.0326,
+      0.0066,
+      0.148
+    ]
+  },
+  "Q4_bimodalidad": {
+    "pasa": false,
+    "bimodalidad_max_simulada": 1.0
+  },
+  "Q5_recorte_explica_la_contraccion": {
+    "nota": "descriptivo, no pasa/falla — ver DI-Y4",
+    "mejor_error_sd_traslacion_con_recorte": 0.0902
+  }
+}
