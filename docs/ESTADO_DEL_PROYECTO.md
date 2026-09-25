@@ -125,7 +125,7 @@ geografía: son proyecciones de población, no estimaciones de una muestra.
 | | por qué |
 |---|---|
 | **Material para el CNC** | tiene que presentarle esto a su equipo, que no tiene contexto |
-| **Escalar la población (A08)** | 10.000 o 100.000 agentes. **Reencuadrado el 25/09:** escalar baja el ruido de una corrida, pero no le da geografía a la opinión (el donante no trae localidad) ni baja la incertidumbre del donante. Paso 0 antes de construir nada: calcular el límite con N infinito por localidad y compararlo contra un bootstrap del donante. Necesita `data/raw/` → PC personal |
+| **Escalar la población (A08)** | 10.000 o 100.000 agentes. **Reencuadrado el 25/09:** escalar baja el ruido de una corrida, pero no le da geografía a la opinión (el donante no trae localidad) ni baja la incertidumbre del donante. **Paso 0 escrito, probado y pre-registrado** (`A08_PASO0_SPECIFICATION.md`, `src/experiments/a08_paso0.py`): límite con N infinito, nulo de permutación en el donante (que sí puede fallar) y bootstrap del donante. **Falta correrlo** en el PC personal: `python src/experiments/a08_paso0.py` |
 | **Hito 3 — bajo la localidad** | UPZ o manzana; exige datos y decisiones de modelo nuevas |
 | **Simulación sobre la serie** | poner una corrida del modelo al lado de la serie medida; es lo que falta para que el tablero deje de ser solo lectura de datos |
 
