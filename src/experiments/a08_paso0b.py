@@ -60,6 +60,7 @@ if str(RAIZ) not in sys.path:
     sys.path.insert(0, str(RAIZ))
 
 SALIDA_DIR = RAIZ / "data" / "processed" / "a08"
+DEFF_EPC = 1.95   # mediana medida sobre gestión del alcalde (ANALISIS_DISENO_MUESTRAL)
 
 
 @dataclass
@@ -138,6 +139,12 @@ def analizar_ola(o: Ola, n_boot: int, n_perm: int, rng) -> dict:
     v_obs = _var_corregida(m_obs, b_obs.var(axis=0, ddof=1))
     v_comp = _var_corregida(m_comp, b_comp.var(axis=0, ddof=1))
     sd_obs, sd_comp = float(np.sqrt(max(v_obs, 0))), float(np.sqrt(max(v_comp, 0)))
+    # SENSIBILIDAD, NO PRE-REGISTRADA (añadida tras ver 2014, 2015 y 2017): el
+    # bootstrap simple ignora el diseño y subestima el ruido de m_obs. Se
+    # repite con la varianza de muestreo inflada por el DEFF medido en la EPC
+    # sobre esta misma variable (mediana 1,95, ANALISIS_DISENO_MUESTRAL).
+    v_obs_deff = _var_corregida(m_obs, DEFF_EPC * b_obs.var(axis=0, ddof=1))
+    sd_obs_deff = float(np.sqrt(max(v_obs_deff, 0)))
 
     # ¿la EPC mide territorio más allá del azar? permutar la localidad
     sd_crudo = float(np.std(m_obs, ddof=1))
@@ -156,6 +163,8 @@ def analizar_ola(o: Ola, n_boot: int, n_perm: int, rng) -> dict:
         "sd_obs": round(sd_obs, 4),
         "sd_comp": round(sd_comp, 4),
         "R": round(sd_obs / sd_comp, 3) if sd_comp > 0 else None,
+        "sd_obs_deff": round(sd_obs_deff, 4),
+        "R_deff": round(sd_obs_deff / sd_comp, 2) if sd_comp > 0 else None,
         "r": round(r, 3),
         "pendiente": round(pendiente, 3),
         "pendiente_corregida": round(pendiente / fiab, 3) if fiab and fiab > 0 else None,
@@ -169,8 +178,11 @@ def analizar_ola(o: Ola, n_boot: int, n_perm: int, rng) -> dict:
 
 def resumir(filas: list[dict]) -> dict:
     Rs = [f["R"] for f in filas if f["R"] is not None]
+    Rd = [f["R_deff"] for f in filas if f["R_deff"] is not None]
     return {
         "R_mediana": round(float(np.median(Rs)), 3) if Rs else None,
+        "R_deff_mediana": round(float(np.median(Rd)), 3) if Rd else None,
+        "olas_sin_sd_comp": int(sum(f["R"] is None for f in filas)),
         "r_mediana": round(float(np.median([f["r"] for f in filas])), 3),
         "olas_con_territorio_p05": int(sum(f["p_territorio"] < 0.05 for f in filas)),
         "n_olas": len(filas),
@@ -181,30 +193,44 @@ def resumir(filas: list[dict]) -> dict:
 # Datos reales
 # ---------------------------------------------------------------------------
 
-def cargar_ola(anio: int, item: str) -> Ola | None:
-    from src.population.epc_bcv import (BANDAS_EDAD, EPCError, LOCALIDADES_EPC,
-                                        cargar_bcv)
+def cargar_ola(anio: int, item: str) -> tuple[Ola | None, str]:
+    """Devuelve la ola y, si no se puede usar, el motivo (nunca falla en silencio)."""
+    from src.population.epc_bcv import (BANDAS_EDAD, LOCALIDADES_EPC,
+                                        bandear_edad, cargar_bcv)
     ola = cargar_bcv(anio)
     d = ola.datos
-    if item not in d.columns or "localidad" not in d.columns:
-        return None
-    df = pd.DataFrame({
+    faltan = [c for c in (item, "localidad", "sexo", "edad", "estrato") if c not in d.columns]
+    if faltan:
+        return None, f"no trae {faltan}"
+    crudo = pd.DataFrame({
         "loc": pd.to_numeric(d["localidad"], errors="coerce"),
         "sexo": pd.to_numeric(d.get("sexo"), errors="coerce"),
         "edad": pd.to_numeric(d.get("edad"), errors="coerce"),
         "estrato": pd.to_numeric(d.get("estrato"), errors="coerce"),
         "y": pd.to_numeric(d[item], errors="coerce"),
         "w": pd.to_numeric(d["peso"], errors="coerce"),
-    }).dropna()
-    df = df[df["loc"].isin(LOCALIDADES_EPC) & (df["w"] > 0)]
-    if not df["edad"].between(1, len(BANDAS_EDAD)).all():
-        raise EPCError(f"EPC {anio}: la edad no viene en bandas (DI-B9).")
+    })
+    # DI-B9 dice que la edad viene en cinco bandas, pero 2018 la trae en años.
+    # Si hay valores fuera de 1-5, se bandea con los mismos cortes del proyecto.
+    nota = ""
+    edad = crudo["edad"].dropna()
+    if len(edad) and not edad.between(1, len(BANDAS_EDAD)).all():
+        crudo["edad"] = bandear_edad(crudo["edad"]).to_numpy()
+        nota = "edad en años, bandeada"
+    df = crudo.dropna()
+    df = df[df["loc"].isin(LOCALIDADES_EPC) & (df["w"] > 0) & df["sexo"].isin([1, 2])]
+    if df["loc"].nunique() < 5:
+        # dice qué columna vació la ola, en vez de caerse más adelante
+        validos = {c: int(crudo[c].notna().sum()) for c in crudo.columns}
+        validos["localidad en 1-19"] = int(crudo["loc"].isin(LOCALIDADES_EPC).sum())
+        validos["sexo en 1-2"] = int(crudo["sexo"].isin([1, 2]).sum())
+        return None, f"quedan {df['loc'].nunique()} localidades; valores válidos por columna: {validos}"
     s = df["sexo"].astype(int).astype(str)
     e = df["edad"].astype(int).astype(str)
     return Ola(anio=anio, loc=df["loc"].astype(int).to_numpy(),
                celda=(s + "|" + e + "|" + df["estrato"].astype(int).astype(str)).to_numpy(),
                celda_gruesa=(s + "|" + e).to_numpy(),
-               y=df["y"].to_numpy(float), w=df["w"].to_numpy(float))
+               y=df["y"].to_numpy(float), w=df["w"].to_numpy(float)), nota
 
 
 def main(argv=None) -> int:
@@ -225,19 +251,22 @@ def main(argv=None) -> int:
     filas = []
     print(f"EPC · {ITEMS[args.item]['etiqueta']}\n")
     print(f"{'año':>5} {'n':>6} {'sd obs':>7} {'sd comp':>8} {'R':>6} {'r':>6} "
-          f"{'pend.':>6} {'p terr.':>8}")
+          f"{'pend.':>6} {'p terr.':>8} {'R deff':>7}")
     for anio in anios:
-        o = cargar_ola(anio, args.item)
+        o, nota = cargar_ola(anio, args.item)
         if o is None:
+            print(f"{anio:>5}  se omite: {nota}")
             continue
         f = analizar_ola(o, args.boot, args.perm, np.random.default_rng(args.seed + anio))
         filas.append(f)
         R = f"{f['R']:.2f}" if f["R"] is not None else "—"
         print(f"{anio:>5} {f['n']:>6} {f['sd_obs']:>7.3f} {f['sd_comp']:>8.3f} {R:>6} "
-              f"{f['r']:>6.2f} {f['pendiente']:>6.2f} {f['p_territorio']:>8.3f}")
+              f"{f['r']:>6.2f} {f['pendiente']:>6.2f} {f['p_territorio']:>8.3f} "
+              f"{f['R_deff'] if f['R_deff'] is not None else '—':>7}  {nota}")
 
     res = resumir(filas)
-    print(f"\nR mediana = {res['R_mediana']}   r mediana = {res['r_mediana']}   "
+    print(f"\nR mediana = {res['R_mediana']}   (con DEFF: {res['R_deff_mediana']})   "
+          f"r mediana = {res['r_mediana']}   "
           f"olas con territorio (p<0,05): {res['olas_con_territorio_p05']} de {res['n_olas']}")
     print("sd obs / sd comp: dispersión entre localidades medida / predicha por composición, "
           "ambas corregidas por ruido.")
