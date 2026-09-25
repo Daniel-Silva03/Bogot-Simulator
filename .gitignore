@@ -71,6 +71,11 @@ data/**
 !data/processed/exp*/
 !data/processed/exp*/veredicto.json
 
+# A08 paso 0: agregados por localidad de datos públicos (DANE). Pesan kilobytes
+# y sostienen A08_PASO0_RESULTS.md.
+!data/processed/a08/
+!data/processed/a08/paso0.json
+
 # --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
 data/external/cnc/
 data/raw/cnc/
