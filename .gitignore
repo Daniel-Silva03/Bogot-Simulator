@@ -75,6 +75,7 @@ data/**
 # y sostienen A08_PASO0_RESULTS.md.
 !data/processed/a08/
 !data/processed/a08/paso0.json
+!data/processed/a08/paso0b_*.json
 
 # --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
 data/external/cnc/
