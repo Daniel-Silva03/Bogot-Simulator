@@ -77,6 +77,12 @@ DI-V45 **El `ee` analítico subestima el ruido territorial, y eso se descubrió
        la corrida publicada (0,341) cae en el **percentil 85 de su propia
        variación por semilla**. No hay señal: hay una semilla afortunada.
 
+       *Corrección DI-V52 (25/09/2026):* la primera mitad se sostiene (una sola
+       corrida no es estable); «no hay señal» no, porque la corrida publicada
+       sale del mismo proceso que las semillas y su percentil es uniforme haya
+       o no efecto. La razón válida para no leer geografía es que el donante no
+       trae localidad. Ver DI-V52 en VISUALIZATION_SPECIFICATION.md.
+
        El piso correcto lo mide `src/viz/piso_territorial.py` y llega acá en
        `piso_territorial.json`. La página usa ESE, no el analítico, para
        afirmar cuánto es ruido. El analítico se conserva en el paquete porque
@@ -541,6 +547,10 @@ def construir() -> dict:
             # Con el piso medido, «cuánto es ruido» deja de ser una fracción
             # derivada y pasa a ser una pregunta de sí o no: ¿esta corrida se
             # sale de lo que el método produce sin fenómeno alguno?
+            # CORRECCIÓN DI-V52: no lo es. Las semillas salen del mismo proceso
+            # que la corrida publicada, así que superar su p95 pasa ~5 % de las
+            # veces haya o no efecto. El campo conserva su nombre para no romper
+            # el paquete, pero la página ya no lo lee.
             c["hay_senal_territorial"] = p["sale_del_piso"]
 
     return {

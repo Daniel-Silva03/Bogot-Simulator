@@ -1,8 +1,8 @@
 # VISUALIZATION SPECIFICATION — BOGOTÁ SOCIAL SIMULATOR
 
-**Versión:** 0.15
-**Fecha:** 24 de septiembre de 2026
-**Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados; cuatro capas, todas responden al año, y una de ellas —Crecimiento— es la primera que **sí** puede afirmar geografía. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. Hitos 3 a 5 especificados, sin construir.
+**Versión:** 0.16
+**Fecha:** 25 de septiembre de 2026
+**Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados; cuatro capas, todas responden al año, y una de ellas —Crecimiento— es la primera que **sí** puede afirmar geografía. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. **Corrección del 25/09 (DI-V52):** la primera mitad de DI-V45 se sostiene; «no hay señal» no, porque la prueba que la sostenía no podía detectar señal. La capa de opinión sigue sin poder leerse por territorio, pero por otra razón: el donante no trae localidad. Hitos 3 a 5 especificados, sin construir.
 **Documentos relacionados:** PROJECT_CONTEXT.md §31 y §51, ARCHITECTURE.md, POPULATION_SPECIFICATION.md, claude/ANALISIS_DISENO_MUESTRAL.md
 
 ---
@@ -635,6 +635,69 @@ la primera vez estorba la centésima.
      premia a las localidades chicas; decirlo es más barato que construir una
      codificación que lo resuelva.
 
+- **DI-V52** — **Corrección de DI-V45: el piso por semillas no es una prueba de
+  señal.** *(25/09/2026. DI-V45 se conserva arriba sin editar, por la regla de
+  PROJECT_CONTEXT §45.)*
+
+  DI-V45 hizo dos afirmaciones. La primera se sostiene: el `ee` analítico
+  subestima cuánto varía `sd_entre` de una corrida a otra, y rehacer la
+  población con 20 semillas lo mide bien — en 2021 la cifra recorre 0,148 a
+  0,515, así que una sola corrida no es una medida estable.
+
+  **La segunda no se sostiene:** que «la corrida publicada cabe dentro del
+  piso» signifique «no hay señal territorial». Las 20 semillas no son un null
+  sin fenómeno: salen del mismo proceso que la corrida publicada, con los
+  mismos datos, y la primera de ellas *es* la publicada. Un valor comparado
+  contra la distribución de la que salió cae en un percentil uniforme, así que
+  supera el p95 alrededor del 5 % de las veces **haya o no efecto, y sea del
+  tamaño que sea**. Los percentiles publicados —25, 10, 10, 85 y 35— son
+  exactamente lo que se espera de un criterio que no mide nada.
+
+  Se verificó con una ciudad simulada con efecto por localidad conocido
+  (`src/viz/simular_prueba_piso.py`):
+
+  | efecto real (sd entre localidades) | lo «detecta» el criterio del piso | lo detecta una permutación |
+  |---|---|---|
+  | 0 | 3 % | 2 % |
+  | 0,1 | 2 % | 23 % |
+  | 0,2 | 2 % | 88 % |
+  | 0,4 | 5 % | 100 % |
+  | 0,8 | 4 % | 100 % |
+
+  Tres consecuencias:
+
+  1. **La permutación que DI-V45 descartó no estaba equivocada.** Su
+     p = 0,0005 detectaba estructura por localidad real *en la población
+     sintética*. Lo que no puede decir es de dónde viene esa estructura.
+  2. **Y de dónde viene sí se sabe, sin prueba:** el donante (ECP) no registra
+     la localidad, así que la única vía por la que la opinión sintética difiere
+     entre localidades es su **composición demográfica** —edad, sexo,
+     educación, estrato—. Es una consecuencia del método, no una medición de
+     Bogotá. Esa es la razón válida por la que la capa de opinión no se lee por
+     territorio, y es más sólida que la anterior porque no depende de ningún
+     umbral. DI-V47 («el tiempo se puede leer, la geografía no») sigue en pie
+     con esta justificación.
+  3. **Para A08:** con el criterio anterior, ni 100.000 agentes habrían hecho
+     «aparecer» señal — el percentil seguiría siendo uniforme. Cualquier
+     comparación de tamaños de población necesita otro criterio: comparar la
+     diferencia por composición contra la incertidumbre del **donante**, que es
+     la que no baja al escalar.
+
+  **Qué cambió en el código.** La página ya no lee `hay_senal_territorial`: la
+  cifra del encabezado muestra el rango por semilla como medida de
+  estabilidad, y el aviso de la capa de opinión y el de Crecimiento dan la
+  razón de fondo (el donante no trae localidad). `piso_territorial.py` y
+  `preparar_mapa.py` conservan el cálculo y el nombre del campo para no romper
+  el paquete, con la corrección escrita en su docstring; la conclusión que
+  emite el script dejó de afirmar nada sobre señal. En las pruebas se retiró
+  «ningún año se sale de su piso — el mapa no puede afirmar geografía», que
+  convertía el resultado circular en afirmación, y se añadió una que impide que
+  la página vuelva a leer ese campo.
+
+  **La lección, y es la misma de DI-V45 dada vuelta:** *un null tiene que
+  poder fallar.* Rehacer el pipeline mide bien la variabilidad; no sirve como
+  null de «sin efecto» si el efecto viaja dentro del mismo pipeline.
+
 - **DI-V30** — El `:hover` de los botones se gatea con
   `@media (hover: hover) and (pointer: fine)`. En táctil, un toque dejaba el
   estado de hover pegado hasta tocar otra cosa.
@@ -685,7 +748,8 @@ data/external/geo/osm/verde.geojson            extracto Overpass: leisure=park (
 data/external/geo/osm/agua.geojson             extracto Overpass: agua — PENDIENTE (DI-V14)
 src/viz/preparar_mapa.py                       geometría + población → paquete de datos
 src/viz/preparar_serie.py                      ECP + EPC → serie temporal con márgenes (Hito 2)
-src/viz/piso_territorial.py                    rehace la población con 20 semillas → piso de ruido (DI-V45)
+src/viz/piso_territorial.py                    rehace la población con 20 semillas → estabilidad de una corrida (DI-V45, DI-V52)
+src/viz/simular_prueba_piso.py                 ciudad simulada: el criterio del piso no detecta señal (DI-V52)
 data/external/marginal_localidad_18mas_serie.csv  población 18+ por localidad y año, solo para dibujar (DI-V48)
 src/utils/revisar_datos.py                     qué datos hay en esta máquina y dónde va cada cosa
 src/viz/preparar_base.py                       extractos OSM → capa base recortada y simplificada
@@ -696,8 +760,8 @@ data/processed/viz/piso_territorial.json       el piso de ruido medido, 20 semil
 data/processed/viz/serie_bogota.json           la serie medida, 14 puntos con intervalo (4,6 KB)
 data/processed/viz/base_bogota.json            capa base, dos niveles de detalle (71 KB)
 data/processed/viz/mapa_bogota.html            la página lista (252 KB)
-tests/test_viz_mapa.py                         73 pruebas
-tests/test_viz_base.py                         80 pruebas de la capa base, la navegación, la ficha, la rampa y el año
+tests/test_viz_mapa.py                         72 pruebas
+tests/test_viz_base.py                         81 pruebas de la capa base, la navegación, la ficha, la rampa y el año
 tests/test_viz_serie.py                        43 pruebas de la serie temporal y su gráfico
 ```
 

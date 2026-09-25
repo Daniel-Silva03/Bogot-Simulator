@@ -60,6 +60,21 @@ analítica parecía tener señal territorial y no la tiene.
 > localidad→demografía y el agrupamiento del hot-deck, y da p = 0,0005 para un
 > efecto inexistente. Se intentó; está documentado para que no se repita.
 
+**Corrección del 25/09 — DI-V52.** La mitad de DI-V45 no se sostiene. Que una
+sola corrida es inestable, sí. Que «no hay señal territorial», no: la corrida
+publicada sale del mismo proceso que las 20 semillas, así que su percentil es
+uniforme y supera el p95 ~5 % de las veces **haya o no efecto**. Verificado con
+una ciudad simulada (`src/viz/simular_prueba_piso.py`): con un efecto enorme el
+criterio lo «detecta» el 4 % de las veces; una permutación, el 100 %. Y la
+permutación descartada no estaba mal: detectaba estructura real *en la población
+sintética*, que es **composición demográfica**, porque el donante no trae
+localidad. **Esa es la razón válida para no leer geografía en la capa de
+opinión**, y no depende de ningún umbral. La página ya se corrigió.
+
+> **Un null tiene que poder fallar.** Rehacer el pipeline mide bien la
+> variabilidad de una corrida; no sirve como null de «sin efecto» si el efecto
+> viaja dentro del mismo pipeline.
+
 Otros: DI-V36 (la rampa verde usaba raíz cuadrada sin declararlo), DI-V48 a
 DI-V51 (población por año, capa de Crecimiento).
 
@@ -87,8 +102,10 @@ alguien propone usar un LLM como donante.
 2. **El hot-deck no predice individuos** (correlación 0,003) y reproduce la
    distribución casi perfecto (W1 0,057, sd ratio 0,958). Es un emparejador de
    distribuciones. Evaluarlo por MAE es evaluar algo que nunca intentó hacer.
-3. **Con 1.000 agentes ninguna diferencia entre localidades sobrevive al ruido.**
-   Es la mejor razón para escalar (A08), mejor que "correr más rápido".
+3. **La opinión sintética no puede tener geografía propia.** El donante (ECP)
+   no trae localidad: toda diferencia entre localidades es composición
+   demográfica por construcción. *(Hasta el 25/09 este punto decía «con 1.000
+   agentes ninguna diferencia sobrevive al ruido»; ver DI-V52.)*
 
 ---
 
@@ -96,8 +113,8 @@ alguien propone usar un LLM como donante.
 
 **El tiempo se puede leer; la geografía no.** La media de ciudad recorre
 2,81 → 2,53 → 2,39 → 2,24 → 2,45 sobre márgenes de ±0,03: señal robusta. La
-variación entre localidades dentro de cualquier año cabe dentro del ruido del
-método. Por eso los agentes se colorean por opinión individual y la coropleta
+variación entre localidades dentro de cualquier año no es una medición: el
+donante no trae localidad, así que solo puede ser composición (DI-V52). Por eso los agentes se colorean por opinión individual y la coropleta
 carga la advertencia — y por eso la capa de **Crecimiento** sí puede afirmar
 geografía: son proyecciones de población, no estimaciones de una muestra.
 
@@ -108,7 +125,7 @@ geografía: son proyecciones de población, no estimaciones de una muestra.
 | | por qué |
 |---|---|
 | **Material para el CNC** | tiene que presentarle esto a su equipo, que no tiene contexto |
-| **Escalar la población (A08)** | 10.000 o 100.000 agentes; el error por localidad cae por √10 y el mapa dejaría de estar dominado por ruido |
+| **Escalar la población (A08)** | 10.000 o 100.000 agentes. **Reencuadrado el 25/09:** escalar baja el ruido de una corrida, pero no le da geografía a la opinión (el donante no trae localidad) ni baja la incertidumbre del donante. Paso 0 antes de construir nada: calcular el límite con N infinito por localidad y compararlo contra un bootstrap del donante. Necesita `data/raw/` → PC personal |
 | **Hito 3 — bajo la localidad** | UPZ o manzana; exige datos y decisiones de modelo nuevas |
 | **Simulación sobre la serie** | poner una corrida del modelo al lado de la serie medida; es lo que falta para que el tablero deje de ser solo lectura de datos |
 
@@ -118,7 +135,7 @@ geografía: son proyecciones de población, no estimaciones de una muestra.
 
 | Si vas a tocar… | lee |
 |---|---|
-| la página / el mapa | `claude/VISUALIZATION_SPECIFICATION.md` (v0.15, DI-V1 a DI-V51) |
+| la página / el mapa | `claude/VISUALIZATION_SPECIFICATION.md` (v0.16, DI-V1 a DI-V52) |
 | la población sintética | `POPULATION_SPECIFICATION.md` (v0.5) |
 | qué datos hay y dónde | `claude/DATA_INVENTORY.md` |
 | decisiones del proyecto | `PROJECT_CONTEXT.md` §39 (formato D0X) |

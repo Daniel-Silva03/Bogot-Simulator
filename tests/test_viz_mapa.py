@@ -137,15 +137,22 @@ def main():
             probar(f"{a}: el rango del piso contiene a la corrida publicada",
                    piso["min"] <= ca["sd_entre"] <= piso["max"],
                    f"{ca['sd_entre']} fuera de {piso['min']}–{piso['max']}")
-            probar(f"{a}: «hay señal» es exactamente «supera el p95 del piso»",
+            # El campo se llama `hay_senal_territorial` por herencia, pero solo
+            # dice si la corrida publicada supera el p95 de sus semillas, que
+            # no es una prueba de señal (DI-V52). La página ya no lo lee.
+            probar(f"{a}: el campo heredado es exactamente «supera el p95 del piso»",
                    ca["hay_senal_territorial"] == (ca["sd_entre"] > piso["p95"]))
             # El piso medido tiene que ser MAYOR que el analítico: si no lo
             # fuera, el argumento de DI-V45 estaría al revés.
             probar(f"{a}: el piso medido supera al ruido analítico",
                    piso["mediana"] >= ca["sd_entre_ruido"] * 0.8,
                    f"piso {piso['mediana']} vs analítico {ca['sd_entre_ruido']}")
-        probar("ningún año se sale de su piso — el mapa no puede afirmar geografía",
-               not any(d["ciudad_por_anio"][str(a)]["hay_senal_territorial"] for a in anios))
+        # DI-V52: aquí había una prueba que exigía «ningún año se sale de su
+        # piso» y la leía como «el mapa no puede afirmar geografía». Se retiró:
+        # la corrida publicada es una de las semillas del propio piso, así que
+        # superar su p95 ocurre ~5 % de las veces haya o no efecto. Que el mapa
+        # no pueda afirmar geografía se sostiene por otra razón —el donante no
+        # trae localidad— y eso lo verifica test_viz_base.py sobre la página.
     else:
         probar("falta el piso medido: el paquete no debería publicarse así", False,
                "correr 'python src/viz/piso_territorial.py'")

@@ -206,10 +206,17 @@ def main():
         ("D.poblacion_max", "la rampa verde se ancla al máximo de todos los años"),
         ("El color apenas se mueve entre", "la página dice que el verde casi no cambia"),
         ("no cambia con el año", "la página aclara que «esperados» es del muestreo"),
-        ("Cabe dentro: lo que se ve entre localidades es el método",
-         "la página dice cuando lo territorial no supera el ruido"),
+        ("no registra la localidad",
+         "la página da la razón de fondo: el donante no trae localidad (DI-V52)"),
     ]:
         probar(que, marca in pagina)
+
+    # DI-V52: comparar la corrida publicada contra el rango de sus propias
+    # semillas no puede detectar señal (el percentil sale uniforme haya o no
+    # efecto). Si la página vuelve a leer ese campo, vuelve a afirmar algo que
+    # la prueba no sostiene.
+    probar("la página no lee hay_senal_territorial (DI-V52)",
+           ".hay_senal_territorial" not in pagina)
 
     # DI-V46: el estado del año es uno solo. Si quedara un `D.ciudad` o un
     # `l.opinion_media` suelto, media pantalla mostraría el año base y la otra

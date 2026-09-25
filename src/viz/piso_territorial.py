@@ -35,6 +35,30 @@ a la vez y produce p ≈ 0,0005 para un efecto que no existe.
 
     python src/viz/piso_territorial.py              # 20 semillas por año
     python src/viz/piso_territorial.py --semillas 5 # borrador rápido
+
+CORRECCIÓN (DI-V52, 25/09/2026) — LO QUE ESTE SCRIPT NO PUEDE DECIR
+------------------------------------------------------------------
+Lo de arriba se conserva sin editar (PROJECT_CONTEXT §45). La mitad es cierta y
+la otra no:
+
+- **Cierto:** el `ee` analítico subestima cuánto varía `sd_entre` de una corrida
+  a otra. Este script lo mide bien, y el rango por semilla es la forma honesta
+  de decir que una sola corrida no es una medida estable.
+- **No se sostiene:** que «cabe dentro del piso» signifique «no hay señal». Las
+  20 semillas NO son un null sin fenómeno: salen del mismo proceso que la
+  corrida publicada, con los mismos datos, y la primera ES la publicada. Un
+  valor comparado contra la distribución de la que salió cae en un percentil
+  uniforme, así que supera el p95 ~5 % de las veces **haya o no efecto
+  territorial, y de cualquier tamaño**. Verificado por simulación con efecto
+  conocido: con un efecto enorme (sd 0,8 entre localidades) este criterio lo
+  «detecta» el 4 % de las veces; una permutación, el 100 %.
+- Por lo mismo, la permutación que se descartó (p ≈ 0,0005) no estaba
+  equivocada: detectaba estructura por localidad, que en esta población es
+  **composición demográfica**, porque el donante (ECP) no trae localidad.
+
+`sale_del_piso` se sigue calculando para no romper el paquete, pero no es una
+prueba de señal y la página ya no lo usa. La razón válida para no leer
+geografía en la capa de opinión es la de fondo: el donante no trae localidad.
 """
 
 from __future__ import annotations
@@ -116,10 +140,12 @@ def main(argv=None) -> int:
               f"{np.percentile(vals, 95):>7.3f} "
               f"{vals.min():.3f}–{vals.max():.3f}".rjust(6) + f" {pct:>9.0f}%")
 
+    # DI-V52: el percentil de la corrida publicada dentro de sus propias
+    # semillas es uniforme por construcción; no se reporta como conclusión.
     salida["conclusion"] = (
-        "Ningún año supera el percentil 95 de su propio piso de ruido."
-        if not any(v["sale_del_piso"] for v in salida["por_anio"].values())
-        else "Hay al menos un año por encima de su piso; revisar antes de publicarlo.")
+        "Rango de la dispersión entre localidades rehaciendo la población con "
+        "otras semillas. Mide la estabilidad de una corrida; no es una prueba "
+        "de señal territorial (DI-V52).")
 
     SALIDA.parent.mkdir(parents=True, exist_ok=True)
     SALIDA.write_text(json.dumps(salida, ensure_ascii=False, indent=2), encoding="utf-8")

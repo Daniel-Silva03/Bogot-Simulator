@@ -756,7 +756,9 @@ const puntos = D.agentes.map(a=>{
 /* Los puntos se colorean por la opinión INDIVIDUAL del año, y esta es la capa
    donde el cambio entre años sí es señal: la media de ciudad recorre 2,81 a
    2,24 sobre márgenes de ±0,03. La coropleta es la que no puede sostener una
-   lectura territorial (DI-V45); los agentes sí muestran el movimiento real. */
+   lectura territorial: el donante no trae localidad, así que toda diferencia
+   entre localidades es composición por construcción (DI-V52, que corrige el
+   argumento de DI-V45); los agentes sí muestran el movimiento real. */
 function pintarAgentes(){
   const op = D.opiniones[String(anioSel)];
   if(!op){ puntos.forEach(c=>c.setAttribute('fill','#b2452c')); return; }
@@ -1435,13 +1437,15 @@ function cifras(){
     [fmt(pob), `personas de 18 años o más en Bogotá en ${anioSel} (proyecciones DANE-SDP, revisión 2025)`],
     ['20', 'localidades, geometría oficial de Catastro Distrital'],
     [fmt(C().n_agentes), 'agentes sintéticos ubicados, uno por punto'],
-    // La afirmación territorial se sostiene en el piso MEDIDO, no en el ee
-    // analítico, que subestima el ruido (DI-V45).
+    // DI-V52: el rango por semilla mide cuánto varía la cifra entre corridas,
+    // NO si hay señal territorial — la corrida publicada sale del mismo proceso
+    // que el rango, así que compararla contra él no puede detectar nada. Por eso
+    // esta cifra no lee `hay_senal_territorial`.
     [C().piso_medido
-       ? (C().hay_senal_territorial ? 'alguna' : 'ninguna')
+       ? `${f2(C().piso_medido.min)}–${f2(C().piso_medido.max)}`
        : (C().fraccion_ruido*100).toFixed(0)+' %',
      C().piso_medido
-       ? `diferencia entre localidades sobrevive al piso de ruido en ${anioSel}: lo observado (${f2(C().sd_entre)}) cabe en el ${f2(C().piso_medido.min)}–${f2(C().piso_medido.max)} que produce el método cambiando solo la semilla`
+       ? `recorre la dispersión entre localidades en ${anioSel} rehaciendo la población con otra semilla; la del mapa vale ${f2(C().sd_entre)}. Una sola corrida no es una medida estable`
        : 'de la diferencia de opinión entre localidades es ruido muestral, no diferencia real']
   ].map(([b,s])=>`<div class="cifra"><b>${b}</b><span>${s}</span></div>`).join('');
 }
@@ -1462,10 +1466,11 @@ function aviso(){
        por construcción. La medida que sí lo captura es rehacer toda la población con otra semilla:
        con ${piso.semillas} semillas sobre los mismos datos de ${anioSel}, la dispersión entre localidades
        recorre de <code>${f2(piso.min)}</code> a <code>${f2(piso.max)}</code>.
-       La que está en el mapa vale <code>${f2(c.sd_entre)}</code> — el percentil ${piso.percentil_publicada.toFixed(0)}
-       de esa variación. <b>${c.hay_senal_territorial
-         ? 'Se sale del piso: hay algo que mirar.'
-         : 'Cabe dentro: lo que se ve entre localidades es el método, no Bogotá.'}</b></p>`
+       La que está en el mapa vale <code>${f2(c.sd_entre)}</code>: la cifra de una sola corrida no es estable.</p>
+    <p><b>Y hay una razón más de fondo para no leer geografía en esta capa.</b> La encuesta que aporta la
+       opinión de cada agente (la Encuesta de Cultura Política del DANE) no registra la localidad. Cualquier
+       diferencia entre localidades en esta población sintética sale solo de su composición —edad, sexo,
+       educación, estrato—: es una consecuencia del método, no una medición de Bogotá.</p>`
      : `<p>Al descontar ese ruido, la dispersión real entre localidades que queda es <code>${f2(c.sd_entre_real)}</code>:
        <b>el ${(c.fraccion_ruido*100).toFixed(0)} % de lo que se ve es error de muestreo</b>.</p>`}
     <p>${estirada
@@ -1501,7 +1506,8 @@ function avisoCrecimiento(){
     <p>Son proyecciones oficiales de población, no estimaciones de una muestra: no traen error
        de muestreo que descontar, así que la diferencia entre el sur y el centro es real y se
        puede leer del color. Es justo lo contrario de la capa de <b>Opinión</b>, donde la
-       variación entre localidades no supera el ruido que el propio método produce. Dos capas,
+       encuesta que aporta la opinión no registra la localidad: cualquier diferencia entre
+       localidades sale de su composición demográfica, no de una medición. Dos capas,
        dos permisos distintos: acá el mapa puede decir «el sur creció»; allá no puede decir
        «el sur confía menos».</p>`;
 }
