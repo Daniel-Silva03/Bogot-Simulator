@@ -115,13 +115,14 @@ la segunda aunque se descuente el diseño.
 - **El territorio está sobre-detectado.** La permutación ignora el diseño
   muestral: con conglomerados por manzana dentro de cada localidad, los p son
   optimistas. Aun así, las diferencias medidas sobreviven a la corrección por
-  DEFF en 5 de las 6 olas con composición no nula.
+  DEFF en las 6 olas con composición no nula: la dispersión medida sigue
+  siendo positiva en todas.
 - **La composición de la EPC es más pobre que la del pipeline.** No trae
   educación (DI-B8): las celdas son sexo × edad × estrato. Con educación, la
   composición podría predecir algo más. Es poco probable que eso cambie el signo
   de r en 2014 y 2015.
 - **Es poco territorio.** Una dispersión real de 0,15–0,27 sobre una escala de 1
-  a 5, con una desviación individual cercana a 1,2, es del orden del 2–5 % de la
+  a 5, con una desviación individual cercana a 1,2, es del orden del 1,5–5 % de la
   varianza. Es consistente con D15: la localidad explica poco, y lo poco que
   explica no es composición.
 
