@@ -1,8 +1,8 @@
 # VISUALIZATION SPECIFICATION — BOGOTÁ SOCIAL SIMULATOR
 
-**Versión:** 0.13
+**Versión:** 0.15
 **Fecha:** 24 de septiembre de 2026
-**Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. Hitos 3 a 5 especificados, sin construir.
+**Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados; cuatro capas, todas responden al año, y una de ellas —Crecimiento— es la primera que **sí** puede afirmar geografía. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. Hitos 3 a 5 especificados, sin construir.
 **Documentos relacionados:** PROJECT_CONTEXT.md §31 y §51, ARCHITECTURE.md, POPULATION_SPECIFICATION.md, claude/ANALISIS_DISENO_MUESTRAL.md
 
 ---
@@ -547,6 +547,94 @@ la primera vez estorba la centésima.
   la advertencia. Es la distinción que el tablero tiene que enseñar, no
   esconder: **el tiempo se puede leer, la geografía no.**
 
+- **DI-V48** — **Los dos marginales viven separados.** Al hacer que la capa de
+  población respondiera al año apareció una ambigüedad que no existía antes:
+  «población de la localidad» pasa a significar dos cosas.
+
+  `marginal_localidad_18mas.csv` es el objetivo del muestreo PPS (D14): la
+  revisión DANE-SDP de 2025, uno solo, y es contra ese que se sortearon los
+  1.000 agentes. La columna «esperados» sigue siendo de ese marginal y de
+  ningún otro, porque describe **el sorteo**, no la ciudad — y el inspector
+  ahora lo dice en la propia fila.
+
+  `marginal_localidad_18mas_serie.csv` es población 18+ por localidad y año, y
+  existe **solo para dibujar**. Si la serie hubiera reemplazado al marginal de
+  muestreo, cada corrida de la población tendría que elegir un año y
+  «esperados» dejaría de significar lo mismo entre corridas.
+
+  Lo produce `extraer_columnas_em2021.py marginal-serie`, que reutiliza el
+  mismo lector que `proyecciones` —el que excluye la fila agregada de Bogotá,
+  verifica que las 20 localidades sumen ese agregado y cruza los nombres contra
+  D12— en vez de volver a parsear el archivo.
+
+- **DI-V49** — La rampa verde se ancla al máximo de **todos** los años, no al
+  del año en pantalla. Reescalarla año a año haría que el mapa se viera
+  idéntico en los cinco y escondería lo único que cambia.
+
+- **DI-V50** — **Y aun así la coropleta de población casi no se mueve. Se midió
+  después de construirla, y el resultado se publica en vez de disimularse.**
+
+  Diferencia máxima de color entre 2013 y 2023: **13 sobre 255 por canal**. Lado
+  a lado, los dos mapas se ven iguales. No es un defecto de implementación, es
+  el dato:
+
+  | | |
+  |---|---|
+  | crecimiento de Bogotá 18+, 2013→2023 | **+16,4 %** |
+  | movimiento del reparto entre localidades (L1) | **0,0201** |
+  | recorrido sobre la rampa (√1,164) | **+8 %** |
+
+  Crece el total, no el reparto — y la rampa dibuja el reparto. La raíz
+  cuadrada de DI-V36 comprime lo que queda, y las localidades grandes ya están
+  cerca del extremo oscuro sin a dónde oscurecerse.
+
+  Lo que sí cambia de forma legible son las **cifras**: 5.221.648 en 2013 contra
+  6.077.736 en 2023, en el encabezado y en el panel. Así que el paquete lleva
+  `poblacion_resumen` y **la leyenda lo dice**: *«el color apenas se mueve entre
+  años, y eso es el dato»*. Un control que hace algo invisible no es mucho mejor
+  que uno que no hace nada; lo que lo salva es nombrar lo invisible.
+
+  **Lo que sí es visible está en DI-V51**: una capa de *crecimiento* en vez de
+  nivel, construida el mismo día.
+
+- **DI-V51** — **La capa de Crecimiento, y por qué esta sí puede afirmar
+  geografía.**
+
+  Es la contracara de DI-V45 y por eso vale la pena tenerlas juntas en el mismo
+  tablero. La coropleta de *opinión* no puede sostener una lectura territorial
+  porque la variación entre localidades no supera el ruido que el propio
+  pipeline produce. La de *crecimiento* sí puede, y la razón no es que sea más
+  bonita: **son proyecciones oficiales de población, no estimaciones de una
+  muestra**. No traen error de muestreo que descontar. Dos capas, dos permisos
+  distintos — y el aviso de cada una lo dice con esas palabras.
+
+  Cinco decisiones:
+
+  1. **Rampa propia, no la de opinión.** Reusar `RAMPA_OP` habría hecho que un
+     azul significara «poca confianza» en una capa y «pierde población» en
+     otra. Los polos son teal `#008f89` ↔ ocre `#ab5e00`, validados contra el
+     lienzo: ΔE 14,3 bajo deuteranopía y 21,3 en visión normal, con croma,
+     banda de luminosidad y contraste en verde. Frío = pierde, cálido = gana,
+     la misma dirección que `RAMPA_OP`, para no obligar a reaprender el mapa.
+  2. **Dominio simétrico ±máximo, con el gris exactamente en el 0.** Un dominio
+     asimétrico (de −2,1 % a +26,9 %) habría usado toda la rampa y pintado a
+     Barrios Unidos, con su −2,1 %, tan saturado como a Usme con su +24,2 %.
+     Con el dominio simétrico un −2 % se ve casi neutro, que es lo que es.
+  3. **Acumulado desde el año base, no interanual.** En 2013 el mapa está
+     neutro en todas partes y la leyenda lo explica en vez de dejar que parezca
+     un error. Avanzando de año se ve la divergencia acumularse, que es la
+     lectura interesante.
+  4. **El dominio es el mismo en los cinco años** — DI-V49 otra vez. Reescalarlo
+     por año haría que todos los cortes se vieran igual de contrastados y la
+     acumulación sería invisible.
+  5. **El aviso da el cambio absoluto además del porcentaje**, y se calcula de
+     los mismos datos que colorean el mapa, no de una cifra precalculada.
+     Importa: por porcentaje el titular es Sumapaz (+26,9 %), que son **559
+     personas** sobre 2.078. El mayor aumento real es Suba, con 162.884 sobre
+     808.093, y el mapa lo pinta con el mismo tono que a Sumapaz. El porcentaje
+     premia a las localidades chicas; decirlo es más barato que construir una
+     codificación que lo resuelva.
+
 - **DI-V30** — El `:hover` de los botones se gatea con
   `@media (hover: hover) and (pointer: fine)`. En táctil, un toque dejaba el
   estado de hover pegado hasta tocar otra cosa.
@@ -598,6 +686,7 @@ data/external/geo/osm/agua.geojson             extracto Overpass: agua — PENDI
 src/viz/preparar_mapa.py                       geometría + población → paquete de datos
 src/viz/preparar_serie.py                      ECP + EPC → serie temporal con márgenes (Hito 2)
 src/viz/piso_territorial.py                    rehace la población con 20 semillas → piso de ruido (DI-V45)
+data/external/marginal_localidad_18mas_serie.csv  población 18+ por localidad y año, solo para dibujar (DI-V48)
 src/utils/revisar_datos.py                     qué datos hay en esta máquina y dónde va cada cosa
 src/viz/preparar_base.py                       extractos OSM → capa base recortada y simplificada
 src/viz/plantilla_mapa.html                    la página, con marcadores /*__DATOS__*/ y /*__BASE__*/
@@ -607,8 +696,8 @@ data/processed/viz/piso_territorial.json       el piso de ruido medido, 20 semil
 data/processed/viz/serie_bogota.json           la serie medida, 14 puntos con intervalo (4,6 KB)
 data/processed/viz/base_bogota.json            capa base, dos niveles de detalle (71 KB)
 data/processed/viz/mapa_bogota.html            la página lista (252 KB)
-tests/test_viz_mapa.py                         64 pruebas
-tests/test_viz_base.py                         59 pruebas de la capa base, la navegación, la ficha, la rampa y el año
+tests/test_viz_mapa.py                         73 pruebas
+tests/test_viz_base.py                         80 pruebas de la capa base, la navegación, la ficha, la rampa y el año
 tests/test_viz_serie.py                        43 pruebas de la serie temporal y su gráfico
 ```
 
@@ -619,6 +708,7 @@ for a in 2013 2017 2019 2021 2023; do
   python3 src/population/construir_poblacion.py --donante ecp:$a --n 1000 --seed 42 \
           --nombre-base poblacion_ecp$a --version v0.4-hito2-$a
 done
+python3 src/population/extraer_columnas_em2021.py marginal-serie
 python3 src/viz/piso_territorial.py        # ~4 min; produce el piso de ruido
 python3 src/viz/preparar_mapa.py
 python3 src/viz/preparar_base.py
