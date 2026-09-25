@@ -48,6 +48,9 @@ Este documento separa las dos cosas explícitamente y no vuelve a usar la palabr
 | Ponderación del donante (raking/IPF) | Corrige el sesgo educativo | ❌ No | El Anexo de `DATA_SPECIFICATION.md` reporta resultados (n efectivo 2.409) — ese cálculo existió pero no quedó como código |
 | **Bogotá Cómo Vamos 2025** (Empaquetado Web) | Validación externa · opinión **por localidad** | ✅ `data/raw/bogota_como_vamos/Empaquetado-Web/` | Solo la ola 2025 — pedir las anteriores, §13 |
 | **Cartografía IDECA** | Capa geográfica del dashboard | ❌ No | No se necesita hasta la Fase 10 |
+| **OSM — vías arteriales de la región** | Capa base del mapa (solo dibujo) | ✅ `data/external/geo/osm/vias.geojson` (5,1 MB) | — |
+| **OSM — áreas verdes de la región** | Capa base del mapa (solo dibujo) | ✅ `data/external/geo/osm/verde.geojson` (5,0 MB) | — |
+| **OSM — agua de la región** | Capa base del mapa (solo dibujo) | ❌ No | Llegó pegada como texto en el chat, no como archivo; falta dejarla en `data/external/geo/osm/agua.geojson` — DI-V14 |
 | **CNPV 2018 / GEIH / ECSC** | Marginales y percepción de seguridad | ❌ No | No se necesitan para los experimentos en curso |
 
 ## 3. Qué se necesita para cada cosa
@@ -102,7 +105,8 @@ data/
 │   └── ecp/{2017,2019,2021,2023}/                          ✅ 3–5 módulos por año
 ├── external/     # marginales y tablas de referencia pequeñas, SÍ versionadas
 │   ├── marginal_localidad_18mas.csv                        ✅ derivado, reproducible
-│   └── cnc/                                                ✅ solo agregados — §12.2
+│   ├── cnc/                                                ✅ solo agregados — §12.2
+│   └── geo/osm/                                            ✅ extractos OSM para la capa base (ODbL)
 └── processed/    # salidas del pipeline, regenerables
     ├── poblacion_sintetica_v2.csv
     └── poblacion_sintetica_v2_metadata.json

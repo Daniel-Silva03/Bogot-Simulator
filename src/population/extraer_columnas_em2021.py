@@ -157,6 +157,13 @@ PROYECCIONES_CSV_ENCODING = "utf-8"
 PROYECCIONES_COD_BOGOTA = 0         # fila agregada; excluirla o se cuenta doble
 MARGINAL_SALIDA = "marginal_localidad_18mas.csv"
 
+#: La MISMA población, pero año por año, para la coropleta del mapa (DI-V48).
+#: Va en un archivo aparte a propósito: `marginal_localidad_18mas.csv` es el
+#: objetivo del muestreo PPS de D14 y tiene que seguir siendo UNO solo. Si la
+#: serie lo reemplazara, cada corrida de la población tendría que elegir un año
+#: y «esperados» dejaría de significar lo mismo entre corridas.
+MARGINAL_SERIE_SALIDA = "marginal_localidad_18mas_serie.csv"
+
 ENCODINGS_CANDIDATOS = ["latin-1", "cp850", "utf-8", "utf-8-sig"]
 SEPARADORES_CANDIDATOS = [";", ",", "\t", "|"]
 
@@ -567,6 +574,68 @@ def _marginal_desde_csv_2025(path: Path, anio: int, edad_minima: int) -> pd.Data
     return marg
 
 
+def cmd_marginal_serie(nombre: str | None, anios: list[int], edad_minima: int) -> int:
+    """
+    Construye el marginal territorial de VARIOS años, para el mapa por año.
+
+    No duplica nada: reutiliza el mismo lector que `proyecciones`, que ya
+    resuelve el vintage, excluye la fila agregada de Bogotá, comprueba que las
+    20 localidades sumen ese agregado y cruza los nombres contra D12.
+
+    Lo que sí hace distinto es **no tocar** `marginal_localidad_18mas.csv`. Ese
+    archivo es el objetivo del muestreo (D14) y es uno solo; esta serie es para
+    dibujar. Mezclarlos haría que cambiar el mapa cambiara la población.
+    """
+    elegida = _elegir_fuente_proyecciones(nombre)
+    if elegida is None:
+        return 1
+    path, vintage = elegida
+    if vintage != "2025":
+        print("La serie por año necesita la revisión de 2025 (el .csv). El anexo .xlsx "
+              "de 2021 trae un solo corte por hoja y no se puede recorrer así.")
+        return 1
+
+    filas = []
+    for anio in anios:
+        try:
+            marg = _marginal_desde_csv_2025(path, anio, edad_minima)
+        except ValueError as e:
+            print(f"ERROR leyendo {path.name} para {anio}: {e}")
+            return 1
+        marg = marg.copy()
+        marg["anio"] = anio
+        marg["COD_LOC"] = marg["COD_LOC"].astype(int)
+        marg["poblacion"] = marg["poblacion"].astype(int)
+        marg["share"] = marg["poblacion"] / marg["poblacion"].sum()
+        filas.append(marg)
+
+    serie = pd.concat(filas, ignore_index=True)[
+        ["anio", "COD_LOC", "localidad", "poblacion", "share"]]
+    serie = serie.sort_values(["anio", "poblacion"], ascending=[True, False])
+
+    DIR_EXTERNAL.mkdir(parents=True, exist_ok=True)
+    destino = DIR_EXTERNAL / MARGINAL_SERIE_SALIDA
+    serie.to_csv(destino, index=False)
+
+    print(f"{destino.relative_to(RAIZ_REPO).as_posix()}  "
+          f"{len(anios)} años × 20 localidades  (vintage {vintage}, {edad_minima}+)")
+    tot = serie.groupby("anio")["poblacion"].sum()
+    for a in anios:
+        print(f"  {a}: {tot[a]:>10,} personas")
+    crec = 100 * (tot.iloc[-1] / tot.iloc[0] - 1)
+    print(f"  crecimiento {anios[0]}→{anios[-1]}: {crec:+.1f} %")
+
+    # Lo que NO se ve si la rampa se reescala cada año: las participaciones
+    # apenas se mueven. Decirlo acá evita que alguien lea el mapa como si el
+    # peso relativo de las localidades hubiera cambiado.
+    sh = serie.pivot(index="localidad", columns="anio", values="share")
+    l1 = float((sh[anios[-1]] - sh[anios[0]]).abs().sum() / 2)
+    print(f"  distancia L1 entre las participaciones de {anios[0]} y {anios[-1]}: {l1:.4f} "
+          f"(0 = mismo reparto). La coropleta tiene que usar rampa FIJA o el "
+          f"crecimiento no se ve.")
+    return 0
+
+
 def _elegir_fuente_proyecciones(nombre: str | None) -> tuple[Path, str] | None:
     """
     Devuelve (ruta, vintage) de la fuente de proyecciones a usar.
@@ -740,6 +809,14 @@ def main(argv: list[str] | None = None) -> int:
     p_proy.add_argument("--anio", type=int, default=PROYECCIONES_ANIO_POR_DEFECTO)
     p_proy.add_argument("--edad-minima", type=int, default=18, dest="edad_minima")
 
+    p_serie = sub.add_parser("marginal-serie",
+                             help="marginal territorial de varios años, para el mapa por año")
+    p_serie.add_argument("--archivo", default=None, help="nombre del anexo dentro de data/raw/")
+    p_serie.add_argument("--anios", type=int, nargs="+",
+                         default=[2013, 2017, 2019, 2021, 2023],
+                         help="años a extraer (default: las cinco olas de la ECP)")
+    p_serie.add_argument("--edad-minima", type=int, default=18, dest="edad_minima")
+
     p_ins = sub.add_parser("inspeccionar", help="vuelca los nombres de columna de un archivo de data/raw/")
     p_ins.add_argument("archivo")
 
@@ -753,6 +830,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_confianza(args.archivo)
     if args.modo == "proyecciones":
         return cmd_proyecciones(args.archivo, args.anio, args.edad_minima)
+    if args.modo == "marginal-serie":
+        return cmd_marginal_serie(args.archivo, sorted(args.anios), args.edad_minima)
     return cmd_inspeccionar(args.archivo)
 
 

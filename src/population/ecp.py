@@ -764,6 +764,18 @@ MAPA_EDUCACION_PROYECTO = {0: 0, 1: 1, 2: 2, 3: 3, 4: 3, 5: 4}
 
 COLUMNA_EDUCACION_MATCH = "educacion_match"
 COLUMNA_OPINION_ECP = "confianza_institucional"
+COLUMNA_N_ITEMS = "n_items_confianza"
+
+
+def _items_validos(panel: pd.DataFrame) -> pd.DataFrame:
+    """Los ítems de confianza, con todo lo que no cae en 1-5 puesto a NaN."""
+    presentes = [i for i in ITEMS_UTILES if i in panel.columns]
+    return panel[presentes].where(panel[presentes].apply(lambda c: c.between(1, 5)))
+
+
+def n_items_confianza(panel: pd.DataFrame) -> pd.Series:
+    """Cuántos ítems de confianza respondió cada persona, de 0 a 13 (DI-C11)."""
+    return _items_validos(panel).notna().sum(axis=1)
 
 
 def indice_confianza(panel: pd.DataFrame, min_items: int = INDICE_MIN_ITEMS) -> pd.Series:
@@ -772,9 +784,12 @@ def indice_confianza(panel: pd.DataFrame, min_items: int = INDICE_MIN_ITEMS) -> 
 
     El 99 ya viene fuera por construcción (no cae en `between(1, 5)`), y
     quien tenga menos de `min_items` respuestas queda en NaN (DI-C6).
+
+    **El denominador no es constante**, y por eso `n_items_confianza()` existe
+    y viaja con el dato (DI-C11): un índice de 7 ítems y uno de 13 son medidas
+    con fiabilidad distinta aunque se impriman igual.
     """
-    presentes = [i for i in ITEMS_UTILES if i in panel.columns]
-    X = panel[presentes].where(panel[presentes].apply(lambda c: c.between(1, 5)))
+    X = _items_validos(panel)
     return X.mean(axis=1).where(X.notna().sum(axis=1) >= min_items)
 
 
@@ -808,6 +823,7 @@ def donante_ecp(
         "nivel_educativo_ecp": pd.to_numeric(panel["educacion"], errors="coerce"),
         "factor_expansion": pd.to_numeric(panel["fex"], errors="coerce"),
         COLUMNA_OPINION_ECP: indice_confianza(panel, min_items=min_items),
+        COLUMNA_N_ITEMS: n_items_confianza(panel),
     })
     d[COLUMNA_EDUCACION_MATCH] = d["nivel_educativo_ecp"].map(MAPA_EDUCACION_ECP)
 
@@ -817,14 +833,31 @@ def donante_ecp(
     if d.empty:
         raise ECPError(f"ECP {anio}: no quedó ningún donante válido.")
 
+    n = d[COLUMNA_N_ITEMS]
     logger.info(
         "Donante ECP %s: %d de %d registros completos (%.1f%%). "
-        "Índice de confianza: media %.4f, sd %.4f.",
+        "Índice de confianza: media %.4f, sd %.4f. "
+        "Ítems promediados: %.1f%% con los %d completos, mínimo %d (DI-C11).",
         anio, len(d), antes, 100 * len(d) / antes,
         float(np.average(d[COLUMNA_OPINION_ECP], weights=d["factor_expansion"])),
         float(d[COLUMNA_OPINION_ECP].std()),
+        100 * float((n == len(ITEMS_UTILES)).mean()), len(ITEMS_UTILES), int(n.min()),
     )
     return d
+
+
+def resumen_n_items(donante: pd.DataFrame) -> dict:
+    """Distribución del denominador del índice, para dejarla en el metadata."""
+    if COLUMNA_N_ITEMS not in donante.columns:
+        return {}
+    n = donante[COLUMNA_N_ITEMS].astype(int)
+    return {
+        "items_utiles": len(ITEMS_UTILES),
+        "min_items_exigido": int(INDICE_MIN_ITEMS),
+        "minimo_observado": int(n.min()),
+        "completos_pct": round(100 * float((n == len(ITEMS_UTILES)).mean()), 2),
+        "distribucion": {int(k): int(v) for k, v in n.value_counts().sort_index().items()},
+    }
 
 
 def cargar_capital_social(raiz: str | Path, anio: int) -> pd.DataFrame:

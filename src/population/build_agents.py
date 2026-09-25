@@ -155,6 +155,7 @@ def guardar_poblacion_sintetica(
     nombre_base: str = "poblacion_sintetica",
     muestreo_metadata: Optional[dict] = None,
     diagnostico_territorial: Optional[pd.DataFrame] = None,
+    escala_opinion: Optional[dict] = None,
 ) -> Path:
     """
     Guarda la población sintética final + metadata de reproducibilidad
@@ -168,6 +169,11 @@ def guardar_poblacion_sintetica(
     hot-deck (ver matching.py) — así el supuesto de independencia
     condicional (POPULATION_SPECIFICATION.md sección 3) queda siempre
     trazable, no oculto detrás del archivo final de agentes.
+
+    `escala_opinion` describe QUÉ mide `opinion_t0`: la pregunta, el rango,
+    cuántos ítems se promediaron y con qué denominador. Sin eso, el CSV
+    entrega una columna de números entre 1 y 5 que nadie puede interpretar
+    sin abrir el código (A05).
     """
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -219,6 +225,11 @@ def guardar_poblacion_sintetica(
     # Composición territorial contra el marginal real. Es la verificación de
     # que el muestreo hizo lo que dice hacer, y el número que hay que
     # reportar junto a cualquier resultado territorial (D14).
+    # QUÉ mide opinion_t0. A05: el índice promedia un número variable de
+    # ítems por persona; el número está en `n_items` y viaja con el dato.
+    if escala_opinion:
+        metadata["escala_opinion"] = escala_opinion
+
     if diagnostico_territorial is not None:
         d = diagnostico_territorial
         n = int(d["observado"].sum())

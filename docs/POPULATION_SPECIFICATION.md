@@ -2,9 +2,10 @@
 
 Proyecto: Bogotá Social Simulator
 Documento: Extiende DATA_SPECIFICATION.md (Fase 2 del roadmap — Población sintética)
-Versión: 0.4 — **8.3 cerrada (DI-M1)**: el desempate determinista era el defecto más caro del pipeline, y se midió. Entra el donante EPC (§9)
+Versión: 0.5 — **8.4 cerrada con el donante ECP (A05)**: el umbral de 7 ítems se midió en vez de heredarse, y el denominador del índice quedó registrado por fila y publicado en la página
+Versión 0.4 — **8.3 cerrada (DI-M1)**: el desempate determinista era el defecto más caro del pipeline, y se midió. Entra el donante EPC (§9)
 Versión 0.3 — Método implementado, probado y auditado (A05 sigue abierta formalmente)
-Fecha: 17 de septiembre de 2026
+Fecha: 23 de septiembre de 2026
 
 ---
 
@@ -158,13 +159,33 @@ La población vieja tenía la opinión apelmazada en pocos valores donados, con 
 
 Implementación en `src/population/matching.py` (DI-M1). Regresor en `tests/test_population_matching.py`.
 
-### 8.4 Abierto — el índice de confianza promedia un número variable de ítems
+### 8.4 CERRADO con el donante ECP — el índice de confianza promedia un número variable de ítems
 
-`df[cols].apply(pd.to_numeric).mean(axis=1)` ignora los NaN sin umbral mínimo de respuesta. Verificando los denominadores implícitos en `opinion_t0`, aparecen valores de **1 a 8**: hay agentes cuyo "índice compuesto de confianza institucional" proviene de **un solo actor** evaluado, y es indistinguible del de alguien que evaluó los ocho. Eso explica buena parte de los 172 agentes con valor exactamente 3,000 y los 157 con exactamente 2,000.
+**El defecto original, y a qué donante pertenece.** `df[cols].apply(pd.to_numeric).mean(axis=1)` ignora los NaN sin umbral mínimo de respuesta. Verificando los denominadores implícitos en `opinion_t0` de la **población de la Veeduría**, aparecen valores de **1 a 8**: hay agentes cuyo "índice compuesto de confianza institucional" proviene de **un solo actor** evaluado, y es indistinguible del de alguien que evaluó los ocho. Eso explica buena parte de los 172 agentes con valor exactamente 3,000 y los 157 con exactamente 2,000. Ese diagnóstico sigue vigente **para ese donante**, y por eso el bloque `escala_opinion` de esa rama lo dice en el metadata en vez de callarlo.
 
-Además, el docstring de `loader.py` habla de 7 actores y `_FRAGMENTOS_ACTORES_CONFIANZA` lista 8 (DATA_SPECIFICATION.md dice 7 pero enumera 8 nombres) — inconsistencia a resolver contra el cuestionario real. Y si un fragmento no encuentra su columna, la función solo emite un `warning` y continúa: el número de actores efectivamente promediados no queda registrado en ningún lado, lo que hace que dos corridas puedan producir índices distintos sin que nada lo señale.
+**Con el donante ECP el umbral ya existía, pero nunca se había medido.** `ecp.py` exige `INDICE_MIN_ITEMS = 7` de 13 desde DI-C6. Lo que faltaba era saber si 7 es el número correcto, y dejar registrado el denominador de cada índice. Medido sobre la ECP 2013 en Bogotá (5.917 personas, 13 ítems utilizables):
 
-**Decisión pendiente:** fijar un mínimo de ítems respondidos, y registrar en el metadata cuántos actores se promediaron.
+| ítems respondidos | 0 | 1-6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 |
+|---|---|---|---|---|---|---|---|---|---|
+| personas | 68 | 62 | 15 | 19 | 31 | 48 | 135 | 407 | **5.132** |
+
+| umbral | conserva | media ponderada | sd |
+|---|---|---|---|
+| `min_items = 1` | 5.849 (98,9 %) | 2,8150 | 0,7632 |
+| `min_items = 7` (actual) | 5.787 (97,8 %) | **2,8076** | 0,7557 |
+| `min_items = 13` | 5.132 (86,7 %) | 2,8008 | 0,7637 |
+
+**El umbral se queda en 7, ahora por medición y no por inercia.** Exigir los 13 mueve la media 0,007 puntos sobre una escala de 4 y cuesta el 11 % de la muestra donante — y ese 11 % no es aleatorio, es quien contesta menos, que es precisamente el perfil que no conviene borrar. La distribución está tan concentrada (86,7 % contesta las 13) que el denominador variable **no** es, con esta fuente, el problema que sí es con la Veeduría.
+
+**Lo que sí faltaba, y es lo que se cerró:** registrar el denominador.
+
+- `ecp.py` expone `n_items_confianza()` y emite la columna `n_items_confianza` en el donante (DI-C11), de modo que el número de ítems promediados viaja **con cada fila**, no como promedio de la corrida.
+- `resumen_n_items()` resume esa distribución y `construir_poblacion.py` la pasa a `guardar_poblacion_sintetica(..., escala_opinion=...)`.
+- El metadata de la población trae ahora un bloque `escala_opinion` con la pregunta, el rango, las anclas verbales (*1 = no confía, 5 = confía mucho*), la dirección, cómo se construye el índice, las 13 instituciones, la distribución de denominadores y una línea explícita de **lo que la escala no es** (no es un porcentaje: 3,0 es el punto medio, no "30 % de confianza").
+- `donante_fuente` decía "13 ítems de P5263S\*" como si todos hubieran respondido los 13. Ahora dice *hasta* 13, con el mínimo exigido y el porcentaje que respondió todo.
+- El mapa copia ese bloque tal cual al paquete de visualización (DI-V34) y la página lo publica: la escala 1-5 dejó de ser una columna de números sin etiqueta.
+
+**Sigue abierto, acotado:** la rama de la Veeduría. El docstring de `loader.py` habla de 7 actores y `_FRAGMENTOS_ACTORES_CONFIANZA` lista 8 (DATA_SPECIFICATION.md dice 7 pero enumera 8 nombres) — inconsistencia a resolver contra el cuestionario real; y si un fragmento no encuentra su columna, la función solo emite un `warning` y continúa. Esa rama no tiene umbral ni columna de denominador, y su `escala_opinion` lo declara así en vez de fingir que sí. Ese donante ya no alimenta ningún experimento vigente, así que la deuda queda enunciada y priorizada por debajo, no disimulada.
 
 ### 8.5 Abierto — `opinion_t0` es independiente de estrato por construcción
 
@@ -207,5 +228,7 @@ El Experimento 7 necesita una población base construida sobre la Encuesta de Pe
 Población `poblacion_epc2014.csv`: 1.000 agentes, 100 % emparejados en nivel 0 (sexo exacto), distancia territorial al marginal 0,045, y \(W_1(a_0, \text{obs}_{2014}) = 0{,}0528\) contra un piso de ruido de 0,0580 — **por debajo del piso**. T6 pasa.
 
 ---
+
+*Estado de A05 (23 de septiembre de 2026): la parte medible quedó cerrada — §8.4. Lo que sigue abierto es la rama de la Veeduría, que ya no alimenta ningún experimento vigente.*
 
 *Documento vivo — decisión final sobre el método de fusión (A05) se registra en PROJECT_CONTEXT.md con formato D0X cuando se confirme, siguiendo la convención establecida ahí (nota: la versión anterior de este documento decía "se registra en MODEL_SPECIFICATION.md", lo cual era inconsistente con la convención real del proyecto — corregido aquí).*

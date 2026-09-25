@@ -1,11 +1,20 @@
+<!-- DI-V22. Sin este meta, un navegador que abra el archivo desde el disco
+     (file://) no recibe cabecera Content-Type y asume Latin-1: «Los Mártires»
+     sale «Los MÃ¡rtires». Publicado como artefacto no pasa, porque el
+     servidor sí manda el charset — y por eso el defecto puede vivir meses sin
+     que nadie lo note. -->
+<meta charset="utf-8">
 <title>Bogotá Sintética</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root{
-  --ground:#e9ece7; --surface:#f7f9f6; --surface-2:#dfe4dd;
-  --ink:#16211c; --ink-2:#48564f; --ink-3:#7d8b83;
+  /* DI-V24. Paleta «Páramo»: el verde de los cerros sobre papel de sabana.
+     Es la identidad del proyecto; la vista Ciudad y los pósters usan la de
+     prettymaps, y ese contraste es el que marca el cambio de modo. */
+  --ground:#dfe4dd; --surface:#f7f9f6; --surface-2:#dfe4dd;
+  --ink:#16211c; --ink-2:#48564f; --ink-3:#69756e;
   --line:#c8d0c8; --line-soft:#d8ded7;
   --teja:#b2452c; --paramo:#2f6b5e; --cielo:#5a7d93;
   --focus:#b2452c;
@@ -28,6 +37,47 @@
   --teja:#e07a5c; --paramo:#63b09c; --cielo:#8fb2c7;
   --focus:#e07a5c;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+/* ---------- colores del lienzo ----------
+   DI-V21. La coropleta usa rampas fijas en RGB: no cambia con el tema del
+   sistema. Por lo tanto TODO lo que se dibuja encima tampoco puede cambiar —
+   si el borde de localidad o el trazo de una vía siguieran a --ink/--surface,
+   en modo oscuro quedarían claros sobre un relleno claro y desaparecerían.
+   Estas cinco variables se definen una sola vez y no se redefinen nunca. */
+:root{
+  /* Curvas y duraciones. Las CSS de serie son demasiado débiles; estas son las
+     del repertorio de Emil Kowalski. Nada de UI pasa de 300 ms. */
+  /* Verde de selección. No puede ser un verde de la rampa: un trazo verde
+     sobre una coropleta verde no se ve — el mejor candidato daba 1,1:1 contra
+     el paso más oscuro. Se dibuja sobre un halo del color del papel, que es
+     lo que lo despega de cualquier relleno. */
+  --sel:#0e9b62;
+  /* El tinte de la localidad seleccionada en la vista Ciudad: verde muy claro
+     y translúcido, para que deje ver las vías y los parques que tiene debajo.
+     Es el único color de esa vista. */
+  --sel-tinte:rgba(72, 187, 128, .28);
+  --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
+  --t-press:120ms;
+  --t-panel:140ms;
+  --t-camara:240ms;
+  --t-paleta:300ms;
+
+  --lienzo-papel:#e9ece7;   /* fondo del mapa */
+  --lienzo-borde:#f7f9f6;   /* separación entre localidades */
+  --lienzo-tinta:#16211c;   /* trazos y texto sobre la coropleta */
+  --base-via:#16211c;
+  --base-verde:#2f6b5e;
+  --base-agua:#5a7d93;
+
+  /* DI-V23. Vista «Ciudad»: la paleta del preset `barcelona` de prettymaps,
+     con sus valores exactos. Es la misma que usan los pósters, para que las
+     dos piezas se reconozcan. Fijas, como todas las del lienzo (DI-V21). */
+  --ciudad-papel:#F2F4CB;
+  --ciudad-suelo:#f7f8e0;
+  --ciudad-verde:#8BB174;
+  --ciudad-agua:#a8e1e6;
+  --ciudad-tinta:#2F3737;
 }
 
 *{box-sizing:border-box}
@@ -63,17 +113,84 @@ h1 em{font-style:italic; color:var(--paramo)}
 
 .panel{background:var(--surface); border:1px solid var(--line); border-radius:4px}
 .mapa-caja{position:relative; overflow:hidden}
-svg.mapa{display:block; width:100%; height:auto; touch-action:manipulation}
+/* touch-action:none — sin esto el navegador se queda el arrastre de un dedo
+   para hacer scroll y el paneo no llega nunca al mapa. La contrapartida es
+   que hay que devolverle el scroll a la página a mano fuera del lienzo. */
+/* El lienzo tiene altura propia y NO la forma del bbox de la ciudad. Bogotá
+   urbana es un corredor norte-sur larguísimo: atar la altura del panel a esa
+   forma daba una columna de 1.500 × 3.800 px en la que, al acercar, solo se
+   veía una franja. El encuadre inicial se calcula para caber aquí dentro. */
+svg.mapa{display:block; width:100%; height:clamp(440px,74vh,880px); touch-action:none;
+  cursor:grab; background-color:var(--lienzo-papel)}
+svg.mapa.arrastrando{cursor:grabbing}
 /* vector-effect: sin esto el ancho de trazo se mide en unidades del viewBox,
    que aquí son grados de longitud (~0,25 de ancho total): un trazo de 0,7
    taparía el mapa entero. */
-.loc{stroke:var(--surface); stroke-width:.7; vector-effect:non-scaling-stroke;
+.loc{stroke:var(--lienzo-borde); stroke-width:.7; vector-effect:non-scaling-stroke;
      stroke-linejoin:round; cursor:pointer; transition:fill .35s ease, opacity .2s ease}
 .loc:hover{opacity:.82}
-.loc.sel{stroke:var(--ink); stroke-width:1.6}
+/* El anillo de foco por defecto de Chrome sobre un <path> con tabindex es
+   `auto 5px` casi negro y se dibuja siguiendo el contorno: en una localidad
+   pequeña tapa el relleno entero y parece que se pintó de negro. Se reemplaza
+   por un trazo propio, que además es coherente con el de selección. */
+.loc:focus{outline:none}
+.loc:focus-visible{outline:none; stroke:var(--focus); stroke-width:2.2}
+.loc.sel:focus-visible{stroke:var(--focus); stroke-width:2.2}
+.sel-relleno{fill:var(--sel-tinte); stroke:none}
+.sel-halo{fill:none; stroke:var(--lienzo-borde); stroke-width:5;
+  vector-effect:non-scaling-stroke; stroke-linejoin:round}
+.sel-linea{fill:none; stroke:var(--sel); stroke-width:2.4;
+  vector-effect:non-scaling-stroke; stroke-linejoin:round}
 .agente{pointer-events:none}
-.etq{font-family:'Archivo',sans-serif; fill:var(--ink); paint-order:stroke;
-     stroke:var(--surface); stroke-width:2.5px; vector-effect:non-scaling-stroke;
+
+/* ---------- capa base (DI-V8 a DI-V14) ----------
+   Va ENCIMA de la coropleta y DEBAJO de los agentes: su trabajo es que se
+   reconozca la ciudad, no competir con el dato. Todo aquí es deliberadamente
+   tenue y sin eventos de puntero: la capa base nunca se puede hacer clic ni
+   seleccionar, porque no es información del modelo. */
+/* La capa base ya no se conmuta: está siempre. Tenía un botón propio y era
+   redundante con la vista Ciudad, que es donde se hace protagonista. */
+#capaBase{transition:opacity .3s ease; pointer-events:none}
+/* El relleno solo no basta: sobre la coropleta de población, que también es
+   verde, un parque con 22 % de opacidad desaparece. El contorno es lo que
+   hace que el parque se lea sobre cualquiera de las dos rampas. */
+/* Conmutar Datos/Ciudad cambia la paleta entera. Sólo transiciona el papel:
+   un nodo. La capa base son ~1.400 paths y ponerles transición de color
+   obligaba al navegador a interpolar 1.400 elementos a la vez — el cambio de
+   vista tardaba segundos en aparecer. La animación costaba más de lo que
+   arreglaba, así que la paleta de la base salta — y el papel con ella.
+
+   Dos intentos fallidos antes de llegar aquí, por si alguien quiere repetirlos:
+   transicionar el atajo `background` deja el color atascado en el valor viejo
+   hasta que algo fuerza un recálculo (el atajo arrastra background-image,
+   -position y -size, y Chromium no lo interpola bien: «nombra las propiedades
+   exactas» no era una regla de estilo, evitaba esto). Y aun con
+   `background-color`, añadir la clase al contenedor obliga a recalcular el
+   estilo de ~2.500 nodos del SVG, y ese trabajo retrasa el arranque de la
+   transición lo suficiente como para que se vea un desfase. Conmutar de vista
+   es un cambio de modo: que salte es correcto. */
+.b-verde{fill:var(--base-verde); fill-opacity:.34; stroke:var(--base-verde); stroke-opacity:.72;
+         stroke-width:.5; vector-effect:non-scaling-stroke; stroke-linejoin:round}
+/* Detalle progresivo (DI-V15): lo que solo aparece al acercar entra con una
+   transición corta, para que se lea como «apareció detalle» y no como
+   «parpadeó algo». */
+#capaBase .detalle{opacity:0; transition:opacity .25s ease}
+#capaBase.cerca .detalle{opacity:1}
+/* De lejos la capa base tiene que ceder ante la coropleta, que es el dato; de
+   cerca la coropleta es un color plano y lo único que informa es la calle. */
+#capaBase.cerca .b-via.trunk{stroke-opacity:.6; stroke-width:1.6}
+#capaBase.cerca .b-via.primary{stroke-opacity:.45; stroke-width:1}
+#capaBase.cerca .b-verde{fill-opacity:.42}
+#capaBase.cerca .b-cauce{stroke-opacity:.75; stroke-width:1.1}
+.b-agua{fill:var(--base-agua); fill-opacity:.38; stroke:none}
+.b-cauce{fill:none; stroke:var(--base-agua); stroke-opacity:.55; stroke-width:.7;
+         vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round}
+.b-via{fill:none; stroke:var(--base-via); vector-effect:non-scaling-stroke;
+       stroke-linecap:round; stroke-linejoin:round}
+.b-via.trunk{stroke-opacity:.42; stroke-width:1.15}
+.b-via.primary{stroke-opacity:.26; stroke-width:.65}
+.etq{font-family:'Archivo',sans-serif; fill:var(--lienzo-tinta); paint-order:stroke;
+     stroke:var(--lienzo-borde); stroke-width:2.5px; vector-effect:non-scaling-stroke;
      pointer-events:none; text-anchor:middle; font-weight:500}
 #capaEtq{opacity:0; transition:opacity .25s}
 #capaEtq.on{opacity:1}
@@ -82,20 +199,84 @@ svg.mapa{display:block; width:100%; height:auto; touch-action:manipulation}
 .barra{display:flex; flex-wrap:wrap; gap:8px; padding:12px 14px; border-bottom:1px solid var(--line-soft)}
 .grupo{display:flex; border:1px solid var(--line); border-radius:3px; overflow:hidden}
 button{font:inherit; font-size:12.5px; color:var(--ink-2); background:var(--surface);
-  border:0; padding:6px 11px; cursor:pointer; transition:background .15s, color .15s}
+  border:0; padding:6px 11px; cursor:pointer;
+  transition:background .15s, color .15s, transform var(--t-press) var(--ease-out)}
 button + button{border-left:1px solid var(--line)}
-button:hover{background:var(--surface-2); color:var(--ink)}
+/* El hover se gatea por puntero fino: en táctil un toque deja el estado
+   pegado hasta que tocas otra cosa. */
+@media (hover: hover) and (pointer: fine){
+  button:hover{background:var(--surface-2); color:var(--ink)}
+}
+/* Feedback de pulsación. Decenas de veces al día, así que casi imperceptible:
+   3 % de escala en 120 ms. Confirma que el botón oyó, y nada más. */
+button:active{transform:scale(.97)}
 button[aria-pressed="true"]{background:var(--ink); color:var(--surface)}
 button:focus-visible{outline:2px solid var(--focus); outline-offset:-2px}
+
+/* ---------- vista «Ciudad» (DI-V23) ----------
+   Ya no es un modo aparte: es la misma herramienta con otra paleta. Las capas
+   de dato —población, agentes, opinión— funcionan igual en las dos vistas; lo
+   que cambia es el papel y el tratamiento de la base urbana. */
+/* El límite de localidad va punteado: no es un objeto de la ciudad sino una
+   convención administrativa, y el punteado lo dice sin explicarlo. */
+.mapa-caja.ciudad svg.mapa{background-color:var(--ciudad-papel)}
+.mapa-caja.ciudad .loc{stroke:var(--ciudad-tinta); stroke-opacity:.6;
+  stroke-width:1.1; stroke-dasharray:6 4}
+.mapa-caja.ciudad #capaBase{opacity:1}
+.mapa-caja.ciudad #capaBase .detalle{opacity:1}
+/* En Ciudad la base manda, pero ahora tiene la coropleta debajo: opacidad
+   suficiente para leerse, no tanta como para tapar el dato. */
+.mapa-caja.ciudad .b-verde{fill:var(--ciudad-verde); fill-opacity:.55;
+  stroke:var(--ciudad-tinta); stroke-opacity:.8; stroke-width:.45}
+.mapa-caja.ciudad .b-agua{fill:var(--ciudad-agua); fill-opacity:.7}
+.mapa-caja.ciudad .b-cauce{stroke:var(--ciudad-agua); stroke-opacity:1; stroke-width:1.5}
+.mapa-caja.ciudad .b-via{stroke:var(--ciudad-tinta)}
+.mapa-caja.ciudad .b-via.trunk{stroke-opacity:1; stroke-width:2}
+.mapa-caja.ciudad .b-via.primary{stroke-opacity:.85; stroke-width:1.1}
+.mapa-caja.ciudad .etq{fill:var(--ciudad-tinta); stroke:var(--ciudad-papel)}
+.mapa-caja.ciudad .escala span{color:var(--ciudad-tinta);
+  text-shadow:0 0 3px var(--ciudad-papel), 0 0 3px var(--ciudad-papel)}
+.mapa-caja.ciudad .escala .barra-esc{border-color:var(--ciudad-tinta)}
+.oculto{display:none !important}
+.solo-ciudad{display:none; font-size:12px; color:var(--ink-3); padding:6px 11px;
+  align-self:center}
+.mapa-caja.ciudad .solo-ciudad{display:inline}
+
+/* ---------- navegación ---------- */
+.nivel{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-3);
+  padding:6px 9px; min-width:46px; text-align:center; font-variant-numeric:tabular-nums;
+  border:1px solid var(--line); border-radius:3px; background:var(--surface)}
+#lienzo{position:relative}
+.escala{position:absolute; left:14px; bottom:12px; z-index:2; display:flex; flex-direction:column; gap:3px;
+  pointer-events:none; user-select:none}
+.escala .barra-esc{height:6px; border:1px solid var(--lienzo-tinta); border-top:0; background:transparent}
+.escala span{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--lienzo-tinta);
+  text-shadow:0 0 3px var(--lienzo-borde), 0 0 3px var(--lienzo-borde)}
+.pista{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(22,33,28,.55); color:#fff; font-size:14px; opacity:0; pointer-events:none;
+  transition:opacity .2s ease; padding:20px; text-align:center}
+.pista.on{opacity:1}
 
 .leyenda{display:flex; align-items:center; gap:10px; padding:10px 14px; border-top:1px solid var(--line-soft);
   font-size:12px; color:var(--ink-3); flex-wrap:wrap}
 .rampa{height:9px; flex:1 1 130px; min-width:110px; border-radius:2px; border:1px solid var(--line-soft)}
 .rampa-lab{font-family:'IBM Plex Mono',monospace; font-size:11px; font-variant-numeric:tabular-nums}
+/* El eje existe para que la rampa de población se pueda LEER: sin marcas
+   intermedias el lector supone una escala lineal y la de población no lo es
+   (DI-V36). El padding inferior reserva el sitio de las etiquetas. */
+.rampa-eje{position:relative; flex:1 1 200px; min-width:180px; padding-bottom:13px}
+.rampa-eje .rampa{flex:none; width:100%; display:block}
+.rampa-eje .marca{position:absolute; top:0; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:2px; pointer-events:none}
+.rampa-eje .marca i{display:block; width:1px; height:11px; background:var(--ink-3); opacity:.55}
+.rampa-eje .marca span{font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--ink-3);
+  font-variant-numeric:tabular-nums; white-space:nowrap}
 
 /* ---------- inspector ---------- */
 .insp{padding:18px 20px 20px; display:flex; flex-direction:column; gap:16px}
 .insp h2{font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:26px; margin:0; line-height:1.1}
+.insp h2 .ir{font-family:'Archivo',sans-serif; font-size:11.5px; vertical-align:middle; margin-left:8px;
+  border:1px solid var(--line); border-radius:3px; padding:4px 9px}
 .insp .cod{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-3); letter-spacing:.08em}
 .filas{display:flex; flex-direction:column; gap:0; margin:0}
 .fila{display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-top:1px solid var(--line-soft); font-size:13.5px}
@@ -118,6 +299,108 @@ button:focus-visible{outline:2px solid var(--focus); outline-offset:-2px}
 .banda .tick{position:absolute; bottom:8px; font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-3)}
 
 /* ---------- aviso ---------- */
+
+/* ---------- Hito 2: la serie medida ----------
+   Dos colores validados: la separación bajo protanopía es ΔE 19,8 y la de
+   visión normal 25,6, así que las dos líneas se distinguen sin depender del
+   color — y aun así cada serie lleva su propia forma de marcador. */
+:root{ --s-ecp:#14588a; --s-epc:#b8531f; }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --s-ecp:#3f92cc; --s-epc:#d4713f; }
+}
+
+.serie{border:1px solid var(--line); border-radius:3px; background:var(--surface);
+  padding:18px 20px 16px; display:flex; flex-direction:column; gap:14px}
+.serie header{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:0}
+.serie h3{margin:0; font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:21px;
+  line-height:1.15; color:var(--ink)}
+.serie .sub{margin:0; font-size:13.5px; color:var(--ink-2); max-width:72ch}
+.serie .grupo{margin-left:auto}
+.serie-lienzo{position:relative}
+.serie svg{display:block; width:100%; height:auto}
+@media (max-width:720px){
+  /* Encoger el viewBox haría el texto ilegible; se desplaza en su lugar. */
+  .serie-lienzo{overflow-x:auto}
+  .serie svg{min-width:640px}
+}
+.serie .grid{stroke:var(--line-soft); stroke-width:1}
+.serie .eje-lab{fill:var(--ink-3); font-family:'IBM Plex Mono',monospace; font-size:10px;
+  font-variant-numeric:tabular-nums}
+.serie .linea{fill:none; stroke-width:2; stroke-linejoin:round; stroke-linecap:round}
+.serie .barra{stroke-width:2; opacity:.5}
+.serie .cap{stroke-width:1.5; opacity:.5}
+.serie .hit{fill:transparent; cursor:pointer}
+.serie .hit:focus{outline:none}
+/* El área de clic mide 28 px y el punto 9: el puntero tiene que llegar al
+   área, no al dibujo. Sin esto, apuntar bien al punto era lo único que NO
+   funcionaba. */
+.serie .marcador{pointer-events:none}
+.serie .hit:focus-visible + .marcador,
+.serie .marca-viva{stroke:var(--ink); stroke-width:2.5}
+.serie .cruz{stroke:var(--ink-3); stroke-width:1; stroke-dasharray:2 3; opacity:0;
+  transition:opacity var(--t-press) var(--ease-out)}
+.serie .cruz.on{opacity:.7}
+.serie .rotulo{font-family:'Archivo',sans-serif; font-size:11px; fill:var(--ink-2)}
+.serie .anio-activo{pointer-events:none; transition:opacity var(--t-press) var(--ease-out)}
+
+.serie-pie{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;
+  border-top:1px solid var(--line-soft); padding-top:12px}
+.serie-ley{display:flex; flex-direction:column; gap:7px; font-size:12.5px}
+.serie-ley div{display:flex; align-items:center; gap:8px; color:var(--ink-2)}
+.serie-ley i{display:block; width:20px; height:0; border-top:2px solid currentColor; flex:none}
+.serie-ley b{font-weight:500; color:var(--ink)}
+.serie-ley small{color:var(--ink-3); font-size:11.5px}
+.serie-lectura{margin-left:auto; min-width:236px; font-size:12.5px; color:var(--ink-2);
+  display:flex; flex-direction:column; gap:5px}
+.serie-lectura .anio{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-3);
+  letter-spacing:.08em}
+.serie-lectura .fila{display:flex; align-items:baseline; gap:8px}
+.serie-lectura .fila i{display:block; width:14px; height:0; border-top:2px solid currentColor;
+  flex:none; transform:translateY(-4px)}
+.serie-lectura .val{font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.serie-lectura .det{color:var(--ink-3); font-size:11.5px}
+.serie .tabla{font-size:12.5px}
+.serie .tabla summary{cursor:pointer; color:var(--ink-3); font-size:12px;
+  font-family:'IBM Plex Mono',monospace}
+.serie .tabla table{border-collapse:collapse; margin-top:10px; width:100%}
+.serie .tabla th,.serie .tabla td{text-align:right; padding:3px 8px; border-bottom:1px solid var(--line-soft);
+  font-variant-numeric:tabular-nums}
+.serie .tabla th:first-child,.serie .tabla td:first-child{text-align:left}
+.serie .tabla th{color:var(--ink-3); font-weight:500}
+.serie .tabla td{color:var(--ink-2)}
+.serie .prestado{color:var(--ink-3)}
+
+.ficha{border:1px solid var(--line); border-radius:3px; background:var(--surface)}
+.ficha summary{list-style:none; cursor:pointer; padding:13px 18px; display:flex; align-items:baseline;
+  gap:10px; font-size:14px; color:var(--ink); user-select:none}
+.ficha summary::-webkit-details-marker{display:none}
+.ficha summary b{font-weight:500}
+.ficha summary .q{font-size:12px; color:var(--ink-3); margin-left:auto;
+  font-family:'IBM Plex Mono',monospace}
+.ficha summary .q::after{content:'abrir ficha'}
+.ficha details[open] summary .q::after{content:'cerrar'}
+.ficha summary:hover .q{color:var(--paramo)}
+.ficha summary::before{content:'+'; font-family:'IBM Plex Mono',monospace; color:var(--ink-3);
+  transition:transform var(--t-press) var(--ease-out)}
+.ficha details[open] summary::before{content:'−'}
+.ficha .cuerpo{padding:0 18px 18px; display:flex; flex-direction:column; gap:12px;
+  border-top:1px solid var(--line-soft); margin-top:0; padding-top:14px}
+/* 140 ms, solo opacidad y desplazamiento: el alto del bloque no se anima
+   porque animar `height` en un panel de texto reflowa en cada cuadro. */
+.ficha details[open] .cuerpo{animation:fichaEntra var(--t-panel) var(--ease-out)}
+@keyframes fichaEntra{from{opacity:0; transform:translateY(-4px)} to{opacity:1; transform:none}}
+.ficha p{margin:0; color:var(--ink-2); font-size:14px; max-width:78ch}
+.ficha .cita{font-family:'Fraunces',Georgia,serif; font-size:16px; color:var(--ink);
+  border-left:2px solid var(--paramo); padding-left:12px; line-height:1.4}
+.ficha .anclas{display:flex; align-items:center; gap:10px; font-size:13px; color:var(--ink-2)}
+.ficha .anclas .rampa{flex:1; max-width:220px}
+.ficha .insts{margin:0; padding:0; list-style:none; display:flex; flex-wrap:wrap; gap:5px}
+.ficha .insts li{font-size:12.5px; color:var(--ink-2); background:var(--surface-2);
+  border-radius:2px; padding:2px 8px}
+.ficha .no-es{color:var(--teja); font-size:13.5px}
+.ficha .denom{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-3)}
+
 .aviso{border:1px solid var(--line); border-left:3px solid var(--teja); border-radius:3px;
   background:var(--surface); padding:18px 20px; display:flex; flex-direction:column; gap:10px}
 .aviso h3{margin:0; font-family:'Fraunces',Georgia,serif; font-weight:500; font-size:20px; line-height:1.15}
@@ -147,10 +430,16 @@ footer b{font-weight:500; color:var(--ink-2)}
 <section class="tablero">
   <div class="panel mapa-caja">
     <div class="barra">
-      <div class="grupo" role="group" aria-label="Capa">
+      <div class="grupo" role="group" aria-label="Vista">
+        <button data-visual="datos" aria-pressed="true">Datos</button>
+        <button data-visual="ciudad" aria-pressed="false">Ciudad</button>
+      </div>
+      <div class="grupo" id="grupoCapa" role="group" aria-label="Capa">
         <button data-capa="poblacion" aria-pressed="true">Población</button>
         <button data-capa="agentes" aria-pressed="false">Agentes</button>
         <button data-capa="opinion" aria-pressed="false">Opinión</button>
+        <button data-capa="crecimiento" aria-pressed="false">Crecimiento</button>
+        <span class="solo-ciudad">Sin coropleta</span>
       </div>
       <div class="grupo" role="group" aria-label="Extensión">
         <button data-vista="urbana" aria-pressed="true">Urbana</button>
@@ -159,13 +448,27 @@ footer b{font-weight:500; color:var(--ink-2)}
       <div class="grupo" role="group" aria-label="Nombres">
         <button id="btnEtq" aria-pressed="false">Nombres</button>
       </div>
+      <div class="grupo" id="grupoAnio" role="group" aria-label="Año de la medición"></div>
+      <div class="grupo" role="group" aria-label="Acercamiento">
+        <button id="btnMenos" title="Alejar (tecla −)" aria-label="Alejar">−</button>
+        <button id="btnAjustar" title="Ajustar al encuadre (tecla 0)">Ajustar</button>
+        <button id="btnMas" title="Acercar (tecla +)" aria-label="Acercar">+</button>
+      </div>
+      <div class="nivel" id="nivel" aria-live="polite">×1,0</div>
     </div>
-    <div id="lienzo"></div>
+    <div id="lienzo">
+      <div class="escala" id="escala" aria-hidden="true"><span></span><div class="barra-esc"></div></div>
+      <div class="pista" id="pista">Para acercar, usa Ctrl + rueda, el pellizco del trackpad o los botones + y −</div>
+    </div>
     <div class="leyenda" id="leyenda"></div>
   </div>
 
   <div class="panel insp" id="insp"></div>
 </section>
+
+<section class="serie" id="serie" hidden></section>
+
+<section class="ficha" id="ficha" hidden></section>
 
 <section class="aviso" id="aviso"></section>
 
@@ -173,15 +476,55 @@ footer b{font-weight:500; color:var(--ink-2)}
   <p><b>Geometría:</b> Unidad Administrativa Especial de Catastro Distrital, capa <code>Localidad</code>, simplificada a ~70 m para dibujo.</p>
   <p><b>Población:</b> 1.000 agentes sintéticos, versión <code>v0.3-DI-M1</code>; marginal territorial de población de 18 años o más.</p>
   <p><b>Advertencia de método:</b> la posición de cada punto dentro de su localidad es aleatoria. El modelo no tiene geografía por debajo de la localidad; los puntos no son domicilios.</p>
+  <p><b>Navegación:</b> se arrastra para mover y se acerca con Ctrl + rueda, con el pellizco del trackpad, con doble clic o con los botones. Al acercar aparecen las vías secundarias y los parques pequeños. La barra de escala se recalcula sola; la geometría está simplificada a resolución de pantalla, así que sirve para ubicarse, no para medir.</p>
+  <p><b>Capa base urbana:</b> vías arteriales y áreas verdes de OpenStreetMap (© colaboradores de OpenStreetMap, <a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>), extracto del 21 de septiembre de 2026, simplificado a ~22 m para dibujo. Es orientación visual: <b>ninguna cifra de esta página se calcula con ella</b>. El recorte es regional, no político, así que dentro del encuadre se ven vías y parques de municipios vecinos; lo único que delimita el Distrito son los polígonos de localidad.</p>
 </footer>
 
 </div>
 
 <script id="datos" type="application/json">/*__DATOS__*/</script>
+<script id="base" type="application/json">/*__BASE__*/</script>
+<script id="serieDatos" type="application/json">/*__SERIE__*/</script>
 <script>
 (() => {
 const D = JSON.parse(document.getElementById('datos').textContent);
-const L = D.localidades, C = D.ciudad;
+const L = D.localidades;
+/* El año seleccionado gobierna el mapa, el inspector, las cifras y el aviso.
+   `C` y `opDe` son las DOS únicas puertas por las que se lee un dato de
+   opinión: mientras sean funciones del año, no puede quedar media pantalla
+   mostrando 2013 y la otra media 2021 (DI-V46). */
+const ANIOS = D.anios;
+let anioSel = D.anio_base;
+const C = () => D.ciudad_por_anio[String(anioSel)];
+const opDe = (l, campo) => l.por_anio[String(anioSel)][campo];
+/* La ficha de la variable la escribe el pipeline, no esta página (DI-V34).
+   Si falta, el bloque no se dibuja: mejor sin ficha que con una inventada. */
+const E = D.escala_opinion || null;
+/* Cuánto crece la ciudad y cuánto se mueve el reparto. Sin estas dos cifras,
+   un lector que cambie de año en la capa verde concluye que el botón está
+   roto (DI-V50). */
+const R = D.poblacion_resumen || null;
+/* Crecimiento acumulado desde el año base hasta el seleccionado. En el año
+   base es 0 en todas partes, y eso es correcto: no hay nada acumulado todavía.
+   El dominio se fija sobre TODOS los años (DI-V49 otra vez): si se reescalara
+   por año, la acumulación sería invisible porque cada corte se vería igual. */
+const crecDe = l => {
+  if(!D.poblacion_por_anio) return null;
+  const base = l.por_anio[String(D.anio_base)].poblacion_18mas;
+  const hoy = l.por_anio[String(anioSel)].poblacion_18mas;
+  return (base && hoy) ? (hoy/base - 1) : null;
+};
+const crecMax = (() => {
+  if(!D.poblacion_por_anio) return 0;
+  let m = 0;
+  for(const a of ANIOS) for(const l of L){
+    const b = l.por_anio[String(D.anio_base)].poblacion_18mas;
+    const h = l.por_anio[String(a)].poblacion_18mas;
+    if(b && h) m = Math.max(m, Math.abs(h/b - 1));
+  }
+  return m;
+})();
+const B = JSON.parse(document.getElementById('base').textContent);
 const fmt = n => n.toLocaleString('es-CO');
 const f1 = n => n.toLocaleString('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1});
 const f2 = n => n.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -217,28 +560,109 @@ const dPath = geom => {
 const mez = (a,b,t) => a.map((v,i)=>Math.round(v+(b[i]-v)*t));
 const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
 // secuencial verde-páramo → teja, pasando por arena
-const RAMPA = [[233,238,232],[186,206,190],[131,173,155],[ 79,134,120],[ 43, 92, 82]];
-const RAMPA_OP = [[ 90,125,147],[152,178,192],[228,224,214],[214,150,124],[178, 69, 44]];
+/* DI-V25. Rampas rediseñadas para el papel crema y validadas contra él, no
+   elegidas a ojo. La secuencial es de un solo tono (vino, OKLCH H=18) con
+   lightness monótona y paso mínimo de 0,06; la divergente son dos brazos de un
+   tono cada uno (índigo y terracota) con un gris neutro en el centro, que es
+   lo que distingue una divergente de un arcoíris. El extremo claro de cada
+   rampa despega del papel con 2,2:1 o más — sobre un fondo de color, un rosa
+   pálido se confundiría con el papel y la localidad menos poblada parecería un
+   agujero. Ninguno de los dos tonos colisiona con el verde oliva de los
+   parques ni con el celeste del agua, que ocupan el resto del lienzo. */
+// Gris neutro para «sin dato» (La Candelaria, sin agentes): tiene que
+// distinguirse del papel, o una localidad sin medición parece un agujero.
+const SIN_DATO = '#9aa39d';
+const RAMPA = [[135,176,153],[ 87,157,121],[ 23,137, 91],[  0,116, 65],[  0, 91, 47]];
+const RAMPA_OP = [[ 20, 88,146],[ 82,126,171],[168,164,155],[175, 98, 79],[147, 46, 20]];
+/* Crecimiento: divergente de verdad, con el gris neutro en el CERO y no en la
+   mitad del rango. Polos validados contra el lienzo (#f7f9f6): ΔE 14,3 bajo
+   deuteranopía y 21,3 en visión normal; los dos pasan croma, banda de
+   luminosidad y contraste. Frío = pierde población, cálido = gana, la misma
+   dirección que RAMPA_OP para que no haya que reaprender el mapa (DI-V51). */
+const RAMPA_CREC = [[  0,143,137],[121,189,184],[232,233,230],[211,171,111],[171, 94,  0]];
 const interp = (ramp,t) => {
   t = Math.max(0,Math.min(1,t));
   const s = t*(ramp.length-1), i = Math.min(ramp.length-2, Math.floor(s));
   return rgb(mez(ramp[i],ramp[i+1],s-i));
 };
 
-let capa='poblacion', vista='urbana', escalaOp='real', sel=null, etq=false;
+let capa='poblacion', vista='urbana', escalaOp='real', sel=null, etq=false, visual='datos';
 
-const maxPob = Math.max(...L.map(l=>l.poblacion_18mas||0));
-const opMin = Math.min(...L.filter(l=>l.opinion_media!=null).map(l=>l.opinion_media));
-const opMax = Math.max(...L.filter(l=>l.opinion_media!=null).map(l=>l.opinion_media));
+/* ---------- cámara ----------
+   El zoom se hace moviendo el viewBox, no con un transform sobre un grupo.
+   Así los trazos con vector-effect:non-scaling-stroke siguen midiéndose en
+   píxeles de pantalla y no hay que compensar nada a mano. cam.x/cam.y son la
+   esquina superior izquierda y cam.w el ancho visible; el alto sale de la
+   relación de aspecto fija de la vista. */
+const ZOOM_MAX = 24, ZOOM_DETALLE = 2.6, ZOOM_AVISO = 5;
+const ENC = {};
+for(const v of ['urbana','total']){
+  const [x0,y0,x1,y1] = VIS[v];
+  const m = (x1-x0)*0.03;
+  ENC[v] = {x:x0-m, y:y0-m, w:(x1-x0)+2*m, h:(y1-y0)+2*m};
+}
+let cam = {x:0, y:0, w:0};
+
+/* El viewBox se construye siempre con la relación de aspecto real del
+   elemento, nunca con la del bbox: así no hay letterboxing y un píxel de
+   pantalla equivale a una fracción fija del viewBox, que es lo que hace
+   correctos el paneo, el zoom al cursor y la barra de escala. */
+function aspecto(){
+  const r = svg.getBoundingClientRect();
+  return r.height > 0 ? r.width / r.height : 1;
+}
+
+/* El «mundo»: el rectángulo mínimo que contiene el encuadre de la vista con
+   la forma del lienzo. Es el tope del alejamiento y el límite del paneo. */
+function mundo(){
+  const e = ENC[vista], A = aspecto();
+  let w = e.w, h = w/A;
+  if(h < e.h){ h = e.h; w = h*A; }
+  return {x: e.x + e.w/2 - w/2, y: e.y + e.h/2 - h/2, w, h};
+}
+
+/* Población del AÑO para dibujar; `l.poblacion_18mas` es el marginal de
+   MUESTREO y solo sostiene «esperados» (DI-V48). Son dos cosas distintas y
+   por eso se leen por puertas distintas. */
+const pobDe = l => D.poblacion_por_anio
+  ? (l.por_anio[String(anioSel)].poblacion_18mas ?? l.poblacion_18mas)
+  : l.poblacion_18mas;
+/* Máximo sobre TODOS los años, no sobre el año en pantalla: reescalar la
+   rampa año a año escondería el crecimiento, que es lo único que cambia
+   (DI-V49). */
+const maxPob = D.poblacion_max || Math.max(...L.map(l=>l.poblacion_18mas||0));
+/* El rango de la escala estirada es del AÑO, no del paquete: si fuera global,
+   la escala al rango dejaría de estirarse al rango observado y el botón
+   mentiría sobre lo que hace. */
+const conMedia = () => L.filter(l=>opDe(l,'opinion_media')!=null);
+const opMin = () => Math.min(...conMedia().map(l=>opDe(l,'opinion_media')));
+const opMax = () => Math.max(...conMedia().map(l=>opDe(l,'opinion_media')));
+
+/* DI-V36 — La posición de un valor de población en la rampa. La usan el color
+   Y las marcas de la leyenda: si fueran dos expresiones distintas, el día que
+   una cambie el mapa y su leyenda dirían cosas distintas sin avisar. */
+const tPob = v => Math.sqrt((v||0)/maxPob);
 
 function colorDe(l){
-  if(capa==='poblacion') return interp(RAMPA, Math.sqrt((l.poblacion_18mas||0)/maxPob));
-  if(capa==='opinion'){
-    if(l.opinion_media==null) return 'var(--surface-2)';
-    const [a,b] = escalaOp==='real' ? [C.escala[0],C.escala[1]] : [opMin,opMax];
-    return interp(RAMPA_OP, (l.opinion_media-a)/(b-a));
+  // En Ciudad el relleno no codifica nada: va del color del papel, así que la
+  // localidad sigue siendo un objetivo de clic —un `fill:none` solo respondería
+  // en el borde— pero no se ve, y debajo queda el mapa limpio.
+  if(visual==='ciudad') return 'var(--ciudad-papel)';
+  if(capa==='poblacion') return interp(RAMPA, tPob(pobDe(l)));
+  if(capa==='crecimiento'){
+    const v = crecDe(l);
+    if(v==null || crecMax===0) return SIN_DATO;
+    // Dominio simétrico ±máximo: así un −2 % se ve casi neutro, que es lo que
+    // es. Un dominio asimétrico lo pintaría saturado y mentiría.
+    return interp(RAMPA_CREC, (v + crecMax) / (2*crecMax));
   }
-  return 'var(--surface-2)';
+  if(capa==='opinion'){
+    const m = opDe(l,'opinion_media');
+    if(m==null) return '#9aa39d';
+    const [a,b] = escalaOp==='real' ? C().escala : [opMin(),opMax()];
+    return interp(RAMPA_OP, (m-a)/(b-a));
+  }
+  return '#9aa39d';
 }
 
 /* ---------- dibujo ---------- */
@@ -248,9 +672,52 @@ const svg = document.createElementNS(NS,'svg');
 svg.setAttribute('class','mapa'); svg.setAttribute('role','img');
 svg.setAttribute('aria-label','Mapa de las 20 localidades de Bogotá');
 const gLoc = document.createElementNS(NS,'g');
+const gSel = document.createElementNS(NS,'g'); gSel.setAttribute('aria-hidden','true');
+gSel.style.pointerEvents = 'none';
+const gBase= document.createElementNS(NS,'g'); gBase.id='capaBase';
+gBase.setAttribute('aria-hidden','true');
 const gAg  = document.createElementNS(NS,'g'); gAg.setAttribute('class','agente');
 const gEtq = document.createElementNS(NS,'g'); gEtq.id='capaEtq';
-svg.append(gLoc,gAg,gEtq); lienzo.append(svg);
+const gTinte = document.createElementNS(NS,'g'); gTinte.style.pointerEvents='none';
+svg.append(gLoc,gTinte,gBase,gSel,gAg,gEtq); lienzo.append(svg);
+
+/* ---------- capa base ----------
+   Las coordenadas llegan como enteros delta en unidades de 1e-4 grados
+   (DI-V13): un punto pesa 3 caracteres en vez de 18. Se reconstruyen sumando. */
+const ESC = B.meta.escala;
+function decodificar(plano){
+  const pts = []; let x = 0, y = 0;
+  for(let i = 0; i < plano.length; i += 2){
+    x += plano[i]; y += plano[i+1];
+    pts.push([x/ESC, y/ESC]);
+  }
+  return pts;
+}
+function trazo(pts, cerrar){
+  let d = '';
+  pts.forEach((p,i)=>{ d += (i ? 'L' : 'M') + px(p[0]).toFixed(5) + ' ' + py(p[1]).toFixed(5); });
+  return cerrar ? d + 'Z' : d;
+}
+function base(lineas, clase, cerrar){
+  const g = document.createElementNS(NS,'g');
+  g.setAttribute('class', clase.includes('detalle') ? 'detalle' : '');
+  (lineas || []).forEach(plano=>{
+    const p = document.createElementNS(NS,'path');
+    p.setAttribute('d', trazo(decodificar(plano), cerrar));
+    p.setAttribute('class', clase);
+    g.append(p);
+  });
+  gBase.append(g);
+  return g;
+}
+// Orden de dibujo: verde, agua, cauces, vías. Lo que orienta más va encima.
+base(B.verde.g, 'b-verde', true);
+base(B.verde.p, 'b-verde detalle', true);
+base(B.agua.areas.g, 'b-agua', true);
+base(B.agua.areas.p, 'b-agua detalle', true);
+base(B.agua.cauces, 'b-cauce', false);
+base(B.vias.primary, 'b-via primary detalle', false);
+base(B.vias.trunk, 'b-via trunk', false);
 
 const rutas = {}, etiquetas = {};
 L.forEach(l=>{
@@ -272,16 +739,54 @@ L.forEach(l=>{
   gEtq.append(t); etiquetas[l.codigo]=t;
 });
 
+/* Las posiciones son las mismas en los cinco años porque los agentes son las
+   mismas 1.000 personas (DI-V43): al cambiar de año solo se repinta el color,
+   nunca se recalcula la geometría. */
 const puntos = D.agentes.map(a=>{
   const c = document.createElementNS(NS,'circle');
   c.setAttribute('cx', px(a[0]).toFixed(5));
   c.setAttribute('cy', py(a[1]).toFixed(5));
   c.setAttribute('r','0.0016');
-  c.setAttribute('fill','var(--teja)');
+  c.setAttribute('fill','#b2452c');   // teja: el único acento cálido del lienzo
   c.setAttribute('fill-opacity','.72');
   gAg.append(c);
   return c;
 });
+
+/* Los puntos se colorean por la opinión INDIVIDUAL del año, y esta es la capa
+   donde el cambio entre años sí es señal: la media de ciudad recorre 2,81 a
+   2,24 sobre márgenes de ±0,03. La coropleta es la que no puede sostener una
+   lectura territorial (DI-V45); los agentes sí muestran el movimiento real. */
+function pintarAgentes(){
+  const op = D.opiniones[String(anioSel)];
+  if(!op){ puntos.forEach(c=>c.setAttribute('fill','#b2452c')); return; }
+  const [a,b] = C().escala;
+  puntos.forEach((c,i)=>{
+    const v = op[i];
+    c.setAttribute('fill', v==null ? '#9aa39d' : interp(RAMPA_OP, (v-a)/(b-a)));
+  });
+}
+
+/* ---------- el año ---------- */
+function botonesAnio(){
+  const el = document.getElementById('grupoAnio');
+  el.innerHTML = ANIOS.map(a=>
+    `<button data-anio="${a}" aria-pressed="${a===anioSel}">${a}</button>`).join('');
+  el.querySelectorAll('[data-anio]').forEach(b=>
+    b.addEventListener('click', ()=>irAlAnio(+b.dataset.anio)));
+}
+
+/* Una sola puerta para cambiar de año, la usen los botones o la línea de
+   tiempo. Si cada uno repintara lo suyo, tarde o temprano uno se olvidaría de
+   una parte y la página mostraría dos años a la vez. */
+function irAlAnio(a){
+  if(!ANIOS.includes(a) || a === anioSel) return;
+  anioSel = a;
+  document.querySelectorAll('button[data-anio]').forEach(b=>
+    b.setAttribute('aria-pressed', String(+b.dataset.anio === anioSel)));
+  pintar(); inspector(); cifras(); aviso();
+  if(typeof marcarAnioSerie === 'function') marcarAnioSerie(anioSel);
+}
 
 function encuadre(){
   // En la vista urbana Sumapaz se oculta: es el 78 % del área del Distrito y el
@@ -293,13 +798,133 @@ function encuadre(){
   const l20 = L.find(l=>l.codigo==='20');
   for(let i=l20.indice_puntos[0]; i<l20.indice_puntos[1]; i++) puntos[i].style.display = ver20 ? '' : 'none';
 
-  const [x0,y0,x1,y1] = VIS[vista];
-  const m = (x1-x0)*0.03;
-  svg.setAttribute('viewBox', `${x0-m} ${y0-m} ${x1-x0+2*m} ${y1-y0+2*m}`);
-  const esc = (x1-x0+2*m);
-  puntos.forEach(c=>c.setAttribute('r', (esc*0.0032).toFixed(6)));
-  gEtq.querySelectorAll('.etq').forEach(t=>t.setAttribute('font-size',(esc*0.019).toFixed(4)));
-  svg.style.aspectRatio = `${x1-x0+2*m} / ${y1-y0+2*m}`;
+  ajustar();
+}
+
+/* ---------- navegación ---------- */
+const zoomActual = () => mundo().w / cam.w;
+const altoCam = () => cam.w / aspecto();
+
+function ajustar(animar){
+  const M = mundo();
+  irA({x:M.x, y:M.y, w:M.w}, animar);
+}
+
+function encajar(){
+  const M = mundo();
+  cam.w = Math.min(M.w, Math.max(M.w/ZOOM_MAX, cam.w));
+  const h = altoCam();
+  // El mundo no se puede abandonar: como mucho el borde del mapa toca el
+  // borde del lienzo. Sin esto es facilísimo perder la ciudad de vista.
+  cam.x = Math.min(M.x + M.w - cam.w, Math.max(M.x, cam.x));
+  cam.y = Math.min(M.y + M.h - h,     Math.max(M.y, cam.y));
+}
+
+/* ---------- movimiento de cámara ----------
+   El viewBox no es animable por CSS, así que se interpola a mano. El reloj es
+   una animación WAAPI sobre un elemento desconectado: da la curva exacta del
+   navegador sin implementar un bézier propio, y es cancelable.
+
+   Sólo se anima el salto DISCRETO —botones, doble clic, «Encuadrar»—, nunca la
+   rueda ni el arrastre, que siguen el gesto 1:1, ni el teclado: una tecla que
+   se repite cien veces con una animación de por medio se siente lenta. */
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)');
+let relojCam = null;
+
+function cortarCamara(){
+  if(relojCam){ relojCam.cancel(); relojCam = null; }
+}
+
+function irA(destino, animar){
+  cortarCamara();
+  if(!animar || REDUCE.matches){ cam = destino; aplicar(); return; }
+  const origen = {x:cam.x, y:cam.y, w:cam.w};
+  const reloj = document.createElement('div').animate(
+    [{opacity:0},{opacity:1}],
+    {duration:240, easing:'cubic-bezier(0.23, 1, 0.32, 1)'});
+  relojCam = reloj;
+  const paso = () => {
+    if(relojCam !== reloj) return;                 // la cancelaron: soltar el bucle
+    const t = reloj.effect.getComputedTiming().progress;
+    if(t === null || reloj.playState === 'finished'){
+      cam = destino; relojCam = null; aplicar(); return;
+    }
+    cam = {x: origen.x + (destino.x-origen.x)*t,
+           y: origen.y + (destino.y-origen.y)*t,
+           w: origen.w + (destino.w-origen.w)*t};
+    aplicar(false);                                // sin leyenda: 60 innerHTML/s no
+    requestAnimationFrame(paso);
+  };
+  requestAnimationFrame(paso);
+}
+
+function aplicar(conLeyenda){
+  encajar();
+  const h = altoCam(), z = zoomActual();
+  svg.setAttribute('viewBox', `${cam.x} ${cam.y} ${cam.w} ${h}`);
+  // Puntos y etiquetas conservan su tamaño en pantalla: si crecieran con el
+  // zoom, acercarse no separaría nada.
+  puntos.forEach(c=>c.setAttribute('r', (cam.w*0.0032).toFixed(6)));
+  gEtq.querySelectorAll('.etq').forEach(el=>el.setAttribute('font-size',(cam.w*0.019).toFixed(4)));
+  gBase.classList.toggle('cerca', z >= ZOOM_DETALLE);
+  document.getElementById('nivel').textContent = '×' + f1(z);
+  document.getElementById('btnAjustar').disabled = z < 1.01;
+  barraEscala();
+  if(conLeyenda !== false) leyenda();
+}
+
+/* Un grado de longitud proyectado por px() mide ~111,32 km en cualquier
+   latitud, porque la proyección ya multiplicó por cos(lat0). */
+const M_POR_UNIDAD = 111320;
+const PASOS = [10,20,50,100,200,500,1000,2000,5000,10000,20000,50000];
+
+function barraEscala(){
+  const caja = svg.getBoundingClientRect();
+  if(!caja.width) return;
+  const mPorPx = cam.w * M_POR_UNIDAD / caja.width;
+  // El mayor paso "redondo" que no pase de 150 px; si ninguno cabe, el menor.
+  const paso = [...PASOS].reverse().find(v => v/mPorPx <= 150) || PASOS[0];
+  const el = document.getElementById('escala');
+  el.querySelector('span').textContent = paso >= 1000 ? `${paso/1000} km` : `${paso} m`;
+  el.querySelector('.barra-esc').style.width = (paso/mPorPx).toFixed(1) + 'px';
+}
+
+function haciaPunto(factor, cx, cy, animar){
+  // cx,cy en unidades del viewBox: el punto bajo el cursor se queda quieto.
+  const M = mundo();
+  const nuevoW = Math.min(M.w, Math.max(M.w/ZOOM_MAX, cam.w/factor));
+  const real = cam.w / nuevoW;
+  irA({x: cx - (cx - cam.x)/real,
+       y: cy - (cy - cam.y)/real,
+       w: nuevoW}, animar);
+}
+
+function aUnidades(ev){
+  const caja = svg.getBoundingClientRect();
+  return [cam.x + (ev.clientX - caja.left)/caja.width * cam.w,
+          cam.y + (ev.clientY - caja.top)/caja.height * altoCam()];
+}
+
+const centro = () => [cam.x + cam.w/2, cam.y + altoCam()/2];
+
+/* Encuadrar una localidad: el puente entre seleccionar y navegar. Sin esto,
+   para mirar de cerca la localidad que acabas de elegir hay que buscarla a
+   mano con el zoom, que es justo la fricción que el zoom venía a quitar. */
+function encuadrarLocalidad(cod){
+  const [x0,y0,x1,y1] = bbox([cod]);
+  const M = mundo(), A = aspecto();
+  const margen = 1.25;
+  let w = Math.max((x1-x0)*margen, (y1-y0)*margen*A);
+  w = Math.min(M.w, Math.max(M.w/ZOOM_MAX, w));
+  irA({x:(x0+x1)/2 - w/2, y:(y0+y1)/2 - w/A/2, w}, true);
+}
+
+let pista = null;
+function mostrarPista(){
+  const el = document.getElementById('pista');
+  el.classList.add('on');
+  clearTimeout(pista);
+  pista = setTimeout(()=>el.classList.remove('on'), 1400);
 }
 
 function pintar(){
@@ -307,30 +932,80 @@ function pintar(){
     rutas[l.codigo].setAttribute('fill', colorDe(l));
     rutas[l.codigo].classList.toggle('sel', l.codigo===sel);
   });
+  const ciudad = visual==='ciudad';
+  document.querySelector('.mapa-caja').classList.toggle('ciudad', ciudad);
+  // Las tres capas de coropleta desaparecen en Ciudad, donde no hay coropleta:
+  // un botón que no hace nada visible es peor que un botón ausente.
+  for(const c of ['poblacion','opinion','crecimiento'])
+    document.querySelector(`[data-capa="${c}"]`).classList.toggle('oculto', ciudad);
   gAg.style.display = capa==='agentes' ? '' : 'none';
+  if(capa==='agentes') pintarAgentes();
   gEtq.classList.toggle('on', etq);
+  marcarSeleccion();
+  barraEscala();
   leyenda();
 }
 
 /* ---------- leyenda ---------- */
 function leyenda(){
   const el = document.getElementById('leyenda');
-  if(capa==='agentes'){
-    el.innerHTML = `<span>1.000 agentes. Cada punto es una persona sintética; su posición dentro de la localidad es aleatoria.</span>`;
+  if(visual==='ciudad' && capa!=='agentes'){
+    el.innerHTML = `<span><b>Vista Ciudad.</b> Las localidades van sin color: aquí se lee el trazado
+      urbano, no el dato. Haz clic en una para ver su ficha completa a la derecha; la que elijas se
+      tiñe de verde. Para la coropleta de población u opinión, vuelve a <b>Datos</b>.</span>`;
     return;
   }
+  if(capa==='agentes'){
+    // El zoom es lo que vuelve visible el defecto que DI-V3 declara por
+    // escrito: de cerca se ve que hay puntos sobre el aeropuerto, sobre el
+    // río y sobre el páramo. Vale más enseñarlo que taparlo.
+    const cerca = zoomActual() >= ZOOM_AVISO;
+    const stopsAg = Array.from({length:9},(_,i)=>interp(RAMPA_OP,i/8)).join(',');
+    const ancAg = (E && E.anclas) ? E.anclas : {};
+    el.innerHTML = `<span class="rampa-lab">${C().escala[0]}${ancAg[C().escala[0]]?` <i style="font-style:normal;color:var(--ink-3)">${ancAg[C().escala[0]]}</i>`:''}</span>
+      <span class="rampa" style="background:linear-gradient(90deg,${stopsAg})"></span>
+      <span class="rampa-lab">${ancAg[C().escala[1]]?`<i style="font-style:normal;color:var(--ink-3)">${ancAg[C().escala[1]]}</i> `:''}${C().escala[1]}</span>
+      <span>1.000 agentes en ${anioSel}. Cada punto es una persona sintética, coloreada por su propia opinión; la posición dentro de la localidad es aleatoria.</span>` +
+      (cerca ? `<span style="color:var(--teja)"><b>A este acercamiento se nota:</b> hay puntos sobre el aeropuerto, sobre el río y sobre el área rural. No es un error de dibujo — el modelo no tiene geografía por debajo de la localidad, así que no sabe dónde vive nadie dentro de ella.</span>` : ``);
+    return;
+  }
+  if(capa==='crecimiento'){ leyendaCrecimiento(el); return; }
   const ramp = capa==='poblacion' ? RAMPA : RAMPA_OP;
   const stops = Array.from({length:9},(_,i)=>interp(ramp,i/8)).join(',');
   if(capa==='poblacion'){
+    // Marcas redondas dentro del rango, colocadas con tPob: son las que
+    // revelan que el color no es proporcional. Sin ellas, alguien lee el
+    // verde de Los Mártires como «un cuarto de Suba» cuando es un 6 %.
+    const marcas = [50000, 200000, 500000].filter(v => v < maxPob);
+    const ticks = marcas.map(v =>
+      `<span class="marca" style="left:${(tPob(v)*100).toFixed(2)}%"><i></i><span>${
+        fmt(Math.round(v/1000))} mil</span></span>`).join('');
     el.innerHTML = `<span class="rampa-lab">0</span>
-      <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
+      <span class="rampa-eje" title="El color crece con la raíz cuadrada de la población, no en proporción directa (DI-V36)">
+        <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
+        ${ticks}
+      </span>
       <span class="rampa-lab">${fmt(maxPob)}</span>
-      <span>personas de 18 años o más</span>`;
+      <span>personas de 18 años o más en ${anioSel}${D.poblacion_por_anio
+        ? ' · escala de raíz, fija en los cinco años'
+        : ' · color en escala de raíz'}</span>
+      ${R ? `<span style="flex-basis:100%;color:var(--ink-3)">El color apenas se mueve entre
+        años, y eso <b>es</b> el dato: Bogotá 18+ creció ${f1(R.crecimiento_pct)} % entre
+        ${R.anio_min} y ${R.anio_max}, pero el reparto entre localidades no
+        (distancia L1 ${f2(R.l1_reparto).replace('0,','0,')}). La rampa dibuja el reparto, así que
+        lo que cambia de forma legible son las cifras, no el mapa.</span>` : ''}`;
   }else{
-    const [a,b] = escalaOp==='real' ? [C.escala[0],C.escala[1]] : [opMin,opMax];
-    el.innerHTML = `<span class="rampa-lab">${f2(a)}</span>
+    const [a,b] = escalaOp==='real' ? C().escala : [opMin(),opMax()];
+    // Los extremos llevan el ancla verbal solo cuando son los extremos reales
+    // de la pregunta: con la escala estirada, 2,54 no significa «no confía».
+    const anc = (escalaOp==='real' && E && E.anclas) ? E.anclas : {};
+    // Los extremos de la escala real son enteros: «1,00» sugiere una precisión
+    // que la pregunta no tiene. La escala al rango sí necesita los decimales.
+    const num = v => escalaOp==='real' ? String(v) : f2(v);
+    el.innerHTML = `<span class="rampa-lab">${num(a)}${anc[a]?` <i style="font-style:normal;color:var(--ink-3)">${anc[a]}</i>`:''}</span>
       <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
-      <span class="rampa-lab">${f2(b)}</span>
+      <span class="rampa-lab">${anc[b]?`<i style="font-style:normal;color:var(--ink-3)">${anc[b]}</i> `:''}${num(b)}</span>
+      <span>${E && E.concepto ? E.concepto : 'opinión'}</span>
       <span class="grupo" style="margin-left:auto">
         <button data-esc="real" aria-pressed="${escalaOp==='real'}">Escala 1–5</button>
         <button data-esc="rango" aria-pressed="${escalaOp!=='real'}">Escala al rango</button>
@@ -339,6 +1014,30 @@ function leyenda(){
       escalaOp = b.dataset.esc==='real' ? 'real' : 'rango'; pintar(); aviso();
     }));
   }
+}
+
+/* La leyenda del crecimiento tiene que decir tres cosas que no se deducen del
+   color: desde cuándo se acumula, dónde está el cero, y que el dominio es el
+   mismo en los cinco años. */
+function leyendaCrecimiento(el){
+  const pct = v => (v>=0?'+':'−') + f1(Math.abs(100*v)) + ' %';
+  const stops = Array.from({length:11},(_,i)=>interp(RAMPA_CREC,i/10)).join(',');
+  if(anioSel === D.anio_base){
+    el.innerHTML = `<span><b>${D.anio_base} es el año base.</b> El crecimiento se acumula
+      <i>desde</i> aquí, así que en este corte es cero en todas partes — por eso el mapa
+      está neutro. Elige otro año para verlo acumularse.</span>`;
+    return;
+  }
+  el.innerHTML = `<span class="rampa-lab">${pct(-crecMax)}</span>
+    <span class="rampa-eje" title="Gris = 0 %. El dominio es simétrico y el mismo en los cinco años.">
+      <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
+      <span class="marca" style="left:50%"><i></i><span>0 %</span></span>
+    </span>
+    <span class="rampa-lab">${pct(crecMax)}</span>
+    <span>población 18+ ganada o perdida entre ${D.anio_base} y ${anioSel}</span>
+    <span style="flex-basis:100%;color:var(--ink-3)">Escala simétrica y fija en los cinco
+    años: un −2 % se ve casi neutro porque casi no es cambio, y el sur se oscurece a medida
+    que avanzas de año.</span>`;
 }
 
 /* ---------- inspector ---------- */
@@ -350,54 +1049,101 @@ function barras(obj, total, orden){
   ).join('') + `</div>`;
 }
 
-function seleccionar(cod){ sel = (sel===cod) ? null : cod; pintar(); inspector(); }
+/* La marca de selección va en su propio grupo, por encima de la capa base: si
+   fuera el borde del propio polígono, las localidades vecinas y las vías se
+   dibujarían encima y se la comerían a medias. */
+function marcarSeleccion(){
+  gSel.textContent = '';
+  gTinte.textContent = '';
+  if(!sel) return;
+  const d = rutas[sel].getAttribute('d');
+  // El tinte solo en Ciudad: sobre la coropleta de Datos alteraría el color
+  // que lleva el dato, que es justo lo que no se puede tocar.
+  const capas = visual==='ciudad'
+    ? ['sel-relleno','sel-halo','sel-linea']
+    : ['sel-halo','sel-linea'];
+  gTinte.textContent = '';
+  for(const clase of capas){
+    const q = document.createElementNS(NS,'path');
+    q.setAttribute('d', d);
+    q.setAttribute('class', clase);
+    // el tinte se dibuja bajo la capa base: tiñe la localidad sin tapar sus
+    // vías ni sus parques, que es lo que lo hace translúcido de verdad
+    (clase==='sel-relleno' ? gTinte : gSel).append(q);
+  }
+}
+
+let huboArrastre = false;
+function seleccionar(cod){
+  // Un arrastre que termina encima de una localidad no es un clic: sin esto,
+  // mover el mapa cambiaría la selección cada vez.
+  if(huboArrastre) return;
+  sel = (sel===cod) ? null : cod; pintar(); inspector();
+}
+
+/* El panel se reemplaza entero al cambiar de localidad: veinte filas cambian a
+   la vez y el ojo pierde el hilo. Un fundido corto de opacidad —sin mover
+   nada, porque es una tabla que se lee— basta para que se note que cambió. */
+function relevo(el){
+  if(REDUCE.matches) return;
+  el.animate([{opacity:0},{opacity:1}],
+             {duration:140, easing:'cubic-bezier(0.23, 1, 0.32, 1)'});
+}
 
 function inspector(){
   const el = document.getElementById('insp');
+  relevo(el);
+  queueMicrotask(()=>{
+    const b = document.getElementById('btnIr');
+    if(b) b.addEventListener('click', ()=>encuadrarLocalidad(sel));
+  });
   if(!sel){
     el.innerHTML = `
       <p class="cod">Ciudad completa</p>
       <h2>Bogotá D.C.</h2>
       <dl class="filas">
         <div class="fila"><dt>Localidades</dt><dd>20</dd></div>
-        <div class="fila"><dt>Población 18+</dt><dd>${fmt(L.reduce((s,l)=>s+(l.poblacion_18mas||0),0))}</dd></div>
-        <div class="fila"><dt>Agentes sintéticos</dt><dd>${fmt(C.n_agentes)}</dd></div>
-        <div class="fila"><dt>Opinión media</dt><dd>${f2(C.opinion_media)} / 5</dd></div>
-        <div class="fila"><dt>Desviación dentro de cada localidad</dt><dd>${f2(C.sd_dentro)}</dd></div>
-        <div class="fila"><dt>Desviación entre localidades</dt><dd>${f2(C.sd_entre)}</dd></div>
+        <div class="fila"><dt>Población 18+ en ${anioSel}</dt><dd>${fmt(L.reduce((s,l)=>s+(pobDe(l)||0),0))}</dd></div>
+        <div class="fila"><dt>Agentes sintéticos</dt><dd>${fmt(C().n_agentes)}</dd></div>
+        <div class="fila"><dt>${E && E.concepto ? E.concepto : 'Opinión'} (media) en ${anioSel}</dt><dd>${f2(C().opinion_media)} / 5</dd></div>
+        <div class="fila"><dt>Desviación dentro de cada localidad</dt><dd>${f2(C().sd_dentro)}</dd></div>
+        <div class="fila"><dt>Desviación entre localidades</dt><dd>${f2(C().sd_entre)}</dd></div>
       </dl>
       <p style="margin:0;color:var(--ink-2);font-size:13.5px">
         Haz clic en una localidad para ver su composición. La dispersión <b>dentro</b> de una localidad es
-        ${(C.sd_dentro/C.sd_entre).toFixed(1)} veces la dispersión <b>entre</b> localidades: dos vecinos de cuadra
+        ${(C().sd_dentro/C().sd_entre).toFixed(1)} veces la dispersión <b>entre</b> localidades: dos vecinos de cuadra
         se parecen entre sí mucho menos de lo que se parecen dos localidades.</p>`;
     return;
   }
   const l = L.find(x=>x.codigo===sel);
   const c = l.composicion || {};
-  const dif = l.opinion_media!=null ? l.opinion_media - C.opinion_media : null;
-  const signif = (l.opinion_ee!=null && dif!=null) ? Math.abs(dif) > 2*l.opinion_ee : null;
+  const media = opDe(l,'opinion_media'), ee = opDe(l,'opinion_ee');
+  const dif = media!=null ? media - C().opinion_media : null;
+  const signif = (ee!=null && dif!=null) ? Math.abs(dif) > 2*ee : null;
 
   // banda de ruido en escala 1-5
-  const a=C.escala[0], b=C.escala[1], pos = v => ((v-a)/(b-a)*100);
-  const banda = l.opinion_ee!=null ? `
+  const a=C().escala[0], b=C().escala[1], pos = v => ((v-a)/(b-a)*100);
+  const banda = ee!=null ? `
     <div class="banda">
-      <span class="tick" style="left:0">${a}</span>
-      <span class="tick" style="right:0">${b}</span>
+      <span class="tick" style="left:0">${a}${E&&E.anclas&&E.anclas[a]?` ${E.anclas[a]}`:''}</span>
+      <span class="tick" style="right:0">${E&&E.anclas&&E.anclas[b]?`${E.anclas[b]} `:''}${b}</span>
       <span class="esc"></span>
-      <span class="ruido" style="left:${pos(l.opinion_media-2*l.opinion_ee).toFixed(2)}%;width:${(pos(l.opinion_media+2*l.opinion_ee)-pos(l.opinion_media-2*l.opinion_ee)).toFixed(2)}%"></span>
-      <span class="cd" style="left:${pos(C.opinion_media).toFixed(2)}%" title="media de la ciudad"></span>
-      <span class="pt" style="left:${pos(l.opinion_media).toFixed(2)}%" title="media de la localidad"></span>
+      <span class="ruido" style="left:${pos(media-2*ee).toFixed(2)}%;width:${(pos(media+2*ee)-pos(media-2*ee)).toFixed(2)}%"></span>
+      <span class="cd" style="left:${pos(C().opinion_media).toFixed(2)}%" title="media de la ciudad"></span>
+      <span class="pt" style="left:${pos(media).toFixed(2)}%" title="media de la localidad"></span>
     </div>` : '';
 
   el.innerHTML = `
     <p class="cod">LOCALIDAD ${l.codigo}</p>
-    <h2>${l.nombre}</h2>
+    <h2>${l.nombre} <button class="ir" id="btnIr" title="Encuadrar esta localidad">Encuadrar</button></h2>
     <dl class="filas">
-      <div class="fila"><dt>Población 18+</dt><dd>${fmt(l.poblacion_18mas)}</dd></div>
+      <div class="fila"><dt>Población 18+ en ${anioSel}</dt><dd>${fmt(pobDe(l))}</dd></div>
       <div class="fila"><dt>Peso en la ciudad</dt><dd>${(l.share*100).toFixed(2)} %</dd></div>
-      <div class="fila"><dt>Agentes (observados / esperados)</dt><dd>${l.n_agentes} / ${f1(l.esperado)}</dd></div>
-      ${l.opinion_media!=null?`<div class="fila"><dt>Opinión media</dt><dd>${f2(l.opinion_media)} / 5</dd></div>`:''}
-      ${l.opinion_ee!=null?`<div class="fila"><dt>Error estándar (con efecto de diseño ${f2(D.deff)})</dt><dd>± ${f2(l.opinion_ee)}</dd></div>`:''}
+      ${(() => { const v = crecDe(l); return (v==null || anioSel===D.anio_base) ? '' :
+        `<div class="fila"><dt>Población: cambio desde ${D.anio_base}</dt><dd>${v>=0?'+':'−'}${f1(Math.abs(100*v))} %</dd></div>`; })()}
+      <div class="fila"><dt>Agentes (observados / esperados)<br><small style="color:var(--ink-3);font-weight:400">esperados según el marginal de muestreo, que es uno solo y no cambia con el año</small></dt><dd>${l.n_agentes} / ${f1(l.esperado)}</dd></div>
+      ${media!=null?`<div class="fila"><dt>${E && E.concepto ? E.concepto : 'Opinión'} (media) en ${anioSel}</dt><dd>${f2(media)} / 5</dd></div>`:''}
+      ${ee!=null?`<div class="fila"><dt>Error estándar (con efecto de diseño ${f2(D.deff)})</dt><dd>± ${f2(ee)}</dd></div>`:''}
       ${dif!=null?`<div class="fila"><dt>Diferencia con la ciudad</dt><dd>${dif>=0?'+':'−'}${f2(Math.abs(dif))}</dd></div>`:''}
     </dl>
     ${banda}
@@ -411,33 +1157,361 @@ function inspector(){
     ${c.educacion?`<div class="comp"><h3>Nivel educativo</h3>${barras(c.educacion,l.n_agentes,['Ninguno/primaria','Secundaria','Técnico/tecnológico','Universitario o más'])}</div>`:''}`;
 }
 
+/* ---------- ficha de la escala (A05) ----------
+   Qué mide el 1-5. Todo el texto viene del metadata de la población: esta
+   función formatea, no describe. Cerrada por defecto para no empujar el
+   mapa hacia abajo, pero siempre visible en la página. */
+function fichaEscala(){
+  const el = document.getElementById('ficha');
+  if(!E){ el.hidden = true; return; }
+  el.hidden = false;
+
+  const a = E.rango ? E.rango[0] : 1, b = E.rango ? E.rango[1] : 5;
+  const anc = E.anclas || {};
+  const stops = Array.from({length:9},(_,i)=>interp(RAMPA_OP,i/8)).join(',');
+  const n = E.n_items || {};
+
+  // El denominador variable es el punto de A05: se dice, no se esconde.
+  const denom = (n.items_utiles && n.min_items_exigido)
+    ? `El índice promedia <b>hasta ${n.items_utiles} instituciones</b> por persona, no siempre las
+       ${n.items_utiles}: quien no responde alguna se promedia sobre las que sí respondió, y se exige
+       un mínimo de ${n.min_items_exigido}. ${n.completos_pct!=null
+         ? `El ${Math.round(n.completos_pct)} % de la muestra respondió las ${n.items_utiles} completas.` : ''}
+       <span class="denom">n_items ∈ [${n.minimo_observado ?? n.min_items_exigido}, ${n.items_utiles}]</span>`
+    : '';
+
+  el.innerHTML = `
+    <details>
+      <summary><b>Qué mide la escala de 1 a 5</b>
+        <span>${E.concepto || ''}</span>
+        <span class="q"></span></summary>
+      <div class="cuerpo">
+        ${E.pregunta ? `<p class="cita">«${E.pregunta}»</p>` : ''}
+        <div class="anclas">
+          <span><b>${a}</b> ${anc[a] || ''}</span>
+          <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
+          <span><b>${b}</b> ${anc[b] || ''}</span>
+        </div>
+        ${E.construccion ? `<p><b>Cómo se construye.</b> ${E.construccion}.</p>` : ''}
+        ${denom ? `<p>${denom}</p>` : ''}
+        ${E.instituciones ? `<ul class="insts">${E.instituciones.map(i=>`<li>${i}</li>`).join('')}</ul>` : ''}
+        ${E.no_es ? `<p class="no-es"><b>Lo que no es.</b> ${E.no_es}</p>` : ''}
+        ${E.fuente ? `<p class="denom">${E.fuente}</p>` : ''}
+      </div>
+    </details>`;
+}
+
+
+/* ---------- Hito 2: la serie medida ----------
+   Es un gráfico de encuesta, no una salida del simulador, y todo lo que sigue
+   está al servicio de que eso se note: el eje va de 1 a 5 por defecto (la
+   misma regla del mapa, §31), cada punto lleva su intervalo, y los puntos
+   cuyo error viene de un DEFF prestado se dibujan huecos en vez de rellenos.
+   DI-V37 a DI-V41. */
+const S = (() => {
+  try { const n = document.getElementById('serieDatos');
+        return n ? JSON.parse(n.textContent) : null; }
+  catch(e){ console.error('serie: no se pudo leer el paquete', e); return null; }
+})();
+
+let escalaSerie = 'real', anioVivo = null;
+
+/* Una sola geometría para el gráfico y para la cruz del cursor: dos copias de
+   la misma fórmula es cómo empezó DI-V36. */
+const GEO_S = {W:920, H:320, t:16, r:132, b:34, l:44};
+
+const SERIE_COLOR = {ecp_confianza:'var(--s-ecp)', epc_gestion_alcalde:'var(--s-epc)'};
+const colorSerie = clave => SERIE_COLOR[clave] || 'var(--ink-2)';
+
+/* Círculo para una serie, cuadrado para la otra: si el color falla —impresión
+   en gris, daltonismo severo, pantalla mala— la forma sigue distinguiéndolas. */
+function marcaPunto(i, x, y, lleno, color){
+  const r = 4.5;
+  const com = `class="marcador" fill="${lleno ? color : 'var(--surface)'}" stroke="${color}" stroke-width="2"`;
+  return i === 0
+    ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" ${com}/>`
+    : `<rect x="${(x-r).toFixed(1)}" y="${(y-r).toFixed(1)}" width="${r*2}" height="${r*2}" ${com}/>`;
+}
+
+function dibujarSerie(){
+  const el = document.getElementById('serie');
+  if(!S || !S.series || !S.series.length){ el.hidden = true; return; }
+  el.hidden = false;
+
+  const {W, H} = GEO_S, M = GEO_S;
+  const anios = S.series.flatMap(s=>s.puntos.map(p=>p.anio));
+  const x0 = Math.min(...anios), x1 = Math.max(...anios);
+  const px = a => M.l + (a - x0) / (x1 - x0) * (W - M.l - M.r);
+
+  // Igual que en el mapa: 1-5 es el rango real de la pregunta. La escala al
+  // rango existe para poder ENSEÑAR lo que exagera, no como vista por defecto.
+  const vals = S.series.flatMap(s=>s.puntos.flatMap(p=>p.ic95));
+  const [y0,y1] = escalaSerie==='real' ? S.escala
+    : [Math.floor(Math.min(...vals)*10)/10, Math.ceil(Math.max(...vals)*10)/10];
+  const py = v => M.t + (y1 - v) / (y1 - y0) * (H - M.t - M.b);
+
+  const paso = (y1-y0) > 2 ? 1 : 0.2;
+  const marcasY = [];
+  for(let v=y0; v<=y1+1e-9; v+=paso) marcasY.push(Math.round(v*100)/100);
+
+  let svg = '';
+  marcasY.forEach(v=>{
+    svg += `<line class="grid" x1="${M.l}" y1="${py(v).toFixed(1)}" x2="${W-M.r}" y2="${py(v).toFixed(1)}"/>`;
+    svg += `<text class="eje-lab" x="${M.l-7}" y="${(py(v)+3.5).toFixed(1)}" text-anchor="end">${f1(v)}</text>`;
+  });
+  [...new Set(anios)].sort((a,b)=>a-b).forEach(a=>{
+    svg += `<text class="eje-lab" x="${px(a).toFixed(1)}" y="${H-M.b+16}" text-anchor="middle">${a}</text>`;
+  });
+
+  svg += `<line class="cruz" id="cruzSerie" y1="${M.t}" y2="${H-M.b}" x1="0" x2="0"/>`;
+
+  S.series.forEach((s,i)=>{
+    const color = colorSerie(s.clave);
+    // Un tramo con hueco de más de dos años va punteado: entre 2013 y 2017 no
+    // se midió nada, y una recta continua insinuaría cuatro años observados.
+    s.puntos.slice(0,-1).forEach((p,k)=>{
+      const q = s.puntos[k+1], t = s.tramos[k];
+      svg += `<line class="linea" stroke="${color}"${t && t.salto ? ' stroke-dasharray="5 4" opacity=".75"' : ''}`
+           + ` x1="${px(p.anio).toFixed(1)}" y1="${py(p.media).toFixed(1)}"`
+           + ` x2="${px(q.anio).toFixed(1)}" y2="${py(q.media).toFixed(1)}"/>`;
+    });
+    s.puntos.forEach(p=>{
+      const X = px(p.anio), a = py(p.ic95[0]), b = py(p.ic95[1]);
+      const guion = p.con_diseno ? '' : ' stroke-dasharray="2 2"';
+      svg += `<line class="barra" stroke="${color}"${guion} x1="${X.toFixed(1)}" y1="${a.toFixed(1)}" x2="${X.toFixed(1)}" y2="${b.toFixed(1)}"/>`;
+      [a,b].forEach(yy=>{ svg += `<line class="cap" stroke="${color}" x1="${(X-3.5).toFixed(1)}" y1="${yy.toFixed(1)}" x2="${(X+3.5).toFixed(1)}" y2="${yy.toFixed(1)}"/>`; });
+    });
+    s.puntos.forEach(p=>{
+      svg += `<g data-serie="${i}" data-anio="${p.anio}">`
+           + `<rect class="hit" tabindex="0" role="button" x="${(px(p.anio)-14).toFixed(1)}" y="${(py(p.media)-14).toFixed(1)}" width="28" height="28"></rect>`
+           + marcaPunto(i, px(p.anio), py(p.media), p.con_diseno, color) + `</g>`;
+    });
+    // Rótulo directo: con dos series el lector no debería tener que ir y
+    // volver a la leyenda para saber cuál es cuál.
+    const ult = s.puntos[s.puntos.length-1];
+    svg += `<line class="linea" stroke="${color}" x1="${(W-M.r+8)}" y1="${py(ult.media).toFixed(1)}" x2="${(W-M.r+26)}" y2="${py(ult.media).toFixed(1)}"/>`
+         + `<text class="rotulo" x="${W-M.r+32}" y="${(py(ult.media)+4).toFixed(1)}">${s.clave==='ecp_confianza'?'Confianza':'Gestión'}</text>`;
+  });
+
+  const desc = S.series.map(s=>`${s.nombre}, ${s.puntos.length} mediciones entre `
+    + `${s.puntos[0].anio} y ${s.puntos[s.puntos.length-1].anio}`).join('; ');
+
+  el.innerHTML = `
+    <header>
+      <h3>La serie medida</h3>
+      <span class="grupo" role="group" aria-label="Escala del eje">
+        <button data-esc-s="real" aria-pressed="${escalaSerie==='real'}">Escala 1–5</button>
+        <button data-esc-s="rango" aria-pressed="${escalaSerie!=='real'}">Escala al rango</button>
+      </span>
+    </header>
+    <p class="sub">${S.advertencia}</p>
+    <div class="serie-lienzo">
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Líneas de tiempo: ${desc}">${svg}</svg>
+    </div>
+    <div class="serie-pie">
+      <div class="serie-ley">
+        ${S.series.map((s,i)=>`<div><i style="color:${colorSerie(s.clave)}"></i>
+          <span><b>${s.nombre}</b> — ${s.fuente}<br>
+          <small>${s.unidad}${s.anios_con_diseno && s.anios_con_diseno.length
+            ? ` · error con diseño en ${s.anios_con_diseno.length} de ${s.puntos.length} olas`
+            : ' · error con DEFF prestado en toda la serie'}</small></span></div>`).join('')}
+        <div style="color:var(--ink-3)"><i style="border-top-style:dashed"></i>
+          <span><small>Punto hueco o barra punteada: el margen no se midió en esa fuente, se
+          aproximó con un DEFF prestado. Tramo punteado: años sin medición en medio.</small></span></div>
+        <div style="color:var(--ink-3)"><i style="border:0;width:20px;text-align:center;height:auto;font-style:normal">○</i>
+          <span><small>Haz clic en un punto de <b>Confianza</b> para llevar el mapa a ese año: son los
+          cinco años con población sintética. Los de <b>Gestión</b> no mueven el mapa — el mapa no
+          muestra gestión del alcalde.</small></span></div>
+      </div>
+      <div class="serie-lectura" id="lecturaSerie" aria-live="polite"></div>
+    </div>
+    <details class="tabla"><summary>Ver los números</summary><div id="tablaSerie"></div></details>`;
+
+  el.querySelectorAll('[data-esc-s]').forEach(b=>b.addEventListener('click',()=>{
+    escalaSerie = b.dataset.escS==='real' ? 'real' : 'rango'; dibujarSerie();
+  }));
+  el.querySelectorAll('.hit').forEach(h=>{
+    const a = +h.parentNode.dataset.anio;
+    const esEcp = h.parentNode.dataset.serie === '0';
+    h.addEventListener('pointerenter', ()=>leerAnio(a));
+    h.addEventListener('focus', ()=>leerAnio(a));
+    // Solo los puntos de la ECP mueven el mapa: son los años para los que hay
+    // población sintética. Un punto de la EPC que cambiara el mapa haría creer
+    // que el mapa muestra gestión del alcalde, y no la muestra.
+    if(esEcp && typeof irAlAnio === 'function' && ANIOS.includes(a)){
+      h.style.cursor = 'pointer';
+      h.addEventListener('click', ()=>irAlAnio(a));
+      h.addEventListener('keydown', e=>{
+        if(e.key==='Enter'||e.key===' '){ e.preventDefault(); irAlAnio(a); }
+      });
+    }
+  });
+  el.querySelector('svg').addEventListener('pointerleave', ()=>leerAnio(null));
+  tablaSerie();
+  leerAnio(anioVivo);
+  marcarAnioSerie(typeof anioSel !== 'undefined' ? anioSel : null);
+}
+
+/* El año que el mapa está mostrando se resalta en la serie: sin esa marca,
+   dos controles del mismo estado (los botones y el gráfico) se contradicen a
+   la vista aunque el estado sea uno solo. */
+function marcarAnioSerie(anio){
+  const el = document.getElementById('serie');
+  if(!el) return;
+  el.querySelectorAll('.anio-activo').forEach(n=>n.remove());
+  if(anio == null) return;
+  const svg = el.querySelector('svg');
+  const g = el.querySelector(`g[data-serie="0"][data-anio="${anio}"]`);
+  if(!svg || !g) return;
+  const m = g.querySelector('.marcador');
+  if(!m) return;
+  const anillo = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  anillo.setAttribute('class','anio-activo');
+  anillo.setAttribute('cx', m.getAttribute('cx'));
+  anillo.setAttribute('cy', m.getAttribute('cy'));
+  anillo.setAttribute('r', '9');
+  anillo.setAttribute('fill','none');
+  anillo.setAttribute('stroke','var(--ink)');
+  anillo.setAttribute('stroke-width','1.5');
+  anillo.setAttribute('opacity','.55');
+  svg.appendChild(anillo);
+}
+
+/* La lectura vive siempre bajo el gráfico, no en un globo flotante: así el
+   valor es alcanzable con teclado y no desaparece al mover el ratón. */
+function leerAnio(anio){
+  anioVivo = anio;
+  const el = document.getElementById('lecturaSerie');
+  if(!el) return;
+  const cruz = document.getElementById('cruzSerie');
+  if(anio == null){
+    if(cruz) cruz.classList.remove('on');
+    el.innerHTML = `<span class="anio">SIN AÑO SELECCIONADO</span>
+      <span class="det">Pasa el cursor o tabula por los puntos para leer cada medición con su margen.</span>`;
+    return;
+  }
+  const filas = S.series.map(s=>{
+    const p = s.puntos.find(q=>q.anio===anio);
+    const color = colorSerie(s.clave);
+    if(!p) return `<span class="fila"><i style="color:${color};opacity:.35"></i>
+      <span class="det">${s.nombre}: no se midió en ${anio}</span></span>`;
+    return `<span class="fila"><i style="color:${color}"></i>
+      <span><span class="val">${f2(p.media)}</span>
+      <span class="det">± ${f2(1.96*p.ee)} · n = ${fmt(p.n)}
+      ${p.con_diseno ? '' : '<b class="prestado">· margen aproximado</b>'}</span></span></span>`;
+  }).join('');
+  el.innerHTML = `<span class="anio">AÑO ${anio}</span>${filas}`;
+  if(cruz){
+    const anios = S.series.flatMap(s=>s.puntos.map(p=>p.anio));
+    const x0 = Math.min(...anios), x1 = Math.max(...anios);
+    const X = GEO_S.l + (anio - x0)/(x1 - x0) * (GEO_S.W - GEO_S.l - GEO_S.r);
+    cruz.setAttribute('x1', X); cruz.setAttribute('x2', X); cruz.classList.add('on');
+  }
+}
+
+/* La tabla no es un extra de accesibilidad: es la única forma de leer los
+   valores sin depender del cursor, y la que se puede copiar. */
+function tablaSerie(){
+  const cont = document.getElementById('tablaSerie');
+  if(!cont) return;
+  const anios = [...new Set(S.series.flatMap(s=>s.puntos.map(p=>p.anio)))].sort((a,b)=>a-b);
+  const cab = S.series.map(s=>`<th colspan="3">${s.nombre}</th>`).join('');
+  const sub = S.series.map(()=>`<th>media</th><th>± 95 %</th><th>n</th>`).join('');
+  const filas = anios.map(a=>`<tr><td>${a}</td>` + S.series.map(s=>{
+    const p = s.puntos.find(q=>q.anio===a);
+    if(!p) return `<td class="prestado">—</td><td class="prestado">—</td><td class="prestado">—</td>`;
+    return `<td>${f2(p.media)}</td><td${p.con_diseno?'':' class="prestado"'}>± ${f2(1.96*p.ee)}${p.con_diseno?'':' *'}</td><td>${fmt(p.n)}</td>`;
+  }).join('') + `</tr>`).join('');
+  cont.innerHTML = `<table><thead><tr><th>Año</th>${cab}</tr><tr><th></th>${sub}</tr></thead>
+    <tbody>${filas}</tbody></table>
+    <p class="sub" style="margin-top:8px;font-size:11.5px">* margen aproximado con un DEFF prestado,
+    no estimado con el diseño de esa muestra.</p>`;
+}
+
 /* ---------- cifras y aviso ---------- */
 function cifras(){
-  const pob = L.reduce((s,l)=>s+(l.poblacion_18mas||0),0);
+  const pob = L.reduce((s,l)=>s+(pobDe(l)||0),0);
   document.getElementById('cifras').innerHTML = [
-    [fmt(pob), 'personas de 18 años o más en Bogotá (marginal territorial del proyecto)'],
+    [fmt(pob), `personas de 18 años o más en Bogotá en ${anioSel} (proyecciones DANE-SDP, revisión 2025)`],
     ['20', 'localidades, geometría oficial de Catastro Distrital'],
-    [fmt(C.n_agentes), 'agentes sintéticos ubicados, uno por punto'],
-    [(C.fraccion_ruido*100).toFixed(0)+' %', 'de la diferencia de opinión entre localidades es ruido muestral, no diferencia real']
+    [fmt(C().n_agentes), 'agentes sintéticos ubicados, uno por punto'],
+    // La afirmación territorial se sostiene en el piso MEDIDO, no en el ee
+    // analítico, que subestima el ruido (DI-V45).
+    [C().piso_medido
+       ? (C().hay_senal_territorial ? 'alguna' : 'ninguna')
+       : (C().fraccion_ruido*100).toFixed(0)+' %',
+     C().piso_medido
+       ? `diferencia entre localidades sobrevive al piso de ruido en ${anioSel}: lo observado (${f2(C().sd_entre)}) cabe en el ${f2(C().piso_medido.min)}–${f2(C().piso_medido.max)} que produce el método cambiando solo la semilla`
+       : 'de la diferencia de opinión entre localidades es ruido muestral, no diferencia real']
   ].map(([b,s])=>`<div class="cifra"><b>${b}</b><span>${s}</span></div>`).join('');
 }
 
 function aviso(){
+  if(capa==='crecimiento'){ avisoCrecimiento(); return; }
   const estirada = escalaOp!=='real' && capa==='opinion';
+  const c = C(), piso = c.piso_medido;
+  const ees = L.map(l=>opDe(l,'opinion_ee')).filter(v=>v!=null);
   document.getElementById('aviso').innerHTML = `
     <h3>${estirada ? 'Esto es exactamente el mapa que no hay que publicar' : 'Por qué la capa de opinión se ve casi plana'}</h3>
-    <p>Las 20 medias de opinión van de <code>${f2(opMin)}</code> a <code>${f2(opMax)}</code> sobre una escala de 1 a 5.
+    <p>En ${anioSel}, las 20 medias de opinión van de <code>${f2(opMin())}</code> a <code>${f2(opMax())}</code> sobre una escala de 1 a 5.
        Con 1.000 agentes, el error estándar de cada media —corregido por el efecto de diseño medido en la Encuesta de
-       Percepción Ciudadana (<code>${f2(D.deff)}</code>)— es de ±${f2(Math.min(...L.filter(l=>l.opinion_ee!=null).map(l=>l.opinion_ee)))} a
-       ±${f2(Math.max(...L.filter(l=>l.opinion_ee!=null).map(l=>l.opinion_ee)))}.
-       Al descontar ese ruido, la dispersión real entre localidades que queda es <code>${f2(C.sd_entre_real)}</code>:
-       <b>el ${(C.fraccion_ruido*100).toFixed(0)} % de lo que se ve es error de muestreo</b>.</p>
+       Percepción Ciudadana (<code>${f2(D.deff)}</code>)— es de ±${f2(Math.min(...ees))} a ±${f2(Math.max(...ees))}.</p>
+    ${piso ? `<p><b>Y ese error estándar todavía se queda corto.</b> Supone que las 1.000 opiniones son
+       independientes, y no lo son: el emparejamiento por celda demográfica hace que dos agentes de la misma
+       celda puedan recibir el valor del mismo encuestado, así que la opinión queda agrupada por localidad
+       por construcción. La medida que sí lo captura es rehacer toda la población con otra semilla:
+       con ${piso.semillas} semillas sobre los mismos datos de ${anioSel}, la dispersión entre localidades
+       recorre de <code>${f2(piso.min)}</code> a <code>${f2(piso.max)}</code>.
+       La que está en el mapa vale <code>${f2(c.sd_entre)}</code> — el percentil ${piso.percentil_publicada.toFixed(0)}
+       de esa variación. <b>${c.hay_senal_territorial
+         ? 'Se sale del piso: hay algo que mirar.'
+         : 'Cabe dentro: lo que se ve entre localidades es el método, no Bogotá.'}</b></p>`
+     : `<p>Al descontar ese ruido, la dispersión real entre localidades que queda es <code>${f2(c.sd_entre_real)}</code>:
+       <b>el ${(c.fraccion_ruido*100).toFixed(0)} % de lo que se ve es error de muestreo</b>.</p>`}
     <p>${estirada
       ? 'Con la escala estirada al rango observado, la misma ciudad aparece partida en dos. Ningún dato cambió: solo se estiró el color sobre 0,69 puntos de una escala de 4. Esa es la razón por la que este tablero trae las dos escalas y no deja la estirada por defecto.'
       : 'Por eso la escala va de 1 a 5, el rango real de la pregunta, y no del mínimo al máximo observado. Prueba el botón «Escala al rango» en la leyenda para ver el mismo mapa con la escala estirada: es el gráfico más vendedor y el más engañoso que puede salir de este proyecto.'}</p>`;
 }
 
+/* El contraste con la capa de Opinión es el punto: acá SÍ hay geografía, y
+   conviene decir por qué una capa puede afirmar territorio y la otra no. */
+function avisoCrecimiento(){
+  const el = document.getElementById('aviso');
+  if(!D.poblacion_por_anio){ el.innerHTML = ''; return; }
+  const hasta = anioSel === D.anio_base ? ANIOS[ANIOS.length-1] : anioSel;
+  const filas = L.map(l=>{
+    const a = l.por_anio[String(D.anio_base)].poblacion_18mas;
+    const b = l.por_anio[String(hasta)].poblacion_18mas;
+    return (a && b) ? {n:l.nombre, pct:(b/a-1), abs:(b-a), base:a} : null;
+  }).filter(Boolean).sort((x,y)=>x.pct-y.pct);
+  if(!filas.length){ el.innerHTML = ''; return; }
+  const pct = v => (v>=0?'+':'−') + f1(Math.abs(100*v)) + ' %';
+  // El porcentaje solo, sin el absoluto, hace de Sumapaz el titular: crece más
+  // que nadie sobre 2.078 personas. Los dos números juntos dejan juzgar.
+  const linea = f => `<b>${f.n}</b> ${pct(f.pct)} (${f.abs>=0?'+':'−'}${fmt(Math.abs(f.abs))} personas)`;
+  const arriba = filas.slice(-3).reverse(), abajo = filas.slice(0,3);
+  const mayor = [...filas].sort((x,y)=>y.abs-x.abs)[0];
+  el.innerHTML = `
+    <h3>Esta capa sí puede afirmar geografía</h3>
+    <p>Entre ${D.anio_base} y ${hasta} crecen más ${arriba.map(linea).join(', ')}; y menos
+       ${abajo.map(linea).join(', ')}. En personas, el mayor aumento no es ninguno de esos:
+       es <b>${mayor.n}</b>, con ${fmt(mayor.abs)} sobre ${fmt(mayor.base)} — el porcentaje
+       premia a las localidades chicas y el mapa las pinta igual de oscuras, así que conviene
+       leer las dos cifras.</p>
+    <p>Son proyecciones oficiales de población, no estimaciones de una muestra: no traen error
+       de muestreo que descontar, así que la diferencia entre el sur y el centro es real y se
+       puede leer del color. Es justo lo contrario de la capa de <b>Opinión</b>, donde la
+       variación entre localidades no supera el ruido que el propio método produce. Dos capas,
+       dos permisos distintos: acá el mapa puede decir «el sur creció»; allá no puede decir
+       «el sur confía menos».</p>`;
+}
+
 /* ---------- eventos ---------- */
+document.querySelectorAll('[data-visual]').forEach(b=>b.addEventListener('click',()=>{
+  visual = b.dataset.visual;
+  document.querySelectorAll('[data-visual]').forEach(o=>o.setAttribute('aria-pressed', String(o===b)));
+  pintar(); aviso();
+}));
 document.querySelectorAll('[data-capa]').forEach(b=>b.addEventListener('click',()=>{
   capa = b.dataset.capa;
   document.querySelectorAll('[data-capa]').forEach(o=>o.setAttribute('aria-pressed', String(o===b)));
@@ -451,7 +1525,122 @@ document.querySelectorAll('[data-vista]').forEach(b=>b.addEventListener('click',
 document.getElementById('btnEtq').addEventListener('click', e=>{
   etq = !etq; e.currentTarget.setAttribute('aria-pressed', String(etq)); pintar();
 });
+/* ---------- navegación: rueda, arrastre, pellizco, teclado ----------
+   DI-V16: la rueda sola NO hace zoom, deja scrollear la página; el zoom pide
+   Ctrl (o ⌘). El pellizco del trackpad llega como wheel con ctrlKey=true, así
+   que funciona sin que el usuario sepa nada de teclas. Atrapar la rueda a
+   secas en una página larga es de las cosas que más molestan de un mapa
+   embebido, y aquí el mapa es una columna dentro de un documento. */
+svg.addEventListener('wheel', ev=>{
+  if(!(ev.ctrlKey || ev.metaKey)){ mostrarPista(); return; }
+  ev.preventDefault();
+  cortarCamara();                        // el gesto manda sobre cualquier salto en curso
+  const [cx,cy] = aUnidades(ev);
+  haciaPunto(Math.exp(-ev.deltaY * 0.0022), cx, cy, false);
+}, {passive:false});
 
-encuadre(); pintar(); inspector(); cifras(); aviso();
+svg.addEventListener('dblclick', ev=>{
+  ev.preventDefault();
+  const [cx,cy] = aUnidades(ev);
+  haciaPunto(ev.shiftKey ? 1/1.9 : 1.9, cx, cy, true);
+});
+
+const punteros = new Map();
+let arrastre = null, pellizco = null;
+
+/* NO se usa setPointerCapture. Capturar el puntero en el <svg> hace que el
+   evento `click` se dispare sobre el <svg> y no sobre el <path> de la
+   localidad, así que el inspector deja de abrirse: el mapa se mueve pero no
+   se puede seleccionar nada. El seguimiento del arrastre se hace escuchando
+   en `window`, que da el mismo comportamiento fuera del lienzo sin robarle el
+   clic a nadie. */
+svg.addEventListener('pointerdown', ev=>{
+  punteros.set(ev.pointerId, {x:ev.clientX, y:ev.clientY});
+  huboArrastre = false;
+  cortarCamara();                        // tocar el mapa cancela el salto en curso
+  if(punteros.size === 1){
+    arrastre = {x:ev.clientX, y:ev.clientY, camX:cam.x, camY:cam.y, dist:0};
+    svg.classList.add('arrastrando');
+  }else if(punteros.size === 2){
+    arrastre = null;
+    const [a,b] = [...punteros.values()];
+    pellizco = Math.hypot(a.x-b.x, a.y-b.y);
+  }
+});
+
+addEventListener('pointermove', ev=>{
+  if(!punteros.has(ev.pointerId)) return;
+  punteros.set(ev.pointerId, {x:ev.clientX, y:ev.clientY});
+  const caja = svg.getBoundingClientRect();
+  if(pellizco !== null && punteros.size === 2){
+    const [a,b] = [...punteros.values()];
+    const d = Math.hypot(a.x-b.x, a.y-b.y);
+    if(pellizco > 0){
+      const medio = {clientX:(a.x+b.x)/2, clientY:(a.y+b.y)/2};
+      const [cx,cy] = aUnidades(medio);
+      haciaPunto(d/pellizco, cx, cy, false);
+      huboArrastre = true;
+    }
+    pellizco = d;
+    return;
+  }
+  if(!arrastre) return;
+  const dx = ev.clientX - arrastre.x, dy = ev.clientY - arrastre.y;
+  arrastre.dist = Math.max(arrastre.dist, Math.hypot(dx,dy));
+  if(arrastre.dist > 4) huboArrastre = true;
+  cam.x = arrastre.camX - dx/caja.width  * cam.w;
+  cam.y = arrastre.camY - dy/caja.height * altoCam();
+  aplicar();
+});
+
+function soltar(ev){
+  punteros.delete(ev.pointerId);
+  if(punteros.size < 2) pellizco = null;
+  if(punteros.size === 0){
+    arrastre = null;
+    svg.classList.remove('arrastrando');
+    // El clic del path se dispara después de pointerup; el flag se limpia en
+    // el siguiente cuadro para que seleccionar() alcance a verlo.
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ huboArrastre = false; }));
+  }
+}
+addEventListener('pointerup', soltar);
+addEventListener('pointercancel', soltar);
+
+document.getElementById('btnMas').addEventListener('click', ()=>haciaPunto(1.6, ...centro(), true));
+document.getElementById('btnMenos').addEventListener('click', ()=>haciaPunto(1/1.6, ...centro(), true));
+document.getElementById('btnAjustar').addEventListener('click', ()=>ajustar(true));
+
+document.addEventListener('keydown', ev=>{
+  if(ev.target.matches('input, textarea')) return;
+  const paso = cam.w * 0.12;
+  if(ev.key === '+' || ev.key === '='){ haciaPunto(1.6, ...centro(), false); }
+  else if(ev.key === '-' || ev.key === '_'){ haciaPunto(1/1.6, ...centro(), false); }
+  else if(ev.key === '0'){ ajustar(false); }
+  // Las flechas solo mueven el mapa cuando el foco ya está dentro del panel:
+  // robárselas al documento entero rompería el scroll con teclado.
+  else if(ev.key.startsWith('Arrow')){
+    if(!ev.target.closest || !ev.target.closest('.mapa-caja')) return;
+    if(ev.key === 'ArrowLeft')  cam.x -= paso;
+    if(ev.key === 'ArrowRight') cam.x += paso;
+    if(ev.key === 'ArrowUp')    cam.y -= paso;
+    if(ev.key === 'ArrowDown')  cam.y += paso;
+    aplicar();
+  }
+  else return;
+  ev.preventDefault();
+});
+
+// Al cambiar de tamaño cambia la forma del lienzo y con ella el mundo:
+// encajar() vuelve a meter la cámara dentro y aplicar() redibuja todo.
+addEventListener('resize', ()=>aplicar());
+
+botonesAnio();
+// Sin población por año no hay crecimiento que dibujar: se retira el botón en
+// vez de dejarlo pintando gris.
+if(!D.poblacion_por_anio)
+  document.querySelector('[data-capa="crecimiento"]').remove();
+encuadre(); pintar(); inspector(); cifras(); aviso(); fichaEscala(); dibujarSerie();
+requestAnimationFrame(()=>ajustar(false));
 })();
 </script>

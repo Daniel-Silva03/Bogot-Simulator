@@ -21,6 +21,11 @@ escondidas acá:
     D11  la variable de opinión es confianza institucional
     D12  el agente tiene exactamente los 7 campos de CAMPOS_D12
     D14  el muestreo es proporcional al factor de expansión (PPS sistemático)
+    A05  `opinion_t0` sale con su ficha de escala en el metadata
+         (`escala_opinion`): qué pregunta la produjo, en qué rango, con
+         qué dirección y sobre cuántos ítems. Antes el CSV entregaba una
+         columna de números entre 1 y 5 que solo era interpretable
+         leyendo el código.
     A15  `estrato` queda FUERA de las variables de distancia porque el
          donante no lo trae — decisión de esta corrida, registrada en el
          metadata, no una solución de fondo. La consecuencia (opinion_t0 es
@@ -46,12 +51,16 @@ from src.population.build_agents import (  # noqa: E402
 )
 from src.population.ecp import (  # noqa: E402
     COLUMNA_EDUCACION_MATCH,
+    ETIQUETAS_ITEMS,
+    ITEMS_UTILES,
     armonizar_educacion_proyecto,
     donante_ecp,
+    resumen_n_items,
 )
 from src.population.epc_bcv import (  # noqa: E402
     COLUMNA_EDAD_BANDA,
     FACTOR_POR_ANIO,
+    ITEMS as ITEMS_EPC,
     bandear_edad,
     donante_epc,
 )
@@ -158,8 +167,34 @@ def main(argv: list[str] | None = None) -> int:
             agentes_muestra["nivel_educativo"])
         distance_vars = DISTANCE_VARS_ECP
         exact_match_vars = EXACT_MATCH_VARS_ECP
-        donante_fuente = (f"Encuesta de Cultura Política {anio_ecp} (DANE), submuestra de "
-                          f"Bogotá (REGION=1), 13 ítems de P5263S*, ponderada por FEX_P")
+        items = resumen_n_items(donante)
+        # El texto viejo decía "13 ítems" como si todos hubieran respondido
+        # los 13. El 86,7 % sí; el resto promedia menos (A05 / DI-C11).
+        donante_fuente = (
+            f"Encuesta de Cultura Política {anio_ecp} (DANE), submuestra de "
+            f"Bogotá (REGION=1), índice de confianza sobre hasta "
+            f"{items['items_utiles']} ítems de P5263S* "
+            f"(mínimo {items['min_items_exigido']} por persona; "
+            f"{items['completos_pct']:.0f}% respondió los {items['items_utiles']}), "
+            f"ponderada por FEX_P")
+        escala_opinion = {
+            "concepto": "Confianza institucional",
+            "pregunta": (
+                "¿Cuánta confianza tiene usted en cada una de las siguientes "
+                "instituciones? — ECP, capítulo Democracia"),
+            "rango": [1, 5],
+            "anclas": {"1": "no confía", "5": "confía mucho"},
+            "direccion": "mayor = más confianza",
+            "construccion": (
+                "promedio simple de los ítems que la persona respondió en la "
+                "escala 1-5; el código 99 (no sabe/no responde) queda fuera del "
+                "promedio, no se imputa"),
+            "instituciones": [ETIQUETAS_ITEMS[i] for i in ITEMS_UTILES],
+            "n_items": items,
+            "no_es": (
+                "No es un porcentaje ni una probabilidad. Un 3,0 es el punto "
+                "medio de la escala, no «30 % de confianza»."),
+        }
     elif usa_epc:
         # El ítem se renombra al hueco genérico de opinión del pipeline. No es
         # confianza institucional y el metadata lo dice: `donante_fuente` nombra
@@ -174,11 +209,34 @@ def main(argv: list[str] | None = None) -> int:
         donante_fuente = (f"Encuesta de Percepción Ciudadana {anio_epc} "
                           f"(Bogotá Cómo Vamos), ítem «{item_epc}», escala 1-5, "
                           f"ponderada por {FACTOR_POR_ANIO[anio_epc]}")
+        escala_opinion = {
+            "concepto": ITEMS_EPC[item_epc]["etiqueta"],
+            "pregunta": ITEMS_EPC[item_epc]["etiqueta"],
+            "rango": [1, 5],
+            "anclas": {"1": "muy mala gestión", "5": "muy buena gestión"},
+            "direccion": "mayor = mejor evaluación",
+            "construccion": "ítem único, sin promediar",
+            "n_items": {"items_utiles": 1, "min_items_exigido": 1},
+            "no_es": (
+                "No es confianza institucional (D11): es evaluación de gestión. "
+                "Ocupa el mismo hueco del pipeline, pero no es la misma variable."),
+        }
     else:
         donante = load_confianza_institucional_donante(DONANTE)
         distance_vars = DISTANCE_VARS
         exact_match_vars = None      # usa el default de matching.py
         donante_fuente = "Encuesta de Confianza Institucional 2024-2025 (Veeduría Distrital)"
+        escala_opinion = {
+            "concepto": "Confianza institucional",
+            "rango": [1, 5],
+            "direccion": "mayor = más confianza",
+            "construccion": (
+                "promedio de los ítems de confianza del instrumento de la "
+                "Veeduría; el denominador varía entre 1 y 8 ítems y ese número "
+                "NO se registra por fila — ver POPULATION_SPECIFICATION.md "
+                "§8.4. Es la parte de A05 que sigue abierta con este donante."),
+            "n_items": {"min_items_exigido": 1, "advertencia": "denominador de 1 a 8, sin registrar"},
+        }
 
     matching = hot_deck_match(
         agentes_muestra, donante, OPINION_COL,
@@ -229,6 +287,7 @@ def main(argv: list[str] | None = None) -> int:
         nombre_base=args.nombre_base,
         muestreo_metadata=meta_muestreo,
         diagnostico_territorial=diag,
+        escala_opinion=escala_opinion,
     )
     print(f"\nListo: {ruta} ({len(agentes)} agentes)")
     print(f"       {ruta.parent / (args.nombre_base + '_metadata.json')}")

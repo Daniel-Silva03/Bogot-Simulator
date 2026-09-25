@@ -1,0 +1,73 @@
+{
+  "semillas": [
+    42,
+    101,
+    202,
+    303,
+    404,
+    505,
+    606,
+    707,
+    808,
+    909,
+    111,
+    222,
+    333,
+    444,
+    555,
+    666,
+    777,
+    888,
+    121,
+    232
+  ],
+  "n_agentes": 1000,
+  "por_anio": {
+    "2013": {
+      "sd_entre_publicada": 0.156,
+      "piso_mediana": 0.2273,
+      "piso_p95": 0.4141,
+      "piso_min": 0.1018,
+      "piso_max": 0.4829,
+      "percentil_publicada": 25.0,
+      "sale_del_piso": false
+    },
+    "2017": {
+      "sd_entre_publicada": 0.196,
+      "piso_mediana": 0.2869,
+      "piso_p95": 0.4504,
+      "piso_min": 0.1598,
+      "piso_max": 0.5319,
+      "percentil_publicada": 10.0,
+      "sale_del_piso": false
+    },
+    "2019": {
+      "sd_entre_publicada": 0.1466,
+      "piso_mediana": 0.2846,
+      "piso_p95": 0.444,
+      "piso_min": 0.1442,
+      "piso_max": 0.5948,
+      "percentil_publicada": 10.0,
+      "sale_del_piso": false
+    },
+    "2021": {
+      "sd_entre_publicada": 0.341,
+      "piso_mediana": 0.2728,
+      "piso_p95": 0.4132,
+      "piso_min": 0.1479,
+      "piso_max": 0.5149,
+      "percentil_publicada": 85.0,
+      "sale_del_piso": false
+    },
+    "2023": {
+      "sd_entre_publicada": 0.1703,
+      "piso_mediana": 0.2153,
+      "piso_p95": 0.4361,
+      "piso_min": 0.1273,
+      "piso_max": 0.483,
+      "percentil_publicada": 35.0,
+      "sale_del_piso": false
+    }
+  },
+  "conclusion": "Ningún año supera el percentil 95 de su propio piso de ruido."
+}

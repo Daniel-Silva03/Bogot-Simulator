@@ -1,8 +1,8 @@
 # VISUALIZATION SPECIFICATION — BOGOTÁ SOCIAL SIMULATOR
 
-**Versión:** 0.1
-**Fecha:** 18 de septiembre de 2026
-**Estado:** Hito 1 construido y publicado. Hitos 2 a 5 especificados, sin construir.
+**Versión:** 0.13
+**Fecha:** 24 de septiembre de 2026
+**Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. Hitos 3 a 5 especificados, sin construir.
 **Documentos relacionados:** PROJECT_CONTEXT.md §31 y §51, ARCHITECTURE.md, POPULATION_SPECIFICATION.md, claude/ANALISIS_DISENO_MUESTRAL.md
 
 ---
@@ -80,6 +80,11 @@ producto.
 | **Población** | Coropleta por población de 18 años o más | `data/external/marginal_localidad_18mas.csv` (dato real, no simulado) |
 | **Agentes** | 1.000 puntos, uno por agente sintético | `data/processed/poblacion_ecp2013.csv` v0.3-DI-M1 |
 | **Opinión** | Coropleta por media de `opinion_t0`, con conmutador de escala | misma población |
+| **Base urbana** *(conmutador aparte)* | Vías arteriales y áreas verdes sobre la coropleta, con detalle progresivo | OpenStreetMap vía Overpass, extracto del 21/09/2026, ODbL |
+
+Sobre las tres capas se navega: arrastre para mover, Ctrl + rueda o pellizco
+para acercar, doble clic, botones `+` / `−` / «Ajustar», teclas `+` `−` `0` y
+flechas, y un botón «Encuadrar» en la ficha de cada localidad.
 
 ## 3.2 Inspector
 
@@ -124,24 +129,504 @@ Están en el docstring de `src/viz/preparar_mapa.py`. Resumen:
   ciudad construida en una esquina del encuadre. El conmutador «Con Sumapaz»
   devuelve la forma real del Distrito, que también hay que poder ver.
 
+### Capa base urbana (añadida el 21/09/2026)
+
+El hito 1 dibujaba 20 polígonos sin nada dentro. Quien conoce Bogotá no
+reconocía Bogotá: sin la Autopista Norte, la Caracas, la Boyacá ni el Simón
+Bolívar, ubicar una localidad exigía sabérselas de memoria. La capa base
+resuelve ese problema concreto y **ninguno más**. Se dibuja por encima de la
+coropleta, por debajo de los agentes, apagada por defecto, sin eventos de
+puntero y sin ninguna etiqueta de OpenStreetMap en el paquete: no se puede
+hacer clic sobre ella porque no hay nada que consultar.
+
+- **DI-V8** — Fuente: OpenStreetMap vía Overpass, extracto del 21/09/2026,
+  bajo ODbL. La atribución va en el pie de la página; es obligación de la
+  licencia, no cortesía. Los archivos crudos quedan versionados en
+  `data/external/geo/osm/` para que el paquete se reproduzca sin volver a
+  consultar Overpass.
+- **DI-V9** — Simplificación Douglas-Peucker a 0,0002° (~22 m) en vías y
+  0,00015° (~17 m) en polígonos, y redondeo final a cuatro decimales (~11 m),
+  la misma resolución que DI-V1. Es resolución de dibujo: **esta capa no sirve
+  para medir distancias, áreas ni accesibilidad.**
+- **DI-V10** — Overpass devuelve las vías partidas en cada cambio de etiqueta:
+  5.429 tramos en el extracto. Antes de simplificar se reencadenan por extremo
+  compartido y quedan **178 polilíneas**. Sin ese paso el paquete pesa diez
+  veces más y Douglas-Peucker no tiene nada que simplificar dentro de un tramo
+  de dos puntos.
+- **DI-V11** — El recorte es por caja envolvente de las 19 localidades urbanas
+  más 0,01°, **no por el límite político del Distrito**. Consecuencia
+  deliberada: dentro del encuadre se ven vías y parques de Soacha, Mosquera,
+  Funza y Chía. La ciudad no se acaba en el borde de Bogotá; fingir que sí es
+  peor que mostrarlo. La página dice que la capa base es regional y que lo
+  único que delimita el Distrito son los polígonos de localidad.
+- **DI-V12** — Se descartan las áreas verdes menores de 2 ha: a la escala de la
+  ciudad entera un parque de barrio mide menos de tres píxeles y solo aporta
+  ruido visual. De 4.189 polígonos del extracto quedan 206.
+- **DI-V13** — Codificación delta en enteros de 1e-4 grados. Un punto pasa de
+  18 caracteres a 3 y el paquete de ~120 KB a 30 KB, sin perder un solo punto.
+  La página lo decodifica sumando.
+- **DI-V15** — Detalle progresivo. Las vías `trunk` y las áreas verdes de 2 ha
+  o más se dibujan siempre; `primary` y los parques de 0,5 a 2 ha aparecen al
+  pasar de ×2,6. No es solo peso de archivo: a escala de ciudad entera las 129
+  polilíneas de `primary` se cruzan entre sí y tapan la coropleta, que es el
+  dato. El detalle aparece cuando hay resolución para leerlo, y por la misma
+  razón la capa base sube de opacidad al acercar: de lejos tiene que ceder
+  ante el color, de cerca el color es plano y lo único que informa es la calle.
+- **DI-V14** — Si falta una de las tres capas de origen, el preparador no
+  falla: emite esa capa vacía y lo declara en los metadatos. **Hoy falta
+  `agua.geojson`** —llegó pegado como texto en el chat, no como archivo— así
+  que la capa de agua va vacía. El agua es la capa que más ayuda a reconocer
+  Bogotá (el río Bogotá, el Fucha, el Tunjuelo, los humedales de Tibabuyes y
+  Córdoba); el código ya la dibuja, solo falta dejar el archivo en
+  `data/external/geo/osm/agua.geojson` y volver a correr el preparador.
+
+### Navegación (añadida el 22/09/2026)
+
+Sin zoom, la capa base era desperdicio: se cargó geometría a 22 m para
+dibujarla a una escala donde una arteria mide un píxel. El mapa ahora se
+arrastra y se acerca hasta ×24, con barra de escala, encuadre por localidad y
+control por teclado.
+
+- **DI-V17** — El zoom se hace moviendo el `viewBox`, no con un `transform`
+  sobre un grupo. Así los trazos con `vector-effect: non-scaling-stroke`
+  siguen midiéndose en píxeles de pantalla y no hay que compensar nada a mano;
+  los puntos de agente y las etiquetas se reescalan explícitamente para
+  conservar su tamaño en pantalla, porque si crecieran con el zoom acercarse
+  no separaría nada.
+- **DI-V18** — El lienzo tiene altura propia (`clamp(440px, 74vh, 880px)`) y
+  **ya no toma la forma del *bounding box* de la ciudad**. Bogotá urbana es un
+  corredor norte-sur larguísimo: atar la altura del panel a esa forma producía
+  un lienzo de 1.500 × 3.800 px en el que, al acercar, solo se veía una franja
+  vertical. El encuadre inicial se calcula para caber dentro del lienzo, y el
+  rectángulo resultante —el «mundo»— es a la vez el tope del alejamiento y el
+  límite del paneo: la ciudad no se puede perder de vista.
+- **DI-V16** — La rueda sola **no** hace zoom: deja scrollear la página. El
+  zoom pide Ctrl (o ⌘), que es además lo que el navegador envía cuando alguien
+  hace el gesto de pellizco en un trackpad, así que el gesto natural funciona
+  sin saber la tecla. Atrapar la rueda a secas es de las cosas que más
+  molestan de un mapa embebido, y aquí el mapa es una columna dentro de un
+  documento que se lee de arriba abajo. Quien prefiera no usar modificadores
+  tiene doble clic y los botones `+` / `−`.
+- **DI-V19** — Un arrastre que termina encima de una localidad no cuenta como
+  clic. Sin ese guardia, mover el mapa cambiaría la selección cada vez.
+- **DI-V20** — **El acercamiento se usa para enseñar DI-V3, no para taparlo.**
+  A partir de ×5, con la capa de agentes activa, la leyenda dice que hay
+  puntos sobre el aeropuerto, sobre el río y sobre el área rural, y explica
+  por qué: el modelo no tiene geografía por debajo de la localidad. Es el
+  mismo criterio de la sección 2 —enseñar el error es más eficaz que
+  esconderlo— aplicado a la herramienta que más podría disimularlo. El zoom
+  hace que la página parezca más precisa; esta es la contrapartida que lo
+  compensa.
+
+### Una sola identidad visual (22/09/2026)
+
+El proyecto tiene **dos modos de mirar**, no dos identidades:
+
+| | Para qué | Color |
+|---|---|---|
+| **Tablero, vista Datos** | Leer población y opinión con sus márgenes | Codifica: la rampa *es* el dato |
+| **Tablero, vista Ciudad** · **pósters** | Mirar y reconocer Bogotá | No codifica nada |
+
+- **DI-V24** — La identidad del tablero es la paleta **«Páramo»**: verde de
+  los cerros sobre papel de sabana (`#e9ece7` en el lienzo, `#f7f9f6` en los
+  paneles, tinta `#16211c`, acento teja `#b2452c`). La vista Ciudad y los
+  pósters conservan la paleta de prettymaps, y ese salto de color es
+  precisamente lo que marca el cambio de modo: de leer a mirar.
+
+  Se eligió tras renderizar cuatro candidatas sobre el mapa real —Páramo,
+  Ladrillo a la vista, Bandera del Distrito y Cielo de sabana—, validando cada
+  una contra su propio papel. Decidir viendo y no por nombres de color es
+  parte del método: las cuatro eran legales, así que la elección fue de gusto,
+  y eso solo se sabe después de comprobar que ninguna era ilegible.
+- **DI-V25** — Las rampas **se rediseñaron y se validaron contra el papel
+  nuevo**, no se ajustaron a ojo. La secuencial de población es de un solo
+  tono (vino, OKLCH H=18) con lightness monótona y paso mínimo de 0,06. La
+  divergente de opinión son dos brazos de un tono cada uno —índigo y
+  terracota— con un **gris neutro** en el centro, que es lo que separa una
+  divergente legítima de un arcoíris. El requisito que obligó a rehacerlas
+  enteras: sobre un fondo de color, el extremo claro tiene que despegarse del
+  papel (≥ 2:1).
+
+  **Este check destapó un defecto que el tablero llevaba desde el hito 1.** La
+  rampa verde original arrancaba en `#e9eee8` sobre un papel `#e9ece7`: un
+  contraste de **1,01:1**. La localidad menos poblada no era el extremo claro
+  de una escala, era un agujero en el mapa — y nadie lo notó en meses, porque
+  el ojo rellena el hueco con el contorno. La rampa verde de hoy arranca en
+  `#87b099` y da 2,02:1; la divergente, 3,5:1 o más en cada brazo. «Sin dato»
+  tiene su propio gris a 2,17:1, porque una localidad sin medición tampoco
+  puede confundirse con el fondo.
+- Los agentes pasan al coral `#FF5E5B` del preset, el único acento saturado
+  del lienzo, y «sin dato» tiene su propio gris: una localidad sin medición
+  —La Candelaria— no puede confundirse con el fondo.
+
+**Lo que no cambió, y es el punto:** la capa de opinión sigue viéndose casi
+plana, con todas las localidades alrededor del gris del centro. El rediseño de
+la paleta no tapó la conclusión de la sección 2; si la hubiera tapado, estaría
+mal hecho.
+
+- **DI-V26** — El paneo **no** usa `setPointerCapture`. Capturar el puntero en
+  el `<svg>` hace que el evento `click` se dispare sobre el `<svg>` y no sobre
+  el `<path>` de la localidad: el mapa se movía pero el inspector dejaba de
+  abrirse. El arrastre se sigue en `window` en su lugar, que da el mismo
+  comportamiento fuera del lienzo sin quitarle el clic a nadie.
+
+  *Y una lección de método que vale más que el arreglo:* el defecto vivió tres
+  versiones porque las pruebas disparaban el clic con `dispatchEvent`, que se
+  salta `pointerdown` por completo. Una prueba que no pasa por el mismo camino
+  que el usuario no está probando lo que el usuario hace. Las pruebas de
+  interacción ahora usan clics reales.
+
+- **DI-V27** — En la vista Ciudad las localidades **siguen siendo
+  consultables**. El aviso de que «el color no codifica nada» se refiere al
+  relleno del mapa, no al inspector: la ficha de la derecha —población,
+  composición, media de opinión con su banda de error— es la misma en las dos
+  vistas. Por eso el límite punteado tiene presencia suficiente para verse y
+  para invitar al clic, y hay realce al pasar el cursor: si algo se puede
+  pulsar, tiene que parecerlo.
+
+- **DI-V23** *(revisada el 22/09/2026)* — La vista «Ciudad» adopta la paleta
+  exacta del preset `barcelona` de prettymaps (papel `#F2F4CB`, verde
+  `#8BB174`, agua `#a8e1e6`, tinta `#2F3737`) y **nada más**: es la misma
+  herramienta con otro papel. Las tres capas de dato —población, agentes,
+  opinión— funcionan igual en las dos vistas.
+
+  **En Ciudad las localidades van sin relleno de dato:** se pintan del color
+  del papel, así que siguen siendo objetivo de clic —un `fill:none` solo
+  respondería en el borde— pero no se ven, y lo que queda es el trazado urbano.
+  La capa de agentes sí funciona, porque son puntos y no relleno; los botones
+  de Población y Opinión se ocultan en esta vista, ya que sin coropleta no
+  pintarían nada y un botón que no hace nada visible es peor que un botón
+  ausente. El verde oliva de los parques baja a 0,55 de opacidad y el agua a
+  0,7 para que la base no se coma el papel.
+
+  Esta decisión fue de ida y vuelta, y vale la pena dejar el recorrido: primero
+  Ciudad aplanaba la coropleta y escondía los controles; luego se le devolvieron
+  las tres capas de dato; y finalmente se le quitó el relleno otra vez, esta vez
+  porque **se veía mal**, no por un argumento metodológico. El resultado se
+  parece al primero, pero la razón es distinta y el mecanismo también: las
+  localidades no están «aplanadas a un relleno neutro», están sin pintar.
+
+- **DI-V31** — Se eliminó el conmutador «Base urbana». La capa base está
+  siempre, y su presencia la gradúan el zoom (DI-V15) y la vista. Un botón que
+  el usuario lee como equivalente a otro botón es un botón de más.
+
+- **DI-V32** — La localidad seleccionada se marca con un trazo verde `#0e9b62`
+  sobre un halo del color del papel, en un grupo propio por encima de la capa
+  base. **En la vista Ciudad se añade un tinte** `rgba(72,187,128,.28)`, que es
+  el único color de esa vista; se dibuja **debajo** de la capa base, para que
+  tiña la localidad sin tapar sus vías ni sus parques — que es lo que lo hace
+  translúcido de verdad y no solo transparente. En Datos no hay tinte: sobre la
+  coropleta alteraría el color que lleva el dato. Dos razones, las dos medidas: un trazo verde *de la rampa* sobre una
+  coropleta verde no se ve —el mejor candidato daba 1,06:1 contra el paso más
+  oscuro—, y si la marca fuera el borde del propio polígono, las localidades
+  vecinas y las vías se dibujarían encima y se la comerían a medias.
+- **DI-P11** (en `src/viz/poster.py`) — Los pósters usan los presets de
+  prettymaps **tal cual**, sin adaptarlos a la paleta del proyecto. Son dos
+  identidades visuales a propósito: una para leer y otra para mirar.
+- **DI-P12** — La zona «ciudad» del generador de pósters no puede usar un
+  preset sin tocarlo: con 11 km de radio, pedir las huellas de edificios son
+  cientos de miles de polígonos y Overpass se cae por tiempo de espera. Se
+  dibuja sin edificios y con el agua añadida, que a esa escala es lo que
+  estructura la ciudad.
+
+El límite de localidad se dibuja punteado en la vista Ciudad. Compite con las
+vías —ambos son líneas oscuras y finas— y además no es un objeto de la ciudad
+sino una convención administrativa; el punteado dice eso sin tener que
+explicarlo.
+
+### Movimiento (22/09/2026)
+
+El tablero anima **cuatro cosas y ninguna más**. El criterio no es estético: a
+más veces se ve algo, menos puede moverse, porque el movimiento que sorprende
+la primera vez estorba la centésima.
+
+| Qué | Por qué | Cuánto |
+|---|---|---|
+| Salto de cámara por clic en `+`/`−`/«Ajustar»/«Encuadrar»/doble clic | Evitar el teletransporte: sin puente, al encuadrar una localidad se pierde la referencia de dónde estaba | 240 ms, `cubic-bezier(0.23, 1, 0.32, 1)` |
+| Pulsación de botón | Confirmar que el botón oyó | `scale(.97)`, 120 ms |
+| Relevo del panel inspector | Veinte filas cambian a la vez; sin puente el ojo pierde el hilo | opacidad, 140 ms |
+| ~~Conmutar Datos ↔ Ciudad~~ | **Retirada.** Ver DI-V33 | — |
+
+- **DI-V28** — **La rueda, el arrastre, el pellizco y el teclado NO se
+  animan.** Los tres primeros siguen el gesto 1:1: cualquier suavizado se
+  percibe como retraso. El teclado se excluye por frecuencia — una tecla que se
+  repite se vuelve lenta si cada pulsación arrastra una animación de por medio.
+  Tocar el mapa o girar la rueda **cancela** el salto en curso: el gesto manda.
+- **DI-V29** — El `viewBox` no es animable por CSS, así que se interpola a
+  mano. El reloj es una animación WAAPI sobre un elemento desconectado, de la
+  que solo se lee el progreso: da la curva exacta del navegador sin implementar
+  un bézier propio, y es cancelable. Durante la interpolación no se vuelve a
+  pintar la leyenda — reescribir su HTML sesenta veces por segundo es justo el
+  tipo de coste que hace que una animación se sienta pesada.
+- **DI-V33** — **La transición de paleta al conmutar de vista se retiró.**
+  Costaba más de lo que arreglaba, y el camino hasta entenderlo vale la pena
+  dejarlo escrito:
+
+  1. Con `transition` sobre los ~1.400 paths de la capa base, el navegador
+     tenía que interpolar 1.400 colores a la vez y el cambio de vista tardaba
+     **segundos** en aparecer.
+  2. Reducida a un solo nodo, el papel seguía sin cambiar: se transicionaba el
+     atajo `background`, que arrastra `background-image`, `-position` y
+     `-size`, y Chromium deja el valor atascado en el color viejo hasta que
+     algo fuerza un recálculo. *«Nombra las propiedades exactas» no era una
+     regla de estilo, evitaba esto.*
+  3. Ya con `background-color`, quedaba un desfase visible: añadir la clase al
+     contenedor obliga a recalcular el estilo de ~2.500 nodos del SVG, y ese
+     trabajo retrasa el arranque de la transición.
+
+  Conmutar de vista es un cambio de modo, y que salte es correcto. A veces la
+  mejor animación es ninguna.
+
+- **DI-V34** — **La página no describe la variable: la copia.** Durante todo el
+  Hito 1 el tablero publicó una coropleta y un inspector llenos de números
+  entre 1 y 5 sin decir en ninguna parte qué medían. Alguien que llegara a la
+  página podía leer «2,81 / 5» y no tener forma de saber si era confianza,
+  aprobación, ideología o satisfacción, ni en qué dirección, ni de qué encuesta
+  ni de qué año. Es exactamente el defecto que §31 de PROJECT_CONTEXT advierte
+  para los mapas, aplicado a la leyenda en vez de al color.
+
+  La ficha (`escala_opinion`) se escribe **una sola vez**, en el metadata de la
+  población que produjo `opinion_t0`; `preparar_mapa.py` la copia al paquete y
+  la página la formatea. No hay texto descriptivo escrito a mano en la
+  plantilla. La razón es concreta: el pipeline sirve tres donantes —ECP,
+  EPC/Bogotá Cómo Vamos y Veeduría— y con el donante EPC la variable **no es
+  confianza institucional**, es evaluación de gestión del alcalde. Una
+  descripción escrita en el HTML seguiría diciendo «confianza» el día que se
+  cambie el donante, y nadie se daría cuenta. Si el paquete no trae la ficha,
+  el bloque no se dibuja: mejor sin ficha que con una inventada.
+
+  La ficha publica la pregunta textual, las anclas verbales (*1 = no confía,
+  5 = confía mucho*), la rampa, cómo se construye el índice, **la distribución
+  del denominador** (POPULATION_SPECIFICATION §8.4), las 13 instituciones
+  evaluadas y una línea de *lo que no es*: un 3,0 es el punto medio de la
+  escala, no «30 % de confianza». Va en un `<details>` cerrado —no empuja el
+  mapa hacia abajo— pero siempre presente, no escondido detrás de un modal.
+
+- **DI-V35** — Las anclas verbales solo acompañan a los extremos **cuando son
+  los extremos reales de la pregunta**. Con «Escala al rango» activada los topes
+  son 2,54 y 3,23, y poner «no confía» junto a un 2,54 sería mentir con más
+  énfasis que el propio estirado de color. Por la misma razón el 1 y el 5 se
+  imprimen sin decimales en la escala real —«1,00» sugiere una precisión que la
+  pregunta no tiene— y con dos decimales en la estirada, donde hacen falta.
+
+- **DI-V36** — **La coropleta de población nunca fue lineal, y la leyenda decía
+  que sí.** El color se calcula con `Math.sqrt(población / máximo)` desde el
+  Hito 1. La leyenda imprimía `0 ————— 991.096` y nada más, así que la única
+  lectura disponible era la proporcional, y era falsa:
+
+  | localidad | población | proporción real | dónde caía el color |
+  |---|---|---|---|
+  | Kennedy | 852.417 | 86 % | 93 % |
+  | Los Mártires | 59.740 | 6 % | 25 % |
+  | La Candelaria | 14.082 | 1,4 % | 12 % |
+
+  **La raíz se queda.** No es un adorno: sin ella las quince localidades por
+  debajo de 300.000 personas caen todas en el mismo verde claro y el mapa deja
+  de distinguir Sumapaz de Los Mártires, que se diferencian en veinte veces. La
+  compresión de la cola es exactamente lo que hace legible un mapa de conteos
+  sobre áreas de tamaño muy desigual. Lo que no se queda es la leyenda que la
+  ocultaba: ahora lleva marcas en 50.000, 200.000 y 500.000, **colocadas con la
+  misma transformación que pinta el color**, de modo que la curvatura se ve en
+  el espaciado de las marcas, y el texto dice «color en escala de raíz».
+
+  La decisión de implementación que importa es la otra: la transformación tiene
+  ahora un nombre (`tPob`) y **un solo cuerpo**, que consumen el color y la
+  leyenda. Mientras fueran dos expresiones separadas, cualquiera podía cambiar
+  una y dejar el mapa contradiciendo su propia leyenda sin que nada fallara. La
+  prueba comprueba justamente eso: que `Math.sqrt` aparezca **una sola vez** en
+  toda la página.
+
+  Es el mismo defecto que DI-V34, en la otra capa: una rampa que no dice cómo
+  se lee. Que aparecieran los dos el mismo día, uno buscando el otro, sugiere
+  revisar cada codificación visual con la misma pregunta — *¿un lector puede
+  saber cómo se convierte el dato en el color?*— antes de agregar capas nuevas.
+
+- **DI-V41** — **Decisiones del gráfico de la serie** (`dibujarSerie`, Hito 2).
+  Las cuatro que no son obvias:
+
+  1. **Los dos colores se validaron, no se eligieron mirando.** El verde
+     `--paramo` del proyecto falla el piso de croma (C = 0,066: a ese nivel un
+     tono deja de hacer trabajo de identidad y se lee como gris) y su
+     separación bajo protanopía contra el `--teja` es ΔE 7,1, dentro de la
+     banda que solo es admisible con codificación secundaria. Los que quedaron
+     —`#14588a` y `#b8531f` en claro, `#3f92cc` y `#d4713f` en oscuro— pasan
+     las cinco comprobaciones, con ΔE 19,8 bajo protanopía y 25,6 en visión
+     normal. Los pasos oscuros son propios, no una inversión automática.
+  2. **Y aun así cada serie lleva su forma**: círculo la ECP, cuadrado la EPC.
+     Impreso en gris o en una pantalla mala, el color es lo primero que se
+     pierde; la forma no.
+  3. **El área de clic mide 28 px y el punto 9.** La primera versión ponía el
+     marcador encima del área, así que apuntar *bien* al punto era lo único
+     que no funcionaba: el dibujo interceptaba el puntero. `pointer-events:none`
+     en el marcador.
+  4. **La lectura no es un globo flotante**, es un bloque fijo bajo el gráfico
+     con `aria-live`. Se llega con el tabulador, no se escapa al mover el
+     ratón, y la tabla de «Ver los números» deja los valores copiables sin
+     cursor de por medio. Un globo habría sido más vistoso y menos usable.
+
+  El eje vertical va de 1 a 5 por defecto, con el mismo botón de «Escala al
+  rango» que el mapa y por la misma razón (§31): con la escala real el gráfico
+  se ve tranquilo, y esa tranquilidad es el dato.
+
+- **DI-V43** — **Las cinco olas son la misma muestra**, y eso es lo que hace
+  que el mapa por año signifique algo. Las cinco poblaciones se construyen con
+  la misma semilla y el mismo método, así que los 1.000 agentes son las mismas
+  1.000 personas sintéticas en 2013 y en 2023 y lo único que cambia entre años
+  es `opinion_t0` (verificado: las seis columnas demográficas son idénticas
+  entre olas). Tres consecuencias: la geometría, las posiciones de los puntos y
+  la composición por localidad se guardan una sola vez —el paquete pasa de 71 a
+  98 KB para cinco años, no a 355—; cualquier diferencia que el lector vea
+  entre dos años es del dato y no del sorteo; y `preparar_mapa.py` **verifica**
+  esa identidad en vez de confiarse, porque compartir posiciones entre
+  poblaciones distintas dibujaría a una persona de Suba en Kennedy sin que nada
+  avisara.
+
+- **DI-V44** — El ruido se recalcula por año y la página lo muestra al cambiar
+  de año. El mapa por año es exactamente el gráfico que §31 advierte: cinco
+  cortes que parpadean y parecen movimiento territorial.
+
+- **DI-V45** — **El error estándar analítico subestima el ruido territorial.**
+  Es el hallazgo del Hito 2, y apareció construyéndolo.
+
+  Desde el Hito 1 el proyecto descomponía la dispersión entre localidades con
+  `sd_ruido² = promedio(ee²)`, con `ee = sd/√n · √DEFF` (DI-V4). Esa fórmula
+  supone que las 1.000 opiniones son extracciones independientes. **No lo son.**
+  El hot-deck empareja por celda demográfica y el desempate ponderado de DI-M1
+  permite que dos agentes de la misma celda reciban el valor del **mismo**
+  encuestado. Los agentes de una localidad comparten celdas más que dos agentes
+  cualesquiera, así que la opinión queda agrupada por localidad **por
+  construcción**, y ese agrupamiento no entra en `ee`.
+
+  Se vio en la ECP 2021, el único año que parecía distinto:
+
+  | | analítico (DI-V4) | medido (20 semillas) |
+  |---|---|---|
+  | dispersión entre localidades | 0,341 | 0,341 |
+  | ruido | 0,246 (52 %) | rango 0,148–0,515, p95 = 0,413 |
+  | «dispersión real» | **0,236** | **ninguna** — percentil 85 del propio piso |
+
+  Rehaciendo el pipeline con otras semillas —mismo año, mismos datos, mismo
+  método—, la dispersión entre localidades de 2021 recorre 0,148 a 0,515. La
+  corrida publicada vale 0,341. No hay señal territorial: hay una semilla
+  afortunada. Y lo mismo, sin excepción, en los cinco años.
+
+  **Una prueba de permutación no sirve para esto, y se intentó.** Remezclar la
+  opinión entre agentes rompe a la vez el vínculo localidad→demografía **y** el
+  agrupamiento del hot-deck, así que da p = 0,0005 para un efecto que no
+  existe. El null correcto conserva las dos cosas y solo cambia la semilla. Es
+  la misma lección de §8.3 de POPULATION_SPECIFICATION en otra forma: *el piso
+  de ruido de un pipeline se mide rehaciéndolo, no derivándolo.*
+
+  `src/viz/piso_territorial.py` lo mide, `piso_territorial.json` lo transporta y
+  **la página usa ese, no el analítico**, para cualquier afirmación territorial.
+  El analítico se conserva en el paquete porque sigue siendo el que corresponde
+  a las barras del inspector de cada localidad, renombrado a
+  `fraccion_ruido_analitica` para que nadie lo vuelva a usar por descuido. La
+  prueba exige que el piso medido sea mayor que el analítico: si algún día
+  dejara de serlo, el argumento estaría al revés y habría que revisarlo.
+
+- **DI-V46** — **El año es un solo estado, con una sola puerta.** `C()` y
+  `opDe()` son las únicas dos formas de leer un dato de opinión, las dos son
+  funciones del año seleccionado, y `irAlAnio()` es el único camino para
+  cambiarlo —lo usen los botones de la barra o un clic en la línea de tiempo—.
+  La prueba comprueba lo contrario de lo habitual: que **no** queden en la
+  página lecturas de `D.ciudad.`, `l.opinion_media` ni `l.opinion_ee`, que son
+  las formas sin año. Con dos caminos, media pantalla acabaría mostrando 2013 y
+  la otra media 2021, y nadie lo notaría hasta que los números no cuadraran.
+
+  Solo los puntos de la serie **ECP** llevan al mapa a su año: son los cinco con
+  población sintética. Un punto de la EPC que moviera el mapa haría creer que el
+  mapa colorea gestión del alcalde, y no la colorea.
+
+- **DI-V47** — **La capa de Agentes sí colorea por opinión, y la coropleta no
+  puede.** Son la misma variable y admiten lecturas distintas: la media de
+  ciudad recorre 2,81 → 2,24 sobre márgenes de ±0,03, así que el cambio entre
+  años es señal robusta; la variación *entre localidades* dentro de un año no
+  supera el piso (DI-V45). Por eso los 1.000 puntos se colorean por la opinión
+  individual —donde el movimiento es real y se ve— mientras la coropleta carga
+  la advertencia. Es la distinción que el tablero tiene que enseñar, no
+  esconder: **el tiempo se puede leer, la geografía no.**
+
+- **DI-V30** — El `:hover` de los botones se gatea con
+  `@media (hover: hover) and (pointer: fine)`. En táctil, un toque dejaba el
+  estado de hover pegado hasta tocar otra cosa.
+- Con `prefers-reduced-motion: reduce` no hay interpolación de cámara ni
+  fundido de panel: el estado salta al destino. Reducir movimiento es tener
+  menos, no tener cero — las transiciones de color se conservan.
+
+**Lo que se descartó, y es la parte que importa:** animar la coropleta al
+cambiar de capa más allá de lo que ya hacía, la entrada escalonada de las 20
+localidades, la aparición de los 1.000 agentes, y el dibujado progresivo de la
+banda de error. Todos son dato que alguien está leyendo. Un tablero que se
+mueve mientras lo lees es peor tablero, por bonito que se vea la primera vez.
+
+Dos defectos que la navegación dejó a la vista y quedaron corregidos:
+
+- **DI-V21** — Los colores del lienzo dejan de seguir al tema del sistema. Las
+  rampas de la coropleta son RGB fijos, así que no cambian en modo oscuro;
+  todo lo que se dibuja encima —bordes de localidad, etiquetas, vías, verde,
+  agua, barra de escala— seguía a `--ink` y `--surface` y en modo oscuro
+  quedaba claro sobre relleno claro. Ahora hay cinco variables de lienzo
+  (`--lienzo-borde`, `--lienzo-tinta`, `--base-via`, `--base-verde`,
+  `--base-agua`) que se definen una sola vez y no se redefinen nunca.
+- **DI-V22** — La plantilla declara `<meta charset="utf-8">`. Sin eso, un
+  navegador que abra el archivo desde el disco no recibe cabecera
+  `Content-Type` y asume Latin-1: «Los Mártires» salía «Los MÃ¡rtires».
+  Publicada como artefacto no fallaba, porque el servidor sí manda el charset,
+  y por eso el defecto podía vivir meses sin que nadie lo notara — lo destapó
+  encender los nombres de localidad para revisar el modo oscuro.
+
+Lo que el zoom **no** arregla: la geometría sigue simplificada a resolución de
+pantalla (DI-V1, DI-V9). A ×24 se ven los vértices. Sirve para ubicarse, no
+para medir, y la barra de escala está ahí para dar orden de magnitud, no para
+tomar distancias.
+
+**Lo que la capa base no cambia.** Nada de lo que dice la sección 2. Un mapa
+con calles se parece más a un mapa de verdad, y eso lo hace *más* persuasivo,
+no más cierto: la capa de opinión sigue siendo plana y el 100 % de su
+dispersión entre localidades sigue siendo ruido muestral. Por eso la capa base
+va apagada por defecto y el pie dice, con esas palabras, que ninguna cifra de
+la página se calcula con ella.
+
 ## 3.4 Archivos
 
 ```
 data/external/geo/localidades_bogota.geojson   geometría oficial simplificada (27 KB)
+data/external/geo/osm/vias.geojson             extracto Overpass: trunk + primary (5,1 MB)
+data/external/geo/osm/verde.geojson            extracto Overpass: leisure=park (5,0 MB)
+data/external/geo/osm/agua.geojson             extracto Overpass: agua — PENDIENTE (DI-V14)
 src/viz/preparar_mapa.py                       geometría + población → paquete de datos
-src/viz/plantilla_mapa.html                    la página, con marcador /*__DATOS__*/
-src/viz/construir_pagina.py                    plantilla + datos → archivo único
-data/processed/viz/mapa_bogota.json            paquete de datos (69 KB)
-data/processed/viz/mapa_bogota.html            la página lista (92 KB)
-tests/test_viz_mapa.py                         12 pruebas
+src/viz/preparar_serie.py                      ECP + EPC → serie temporal con márgenes (Hito 2)
+src/viz/piso_territorial.py                    rehace la población con 20 semillas → piso de ruido (DI-V45)
+src/utils/revisar_datos.py                     qué datos hay en esta máquina y dónde va cada cosa
+src/viz/preparar_base.py                       extractos OSM → capa base recortada y simplificada
+src/viz/plantilla_mapa.html                    la página, con marcadores /*__DATOS__*/ y /*__BASE__*/
+src/viz/construir_pagina.py                    plantilla + datos + base → archivo único
+data/processed/viz/mapa_bogota.json            paquete de 5 olas, con `escala_opinion` y el piso (98 KB)
+data/processed/viz/piso_territorial.json       el piso de ruido medido, 20 semillas × 5 años
+data/processed/viz/serie_bogota.json           la serie medida, 14 puntos con intervalo (4,6 KB)
+data/processed/viz/base_bogota.json            capa base, dos niveles de detalle (71 KB)
+data/processed/viz/mapa_bogota.html            la página lista (252 KB)
+tests/test_viz_mapa.py                         64 pruebas
+tests/test_viz_base.py                         59 pruebas de la capa base, la navegación, la ficha, la rampa y el año
+tests/test_viz_serie.py                        43 pruebas de la serie temporal y su gráfico
 ```
 
 Reproducir de cero:
 
 ```
+for a in 2013 2017 2019 2021 2023; do
+  python3 src/population/construir_poblacion.py --donante ecp:$a --n 1000 --seed 42 \
+          --nombre-base poblacion_ecp$a --version v0.4-hito2-$a
+done
+python3 src/viz/piso_territorial.py        # ~4 min; produce el piso de ruido
 python3 src/viz/preparar_mapa.py
+python3 src/viz/preparar_base.py
+python3 src/viz/preparar_serie.py
 python3 src/viz/construir_pagina.py
 python3 tests/test_viz_mapa.py
+python3 tests/test_viz_base.py
+python3 tests/test_viz_serie.py
 ```
 
 ## 3.5 Qué verifican las pruebas
@@ -154,15 +639,77 @@ estadística (la dispersión dentro supera a la de entre; el efecto de diseño
 aplicado es el medido; la descomposición ruido/real cierra) y reproducibilidad
 con semilla fija.
 
+De la capa base (`tests/test_viz_base.py`): que la codificación delta sea la
+identidad al decodificar —si se desalinea, las vías aparecen corridas sobre las
+localidades y el lector ubica una avenida en la localidad equivocada—, que casi
+todo punto caiga dentro de la caja de recorte, **que ninguna etiqueta de
+OpenStreetMap sobreviva en el paquete** (si llevara nombres o anchos, alguien
+acabaría calculando algo con ella), que el reencadenado de tramos funcione, que
+Douglas-Peucker colapse rectas y conserve esquinas, y que la página construida
+lleve la atribución ODbL, la frase de que no entra en ningún cálculo y ninguna
+petición de red fuera de las tipografías.
+
+De la ficha de la escala (A05, en los dos archivos): que el paquete traiga
+`escala_opinion`, que su rango coincida con el de `ciudad.escala`, que existan
+anclas verbales para los dos extremos, que el denominador quede registrado y que
+el mínimo observado nunca baje del mínimo exigido; y, del lado de la página, que
+el bloque se dibuje **desde el metadata** (`D.escala_opinion`) y no desde texto
+escrito a mano, y que las anclas y la advertencia de «no es un porcentaje»
+lleguen efectivamente al HTML. La prueba que importa es la del origen: impide
+que alguien "arregle" la ficha escribiéndola en la plantilla, que es como
+volvería el defecto.
+
+De la rampa de población (DI-V36): que la transformación tenga nombre, que el
+color y las marcas de la leyenda usen esa misma, que la leyenda declare la
+escala de raíz, y —la que de verdad protege— **que `Math.sqrt` aparezca una sola
+vez en toda la página**. Dos raíces separadas es como empezó el defecto.
+
+De la serie temporal (`tests/test_viz_serie.py`): que cada intervalo sea
+exactamente ±1,96 EE —dibujar uno más angosto sería mentir justo donde
+importa—, que ningún punto de la ECP se declare estimado con diseño, que los
+años marcados con diseño en la EPC coincidan con los que la lista declara, que
+el salto se marque **exactamente** cuando la brecha supera dos años, que 2015
+siga excluido con su motivo, y que el paquete no traiga ninguna comparación
+precalculada entre las dos series.
+
 ---
 
 # 4. HITOS SIGUIENTES *(especificados, no construidos)*
 
-## Hito 2 — El tiempo
-Poner la serie de la EPC y de la ECP sobre el mapa y sobre una línea de tiempo:
-qué se midió, cuándo, con cuántos casos y con qué margen. Sigue sin haber
-simulación. Es el paso que convierte el mapa en un instrumento de lectura de los
-datos reales que el proyecto ya cargó, y no cuesta modelo nuevo.
+## Hito 2 — El tiempo  *(completo, 24/09/2026)*
+
+**Construido, segunda mitad — el mapa por año.** Cinco poblaciones sintéticas,
+una por ola de la ECP, construidas con la misma muestra (DI-V43). Botones de
+año en la barra del mapa; un clic en un punto de la serie ECP lleva el mapa a
+ese año; el año activo se marca en el gráfico. La capa de Agentes colorea cada
+punto por su propia opinión, así que al cambiar de año se ve la distribución
+moverse (DI-V47).
+
+**Y lo que el mapa por año enseñó sobre el proyecto.** Construirlo obligó a
+mirar cinco veces la misma descomposición ruido/señal, y ahí apareció DI-V45:
+el error estándar analítico venía subestimando el ruido territorial desde el
+Hito 1, y el único año que parecía tener señal (2021) no la tiene. Es el
+segundo defecto de esta fase que encuentra **un control numérico y no una
+revisión** — el primero fue la rampa verde (DI-V36).
+
+**Construido, primera mitad:** la línea de tiempo. Catorce mediciones reales con su margen:
+confianza institucional (ECP, 2013–2023, cinco puntos) y gestión del alcalde
+(EPC, 2014–2025, nueve puntos). Cada punto trae n, intervalo al 95 % y si ese
+intervalo se estimó con el diseño de la muestra o con un DEFF prestado.
+Decisiones DI-V37 a DI-V41; datos en `src/viz/preparar_serie.py`.
+
+Lo que la serie muestra, y que no se veía antes en ninguna parte del proyecto:
+la confianza institucional cae de 2,81 (2013) a 2,24 (2021) y rebota a 2,43 en
+2023 — un movimiento de 0,57 puntos frente a márgenes de ±0,03, así que es
+señal, no ruido. La evaluación del alcalde recorre un rango mayor (2,10 en 2017
+a 3,18 en 2024) y **no** se mueve en fase con la confianza: entre 2019 y 2023 la
+gestión sube mientras la confianza sigue bajando. Son dos instrumentos y dos
+conceptos, y el gráfico existe para que eso se vea en vez de suponerse.
+
+**Lo que queda pendiente, y no es del Hito 2:** el tablero ya puede mostrar
+cinco cortes del mismo instrumento, pero sigue sin haber simulación. El
+siguiente paso que cambia de naturaleza es poner una corrida del modelo al lado
+de la serie medida, para que se vea qué tan lejos cae.
 
 ## Hito 3 — Geografía por debajo de la localidad
 Es el hito que levanta DI-V3. Hay dos caminos y **no son equivalentes**:
