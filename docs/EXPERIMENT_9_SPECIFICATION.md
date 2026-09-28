@@ -90,6 +90,13 @@ repositorio:
 *Pendiente dentro del pre-registro:* nombrar la fuente concreta. Se añade como
 enmienda fechada **antes** de armar el primer dossier.
 
+> **Enmienda 1 — 28/09/2026, antes de armar ningún dossier.** Fuente fijada,
+> aprobada por Daniel: **las cronologías anuales de Wikipedia en español** para
+> Colombia y para Bogotá de cada año del periodo. Si para un año no existe
+> cronología propia de Bogotá, se usan solo los hechos de Bogotá de la de
+> Colombia, y eso se anota en el dossier. Se aplican sin excepción las reglas de
+> arriba (10 a 20 hechos, sin encuestas ni aprobación, mismo formato).
+
 ### 3.4 Cómo se evalúa
 
 La propuesta del LLM se aplica a la distribución inicial con el **ladeo
