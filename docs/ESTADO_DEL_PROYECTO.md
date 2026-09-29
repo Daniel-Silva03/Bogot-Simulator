@@ -1,150 +1,171 @@
 # ESTADO DEL PROYECTO — punto de partida para una conversación nueva
 
 Proyecto: Bogotá Social Simulator
-Fecha de corte: **25 de septiembre de 2026**
+Fecha de corte: **29 de septiembre de 2026**
 Para qué sirve: leer **este documento solo** basta para retomar. Los demás se
 leen cuando el trabajo los toque, no antes.
 
 ---
 
-## 1. Dónde está el proyecto, en cinco líneas
+## 1. Dónde está el proyecto, en seis líneas
 
-- El **pipeline de población** funciona, es reproducible y está validado contra datos reales.
-- El **modelo de opinión** falló contra lo pre-registrado, y ese resultado negativo definió el producto: **escenarios**, no predicción (Fase 8, construida).
-- La **capa visual pasó a ser el frente principal** por decisión del jefe de Daniel (18/09). Hitos 1 y 2 completos.
-- La **página ya está publicada** en GitHub.
-- Lo que sigue está en §6.
-
----
-
-## 2. Cómo trabajar con Daniel (importante, ahorra fricción)
-
-| | |
-|---|---|
-| Máquina | PC del CNC, `C:\Users\CNC.DSP-17291\Desktop\Bogot-Simulator`, clon de GitHub |
-| **Qué tiene** | el código y `data/external/` |
-| **Qué NO tiene** | `data/raw/` (microdatos) ni `data/processed/` — están en `.gitignore` a propósito |
-| Consecuencia | **no puede correr los preparadores.** Hay que mandarle el código *y* los paquetes ya construidos |
-| Cómo aplica cambios | a mano. No puede instalar Claude Code ahí. Pide un ZIP + **lista explícita de qué reemplazar y qué añadir** + los comandos |
-| Terminal | PowerShell (VS Code). `.\venv\Scripts\Activate.ps1`, y el intérprete es `python` (no `python3`) |
-
-`python src/utils/revisar_datos.py` dice qué hay en una máquina y qué falta.
-
-**Regla R10 / DATA_INVENTORY §12.4:** los microdatos del CNC no salen de su
-equipo ni se suben a ningún servicio. La ECP y la EPC sí son públicas.
+- El **pipeline de población** funciona, es reproducible y está validado: la opinión sintética es indistinguible de la encuesta real (por debajo del piso de ruido).
+- El **modelo de opinión** falló contra lo pre-registrado, y ese resultado definió el producto: **escenarios**, no predicción. El motor de escenarios está construido (Fase 8).
+- La **capa visual** es el frente principal desde el 18/09 (decisión del jefe de Daniel). Hitos 1 y 2 completos; la página está en GitHub.
+- **A08 (escalar a 100.000 agentes) quedó sin argumento visual** el 25/09: más agentes dibujarían nítida la composición demográfica, y la composición no reproduce la geografía real de la opinión.
+- **La IA generativa como fuente de opinión se descartó** con datos (Experimento 8). El **Experimento 9** —la IA como proponente de escenarios, inspirado en MiroFish— está **pre-registrado y sin código**. Es lo siguiente.
+- Lo que sigue, en §6.
 
 ---
 
-## 3. Lo que se cerró en esta tanda (18–25 de septiembre)
+## 2. Cómo trabajar con Daniel
+
+Daniel es ingeniero multimedia en el CNC. **Prefiere avanzar un frente a la vez,
+confirmando antes de pasar al siguiente, y detenerse a resolver lo que falla antes
+de acumular avances.**
+
+### Dos máquinas, un repo
+
+Repo: `github.com/Daniel-Silva03/Bogot-Simulator` (privado). **Todo se sincroniza
+por GitHub**: antes de trabajar, `git pull`; al terminar, `git push`. Al 29/09 las
+dos máquinas y el repo están iguales (último commit `ced26f1`).
+
+| | PC personal | PC del CNC |
+|---|---|---|
+| Carpeta | `C:\Users\User\Desktop\bogota_social_simulator` *(confirmar que es clon del repo: `git remote -v`)* | `C:\Users\CNC.DSP-17291\Desktop\Bogot-Simulator` |
+| Claude | **puede operar directo** si el chat está vinculado al computador | no: Daniel aplica cambios a mano y corre los comandos |
+| Microdatos del CNC | **sí**, fuera del repo; nunca se tocan ni se suben (R10) | no |
+| `data/raw/` público | sí (Multipropósito, ECP, EPC en su ruta por defecto) | sí, descargado del DANE el 25/09; EPC en `data\raw\Encuesta de Percepción Ciudadana` → requiere `$env:BSS_EPC_DIR` |
+
+Terminal: PowerShell en VS Code. `.\venv\Scripts\Activate.ps1`; el intérprete es
+`python`, no `python3`. `python src/utils/revisar_datos.py` dice qué datos hay en
+una máquina y qué se puede correr.
+
+**Regla R10 / DATA_INVENTORY §12.4:** los microdatos del CNC no salen de su equipo
+ni se suben a ningún servicio, **tampoco a una API de LLM**. La ECP y la EPC sí
+son públicas. Antes de cada commit, revisar `git status` por si se cuela algo de
+`data/raw/`, del CNC o de `cache/`.
+
+---
+
+## 3. Lo que se cerró en estas dos tandas (18–29 de septiembre)
 
 ### A05 — el índice de confianza (POPULATION_SPECIFICATION §8.4)
-Se **midió** el umbral en vez de heredarlo: con 13 ítems, exigir 7 conserva el
-97,8 % del donante y exigir los 13 conserva el 86,7 %, moviendo la media 0,007
-sobre una escala de 4. Se queda en 7. Lo que faltaba era **registrar el
-denominador**, y ahora viaja por fila (`n_items_confianza`), entra al metadata
-(`escala_opinion`) y la página lo publica.
+Umbral de 7 ítems medido, no heredado; el denominador viaja por fila y la página lo publica.
 
 ### Hito 2 — el tiempo (VISUALIZATION_SPECIFICATION §Hito 2)
-Línea de tiempo con las dos series medidas (ECP 2013–2023, EPC 2014–2025) y
-mapa por año conectado a ella. Cuatro capas, todas responden al año.
+Línea de tiempo con la ECP (2013–2023) y la EPC (2014–2025), mapa por año conectado, capa de Crecimiento.
 
-**Y destapó DI-V45, el hallazgo de la tanda:** el error estándar analítico
-**subestima el ruido territorial**. `ee = sd/√n·√DEFF` supone independencia, y el
-hot-deck agrupa la opinión por localidad **por construcción** (dos agentes de la
-misma celda pueden recibir el mismo donante). Rehaciendo el pipeline con 20
-semillas, ningún año supera su propio piso — incluido 2021, que con la fórmula
-analítica parecía tener señal territorial y no la tiene.
+### DI-V45 → DI-V52: la corrección de la semana
+DI-V45 (18–24/09) concluyó «no hay señal territorial» comparando la corrida
+publicada contra 20 semillas del mismo pipeline. **DI-V52 (25/09) lo corrigió:**
+la corrida publicada sale del mismo proceso que las semillas, así que su percentil
+es uniforme; el criterio «detecta» ~5 % de las veces **haya o no efecto**
+(simulado: 4 % con un efecto enorme; una permutación, 100 %). Lo que se sostiene
+de DI-V45: una sola corrida es inestable. La página ya no afirma «no hay señal»;
+da la razón válida: **el donante no trae localidad**.
 
-> **El piso de ruido de un pipeline se mide rehaciéndolo, no derivándolo.**
-> Una prueba de permutación NO sirve: rompe a la vez el vínculo
-> localidad→demografía y el agrupamiento del hot-deck, y da p = 0,0005 para un
-> efecto inexistente. Se intentó; está documentado para que no se repita.
+> **Un null tiene que poder fallar.**
 
-**Corrección del 25/09 — DI-V52.** La mitad de DI-V45 no se sostiene. Que una
-sola corrida es inestable, sí. Que «no hay señal territorial», no: la corrida
-publicada sale del mismo proceso que las 20 semillas, así que su percentil es
-uniforme y supera el p95 ~5 % de las veces **haya o no efecto**. Verificado con
-una ciudad simulada (`src/viz/simular_prueba_piso.py`): con un efecto enorme el
-criterio lo «detecta» el 4 % de las veces; una permutación, el 100 %. Y la
-permutación descartada no estaba mal: detectaba estructura real *en la población
-sintética*, que es **composición demográfica**, porque el donante no trae
-localidad. **Esa es la razón válida para no leer geografía en la capa de
-opinión**, y no depende de ningún umbral. La página ya se corrigió.
+### A08 — escalar la población: cerrado como argumento visual
+- **Paso 0** (`A08_PASO0_RESULTS.md`): el límite con N infinito se calcula exacto
+  sin construir poblaciones. La composición separa las localidades en 2017–2023
+  (no en 2013), con el patrón del estrato; verlo exige 100.000 agentes. Las cinco
+  predicciones fallaron (P2 por usar R² lineal como proxy del emparejamiento).
+- **Paso 0b** (`A08_PASO0B_RESULTS.md`): con la EPC, que sí trae localidad, **hay
+  territorio real** (7 de 9 olas) pero **la composición no lo reproduce** ni en
+  escala (R = 2,1; 1,37 con DEFF) ni en dirección (r = 0,33).
+- **Decisión:** un mapa nítido de la composición sería un mapa preciso de otra
+  cosa. Si se quiere geografía de opinión, el problema es de **datos** (un donante
+  con localidad; reabrir DI-B10), no de escala.
 
-> **Un null tiene que poder fallar.** Rehacer el pipeline mide bien la
-> variabilidad de una corrida; no sirve como null de «sin efecto» si el efecto
-> viaja dentro del mismo pipeline.
+### Experimento 8 — LLM como donante: descartado
+El LLM pierde en los dos ejes. **Aplana a las personas (0,30× la variación real) y
+exagera las instituciones (3,3×)**, con Partidos en 1,00. No se repite con otro
+modelo. Informe para no técnicos: doc de Claude «IA generativa como fuente de
+opinión: qué probamos y por qué seguimos sin ella» (28/09).
 
-Otros: DI-V36 (la rampa verde usaba raíz cuadrada sin declararlo), DI-V48 a
-DI-V51 (población por año, capa de Crecimiento).
+### MiroFish y el Experimento 9
+El jefe de Daniel recomendó MiroFish (agentes LLM que parten de un documento y
+simulan reacciones en redes). Evaluación: su núcleo —LLM como personas— es lo que
+el Experimento 8 ya descartó; sin validación publicada; AGPL-3.0; choca con R10.
+**Lo aprovechable es «del documento al escenario»:** que un LLM lea lo que pasó y
+proponga los dos números del escenario (nivel y dispersión).
+`EXPERIMENT_9_SPECIFICATION.md`: 12 transiciones reales (ECP 4 + EPC 8), dos
+brazos (memoria propia / dossier), baselines «sin cambio», «tendencia» y oráculo,
+**sonda de memoria**, seis predicciones y regla de decisión. **Enmienda 1 (28/09):**
+dossier desde las cronologías anuales de Wikipedia en español.
 
-### Experimento 8 — LLM como donante (EXPERIMENT_8_RESULTS.md)
-Pre-registrado, corrido con `xiaomi/mimo-v2.6-pro` sobre 1.266 de 1.269
-personas retenidas, ~USD 0,48. **El LLM pierde en los dos ejes** y la regla de
-decisión falla por ambos lados. El hot-deck se queda; **D28 se mantiene**.
-
-Lo interesante es *qué* hace en su lugar: **aplana la variación entre personas
-(0,30×) y exagera la entre instituciones (3,3×)**, con `Partidos políticos` en
-media 1,00 — el piso exacto de la escala. Acierta el orden (Spearman 0,771) e
-inventa las magnitudes: no simula personas, aplica un relato nacional sobre
-instituciones a las 1.266 por igual.
-
-Decidido el 25/09: **no se corre con un segundo modelo.** Se reabre solo si
-alguien propone usar un LLM como donante.
+### Material para la dirección
+Presentación de 7 diapositivas (artefacto de Claude, 25/09). **A Daniel no lo
+convenció: parecía que no hubiera avances.** El enfoque que sí sirve para la
+dirección: lo construido y validado primero —población validada, cuatro fuentes
+integradas (incluido el error de códigos invertidos encontrado en la EPC de BCV),
+serie con márgenes de diseño, tablero publicado, motor de escenarios (polarización:
+promedio quieto, extremos de 19 % a 32 %), evidencia propia sobre IA—, y los
+límites después, como conocimiento ganado.
 
 ---
 
-## 4. Los tres números que hay que tener en la cabeza
+## 4. Los números que hay que tener en la cabeza
 
-1. **Las variables puente explican R² = 0,02** de la varianza de opinión
-   individual. Una regresión lineal ya está en el piso teórico del MAE. Ningún
-   motor —LLM incluido— crea información que no está en los datos.
-2. **El hot-deck no predice individuos** (correlación 0,003) y reproduce la
-   distribución casi perfecto (W1 0,057, sd ratio 0,958). Es un emparejador de
-   distribuciones. Evaluarlo por MAE es evaluar algo que nunca intentó hacer.
-3. **La opinión sintética no puede tener geografía propia.** El donante (ECP)
-   no trae localidad: toda diferencia entre localidades es composición
-   demográfica por construcción. *(Hasta el 25/09 este punto decía «con 1.000
-   agentes ninguna diferencia sobrevive al ruido»; ver DI-V52.)*
+1. **Las variables puente explican R² ≈ 0,02** de la opinión individual. Ningún motor —LLM incluido— crea información que no está en los datos.
+2. **El hot-deck no predice individuos** (r = 0,003) y reproduce la distribución casi perfecto (W1 0,057, sd ratio 0,958). Es un emparejador de distribuciones.
+3. **La opinión sintética no tiene geografía propia** (el donante no trae localidad), y **la composición no reproduce la geografía real** (paso 0b).
+4. **Dos números exógenos por periodo** (nivel y dispersión, con ladeo categórico) llevan el ajuste al piso de ruido. Es la base del motor de escenarios y del Experimento 9.
 
 ---
 
 ## 5. La distinción que el tablero enseña
 
 **El tiempo se puede leer; la geografía no.** La media de ciudad recorre
-2,81 → 2,53 → 2,39 → 2,24 → 2,45 sobre márgenes de ±0,03: señal robusta. La
-variación entre localidades dentro de cualquier año no es una medición: el
-donante no trae localidad, así que solo puede ser composición (DI-V52). Por eso los agentes se colorean por opinión individual y la coropleta
-carga la advertencia — y por eso la capa de **Crecimiento** sí puede afirmar
-geografía: son proyecciones de población, no estimaciones de una muestra.
+2,81 → 2,53 → 2,39 → 2,24 → 2,45 con márgenes de ±0,03. La variación entre
+localidades en la capa de opinión es composición, no medición (DI-V52, paso 0b).
+La capa de **Crecimiento** sí afirma geografía: son proyecciones oficiales.
 
 ---
 
-## 6. Qué sigue (ninguna elegida)
+## 6. Qué sigue
+
+**Frente activo: Experimento 9.** En orden:
+1. Armar los **12 dossiers** con la regla de la enmienda 1 (Wikipedia en español, 10–20 hechos, sin encuestas ni aprobación), versionados.
+2. `src/experiments/experimento9.py` con **pruebas sobre un modelo simulado** antes de gastar una sola llamada.
+3. **Sonda de memoria**, luego los dos brazos (~250 llamadas, clave de OpenRouter de Daniel).
+4. `EXPERIMENT_9_RESULTS.md`, contra el pre-registro.
+
+**Otros frentes, sin elegir:**
 
 | | por qué |
 |---|---|
-| **Material para el CNC** | tiene que presentarle esto a su equipo, que no tiene contexto |
-| **Escalar la población (A08)** | **Sin argumento visual (25/09).** El paso 0 (`A08_PASO0_RESULTS.md`) mostró que con 100.000 agentes el mapa dibujaría nítidas las diferencias por composición —el patrón del estrato—. El paso 0b (`A08_PASO0B_RESULTS.md`), con la EPC, mostró que **esas no son las diferencias que existen**: la EPC mide territorio real (7 de 9 olas) que la composición no reproduce ni en escala (R = 2,1) ni en dirección (r = 0,33). Si algún día se quiere geografía de opinión, el problema es de datos —un donante con localidad, reabrir DI-B10—, no de escala |
-| **Hito 3 — bajo la localidad** | UPZ o manzana; exige datos y decisiones de modelo nuevas |
-| **Simulación sobre la serie** | poner una corrida del modelo al lado de la serie medida; es lo que falta para que el tablero deje de ser solo lectura de datos |
+| **Escenarios con preguntas reales** | Los dos escenarios que existen son de ejemplo. Ninguno salió de una pregunta de un proyecto del CNC; es lo que haría útil el motor |
+| **Simulación sobre la serie** | Poner una corrida del modelo junto a la serie medida en el tablero |
+| **Hito 3 — bajo la localidad** | UPZ; ahora con la advertencia del paso 0b: sin donante con localidad, no hay geografía de opinión que bajar |
+
+**Pendientes menores, conocidos:**
+- `data/external/marginal_localidad_18mas_serie.csv` (capa de Crecimiento) está bloqueado por `.gitignore`: falta la excepción.
+- **D28** se cita en EXPERIMENT_8 y EVALUACION_AGENTES_GENERATIVOS pero **no existe** en PROJECT_CONTEXT §39 (la última es D15; lo que cita equivale a D10). Registrar o corregir.
+- Duplicados en el proyecto de Claude: `ESTADO_DEL_PROYECTO.md` y `POPULATION_SPECIFICATION.md` aparecen dos veces.
+- La simulación con N finito del paso 0 da `sd_entre` 10–20 % menor que el piso por semillas del pipeline completo. No afecta el límite; sin explicar.
 
 ---
 
 ## 7. Mapa de documentos
 
+Todos en `docs/` del repo; en el proyecto de Claude, los de trabajo están bajo `claude/`.
+
 | Si vas a tocar… | lee |
 |---|---|
-| la página / el mapa | `claude/VISUALIZATION_SPECIFICATION.md` (v0.16, DI-V1 a DI-V52) |
+| la página / el mapa | `VISUALIZATION_SPECIFICATION.md` (v0.16, DI-V1 a DI-V52) |
 | la población sintética | `POPULATION_SPECIFICATION.md` (v0.5) |
-| qué datos hay y dónde | `claude/DATA_INVENTORY.md` |
+| qué datos hay y dónde | `DATA_INVENTORY.md` |
 | decisiones del proyecto | `PROJECT_CONTEXT.md` §39 (formato D0X) |
-| LLM / agentes generativos | `claude/EVALUACION_AGENTES_GENERATIVOS.md` + `EXPERIMENT_8_*` |
-| escenarios | `claude/SCENARIO_SPECIFICATION.md` |
+| escalar / geografía | `A08_PASO0_*`, `A08_PASO0B_*` |
+| LLM / agentes generativos | `EVALUACION_AGENTES_GENERATIVOS.md`, `EXPERIMENT_8_*`, `EXPERIMENT_9_SPECIFICATION.md` |
+| escenarios | `SCENARIO_SPECIFICATION.md` |
 
 **Convención que sostiene todo esto:** las decisiones se registran con
-identificador, fecha y justificación, y **las expectativas fallidas no se
-reescriben** — se reporta contra el pre-registro, no contra lo que resultó
+identificador, fecha y justificación; los experimentos se **pre-registran** y se
+reportan contra el pre-registro, y **las expectativas fallidas no se reescriben**
 (PROJECT_CONTEXT §45).
 
 ---
