@@ -145,8 +145,9 @@ resultados electorales por mesa (presidente 2014, 2018 y 2022; Senado y Cámara 
 y por municipio, sin datos de personas. **D16** los saca de R10 (se pueden leer con un
 LLM; viven fuera del repo, en `BSS_ELECTORAL_DIR`); inventario en `DATA_INVENTORY.md`
 §14. Bogotá viene en 22 zonas: si las 1–20 son las localidades, es la primera
-geografía real dentro de la ciudad que tiene el proyecto. **Primer paso: verificar
-zona → localidad.** Si se confirma, gana a «escenarios con preguntas reales» como
+geografía real dentro de la ciudad que tiene el proyecto. **Verificado el 29/09:
+zona = localidad** (r = 0,991 en tamaño; nombres de puesto coinciden; §14.3), con
+la zona 90 (Corferias, 7,6 %) sin localidad y un sesgo de inscripción hacia el centro. Gana a «escenarios con preguntas reales» como
 siguiente frente, porque resuelve un vacío de datos que ningún otro frente resuelve.
 
 **Experimento 9: cerrado.** Se cerró el 29/09

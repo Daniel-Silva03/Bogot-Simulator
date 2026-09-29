@@ -686,14 +686,43 @@ Los cinco archivos por mesa traen Bogotá (código de departamento de la Registr
 | Senado 2018 | 642 | 15.462 | 2.809.019 |
 | DIVIPOL 2018 | 642 | 14.420 | potencial 5.702.805 |
 
-**Hipótesis por verificar (no usar hasta entonces):** las zonas 1–20 son las 20
-localidades; la 90 y la 98 son zonas especiales. Si se confirma, es la **primera
-fuente del proyecto con geografía real dentro de Bogotá**, en tres elecciones, que es
-el vacío que dejó `A08_PASO0B_RESULTS.md`.
+### 14.3 Zona = localidad: verificado (29/09/2026)
 
-**Pendiente:** 2022 tiene el doble de puestos que 2018 (1.296 contra 642). Puede ser
-un cambio real de la Registraduría o una codificación distinta de `PUESTO`; hay que
-entenderlo antes de comparar años por puesto.
+**Las zonas 1–20 de la Registraduría son las localidades 1–20, con la numeración del
+DANE.** Dos pruebas independientes:
+
+1. **Tamaño.** Potencial electoral 2018 por zona (hoja `DIVIPOL`) contra población 18+
+   de la localidad del mismo código (`data/external/marginal_localidad_18mas.csv`):
+   **r = 0,991** (rangos 0,981). Con los códigos barajados 10.000 veces, la
+   correlación nunca pasa de 0,77 (p99 = 0,54). Sumapaz: 2.669 potenciales contra 2.757
+   adultos.
+2. **Nombres.** Toda localidad cuyo nombre aparece en nombres de puesto cae en la zona
+   de su código, en 2018 y en 2022 (Suba: 16 de 16 puestos en la zona 11; Bosa 7 de 7
+   en la 7; igual Kennedy, Usme, Tunjuelito, San Cristóbal, Engativá, Fontibón,
+   Teusaquillo, Puente Aranda, Rafael Uribe, Sumapaz). Los únicos cruces son palabras
+   genéricas: el barrio Santa Fe (en Los Mártires) y colegios «Antonio Nariño» y
+   «Simón Bolívar» en otras zonas.
+
+**Tres cosas que viajan con el dato:**
+
+- **La zona 90 no es una localidad.** Es un solo puesto, «PUESTO CENSO (FERIA
+  EXPOSICIÓN)» (Corferias), con el **7,6 % del potencial electoral** (361 mesas).
+  La 98 son las cárceles (Buen Pastor, La Picota, Modelo, Distrital). Ese 7,6 % no se
+  puede ubicar en ninguna localidad.
+- **La zona es dónde se está inscrito, no dónde se vive.** La razón potencial / población
+  18+ va de **0,70 (Suba, Bosa)** a **1,74 (Antonio Nariño) y 3,04 (La Candelaria)**:
+  el centro tiene más votantes que adultos y la periferia menos. Lectura probable:
+  gente que se mudó a la periferia sin cambiar la inscripción. El mapa electoral queda
+  **suavizado hacia el centro**, y eso hay que decirlo al lado de cualquier mapa.
+- **2022 tiene más puestos que 2018 en todas las zonas** (+25 % a +80 %; 1.296 contra
+  642). El aumento parejo apunta a una ampliación real de la Registraduría, no a una
+  recodificación. **Comparar por zona entre años es seguro; por puesto, no.**
+
+**Sin verificar todavía:** el archivo de 2014 (`MMV_PRESIDENTE_2014_1ERA_VUELTA.xlsx`)
+usa otros nombres de columna (`COD_ZZ`); la correspondencia se probó en 2018 y 2022.
+
+Con esto, esta es la **primera fuente del proyecto con geografía real dentro de
+Bogotá**, en tres elecciones, que es el vacío que dejó `A08_PASO0B_RESULTS.md`.
 
 ---
 

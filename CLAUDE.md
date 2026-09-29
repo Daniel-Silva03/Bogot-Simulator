@@ -82,8 +82,9 @@ El Experimento 9 se cerró el 29/09 (`docs/EXPERIMENT_9_RESULTS.md`): el LLM no 
 las cifras de un escenario. Lo siguiente es la fuente nueva de D16: **resultados
 electorales por mesa, con Bogotá dividida en 22 zonas** (2014, 2018, 2022).
 
-- **Primero:** verificar si las zonas 1–20 de la Registraduría son las 20 localidades
-  (`docs/DATA_INVENTORY.md` §14.2). Hasta entonces es una hipótesis.
+- **Verificado (29/09):** las zonas 1–20 son las localidades, con el código del DANE
+  (`docs/DATA_INVENTORY.md` §14.3). La zona 90 (Corferias, 7,6 % del electorado) no es
+  una localidad, y la zona es dónde se está inscrito, no dónde se vive.
 - El voto es otro constructo: sirve como **referencia territorial**, no reemplaza la
   confianza institucional ni la evaluación del alcalde.
 - El frente alternativo, sin elegir: escenarios con preguntas reales de proyectos del CNC.
