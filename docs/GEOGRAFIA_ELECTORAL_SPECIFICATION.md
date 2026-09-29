@@ -174,6 +174,12 @@ una medición y se puede mostrar sea cual sea el resultado, con sus salvedades
   residencia es estable, el mismo sesgo aparece en todas las elecciones. Para
   separarlo, el residuo se correlaciona también con la razón potencial / población
   (§14.3), y si esa correlación es fuerte, **P4 no se puede leer como territorio**.
+  > **Enmienda 1 — 29/09/2026, antes de escribir el código y de cualquier cruce.**
+  > «Fuerte» no estaba definido. Se fija: la razón es potencial electoral 2018
+  > (hoja `DIVIPOL`) sobre población 18+ del marginal. Si |r| ≥ 0,50 entre esa razón
+  > y el residuo de M1 de Petro 2018 **o** de Petro 2022, P4 se reporta como
+  > **no interpretable como territorio**, y la lectura B de la regla de decisión
+  > no se puede adoptar: el resultado pasa a intermedio.
 - **La participación varía entre localidades.** La composición es de todos los adultos;
   el voto, solo de quienes votaron.
 - **Composición de 2021 para elecciones de 2014 a 2022.** Se supone estable.
