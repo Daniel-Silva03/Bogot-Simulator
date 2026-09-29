@@ -150,9 +150,14 @@ zona = localidad** (r = 0,991 en tamaño; nombres de puesto coinciden; §14.3), 
 la zona 90 (Corferias, 7,6 %) sin localidad y un sesgo de inscripción hacia el centro.
 **Tabla construida el 29/09:** `data/external/electoral/presidente_1v_*` (2014, 2018,
 2022 por localidad; verificada contra los archivos municipales; §14.4).
-**Pre-registrado el 29/09:** `GEOGRAFIA_ELECTORAL_SPECIFICATION.md` — ¿la composición
-de cada localidad explica su voto, y lo que no explica se repite entre elecciones?
-Sin código todavía; primero, mundos simulados. Gana a «escenarios con preguntas reales» como
+**Corrido el 29/09** (`GEOGRAFIA_ELECTORAL_RESULTS.md`): el estrato explica el 84 % de
+la geografía del voto por Petro 2022 (R² fuera de muestra), y lo que no explica **se
+repite** (r = 0,87 entre 2018 y 2022) como un eje izquierda–derecha estable desde 2014:
+el centro y el suroriente, más a la izquierda de lo que dice su estrato; el
+noroccidente, menos. Cinco de cinco predicciones; **lectura B: hay territorio estable
+que la composición no ve.** Sobrevive a la inscripción (pre-registrado) y a la
+participación (no pre-registrado). Refuerza el paso 0b y es evidencia para reabrir
+DI-B10. Gana a «escenarios con preguntas reales» como
 siguiente frente, porque resuelve un vacío de datos que ningún otro frente resuelve.
 
 **Experimento 9: cerrado.** Se cerró el 29/09
