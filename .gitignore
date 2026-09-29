@@ -82,6 +82,10 @@ data/**
 !data/processed/a08/paso0.json
 !data/processed/a08/paso0b_*.json
 
+# geografía electoral: el resultado del análisis pre-registrado (kilobytes, agregados)
+!data/processed/geografia_electoral/
+!data/processed/geografia_electoral/resultado.json
+
 # --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
 data/external/cnc/
 data/raw/cnc/

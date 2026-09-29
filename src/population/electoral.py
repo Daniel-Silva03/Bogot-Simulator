@@ -24,6 +24,7 @@ Uso:
 Escribe en `data/external/electoral/`:
     presidente_1v_localidad.csv   votos por año × zona × opción
     presidente_1v_zonas.csv       puestos, mesas y totales por año × zona
+    presidente_1v_potencial_2018.csv   inscritos habilitados por zona (DIVIPOL 2018)
     presidente_1v_meta.json       fuentes con su huella, verificación, notas
 
 DECISIONES DE IMPLEMENTACIÓN
@@ -235,6 +236,24 @@ def leer_2022(carpeta: Path) -> pd.DataFrame:
 LECTORES = {2014: leer_2014, 2018: leer_2018, 2022: leer_2022}
 
 
+def potencial_2018(carpeta: Path, nombres_loc: dict[int, str]) -> pd.DataFrame:
+    """Potencial electoral 2018 por zona (hoja DIVIPOL): inscritos habilitados.
+
+    Lo usa el control de inscripción de `GEOGRAFIA_ELECTORAL_SPECIFICATION.md`
+    (enmienda 1): la zona es dónde se está inscrito, no dónde se vive.
+    """
+    df = pd.read_excel(carpeta / FUENTES[2018]["archivo"], sheet_name="DIVIPOL")
+    df.columns = [str(c).strip() for c in df.columns]
+    df = df[pd.to_numeric(df.DEP, errors="coerce") == DEP_BOGOTA_REGISTRADURIA]
+    z = (df.assign(potencial=df.HOMBRE + df.MUJERES)
+           .groupby("ZONA").agg(potencial=("potencial", "sum"), mesas_divipol=("MESAS", "sum"))
+           .reset_index().rename(columns={"ZONA": "zona"}))
+    z.insert(0, "anio", 2018)
+    z.insert(2, "cod_loc", z.zona.where(z.zona.between(1, 20)).astype("Int64"))
+    z.insert(3, "localidad", z.zona.map(lambda x: nombres_loc.get(x) or ZONAS_ESPECIALES[x]))
+    return z
+
+
 # --------------------------------------------------------------------------
 # Agregación
 
@@ -330,6 +349,8 @@ def construir(carpeta: Path, anios=(2014, 2018, 2022)) -> tuple[pd.DataFrame, pd
                                           "nota": "sin archivo municipal para contrastar"}
         todos_v.append(v)
         todos_z.append(z)
+    if 2018 in anios:
+        meta["potencial_2018"] = {"hoja": "DIVIPOL", "archivo": FUENTES[2018]["archivo"]}
     return pd.concat(todos_v, ignore_index=True), pd.concat(todos_z, ignore_index=True), meta
 
 
@@ -346,6 +367,8 @@ def main(argv=None) -> int:
     SALIDA.mkdir(parents=True, exist_ok=True)
     votos.to_csv(SALIDA / "presidente_1v_localidad.csv", index=False)
     zonas.to_csv(SALIDA / "presidente_1v_zonas.csv", index=False)
+    potencial_2018(carpeta, localidades()).to_csv(
+        SALIDA / "presidente_1v_potencial_2018.csv", index=False)
     (SALIDA / "presidente_1v_meta.json").write_text(
         json.dumps(meta, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
     for anio, g in zonas.groupby("anio"):

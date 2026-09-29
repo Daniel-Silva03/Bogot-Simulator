@@ -5,7 +5,7 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 29 de septiembre de 2026
-Estado: **sin código y sin ningún cruce entre voto y composición**
+Estado: **código probado en mundos simulados (§4.1); sin ningún cruce entre voto real y composición**
 Datos: `data/external/electoral/presidente_1v_*` (D16, `DATA_INVENTORY.md` §14) y el receptor de Multipropósito 2021
 Origen: `A08_PASO0B_RESULTS.md` (la composición no reproduce la geografía de la EPC) y la llegada de los resultados electorales por mesa
 
@@ -111,6 +111,19 @@ composición real, en los que la respuesta se conoce:
 | El voto no tiene relación con la composición | R²_LOO ≤ 0 y `p_perm` < 0,05 en cerca del 5 % de los casos, no más |
 
 **Si el método no pasa estas tres pruebas, no se corre sobre los datos reales.**
+
+**Resultado de la verificación (29/09/2026, antes de la corrida real).** Con la
+composición real de las 19 localidades y votos inventados, 1.000 semillas por mundo
+(`tests/test_geografia_electoral.py`, 15 pruebas):
+
+| Mundo simulado | R²_LOO mediano | Persistencia | |
+|---|---|---|---|
+| Solo composición | 0,969 | r medio −0,005; r > 0,5 en el 2,3 % | pasa |
+| Composición + territorio fijo (sd 0,05) | 0,802 | r medio 0,855; r > 0,5 en el 100 % | pasa |
+| Sin relación | −0,207 | `p_perm` < 0,05 en el **3,9 %** | pasa |
+
+Las pruebas verifican también las lecturas A, B y C de la regla, y que la
+enmienda 1 bloquee la B cuando el «territorio» simulado es el patrón de inscripción.
 
 ---
 

@@ -212,5 +212,9 @@
     "la zona es dónde se está inscrito, no dónde se vive",
     "proporciones de candidato: sobre votos_candidatos (DI-EL5)",
     "promotores_blanco (2018) va aparte del voto en blanco (DI-EL6)"
-  ]
+  ],
+  "potencial_2018": {
+    "hoja": "DIVIPOL",
+    "archivo": "MMV_NACIONAL_PRESIDENTE_2018_1v.xlsx"
+  }
 }
