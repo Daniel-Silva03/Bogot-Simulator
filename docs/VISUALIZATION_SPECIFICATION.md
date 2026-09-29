@@ -1,8 +1,8 @@
 # VISUALIZATION SPECIFICATION — BOGOTÁ SOCIAL SIMULATOR
 
-**Versión:** 0.16
-**Fecha:** 25 de septiembre de 2026
-**Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados; cuatro capas, todas responden al año, y una de ellas —Crecimiento— es la primera que **sí** puede afirmar geografía. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. **Corrección del 25/09 (DI-V52):** la primera mitad de DI-V45 se sostiene; «no hay señal» no, porque la prueba que la sostenía no podía detectar señal. La capa de opinión sigue sin poder leerse por territorio, pero por otra razón: el donante no trae localidad. Hitos 3 a 5 especificados, sin construir.
+**Versión:** 0.17
+**Fecha:** 29 de septiembre de 2026
+**Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados; cuatro capas, todas responden al año, y una de ellas —Crecimiento— es la primera que **sí** puede afirmar geografía. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. **Corrección del 25/09 (DI-V52):** la primera mitad de DI-V45 se sostiene; «no hay señal» no, porque la prueba que la sostenía no podía detectar señal. La capa de opinión sigue sin poder leerse por territorio, pero por otra razón: el donante no trae localidad. Hitos 3 a 5 especificados, sin construir. **29/09 — capa de Voto (DI-V53 a DI-V56):** la primera vuelta presidencial de 2014, 2018 y 2022 por localidad, un conteo completo que sí puede afirmar geografía, y «lo que el estrato no explica» (`GEOGRAFIA_ELECTORAL_RESULTS.md`).
 **Documentos relacionados:** PROJECT_CONTEXT.md §31 y §51, ARCHITECTURE.md, POPULATION_SPECIFICATION.md, claude/ANALISIS_DISENO_MUESTRAL.md
 
 ---
@@ -80,6 +80,7 @@ producto.
 | **Población** | Coropleta por población de 18 años o más | `data/external/marginal_localidad_18mas.csv` (dato real, no simulado) |
 | **Agentes** | 1.000 puntos, uno por agente sintético | `data/processed/poblacion_ecp2013.csv` v0.3-DI-M1 |
 | **Opinión** | Coropleta por media de `opinion_t0`, con conmutador de escala | misma población |
+| **Voto** *(29/09/2026)* | Coropleta por proporción de voto de un candidato, o por lo que el estrato no explica de ese voto | `data/processed/viz/voto_bogota.json` ← resultados de la Registraduría (D16) y `GEOGRAFIA_ELECTORAL_RESULTS.md` |
 | **Base urbana** *(conmutador aparte)* | Vías arteriales y áreas verdes sobre la coropleta, con detalle progresivo | OpenStreetMap vía Overpass, extracto del 21/09/2026, ODbL |
 
 Sobre las tres capas se navega: arrastre para mover, Ctrl + rueda o pellizco
@@ -739,6 +740,35 @@ dispersión entre localidades sigue siendo ruido muestral. Por eso la capa base
 va apagada por defecto y el pie dice, con esas palabras, que ninguna cifra de
 la página se calcula con ella.
 
+### Capa de Voto (añadida el 29/09/2026)
+
+El detalle está en el docstring de `src/viz/preparar_voto.py`. Resumen:
+
+- **DI-V53** — **La tercera capa que sí puede afirmar geografía**, junto con
+  Población y Crecimiento, y por la misma razón que Crecimiento (DI-V51): es un
+  conteo completo, sin error de muestreo. Carga dos salvedades propias, que el
+  aviso dice **con cifras del paquete**, no con texto fijo: el voto se cuenta
+  donde se está inscrito (La Candelaria tiene 3 inscritos por adulto residente) y
+  una parte de los votos (Corferias y cárceles, 1,6 % a 3,2 % según el año) no
+  tiene localidad. La barra de años se oculta con esta capa: sus años son los de la
+  ECP, no los de las elecciones, y el selector de elección vive en la leyenda.
+- **DI-V54** — Proporción sobre votos por candidato (DI-EL5), y **un solo dominio
+  de color para las nueve combinaciones** de elección y candidato, de 0 al máximo
+  observado (80 %). Reescalar por candidato haría que uno con 3 pp de geografía se
+  viera tan partido como uno con 12 (DI-V49 otra vez). Rampa propia, violeta, que
+  no usa ninguna otra capa.
+- **DI-V55** — **Los residuos son los del análisis pre-registrado, sin
+  recalcularse**, con rampa divergente violeta/café y el gris en el 0. La versión
+  que añade la participación **no estaba pre-registrada**: está como vista
+  exploratoria, lo dice su botón y su aviso, y nunca es la de entrada.
+- **DI-V56** — Sumapaz tiene voto pero no residuo (quedó fuera del ajuste): va en
+  gris en la vista de residuos y la ficha dice por qué.
+
+La regla de §2 se aplica al revés aquí, y el aviso lo enseña: la capa de Opinión no
+puede decir «el sur confía menos»; esta sí puede decir «el sur votó más por Petro»,
+y además decir **dónde el estrato no alcanza a explicarlo**. Lo que no puede decir
+es nada sobre personas: el análisis es ecológico.
+
 ## 3.4 Archivos
 
 ```
@@ -754,15 +784,18 @@ data/external/marginal_localidad_18mas_serie.csv  población 18+ por localidad y
 src/utils/revisar_datos.py                     qué datos hay en esta máquina y dónde va cada cosa
 src/viz/preparar_base.py                       extractos OSM → capa base recortada y simplificada
 src/viz/plantilla_mapa.html                    la página, con marcadores /*__DATOS__*/ y /*__BASE__*/
-src/viz/construir_pagina.py                    plantilla + datos + base → archivo único
+src/viz/preparar_voto.py                       tabla electoral + resultado del análisis → capa de voto (DI-V53)
+src/viz/construir_pagina.py                    plantilla + datos + base + serie + voto → archivo único
 data/processed/viz/mapa_bogota.json            paquete de 5 olas, con `escala_opinion` y el piso (98 KB)
 data/processed/viz/piso_territorial.json       el piso de ruido medido, 20 semillas × 5 años
 data/processed/viz/serie_bogota.json           la serie medida, 14 puntos con intervalo (4,6 KB)
+data/processed/viz/voto_bogota.json            la capa de voto: 9 candidatos × 20 localidades, residuos y salvedades (16 KB)
 data/processed/viz/base_bogota.json            capa base, dos niveles de detalle (71 KB)
 data/processed/viz/mapa_bogota.html            la página lista (252 KB)
 tests/test_viz_mapa.py                         72 pruebas
 tests/test_viz_base.py                         81 pruebas de la capa base, la navegación, la ficha, la rampa y el año
 tests/test_viz_serie.py                        43 pruebas de la serie temporal y su gráfico
+tests/test_viz_voto.py                         35 pruebas de la capa de voto: el paquete contra sus fuentes y la página
 ```
 
 Reproducir de cero:
@@ -777,6 +810,7 @@ python3 src/viz/piso_territorial.py        # ~4 min; produce el piso de ruido
 python3 src/viz/preparar_mapa.py
 python3 src/viz/preparar_base.py
 python3 src/viz/preparar_serie.py
+python3 src/viz/preparar_voto.py          # necesita data/external/electoral y el resultado de la geografía electoral
 python3 src/viz/construir_pagina.py
 python3 tests/test_viz_mapa.py
 python3 tests/test_viz_base.py

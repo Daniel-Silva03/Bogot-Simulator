@@ -439,6 +439,7 @@ footer b{font-weight:500; color:var(--ink-2)}
         <button data-capa="agentes" aria-pressed="false">Agentes</button>
         <button data-capa="opinion" aria-pressed="false">Opinión</button>
         <button data-capa="crecimiento" aria-pressed="false">Crecimiento</button>
+        <button data-capa="voto" aria-pressed="false">Voto</button>
         <span class="solo-ciudad">Sin coropleta</span>
       </div>
       <div class="grupo" role="group" aria-label="Extensión">
@@ -475,6 +476,7 @@ footer b{font-weight:500; color:var(--ink-2)}
 <footer>
   <p><b>Geometría:</b> Unidad Administrativa Especial de Catastro Distrital, capa <code>Localidad</code>, simplificada a ~70 m para dibujo.</p>
   <p><b>Población:</b> 1.000 agentes sintéticos, versión <code>v0.3-DI-M1</code>; marginal territorial de población de 18 años o más.</p>
+  <p><b>Voto:</b> resultados de la Registraduría Nacional, primera vuelta presidencial de 2014, 2018 y 2022, mesa a mesa, sumados por zona electoral (zonas 1–20 = localidades, verificado). Proporciones sobre los votos por candidato. «Lo que el estrato no explica» es el residuo del análisis pre-registrado en <code>docs/GEOGRAFIA_ELECTORAL_SPECIFICATION.md</code>, con el estrato medio de Multipropósito 2021.</p>
   <p><b>Advertencia de método:</b> la posición de cada punto dentro de su localidad es aleatoria. El modelo no tiene geografía por debajo de la localidad; los puntos no son domicilios.</p>
   <p><b>Navegación:</b> se arrastra para mover y se acerca con Ctrl + rueda, con el pellizco del trackpad, con doble clic o con los botones. Al acercar aparecen las vías secundarias y los parques pequeños. La barra de escala se recalcula sola; la geometría está simplificada a resolución de pantalla, así que sirve para ubicarse, no para medir.</p>
   <p><b>Capa base urbana:</b> vías arteriales y áreas verdes de OpenStreetMap (© colaboradores de OpenStreetMap, <a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>), extracto del 21 de septiembre de 2026, simplificado a ~22 m para dibujo. Es orientación visual: <b>ninguna cifra de esta página se calcula con ella</b>. El recorte es regional, no político, así que dentro del encuadre se ven vías y parques de municipios vecinos; lo único que delimita el Distrito son los polígonos de localidad.</p>
@@ -485,6 +487,7 @@ footer b{font-weight:500; color:var(--ink-2)}
 <script id="datos" type="application/json">/*__DATOS__*/</script>
 <script id="base" type="application/json">/*__BASE__*/</script>
 <script id="serieDatos" type="application/json">/*__SERIE__*/</script>
+<script id="votoDatos" type="application/json">/*__VOTO__*/</script>
 <script>
 (() => {
 const D = JSON.parse(document.getElementById('datos').textContent);
@@ -580,6 +583,34 @@ const RAMPA_OP = [[ 20, 88,146],[ 82,126,171],[168,164,155],[175, 98, 79],[147, 
    luminosidad y contraste. Frío = pierde población, cálido = gana, la misma
    dirección que RAMPA_OP para que no haya que reaprender el mapa (DI-V51). */
 const RAMPA_CREC = [[  0,143,137],[121,189,184],[232,233,230],[211,171,111],[171, 94,  0]];
+/* Voto (DI-V53, DI-V54): secuencial de un solo tono, violeta, que no usa
+   ninguna otra capa. El extremo claro despega del papel (~2,3:1), como pide
+   DI-V25: una localidad con poco voto no puede parecer un agujero. */
+const RAMPA_VOTO = [[175,158,205],[143,117,186],[112, 79,163],[ 81, 46,133],[ 52, 20, 96]];
+/* Lo que el estrato no explica: divergente con el gris exactamente en el 0.
+   Violeta = el candidato sacó MÁS de lo que predice el estrato de la
+   localidad (el mismo tono que «más votos» en la vista de voto); café = menos.
+   Dominio simétrico y fijo para los nueve candidatos, como DI-V51. */
+const RAMPA_RESID = [[128, 70, 15],[196,150,100],[232,233,230],[143,117,186],[ 81, 46,133]];
+
+/* Paquete de voto (DI-V53). Si la página se construyó sin él, la capa no existe. */
+const V = (() => {
+  try { return JSON.parse(document.getElementById('votoDatos').textContent); }
+  catch(e){ return null; }
+})();
+let votoSel = V ? V.por_defecto : null, votoModo = 'voto';
+const candDe = k => V.candidatos.find(c=>c.clave===k);
+/* La ÚNICA puerta por la que se lee un valor de la capa de voto: el modo decide
+   si es proporción de voto, residuo pre-registrado o residuo exploratorio. */
+const votoDe = cod => {
+  const l = V.localidades[cod]; if(!l) return null;
+  const campo = votoModo==='voto' ? 'votos'
+              : votoModo==='residuo' ? 'residuo' : 'residuo_participacion';
+  return l[campo][votoSel];
+};
+const domResid = () => votoModo==='residuo_part' ? V.dominio_residuo_participacion : V.dominio_residuo;
+const pp = v => (v>=0?'+':'−') + f1(Math.abs(100*v)) + ' pp';
+const pc = v => f1(100*v) + ' %';
 const interp = (ramp,t) => {
   t = Math.max(0,Math.min(1,t));
   const s = t*(ramp.length-1), i = Math.min(ramp.length-2, Math.floor(s));
@@ -655,6 +686,12 @@ function colorDe(l){
     // Dominio simétrico ±máximo: así un −2 % se ve casi neutro, que es lo que
     // es. Un dominio asimétrico lo pintaría saturado y mentiría.
     return interp(RAMPA_CREC, (v + crecMax) / (2*crecMax));
+  }
+  if(capa==='voto'){
+    const v = votoDe(l.codigo);
+    if(v==null) return SIN_DATO;                 // Sumapaz en los residuos (DI-V56)
+    if(votoModo==='voto') return interp(RAMPA_VOTO, v / V.dominio_voto);
+    return interp(RAMPA_RESID, (v + domResid()) / (2*domResid()));
   }
   if(capa==='opinion'){
     const m = opDe(l,'opinion_media');
@@ -938,8 +975,14 @@ function pintar(){
   document.querySelector('.mapa-caja').classList.toggle('ciudad', ciudad);
   // Las tres capas de coropleta desaparecen en Ciudad, donde no hay coropleta:
   // un botón que no hace nada visible es peor que un botón ausente.
-  for(const c of ['poblacion','opinion','crecimiento'])
-    document.querySelector(`[data-capa="${c}"]`).classList.toggle('oculto', ciudad);
+  for(const c of ['poblacion','opinion','crecimiento','voto']){
+    const b = document.querySelector(`[data-capa="${c}"]`);
+    if(b) b.classList.toggle('oculto', ciudad);
+  }
+  // Las elecciones son 2014, 2018 y 2022, no las olas de la ECP: con la capa de
+  // voto la barra de años no gobierna nada, y un control que no hace nada visible
+  // es peor que uno ausente. El selector de elección vive en la leyenda (DI-V53).
+  document.getElementById('grupoAnio').style.display = capa==='voto' ? 'none' : '';
   gAg.style.display = capa==='agentes' ? '' : 'none';
   if(capa==='agentes') pintarAgentes();
   gEtq.classList.toggle('on', etq);
@@ -972,6 +1015,7 @@ function leyenda(){
     return;
   }
   if(capa==='crecimiento'){ leyendaCrecimiento(el); return; }
+  if(capa==='voto'){ leyendaVoto(el); return; }
   const ramp = capa==='poblacion' ? RAMPA : RAMPA_OP;
   const stops = Array.from({length:9},(_,i)=>interp(ramp,i/8)).join(',');
   if(capa==='poblacion'){
@@ -1042,6 +1086,71 @@ function leyendaCrecimiento(el){
     que avanzas de año.</span>`;
 }
 
+/* La leyenda del voto lleva los controles de la capa: qué candidato y qué se
+   mira de él. La vista exploratoria (participación) nunca es la de entrada y
+   su botón lo dice (DI-V55). */
+function leyendaVoto(el){
+  const c = candDe(votoSel);
+  const botonesCand = V.elecciones.map(a =>
+    `<span style="display:inline-flex;align-items:center;gap:6px"><span class="rampa-lab">${a}</span><span class="grupo" role="group" aria-label="Primera vuelta ${a}">${
+      V.candidatos.filter(x=>x.anio===a).map(x =>
+        `<button data-cand="${x.clave}" aria-pressed="${x.clave===votoSel}">${x.nombre.split(' ').slice(-1)[0]}</button>`
+      ).join('')}</span></span>`).join('');
+  const botonesModo = `<span class="grupo" role="group" aria-label="Qué se mira">
+      <button data-modo="voto" aria-pressed="${votoModo==='voto'}">Voto</button>
+      <button data-modo="residuo" aria-pressed="${votoModo==='residuo'}">Lo que el estrato no explica</button>
+      <button data-modo="residuo_part" aria-pressed="${votoModo==='residuo_part'}" title="No pre-registrado: añade la participación al modelo">… y la participación (exploratorio)</button>
+    </span>`;
+  let rampa;
+  if(votoModo==='voto'){
+    const stops = Array.from({length:9},(_,i)=>interp(RAMPA_VOTO,i/8)).join(',');
+    rampa = `<span class="rampa-lab">0 %</span>
+      <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
+      <span class="rampa-lab">${pc(V.dominio_voto)}</span>
+      <span>de los votos por candidato para <b>${c.nombre}</b>, primera vuelta ${c.anio} ·
+        escala fija para los nueve candidatos</span>`;
+  }else{
+    const stops = Array.from({length:11},(_,i)=>interp(RAMPA_RESID,i/10)).join(',');
+    rampa = `<span class="rampa-lab">${pp(-domResid())}</span>
+      <span class="rampa-eje" title="Gris = lo que el estrato predice. Escala simétrica y fija para los nueve candidatos.">
+        <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
+        <span class="marca" style="left:50%"><i></i><span>0</span></span>
+      </span>
+      <span class="rampa-lab">${pp(domResid())}</span>
+      <span><b>${c.nombre}</b> ${c.anio}: violeta, más votos de los que predice el estrato de la
+        localidad; café, menos</span>`;
+  }
+  el.innerHTML = `<span style="flex-basis:100%;display:flex;flex-wrap:wrap;gap:6px 14px">${botonesCand}</span>
+    <span style="flex-basis:100%">${botonesModo}</span>${rampa}`;
+  el.querySelectorAll('[data-cand]').forEach(b=>b.addEventListener('click',()=>{
+    votoSel = b.dataset.cand; pintar(); inspector(); aviso();
+  }));
+  el.querySelectorAll('[data-modo]').forEach(b=>b.addEventListener('click',()=>{
+    votoModo = b.dataset.modo; pintar(); inspector(); aviso();
+  }));
+}
+
+/* Lo que la ficha de una localidad dice del voto. Las dos salvedades de
+   DI-V53 van con la cifra de ESA localidad, no en general: dónde se inscribe su
+   gente y cuánta votó. */
+function fichaVoto(l){
+  const d = V.localidades[l.codigo], c = candDe(votoSel);
+  const r = d.residuo[votoSel], rp = d.residuo_participacion[votoSel];
+  return `<h3 style="margin:14px 0 4px">Voto presidencial · primera vuelta ${c.anio}</h3>
+    <dl class="filas">
+      <div class="fila"><dt>${c.nombre}</dt><dd>${pc(d.votos[votoSel])} <small style="color:var(--ink-3)">(Bogotá ${pc(c.bogota)})</small></dd></div>
+      <div class="fila"><dt>Lo que el estrato no explica</dt><dd>${r==null
+        ? '<small>sin dato: Sumapaz quedó fuera del ajuste</small>' : pp(r)}</dd></div>
+      ${rp!=null?`<div class="fila"><dt>… con la participación <small style="color:var(--ink-3)">(exploratorio)</small></dt><dd>${pp(rp)}</dd></div>`:''}
+      <div class="fila"><dt>Estrato medio (Multipropósito 2021)</dt><dd>${f2(d.estrato_medio)}</dd></div>
+      ${d.inscritos_sobre_adultos!=null?`<div class="fila"><dt>Inscritos por cada adulto que vive aquí (2018)</dt><dd>${f2(d.inscritos_sobre_adultos)}</dd></div>`:''}
+      ${d.participacion_2018!=null?`<div class="fila"><dt>Participación 2018</dt><dd>${pc(d.participacion_2018)}</dd></div>`:''}
+    </dl>
+    ${d.inscritos_sobre_adultos!=null && Math.abs(d.inscritos_sobre_adultos-1) > 0.2
+      ? `<p style="margin:0;font-size:13px;color:var(--ink-2)">En ${l.nombre} hay ${f2(d.inscritos_sobre_adultos)}
+         inscritos por cada adulto residente: el voto que se cuenta aquí no es el de quienes viven aquí.</p>` : ''}`;
+}
+
 /* ---------- inspector ---------- */
 function barras(obj, total, orden){
   const claves = orden ? orden.filter(k=>k in obj) : Object.keys(obj);
@@ -1110,6 +1219,7 @@ function inspector(){
         <div class="fila"><dt>${E && E.concepto ? E.concepto : 'Opinión'} (media) en ${anioSel}</dt><dd>${f2(C().opinion_media)} / 5</dd></div>
         <div class="fila"><dt>Desviación dentro de cada localidad</dt><dd>${f2(C().sd_dentro)}</dd></div>
         <div class="fila"><dt>Desviación entre localidades</dt><dd>${f2(C().sd_entre)}</dd></div>
+        ${capa==='voto' && V ? `<div class="fila"><dt>${candDe(votoSel).nombre}, primera vuelta ${candDe(votoSel).anio}</dt><dd>${pc(candDe(votoSel).bogota)}</dd></div>` : ''}
       </dl>
       <p style="margin:0;color:var(--ink-2);font-size:13.5px">
         Haz clic en una localidad para ver su composición. La dispersión <b>dentro</b> de una localidad es
@@ -1149,6 +1259,7 @@ function inspector(){
       ${dif!=null?`<div class="fila"><dt>Diferencia con la ciudad</dt><dd>${dif>=0?'+':'−'}${f2(Math.abs(dif))}</dd></div>`:''}
     </dl>
     ${banda}
+    ${capa==='voto' && V ? fichaVoto(l) : ''}
     ${signif!=null?`<p style="margin:0;font-size:13px;color:var(--ink-2)">
       ${signif
         ? `Esta diferencia <b>sí</b> supera el doble de su error estándar.`
@@ -1452,6 +1563,7 @@ function cifras(){
 
 function aviso(){
   if(capa==='crecimiento'){ avisoCrecimiento(); return; }
+  if(capa==='voto'){ avisoVoto(); return; }
   const estirada = escalaOp!=='real' && capa==='opinion';
   const c = C(), piso = c.piso_medido;
   const ees = L.map(l=>opDe(l,'opinion_ee')).filter(v=>v!=null);
@@ -1512,6 +1624,63 @@ function avisoCrecimiento(){
        «el sur confía menos».</p>`;
 }
 
+/* El aviso del voto. Como el de Crecimiento, dice por qué esta capa sí puede
+   afirmar geografía; a diferencia de él, carga dos salvedades propias (DI-V53)
+   y, en la vista de residuos, lo que el análisis pre-registrado encontró. Todas
+   las cifras salen del paquete: ninguna está escrita en esta plantilla. */
+function avisoVoto(){
+  const el = document.getElementById('aviso');
+  const c = candDe(votoSel), A = V.analisis;
+  const conNombre = cod => L.find(x=>x.codigo===cod).nombre;
+  const filas = Object.entries(V.localidades)
+    .filter(([,d]) => d.votos[votoSel]!=null)
+    .map(([cod,d]) => ({n:conNombre(cod), v:d.votos[votoSel], ins:d.inscritos_sobre_adultos}));
+  const ord = [...filas].sort((x,y)=>x.v-y.v), bajo = ord[0], alto = ord[ord.length-1];
+  const ins = filas.filter(f=>f.ins!=null).sort((x,y)=>x.ins-y.ins);
+  const fuera = V.votos_sin_localidad[String(c.anio)];
+  const salvedades = `
+    <p><b>Dos salvedades que viajan con el color.</b> El voto se cuenta donde la persona está
+       <i>inscrita</i>, no donde vive: en ${ins[ins.length-1].n} hay ${f2(ins[ins.length-1].ins)} inscritos por
+       cada adulto que vive allí, y en ${ins[0].n}, ${f2(ins[0].ins)}. Y el ${pc(fuera.fraccion)} de los votos de
+       ${c.anio} (${fmt(fuera.votos)}) se depositó en el puesto censo de Corferias y en las cárceles, que no son
+       de ninguna localidad y no se pintan.</p>`;
+  if(votoModo==='voto'){
+    el.innerHTML = `
+      <h3>Esta capa también puede afirmar geografía</h3>
+      <p>Son votos contados, no una muestra: en la primera vuelta de ${c.anio}, <b>${c.nombre}</b> sacó
+         desde ${pc(bajo.v)} en ${bajo.n} hasta ${pc(alto.v)} en ${alto.n} (Bogotá: ${pc(c.bogota)}). No hay
+         error de muestreo que descontar, así que esa diferencia es real y se puede leer del color, como en la
+         capa de <b>Crecimiento</b> y al revés que en la de <b>Opinión</b>.</p>
+      ${salvedades}
+      <p>Y no es opinión: votar por un candidato no es la confianza institucional que muestra la capa de
+         Opinión. El voto entra aquí como la referencia territorial que al resto del tablero le falta.</p>`;
+    return;
+  }
+  const r2 = A.r2_loo[votoSel];
+  const exploratorio = votoModo==='residuo_part';
+  el.innerHTML = `
+    <h3>${exploratorio ? 'Lo que el estrato y la participación no explican — vista exploratoria' : 'Lo que el estrato no explica'}</h3>
+    <p>El estrato medio de cada localidad explica, fuera de muestra, ${r2 > 0
+        ? `el ${f1(100*r2)} % de la diferencia entre localidades en el voto por <b>${c.nombre}</b> en ${c.anio}`
+        : `<b>nada</b> de la diferencia entre localidades en el voto por <b>${c.nombre}</b> en ${c.anio}
+           (R² fuera de muestra negativo): su voto casi no varía entre localidades, así que aquí el color es
+           prácticamente toda su geografía`}.
+       El color es lo que queda: violeta donde sacó más de lo que predice el estrato, café donde sacó menos.</p>
+    <p><b>Lo que queda no es ruido.</b> Entre ${A.persistencia_entre.map(k=>`${candDe(k).nombre} ${candDe(k).anio}`).join(' y ')} ese resto se
+       repite con r = ${f2(A.persistencia_r)}, y sigue un eje izquierda–derecha que ya estaba en 2014: el mapa
+       por composición se equivoca siempre en los mismos lugares. No lo explica el desajuste entre inscripción
+       y residencia (r = ${f2(Math.max(...Object.values(A.inscripcion_r).map(Math.abs)))}).</p>
+    ${exploratorio
+      ? `<p><b>No pre-registrado.</b> Esta vista añade la participación al modelo, un control que se decidió
+         después de ver los resultados. Cambia el residuo de algunas localidades, pero no el patrón: por eso
+         existe, y por eso no es la vista por defecto.</p>`
+      : ''}
+    <p>Es un análisis <b>ecológico</b>: habla de localidades, no de personas, y no distingue si ese resto es
+       contexto o composición que el estrato no mide. Sumapaz va en gris porque quedó fuera del ajuste.
+       Detalle en <code>${A.documento}</code>.</p>
+    ${salvedades}`;
+}
+
 /* ---------- eventos ---------- */
 document.querySelectorAll('[data-visual]').forEach(b=>b.addEventListener('click',()=>{
   visual = b.dataset.visual;
@@ -1521,7 +1690,8 @@ document.querySelectorAll('[data-visual]').forEach(b=>b.addEventListener('click'
 document.querySelectorAll('[data-capa]').forEach(b=>b.addEventListener('click',()=>{
   capa = b.dataset.capa;
   document.querySelectorAll('[data-capa]').forEach(o=>o.setAttribute('aria-pressed', String(o===b)));
-  pintar(); aviso();
+  // la ficha de la localidad cambia con la capa: la de voto agrega su bloque
+  pintar(); inspector(); aviso();
 }));
 document.querySelectorAll('[data-vista]').forEach(b=>b.addEventListener('click',()=>{
   vista = b.dataset.vista;
@@ -1646,6 +1816,8 @@ botonesAnio();
 // vez de dejarlo pintando gris.
 if(!D.poblacion_por_anio)
   document.querySelector('[data-capa="crecimiento"]').remove();
+// Sin paquete de voto la capa no existe (DI-V53): mejor sin botón que con uno gris.
+if(!V) document.querySelector('[data-capa="voto"]').remove();
 encuadre(); pintar(); inspector(); cifras(); aviso(); fichaEscala(); dibujarSerie();
 requestAnimationFrame(()=>ajustar(false));
 })();

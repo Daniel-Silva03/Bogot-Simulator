@@ -4,7 +4,8 @@ La página es autocontenida a propósito (DI-V6): no pide nada a la red salvo la
 tipografías, así que se puede abrir desde el disco, publicar como artefacto o
 servir desde cualquier parte sin montar un backend. El paquete de datos se
 inyecta en el marcador ``/*__DATOS__*/``, la capa base urbana en
-``/*__BASE__*/`` y la serie temporal del Hito 2 en ``/*__SERIE__*/``.
+``/*__BASE__*/``, la serie temporal del Hito 2 en ``/*__SERIE__*/`` y la capa de
+voto (DI-V53) en ``/*__VOTO__*/``.
 
 Van en dos marcadores y no en uno porque son cosas distintas: ``mapa_bogota.json``
 es el dato del proyecto y ``base_bogota.json`` es decorado de orientación tomado
@@ -15,6 +16,7 @@ Uso:
     python3 src/viz/preparar_mapa.py
     python3 src/viz/preparar_base.py
     python3 src/viz/preparar_serie.py
+    python3 src/viz/preparar_voto.py
     python3 src/viz/construir_pagina.py
 """
 
@@ -27,9 +29,11 @@ PLANTILLA = RAIZ / "src" / "viz" / "plantilla_mapa.html"
 DATOS = RAIZ / "data" / "processed" / "viz" / "mapa_bogota.json"
 BASE = RAIZ / "data" / "processed" / "viz" / "base_bogota.json"
 SERIE = RAIZ / "data" / "processed" / "viz" / "serie_bogota.json"
+VOTO = RAIZ / "data" / "processed" / "viz" / "voto_bogota.json"
 SALIDA = RAIZ / "data" / "processed" / "viz" / "mapa_bogota.html"
 
-PIEZAS = {"/*__DATOS__*/": DATOS, "/*__BASE__*/": BASE, "/*__SERIE__*/": SERIE}
+PIEZAS = {"/*__DATOS__*/": DATOS, "/*__BASE__*/": BASE, "/*__SERIE__*/": SERIE,
+          "/*__VOTO__*/": VOTO}
 
 
 def construir() -> Path:

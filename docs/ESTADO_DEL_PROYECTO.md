@@ -157,7 +157,13 @@ el centro y el suroriente, más a la izquierda de lo que dice su estrato; el
 noroccidente, menos. Cinco de cinco predicciones; **lectura B: hay territorio estable
 que la composición no ve.** Sobrevive a la inscripción (pre-registrado) y a la
 participación (no pre-registrado). Refuerza el paso 0b y es evidencia para reabrir
-DI-B10. Gana a «escenarios con preguntas reales» como
+DI-B10.
+**En el tablero desde el 29/09:** capa **Voto** (DI-V53 a DI-V56), con el voto por
+localidad de los 9 candidatos y «lo que el estrato no explica», más una vista
+exploratoria con participación. 35 pruebas en `tests/test_viz_voto.py`.
+**Pendiente conocido:** en el PC personal, `tests/test_viz_mapa.py` no corre (las
+poblaciones locales son anteriores a A05) y `tests/test_viz_serie.py` falla en «la EPC
+sí tiene olas con diseño real». Ya fallaban antes de la capa de voto. Gana a «escenarios con preguntas reales» como
 siguiente frente, porque resuelve un vacío de datos que ningún otro frente resuelve.
 
 **Experimento 9: cerrado.** Se cerró el 29/09
