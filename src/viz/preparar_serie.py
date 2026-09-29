@@ -195,13 +195,19 @@ def _epc_desde_microdato(item: str) -> tuple[list[dict], list[int]]:
 
         # El identificador de manzana existe en seis olas; donde está, el error
         # se estima con el diseño real en vez de con un factor prestado.
-        col_psu, col_estrato = CONGLOMERADO_POR_ANIO.get(anio, (None, None))
-        hay_psu = bool(col_psu) and col_psu in d.columns
+        # `cargar_bcv` lo entrega como `diseno_psu` / `diseno_estrato`. Antes se
+        # buscaba por el nombre crudo (MANZANA), que el cargador no conservaba:
+        # con el microdato en disco, todas las olas caían al DEFF prestado sin
+        # aviso (corregido el 29/09/2026; lo detectó tests/test_viz_serie.py).
+        hay_psu = "diseno_psu" in d.columns
+        if anio in CONGLOMERADO_POR_ANIO and not hay_psu:
+            logger.warning("EPC %s: debería traer %s y no llegó: se usa DEFF prestado.",
+                           anio, CONGLOMERADO_POR_ANIO[anio][0])
         try:
             if hay_psu:
                 est = media_disenio(
-                    d[item][ok], peso[ok], psu=d[col_psu][ok],
-                    estrato=d[col_estrato][ok] if col_estrato in d.columns else None)
+                    d[item][ok], peso[ok], psu=d["diseno_psu"][ok],
+                    estrato=d["diseno_estrato"][ok] if "diseno_estrato" in d.columns else None)
             else:
                 est = deff_prestado(media_disenio(d[item][ok], peso[ok]))
         except DisenoError as e:

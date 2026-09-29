@@ -161,9 +161,20 @@ DI-B10.
 **En el tablero desde el 29/09:** capa **Voto** (DI-V53 a DI-V56), con el voto por
 localidad de los 9 candidatos y «lo que el estrato no explica», más una vista
 exploratoria con participación. 35 pruebas en `tests/test_viz_voto.py`.
-**Pendiente conocido:** en el PC personal, `tests/test_viz_mapa.py` no corre (las
-poblaciones locales son anteriores a A05) y `tests/test_viz_serie.py` falla en «la EPC
-sí tiene olas con diseño real». Ya fallaban antes de la capa de voto. Gana a «escenarios con preguntas reales» como
+**Pruebas del tablero arregladas (29/09)**, con dos defectos reales detrás:
+`cargar_bcv` descartaba la manzana, así que con el microdato en disco la serie de la
+EPC caía al DEFF prestado en todas las olas sin avisar; y `preparar_mapa` solo leía
+`.csv` aunque `build_agents` escribe `.parquet` donde hay pyarrow. Las 7 suites pasan.
+**Dos hallazgos que quedan abiertos:**
+- **Las opiniones de la población sintética no se reproducen entre máquinas.** Con
+  semilla 42, el PC personal da los mismos agentes (posición, demografía) que el mapa
+  publicado, pero otras opiniones (2021: media 2,280 contra 2,241; 2019: sd entre
+  localidades 0,244 contra 0,147). El mapa publicado no se tocó. Hay que encontrar
+  la causa antes de reconstruir poblaciones en cualquiera de las dos máquinas.
+- **Error con diseño de la EPC en 2018 y 2019:** desde el microdato da 0,0423 y
+  0,0384; `deff_epc_seis_olas.csv` dice 0,0407 y 0,0382. Mismos casos (el error SRS
+  coincide exacto); la diferencia está en el estrato de diseño con que se generó ese
+  CSV, cuyo script no está en el repo. La serie publicada sigue usando el CSV. Gana a «escenarios con preguntas reales» como
 siguiente frente, porque resuelve un vacío de datos que ningún otro frente resuelve.
 
 **Experimento 9: cerrado.** Se cerró el 29/09

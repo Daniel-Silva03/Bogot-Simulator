@@ -163,6 +163,24 @@ DIR_POB = RAIZ / "data" / "processed"
 POBLACION_DE = lambda a: DIR_POB / f"poblacion_ecp{a}.csv"          # noqa: E731
 METADATA_DE = lambda a: DIR_POB / f"poblacion_ecp{a}_metadata.json"  # noqa: E731
 
+
+def _leer_poblacion(a: int):
+    """La población del año, leída del archivo que su metadata dice que se escribió.
+
+    `build_agents` escribe `.parquet` si la máquina tiene motor de parquet y
+    `.csv` si no. Leer siempre `.csv` hacía que, en una máquina con pyarrow, el
+    mapa tomara en silencio un CSV viejo en vez de la población recién
+    construida (corregido el 29/09/2026). Sin metadata, se cae al CSV de siempre.
+    """
+    meta = METADATA_DE(a)
+    if meta.exists():
+        archivo = json.loads(meta.read_text(encoding="utf-8")).get("archivo_datos")
+        ruta = DIR_POB / archivo if archivo else None
+        if ruta is not None and ruta.exists():
+            return pd.read_parquet(ruta) if ruta.suffix == ".parquet" else pd.read_csv(ruta)
+    ruta = POBLACION_DE(a)
+    return pd.read_csv(ruta) if ruta.exists() else None
+
 #: Las columnas que TIENEN que ser idénticas entre años (DI-V43).
 DEMOGRAFICAS = ["agent_id", "edad", "sexo", "localidad", "estrato", "nivel_educativo"]
 SALIDA = RAIZ / "data" / "processed" / "viz" / "mapa_bogota.json"
@@ -329,9 +347,9 @@ def cargar_poblaciones() -> dict:
     """
     pobs = {}
     for a in ANIOS:
-        ruta = POBLACION_DE(a)
-        if ruta.exists():
-            pobs[a] = pd.read_csv(ruta)
+        pob = _leer_poblacion(a)
+        if pob is not None:
+            pobs[a] = pob
     if not pobs:
         raise FileNotFoundError(
             f"No hay ninguna población en {DIR_POB.relative_to(RAIZ).as_posix()}. "

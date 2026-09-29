@@ -306,6 +306,20 @@ def cargar_bcv(anio: int, raiz: str | os.PathLike | None = None) -> Ola:
         no_respuesta[nombre] = int((col == CODIGO_NO_RESPUESTA).sum())
         salida[nombre] = col.where(col.isin(ESCALA))
 
+    # Variables de diseño (conglomerado y estrato de muestreo), con nombre
+    # estable. Sin esto, quien estima el error con el diseño real no las
+    # encuentra y cae en silencio al DEFF prestado en TODAS las olas: pasó en
+    # `preparar_serie.py` con el microdato en disco (corregido el 29/09/2026).
+    # Los nombres crudos cambian entre olas (MANZANA / Manzana); aquí no.
+    from src.utils.diseno import CONGLOMERADO_POR_ANIO
+    col_psu, col_estrato = CONGLOMERADO_POR_ANIO.get(anio, (None, None))
+    psu = _columna(crudo, col_psu)
+    if psu is not None:
+        salida["diseno_psu"] = psu
+        est = _columna(crudo, col_estrato)
+        if est is not None:
+            salida["diseno_estrato"] = est
+
     meta = {
         "anio": anio,
         "n": int(len(crudo)),
@@ -317,6 +331,8 @@ def cargar_bcv(anio: int, raiz: str | os.PathLike | None = None) -> Ola:
         "items_disponibles": [k for k in ITEMS if k in salida.columns],
         "aviso": ANIOS_CON_AVISO.get(anio),
         "codificacion_de_respaldo": codificacion_de_respaldo,
+        "diseno": {"psu": col_psu if psu is not None else None,
+                   "estrato": col_estrato if "diseno_estrato" in salida.columns else None},
     }
     return Ola(anio=anio, datos=salida, metadatos=meta)
 
