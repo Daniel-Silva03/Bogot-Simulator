@@ -13,7 +13,7 @@ leen cuando el trabajo los toque, no antes.
 - El **modelo de opinión** falló contra lo pre-registrado, y ese resultado definió el producto: **escenarios**, no predicción. El motor de escenarios está construido (Fase 8).
 - La **capa visual** es el frente principal desde el 18/09 (decisión del jefe de Daniel). Hitos 1 y 2 completos; la página está en GitHub.
 - **A08 (escalar a 100.000 agentes) quedó sin argumento visual** el 25/09: más agentes dibujarían nítida la composición demográfica, y la composición no reproduce la geografía real de la opinión.
-- **La IA generativa como fuente de opinión se descartó** con datos (Experimento 8). El **Experimento 9** —la IA como proponente de escenarios, inspirado en MiroFish— está **pre-registrado (enmiendas 1 a 4), con dossiers y código probado sobre un modelo simulado**, y **sin ninguna llamada real**. Es lo siguiente.
+- **La IA generativa como fuente de opinión se descartó** con datos (Experimento 8). El **Experimento 9** —la IA como proponente de escenarios, inspirado en MiroFish— está **pre-registrado (enmiendas 1 a 5), con dossiers y código probado sobre un modelo simulado**, y **sin ninguna llamada real**. Es lo siguiente.
 - Lo que sigue, en §6.
 
 ---
@@ -130,7 +130,7 @@ La capa de **Crecimiento** sí afirma geografía: son proyecciones oficiales.
 **Frente activo: Experimento 9.** En orden:
 1. ~~Los **12 dossiers**~~ — hechos el 29/09 (enmiendas 2 y 3), huellas verificadas en `HUELLAS.txt`.
 2. ~~`src/experiments/experimento9.py` con pruebas sobre un modelo simulado~~ — hecho el 29/09; 42 pruebas sin red (`tests/test_experimento9.py`). **Enmienda 4** (§3.7 del pre-registro): cobertura, sonda de memoria, W1 exacto y piso con n = 1000. Control de cordura sobre los datos reales: el oráculo da 0,96× el piso (FORZAMIENTO_CATEGORICO: 0,97×); «sin cambio» 5,8×, «tendencia» 6,8×.
-3. **Decisión pendiente antes de gastar:** un proponente **aleatorio** (Δ ~ N(0; 0,2)) le gana a «sin cambio» en el 55 % de las semillas (P2 no discrimina) y pasaría la regla de decisión completa en el 7 %. ¿Enmienda 5 con ese control nulo, o se corre así?
+3. ~~Decisión sobre el control nulo~~ — **enmienda 5** (29/09, §3.8): un proponente aleatorio le ganaba a «sin cambio» en el 55 % de las semillas y pasaba la regla en el 7 %. Se añade un control por **permutación** de las propias propuestas del LLM dentro de cada serie; *p* > 0,05 se lee como «no se distingue de proponer lo mismo en otro periodo». No cambia la regla. 46 pruebas.
 4. **Sonda de memoria**, luego los dos brazos: `python src/experiments/experimento9.py sonda --real`, `brazos --real`, `evaluar --real`. ~260 llamadas, clave de OpenRouter de Daniel; el script estima el costo y pide confirmación.
 5. `EXPERIMENT_9_RESULTS.md`, contra el pre-registro.
 

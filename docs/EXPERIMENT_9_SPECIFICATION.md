@@ -262,6 +262,37 @@ puede responder su pregunta, y así se reporta.
 >    (1 = muy mala gestión, 5 = muy buena), porque el repositorio no guarda el
 >    enunciado literal. Quién gobernaba: tabla fija en el código.
 
+### 3.8 Enmienda 5 — un control nulo por permutación
+
+> **Enmienda 5 — 29/09/2026, con el código probado y antes de cualquier
+> llamada al modelo.** Aprobada por Daniel. Añade un control; **no cambia
+> ninguna predicción ni la regla de decisión**.
+>
+> **Motivo.** Al probar el código se midió que un proponente que no sabe nada
+> —cambios al azar, Δ ~ N(0; 0,2) y Δsd ~ N(0; 0,05)— le gana a «sin cambio»
+> en la mediana de W1/piso en el **55 %** de 200 semillas, y pasaría la regla
+> de §5 completa en el **7 %**. P2, sola, no distingue a un modelo que sabe de
+> uno que no. *Un null tiene que poder fallar* (DI-V52).
+>
+> **El control.** Las propuestas agregadas de cada brazo (Δnivel, Δsd y sus
+> intervalos) se **reasignan al azar entre las transiciones de la misma
+> serie** (la ECP y la EPC tienen escalas distintas y no se mezclan), y se
+> evalúa todo como si fueran propuestas genuinas. Así el nulo conserva la
+> escala, la dispersión y la confianza propias del modelo, y lo único que
+> destruye es el vínculo entre la propuesta y el periodo, que es justo lo
+> que el experimento quiere probar. Un nulo aleatorio con escala elegida a
+> mano no tiene esa propiedad y por eso no se usa.
+>
+> - **2.000 permutaciones**, semilla fija, sorteadas por serie (la ECP solo
+>   admite 24 órdenes; la EPC, 40.320).
+> - Se reporta, por brazo: la fracción de permutaciones cuya mediana de
+>   W1/piso es **menor o igual** que la del brazo (un valor *p* de una cola),
+>   y la fracción que pasaría el criterio 1 y la regla completa.
+> - **Lectura fijada ahora:** si *p* > 0,05, el informe dice que la ventaja
+>   del brazo **no se distingue de proponer las mismas cifras en otro periodo
+>   de la misma serie**, pase lo que pase con la regla de §5. La regla sigue
+>   siendo la que decide adoptar o no; este control dice cuánto creerle.
+
 ---
 
 ## 4. Predicciones pre-registradas

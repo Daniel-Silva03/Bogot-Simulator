@@ -1,7 +1,7 @@
 """
 Experimento 9 — ¿un LLM puede proponer el escenario de un periodo?
 
-Pre-registro: `docs/EXPERIMENT_9_SPECIFICATION.md`, con las enmiendas 1 a 4.
+Pre-registro: `docs/EXPERIMENT_9_SPECIFICATION.md`, con las enmiendas 1 a 5.
 Este módulo no decide nada que el pre-registro no haya decidido: lo ejecuta.
 
 QUÉ HACE
@@ -13,7 +13,8 @@ Para cada una de las 12 transiciones medidas (ECP 4 + EPC 8):
     W1(predicha, observada final) / piso de ruido   ->  métrica principal
 
 y lo mismo para los tres baselines («sin cambio», «tendencia», «oráculo»).
-Después evalúa P1-P6 y la regla de decisión de §5, tal como están escritas.
+Después evalúa P1-P6 y la regla de decisión de §5, tal como están escritas, y
+el control por permutación de la enmienda 5.
 
 Tres subcomandos, en el orden del pre-registro:
 
@@ -118,6 +119,7 @@ UMBRAL_MEMORIA_PCT = 5.0                  # enmienda 4, punto 2 (complementaria)
 N_PISO, REPS_PISO, SEMILLA_PISO = 1000, 200, 20260929   # enmienda 4, punto 3
 MARGEN_BORDE = 0.05                       # DI-E6
 TRANSICION_SIN_SIGNO = "EPC_2022_2023"    # §2: no distinguible de cero
+N_PERMUTACIONES, SEMILLA_PERMUTACION = 2000, 20260930   # enmienda 5
 USD_POR_MILLON_TOKENS = 0.69              # DI-E8
 TOKENS_SALIDA_BRAZO, TOKENS_SALIDA_SONDA = 350, 30
 
@@ -580,52 +582,105 @@ def baselines(estados: dict) -> dict[str, dict[str, tuple[float, float]]]:
     return salida
 
 
+def _fila(fuente: str, t: Transicion, estados: dict, pisos: dict, sonda: dict,
+          dn: float, dsd: float, agregado: Optional[dict] = None) -> dict:
+    """Una fila de evaluación. `agregado` (salida de `agregar`) solo para los brazos."""
+    dn_obs, dsd_obs = cambio_observado(t, estados)
+    e0, e1 = estados[(t.serie, t.inicio)], estados[(t.serie, t.fin)]
+    q, proyectada = predecir(e0, dn, dsd)
+    w1 = w1_grilla(q, e1.p, e0.grilla)
+    s = sonda.get(t.clave, {})
+    fila = {
+        "fuente": fuente, "clave": t.clave, "serie": t.serie,
+        "delta_nivel": dn, "delta_dispersion": dsd,
+        "delta_nivel_obs": dn_obs, "delta_dispersion_obs": dsd_obs,
+        "w1": w1, "piso": pisos[t.clave], "w1_piso": w1 / pisos[t.clave],
+        "err_nivel": abs(dn - dn_obs), "err_dispersion": abs(dsd - dsd_obs),
+        "signo_ok": (None if t.clave == TRANSICION_SIN_SIGNO
+                     else bool(dn != 0 and np.sign(dn) == np.sign(dn_obs))),
+        "proyectada": proyectada,
+        "en_memoria": bool(s.get("en_memoria", False)),
+        "en_memoria_sens": bool(s.get("en_memoria", False)
+                                or s.get("en_memoria_complementaria", False)),
+    }
+    if agregado is not None:
+        lo, hi = agregado["intervalo_nivel"]
+        lo_s, hi_s = agregado["intervalo_dispersion"]
+        reps = np.array(agregado["intervalos_nivel_reps"], float)
+        fila.update({
+            "n_validas": agregado["n_validas"],
+            "cubre_nivel": bool(lo <= dn_obs <= hi),
+            "cubre_dispersion": bool(lo_s <= dsd_obs <= hi_s),
+            "cubiertos_reps_nivel": int(((reps[:, 0] <= dn_obs) & (dn_obs <= reps[:, 1])).sum()),
+            "n_reps": len(reps),
+        })
+    return fila
+
+
+def pisos_de(estados: dict) -> dict[str, float]:
+    return {t.clave: piso_de_ruido(estados[(t.serie, t.fin)]) for t in TRANSICIONES}
+
+
 def evaluar(estados: dict, brazos: dict[str, dict[str, dict]], sonda: dict[str, dict],
             pisos: Optional[dict[str, float]] = None) -> list[dict]:
     """Una fila por (fuente, transición). `brazos[brazo][clave]` es la salida de `agregar`."""
-    pisos = pisos or {t.clave: piso_de_ruido(estados[(t.serie, t.fin)]) for t in TRANSICIONES}
-    fuentes: dict[str, dict] = {f"brazo_{b}": {c: (a["delta_nivel"], a["delta_dispersion"])
-                                                for c, a in props.items() if a}
-                                 for b, props in brazos.items()}
-    fuentes.update(baselines(estados))
+    pisos = pisos or pisos_de(estados)
     filas = []
-    for fuente, props in fuentes.items():
+    for b, props in brazos.items():
         for t in TRANSICIONES:
-            if t.clave not in props:
-                continue
-            dn, dsd = props[t.clave]
-            dn_obs, dsd_obs = cambio_observado(t, estados)
-            e0, e1 = estados[(t.serie, t.inicio)], estados[(t.serie, t.fin)]
-            q, proyectada = predecir(e0, dn, dsd)
-            w1 = w1_grilla(q, e1.p, e0.grilla)
-            s = sonda.get(t.clave, {})
-            fila = {
-                "fuente": fuente, "clave": t.clave, "serie": t.serie,
-                "delta_nivel": dn, "delta_dispersion": dsd,
-                "delta_nivel_obs": dn_obs, "delta_dispersion_obs": dsd_obs,
-                "w1": w1, "piso": pisos[t.clave], "w1_piso": w1 / pisos[t.clave],
-                "err_nivel": abs(dn - dn_obs), "err_dispersion": abs(dsd - dsd_obs),
-                "signo_ok": (None if t.clave == TRANSICION_SIN_SIGNO
-                             else bool(dn != 0 and np.sign(dn) == np.sign(dn_obs))),
-                "proyectada": proyectada,
-                "en_memoria": bool(s.get("en_memoria", False)),
-                "en_memoria_sens": bool(s.get("en_memoria", False)
-                                        or s.get("en_memoria_complementaria", False)),
-            }
-            if fuente.startswith("brazo_"):
-                a = brazos[fuente[-1]][t.clave]
-                lo, hi = a["intervalo_nivel"]
-                lo_s, hi_s = a["intervalo_dispersion"]
-                reps = np.array(a["intervalos_nivel_reps"], float)
-                fila.update({
-                    "n_validas": a["n_validas"],
-                    "cubre_nivel": bool(lo <= dn_obs <= hi),
-                    "cubre_dispersion": bool(lo_s <= dsd_obs <= hi_s),
-                    "cubiertos_reps_nivel": int(((reps[:, 0] <= dn_obs) & (dn_obs <= reps[:, 1])).sum()),
-                    "n_reps": len(reps),
-                })
-            filas.append(fila)
+            a = props.get(t.clave)
+            if a:
+                filas.append(_fila(f"brazo_{b}", t, estados, pisos, sonda,
+                                   a["delta_nivel"], a["delta_dispersion"], a))
+    for fuente, props in baselines(estados).items():
+        for t in TRANSICIONES:
+            if t.clave in props:
+                filas.append(_fila(fuente, t, estados, pisos, sonda, *props[t.clave]))
     return filas
+
+
+def control_permutacion(estados: dict, agregados: dict[str, dict], sonda: dict,
+                        pisos: dict, brazo: str, n: int = N_PERMUTACIONES,
+                        seed: int = SEMILLA_PERMUTACION) -> dict:
+    """Enmienda 5: las propuestas del brazo, reasignadas entre transiciones de la misma serie.
+
+    Cada par (transición destino, propuesta de origen) se evalúa una sola vez;
+    una permutación solo vuelve a armar filas ya calculadas.
+    """
+    fuente = f"brazo_{brazo}"
+    claves = [t.clave for t in TRANSICIONES if agregados.get(t.clave)]
+    por_serie = {s: [c for c in claves if c.startswith(s)] for s in SERIES}
+    por_clave = {t.clave: t for t in TRANSICIONES}
+    base = evaluar(estados, {}, sonda, pisos)          # los baselines no se permutan
+    par = {}
+    for s, cs in por_serie.items():
+        for destino in cs:
+            for origen in cs:
+                a = agregados[origen]
+                par[(destino, origen)] = _fila(fuente, por_clave[destino], estados, pisos, sonda,
+                                               a["delta_nivel"], a["delta_dispersion"], a)
+    observado = _mediana([par[(c, c)] for c in claves])
+    rng = np.random.default_rng(seed)
+    menores = c1 = adoptadas = 0
+    for _ in range(n):
+        filas = list(base)
+        for cs in por_serie.values():
+            for destino, origen in zip(cs, rng.permutation(cs)):
+                filas.append(par[(destino, origen)])
+        r = resumen(filas, fuente)
+        menores += _mediana(_de(filas, fuente)) <= observado
+        c1 += r["regla"]["c1"]
+        adoptadas += r["regla"]["veredicto"].startswith("Pasa las tres")
+    p = menores / n
+    return {
+        "n_permutaciones": n, "mediana_w1_piso_brazo": round(observado, 4),
+        "p": round(p, 4),
+        "fraccion_que_pasa_c1": round(c1 / n, 4),
+        "fraccion_que_se_adoptaria": round(adoptadas / n, 4),
+        "lectura": ("La ventaja del brazo no se distingue de proponer las mismas cifras en "
+                    "otro periodo de la misma serie." if p > 0.05 else
+                    "La propuesta del brazo depende del periodo: permutarla la empeora."),
+    }
 
 
 # --------------------------------------------------------------------------
@@ -735,7 +790,8 @@ def resumen(filas: list[dict], brazo: str = "brazo_B") -> dict:
     }
 
 
-def veredicto_completo(filas: list[dict], sonda: dict, meta: dict) -> dict:
+def veredicto_completo(filas: list[dict], sonda: dict, meta: dict,
+                       control: Optional[dict] = None) -> dict:
     fuentes = sorted({f["fuente"] for f in filas})
     return {
         **meta,
@@ -751,6 +807,7 @@ def veredicto_completo(filas: list[dict], sonda: dict, meta: dict) -> dict:
                     for f in fuentes},
         "brazo_B": resumen(filas, "brazo_B") if _de(filas, "brazo_B") else None,
         "brazo_A": resumen(filas, "brazo_A") if _de(filas, "brazo_A") else None,
+        "control_permutacion_enmienda_5": control or {},
     }
 
 
@@ -865,10 +922,13 @@ def correr_evaluacion(estados, salida: Path, meta: dict) -> dict:
     crudo = _leer(salida / "brazos.json")
     brazos = {b: {c: agregar(r["propuestas"]) for c, r in por_t.items()}
               for b, por_t in crudo.items()}
-    filas = evaluar(estados, brazos, sonda)
+    pisos = pisos_de(estados)
+    filas = evaluar(estados, brazos, sonda, pisos)
     import pandas as pd
     pd.DataFrame(filas).to_csv(salida / "tabla.csv", index=False)
-    v = veredicto_completo(filas, sonda, meta)
+    control = {f"brazo_{b}": control_permutacion(estados, ag, sonda, pisos, b)
+               for b, ag in brazos.items() if any(ag.values())}
+    v = veredicto_completo(filas, sonda, meta, control)
     _escribir(salida / "veredicto.json", v)
     return v
 
@@ -908,6 +968,9 @@ def main(argv=None, entrada=input) -> int:
                         estado = {True: "se cumple", False: "NO se cumple",
                                   None: "no evaluable"}[p["se_cumple"]]
                         print(f"  {k} {estado} — {p['umbral']}")
+                    c = v["control_permutacion_enmienda_5"].get(b)
+                    if c:
+                        print(f"  Control por permutación (enmienda 5): p = {c['p']:.3f}. {c['lectura']}")
             print(f"\n{_mostrar(salida / 'veredicto.json')}")
     except Experimento9Error as e:
         print(f"ERROR: {e}")

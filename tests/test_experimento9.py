@@ -482,6 +482,45 @@ def test_el_veredicto_completo_se_puede_guardar_en_json():
     assert v["w1_piso"]["oraculo"]["total"]["n"] == 12 and v["brazo_A"] and v["brazo_B"]
 
 
+# --- control por permutación (enmienda 5) ----------------------------------
+
+def _agregados(propone, ancho=0.5):
+    llamar = modelo_que(propone, ancho=ancho)
+    cache = e9.Cache(Path(tempfile.mkdtemp()) / "c.json")
+    return {t.clave: e9.agregar(e9.recolectar_brazo(t, "A", ESTADOS, llamar, cache, "m")["propuestas"])
+            for t in e9.TRANSICIONES}
+
+
+def test_un_modelo_que_ignora_el_periodo_no_pasa_la_permutacion():
+    """Misma propuesta en todos los periodos de una serie: permutar no cambia nada."""
+    fijo = lambda t: (-0.15, 0.02) if t.serie == "ECP" else (0.10, -0.03)      # noqa: E731
+    c = e9.control_permutacion(ESTADOS, _agregados(fijo), {}, PISOS, "A", n=200)
+    assert c["p"] == 1.0 and c["lectura"].startswith("La ventaja del brazo no se distingue")
+
+
+def test_el_oraculo_pasa_la_permutacion():
+    c = e9.control_permutacion(ESTADOS, _agregados(ORACULO), {}, PISOS, "A", n=200)
+    assert c["p"] <= 0.05, c
+    assert c["fraccion_que_pasa_c1"] < 1
+
+
+def test_la_permutacion_es_reproducible_y_no_mezcla_series():
+    ag = _agregados(ORACULO)
+    a = e9.control_permutacion(ESTADOS, ag, {}, PISOS, "A", n=100)
+    b = e9.control_permutacion(ESTADOS, ag, {}, PISOS, "A", n=100)
+    assert a == b
+    # una propuesta de la EPC puesta en la ECP se notaría: aquí basta con que
+    # el observado sea el de la asignación identidad
+    filas = e9.evaluar(ESTADOS, {"A": ag}, {}, PISOS)
+    assert abs(a["mediana_w1_piso_brazo"] - round(e9._mediana(e9._de(filas, "brazo_A")), 4)) < 1e-9
+
+
+def test_el_veredicto_trae_el_control():
+    filas, sonda = correr(modelo_que(ORACULO), brazos=("B",))
+    v = e9.veredicto_completo(filas, sonda, {}, {"brazo_B": {"p": 0.01}})
+    assert v["control_permutacion_enmienda_5"]["brazo_B"]["p"] == 0.01
+
+
 # --- la línea de comandos no gasta nada -------------------------------------
 
 def test_real_sin_clave_no_llama():
@@ -528,6 +567,8 @@ def test_todo_simulado_sobre_los_datos_reales():
         assert e9.main(["todo", "--salida", str(tmp)]) == 0
         v = json.loads((tmp / "veredicto.json").read_text(encoding="utf-8"))
         assert v["simulado"] is True and v["w1_piso"]["brazo_B"]["total"]["n"] == 12
+        # un modelo que propone al azar no depende del periodo
+        assert v["control_permutacion_enmienda_5"]["brazo_B"]["n_permutaciones"] == e9.N_PERMUTACIONES
         # el oráculo no puede ser peor que «sin cambio» en ninguna serie
         assert v["w1_piso"]["oraculo"]["total"]["mediana"] <= v["w1_piso"]["sin_cambio"]["total"]["mediana"]
     finally:
