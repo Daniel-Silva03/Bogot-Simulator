@@ -1366,6 +1366,55 @@ La corrida pre-registrada sigue siendo **la reportada** en `claude/EXPERIMENT_3_
 
 **Estado:** **APPROVED** (confirmada en conversación, 16 de septiembre de 2026).
 
+### D16 — Los resultados electorales que entregó el CNC quedan fuera del régimen R10
+
+**Fecha:** 29 de septiembre de 2026
+**Decisión:** Los archivos electorales que el CNC entregó el 29/09/2026 (inventario en
+`DATA_INVENTORY.md` §14) **no se rigen por R10**: se pueden usar en el proyecto y su
+contenido **se puede leer con un modelo de lenguaje** (Claude en Claude Code). Viven
+**fuera del repositorio**, en una carpeta propia, y el código la encuentra por la
+variable de entorno `BSS_ELECTORAL_DIR`, sin escribir su ruta. **No se copian al
+repositorio**, ni siquiera a `data/raw/`.
+
+**R10 no cambia para nada más.** Los estudios de `DATA_INVENTORY.md` §12 (Salud
+Mental, Sustancias, Apropiación Digital, SABE) siguen exactamente igual: no se abren,
+no se leen con un LLM, no salen del equipo.
+
+**Justificación.**
+- **No hay datos de personas.** Revisión del 29/09, primero de estructura sin imprimir
+  valores y después de conteos agregados: ninguna cédula, dirección de ciudadano,
+  teléfono, correo ni coordenada. Las columnas con nombres son de **candidatos,
+  partidos y puestos de votación**; lo confirman las etiquetas de las variables de
+  los `.dta` («Nombres completos del candidato o del partido…»).
+- **Son agregados.** La unidad más fina es la **mesa de votación**. El más fino de los
+  productos propios del CNC es el municipio.
+- **Casi todo es de origen público** (Registraduría Nacional; los CSV de Senado y
+  Cámara 2018 parecen descargas de datos abiertos del 30/05/2025). Lo producido por
+  el CNC son consolidaciones y el índice de ideología por municipio.
+- **Autorización:** Daniel confirma que el CNC autorizó su uso en el proyecto, y
+  autorizó expresamente que Claude los revise directamente.
+
+**Alternativas consideradas:**
+- *Mantenerlos bajo R10 y revisarlos con un script local que muestre solo la
+  estructura* — propuesta por Claude; Daniel eligió la revisión directa. Sigue siendo
+  el camino para cualquier archivo que traiga datos de personas.
+- *Copiarlos a `data/raw/`* — descartada: pesan 1,8 GB, y un error en `.gitignore` los
+  subiría. Es la misma razón por la que los estudios del CNC salieron del repositorio
+  (DI-N7).
+
+**Límites de la decisión.**
+1. Vale para **los archivos listados en §14**. Un archivo nuevo en la carpeta no entra
+   solo: se revisa igual, estructura primero, antes de leer valores.
+2. **Publicar** en el tablero derivados de los resultados de la Registraduría es
+   publicar datos públicos. Publicar los **productos propios del CNC** (índice de
+   ideología, consolidaciones) queda **pendiente de confirmar** con el CNC.
+3. El voto **no es** confianza institucional ni evaluación del alcalde: es otro
+   constructo. Entra como referencia territorial, no como sustituto (A20).
+
+**Evidencia:** `DATA_INVENTORY.md` §14; revisión en la conversación del 29/09/2026.
+
+**Estado:** **APPROVED** (Daniel, en conversación, 29 de septiembre de 2026).
+
 ---
 
 # 40. DECISIONES ABIERTAS

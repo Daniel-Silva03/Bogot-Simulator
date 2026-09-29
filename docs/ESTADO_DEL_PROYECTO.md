@@ -140,7 +140,16 @@ La capa de **Crecimiento** sí afirma geografía: son proyecciones oficiales.
 
 ## 6. Qué sigue
 
-**Frente activo: ninguno elegido.** El Experimento 9 se cerró el 29/09
+**Frente propuesto: geografía electoral de Bogotá.** El 29/09 el CNC entregó
+resultados electorales por mesa (presidente 2014, 2018 y 2022; Senado y Cámara 2018)
+y por municipio, sin datos de personas. **D16** los saca de R10 (se pueden leer con un
+LLM; viven fuera del repo, en `BSS_ELECTORAL_DIR`); inventario en `DATA_INVENTORY.md`
+§14. Bogotá viene en 22 zonas: si las 1–20 son las localidades, es la primera
+geografía real dentro de la ciudad que tiene el proyecto. **Primer paso: verificar
+zona → localidad.** Si se confirma, gana a «escenarios con preguntas reales» como
+siguiente frente, porque resuelve un vacío de datos que ningún otro frente resuelve.
+
+**Experimento 9: cerrado.** Se cerró el 29/09
 (`EXPERIMENT_9_RESULTS.md`): dossiers, código con 52 pruebas sin red, enmiendas
 4 y 5, sonda, brazos y evaluación. Lo que queda de él:
 - Las respuestas crudas y su costo están en `data/processed/exp9/cache.json`

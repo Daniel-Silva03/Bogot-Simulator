@@ -22,6 +22,12 @@ Viven **fuera** del repo y su ruta no está escrita en el código (`--cnc` o `BS
 - Nunca mandes nada de ellos a una API externa, **incluidos modelos de lenguaje**, ni agregado.
 - Si una tarea parece necesitarlos, **detente y pregunta**.
 
+**Resultados electorales del CNC (D16, `docs/DATA_INVENTORY.md` §14).** Son otra cosa:
+resultados de la Registraduría por mesa y municipio, más productos del CNC por
+municipio, **sin datos de personas**. Se pueden leer y usar. Viven fuera del repo, en
+la carpeta de `BSS_ELECTORAL_DIR`; nunca se copian al repo. Un archivo **nuevo** en esa
+carpeta no queda cubierto: revísalo primero por estructura, sin imprimir valores.
+
 **Datos en general.** `data/raw/` nunca se sube: son microdatos públicos (DANE, Bogotá
 Cómo Vamos) que pesan GB y se regeneran desde la fuente. El `.gitignore` excluye `data/**`
 y reincluye solo rutas publicables. Antes de cada commit, revisa `git status` y confirma
@@ -67,22 +73,20 @@ resultó falso no se borra:** se anota la corrección al lado (§45).
 | `src/viz/` | tablero: preparadores y `plantilla_mapa.html` → `data/processed/viz/mapa_bogota.html` |
 | `src/utils/` | `diseno.py` (medias y DEFF con diseño muestral), `revisar_datos.py` |
 | `config/experimento9/` | los 12 dossiers del Experimento 9 y el script que los genera |
+| `src/experiments/experimento9.py` | Experimento 9: LLM como proponente de escenarios (cerrado) |
 | `docs/` | especificaciones, resultados y `ESTADO_DEL_PROYECTO.md` |
 
-## Frente activo: Experimento 9
+## Frente activo: geografía electoral de Bogotá (propuesto el 29/09)
 
-`docs/EXPERIMENT_9_SPECIFICATION.md` (pre-registro y enmiendas 1 a 3). ¿Puede un LLM
-proponer el cambio de **nivel** y **dispersión** de un periodo mejor que suponer que nada
-cambia? 12 transiciones reales, dos brazos, sonda de memoria, baselines «sin cambio»,
-«tendencia» y oráculo.
+El Experimento 9 se cerró el 29/09 (`docs/EXPERIMENT_9_RESULTS.md`): el LLM no fija
+las cifras de un escenario. Lo siguiente es la fuente nueva de D16: **resultados
+electorales por mesa, con Bogotá dividida en 22 zonas** (2014, 2018, 2022).
 
-- **Hecho:** los 12 dossiers en `config/experimento9/dossiers/`, congelados, con huellas
-  en `HUELLAS.txt`. **No se editan**: cualquier cambio a un dossier invalida el pre-registro.
-- **Siguiente:** `src/experiments/experimento9.py` + `tests/test_experimento9.py`. Las
-  pruebas corren con un **modelo simulado**, sin red, **antes de la primera llamada
-  real**. Reutiliza el cliente con caché de `donante_llm.py` y el ladeo de
-  `forzamiento_categorico.py`. La métrica principal es W1 sobre el piso de ruido.
-- **Antes de gastar llamadas reales**, confirma con Daniel el costo estimado.
+- **Primero:** verificar si las zonas 1–20 de la Registraduría son las 20 localidades
+  (`docs/DATA_INVENTORY.md` §14.2). Hasta entonces es una hipótesis.
+- El voto es otro constructo: sirve como **referencia territorial**, no reemplaza la
+  confianza institucional ni la evaluación del alcalde.
+- El frente alternativo, sin elegir: escenarios con preguntas reales de proyectos del CNC.
 
 ## Git
 

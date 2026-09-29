@@ -630,7 +630,7 @@ El `README.md` del CNC dice, sobre las carpetas `input/`:
 
 > "Nada de lo que sale de aquí hacia un reporte o hacia la bóveda puede llevar registros individuales: solo agregados."
 
-Reglas operativas adoptadas por este proyecto, que valen mientras `data/raw/cnc/` exista:
+Reglas operativas adoptadas por este proyecto, que valen mientras `data/raw/cnc/` exista. **No aplican a los resultados electorales de §14**, que tienen su propio régimen (D16):
 
 1. **Ningún `.sav`, `.dta` ni `<estudio>_base.xlsx` del CNC sale del equipo de Daniel.** Nada de eso se adjunta a una conversación, se sube a un servicio ni se copia a otra máquina.
 2. Lo único que cruza es `data/external/cnc/*`, que son agregados con supresión.
@@ -644,6 +644,56 @@ Reglas operativas adoptadas por este proyecto, que valen mientras `data/raw/cnc/
 **El proyecto viene calculando medias ponderadas ingenuas en todas partes** — en la ECP, en el donante, en los diagnósticos. Eso subestima los errores estándar por un factor del orden de \(\sqrt{DEFF}\), y el DEFF mediano medido aquí es 2,5. Adoptar `svy_prop` (o su equivalente para medias) es barato y cambia la lectura de cualquier diferencia que hoy se reporte sin intervalo. Está en la lista de §9.
 
 **Nota de ejecución:** `carga.py` del CNC importa `pyreadstat`, que no está en el intérprete del repositorio (sí en el venv del CNC). `cnc_agregar.py` trae un stub que permite importar `carga.py` sin `pyreadstat` — para conservar su filtro de PII — y cae a `<estudio>_base.xlsx` cuando no puede leer el `.sav`.
+
+---
+
+## 14. Resultados electorales entregados por el CNC *(29/09/2026)*
+
+**Régimen: D16, no R10.** Sin datos de personas; se pueden leer con un LLM y usar en el
+proyecto. Viven fuera del repositorio, en la carpeta a la que apunta
+`BSS_ELECTORAL_DIR` (en el PC personal, `Desktop\CNC_datos`: **no** es la carpeta de
+los estudios de §12, y no deben mezclarse). En el PC del CNC no están.
+
+### 14.1 Qué hay
+
+| Archivo | Nivel | Contenido | Filas |
+|---|---|---|---|
+| `MMV_PRESIDENTE_2014_1ERA_VUELTA.xlsx` | **mesa** | presidente 2014, 1.ª vuelta | 704.177 |
+| `MMV_PRESIDENTE_2018_1ERA_VUELTA.xlsx` | **mesa** | presidente 2018, 1.ª vuelta; hojas: escrutinio antes de modificaciones, final y `DIVIPOL` (puestos, mesas, potencial electoral por sexo) | 745.470 |
+| `MMV_NACIONAL_PRESIDENTE_2018_1v.xlsx` | **mesa** | lo mismo, más hojas de candidatos y partidos. **Tres copias idénticas** (sha256 `f5ecc623…`) | 745.469 |
+| `MMV_NACIONAL_PRESIDENTE_2022_1v.csv` | **mesa** | presidente 2022, 1.ª vuelta, con nombre de puesto. `latin-1`, separador `;`. **Dos copias idénticas** (`976fa0da…`) | 727.510 |
+| `RESULTADOS_ELECTORALES_2018_SENADO_DE_LA_REPUBLICA_20250530.csv` | **mesa** | Senado 2018 por candidato | 5.191.659 |
+| `RESULTADOS_ELECTORALES_2018_CAMARA_DE_REPRESENTANTES_20250530.csv` | **mesa** | Cámara 2018 por candidato | 4.135.369 |
+| `2018_presidencia_{primera,segunda}_vuelta.dta` | municipio | presidente 2018, con censo electoral por sexo | 12.725 / 5.802 |
+| `2022_presidencia_{primera,segunda}_vuelta.dta` | municipio | presidente 2022 | 13.068 / 5.940 |
+| `2018_camara.dta.csv` | municipio | Cámara 2018 por candidato, con curules y censo | 146.084 |
+| `2018 Camara.xlsx`, `2018 Senado.xlsx`, `2018 Consulta.xlsx` | municipio | votos por partido y censo, con color de partido | — |
+| `Datos_Camara.xlsx`, `Datos_Senado.xlsx` | municipio | votos por partido; hoja de totales (votantes, nulos, no marcados, blancos) | 76.095 / 29.701 |
+| `Data_Total_Coaliciones.xlsx` | municipio | 2022, votos de tres coaliciones (una hoja por coalición) | 5.941 × 3 |
+| `indice por municipio.xlsx` | municipio | **índice de ideología 0 (derecha) – 6 (izquierda)**, producto del CNC. Bogotá = 4 | 1.123 |
+
+Origen: Registraduría Nacional (resultados), consolidaciones del CNC (coaliciones,
+totales, índice).
+
+### 14.2 Lo que importa para este proyecto: Bogotá por dentro
+
+Los cinco archivos por mesa traen Bogotá (código de departamento de la Registraduría
+**16**, no el 11 del DANE) con **22 zonas**: 1 a 20, 90 y 98.
+
+| Archivo | Puestos | Mesas | Votos |
+|---|---|---|---|
+| Presidente 2022, 1.ª vuelta | 1.296 | 14.937 | 3.801.013 |
+| Senado 2018 | 642 | 15.462 | 2.809.019 |
+| DIVIPOL 2018 | 642 | 14.420 | potencial 5.702.805 |
+
+**Hipótesis por verificar (no usar hasta entonces):** las zonas 1–20 son las 20
+localidades; la 90 y la 98 son zonas especiales. Si se confirma, es la **primera
+fuente del proyecto con geografía real dentro de Bogotá**, en tres elecciones, que es
+el vacío que dejó `A08_PASO0B_RESULTS.md`.
+
+**Pendiente:** 2022 tiene el doble de puestos que 2018 (1.296 contra 642). Puede ser
+un cambio real de la Registraduría o una codificación distinta de `PUESTO`; hay que
+entenderlo antes de comparar años por puesto.
 
 ---
 
