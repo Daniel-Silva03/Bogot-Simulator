@@ -194,6 +194,74 @@ resultados se reportan en total y **separados en «en memoria» y «fuera de
 memoria»**. Si no queda ninguna transición fuera de memoria, el experimento no
 puede responder su pregunta, y así se reporta.
 
+### 3.7 Enmienda 4 — lo que el pre-registro dejaba abierto
+
+> **Enmienda 4 — 29/09/2026, antes de escribir el código y antes de cualquier
+> llamada al modelo.** Daniel aprobó el plan de implementación y delegó en
+> Claude estas decisiones. Todas se toman sin haber visto ninguna respuesta del
+> modelo; los cambios observados (§2) sí se conocen, y por eso cada decisión
+> se toma por una razón que no depende de ellos.
+>
+> 1. **Cobertura (§3.4, P5, regla 2).** Con 10 repeticiones hay 10 intervalos
+>    por transición. El intervalo del brazo es la **mediana de los límites
+>    inferiores y la mediana de los superiores** de las repeticiones válidas:
+>    es el intervalo de la propuesta que se evalúa, que también es una
+>    mediana. La **cobertura principal es la del nivel**, sobre las 12
+>    transiciones: §3.4 habla de «el cambio observado», en singular, y el
+>    nivel es el número que las demás predicciones juzgan. Se reportan además,
+>    como secundarias, la cobertura de la dispersión y la cobertura por
+>    repetición (fracción de los ~120 intervalos individuales que cubren).
+> 2. **Sonda de memoria (§3.6).** Ninguna de las dos variables tiene una
+>    «media publicada» en la escala 1–5: el índice de 13 ítems de la ECP lo
+>    construye el proyecto, y Bogotá Cómo Vamos publica proporciones
+>    (1–2 / 3 / 4–5; `epc_bcv.ANCLAS_PUBLICADAS`). Se decide:
+>    - **Sonda principal (pre-registrada):** se describe la variable con
+>      exactitud y se pide su media ponderada en la escala 1–5 del año final;
+>      se compara con la media ponderada de los microdatos públicos, que es la
+>      cifra que cualquiera puede calcular y publicar. Umbral: 0,10. Una
+>      llamada por transición, **temperatura 0**: es la condición en la que un
+>      modelo reproduce mejor lo que recuerda, así que marca memoria de más y
+>      no de menos, que es el error seguro para P6.
+>    - **Sonda complementaria (no pre-registrada), solo EPC:** se pide el
+>      porcentaje que calificó la gestión como buena o muy buena (4–5), que es
+>      la cifra que BCV sí publica. Acierto: a menos de 5 puntos
+>      porcentuales. Sirve **solo como análisis de sensibilidad**: P6 y la
+>      regla 3 se recalculan marcando «en memoria» a la transición que caiga en
+>      cualquiera de las dos sondas. El veredicto oficial usa la principal.
+>    - **Limitación registrada:** la ECP no tiene cifra publicada comparable al
+>      índice, así que su memoria solo se sondea por la media.
+>    - Costo: 12 + 8 llamadas.
+> 3. **W1 y piso (§3.4).** La propuesta ladeada es una distribución exacta
+>    sobre la grilla, y la observada es la distribución ponderada del año
+>    final sobre la misma grilla. **W1 se calcula exacto entre las dos**, sin
+>    sortear agentes: la métrica es determinista y la diferencia entre brazos
+>    no carga ruido de reparto sobre doce puntos. **El piso** es el de DI-X4:
+>    W1 medio entre dos muestras de **n = 1000** (el tamaño de las poblaciones
+>    de los Experimentos 6 y 7) de la distribución observada del año final,
+>    200 réplicas, semilla fija. Consecuencia que se acepta: el oráculo puede
+>    quedar por debajo de 1× el piso, porque la predicción no lleva ruido de
+>    mil agentes. El piso es la unidad de medida, no un umbral.
+> 4. **Grilla de la ECP.** La teórica: todas las medias de *n* ítems en 1–5
+>    con *n* de 7 a 13 (233 valores; `FORZAMIENTO_CATEGORICO.md` §3 mostró
+>    que da lo mismo que las grillas empíricas). Verificado: los cinco años
+>    de la ECP caen exactos sobre ella.
+> 5. **«Tendencia» no existe en la primera transición de cada serie.** Las
+>    comparaciones contra «tendencia» (P3, regla 1) se hacen sobre las **10
+>    transiciones comunes**, recalculando la mediana del brazo sobre ese mismo
+>    subconjunto. La tendencia es el cambio crudo de la transición anterior,
+>    sin reescalar por años (§3.5 no lo pide).
+> 6. **Casos borde.** Un Δ de nivel propuesto exactamente 0 cuenta como signo
+>    fallado (P1). Un objetivo infactible en la grilla se proyecta al borde
+>    alcanzable y se cuenta (DI-M3s del motor). Una respuesta que no se puede
+>    leer no es un dato: se pide otra repetición hasta tener 10 válidas, con
+>    un tope de 20 intentos por transición y brazo; si quedan menos de 10, se
+>    usa la mediana de las que haya y se reporta.
+> 7. **Qué recibe el modelo, en concreto (§3.1).** En la EPC, la distribución
+>    por las cinco categorías; en la ECP, los quintiles ponderados del índice.
+>    El texto de la pregunta de la EPC se arma con las anclas del formulario
+>    (1 = muy mala gestión, 5 = muy buena), porque el repositorio no guarda el
+>    enunciado literal. Quién gobernaba: tabla fija en el código.
+
 ---
 
 ## 4. Predicciones pre-registradas
