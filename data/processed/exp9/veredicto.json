@@ -1,0 +1,282 @@
+{
+  "modelo": "xiaomi/mimo-v2.6-pro",
+  "simulado": false,
+  "memoria": {
+    "en_memoria": [
+      "ECP_2017_2019",
+      "ECP_2019_2021",
+      "EPC_2023_2024"
+    ],
+    "en_memoria_complementaria": [
+      "EPC_2018_2019",
+      "EPC_2019_2022",
+      "EPC_2022_2023",
+      "EPC_2023_2024"
+    ],
+    "sondas_sin_respuesta": []
+  },
+  "w1_piso": {
+    "brazo_A": {
+      "total": {
+        "mediana": 4.7178,
+        "min": 0.8546,
+        "max": 14.1045,
+        "n": 12
+      },
+      "ECP": {
+        "mediana": 3.1852,
+        "min": 1.1276,
+        "max": 7.2103,
+        "n": 4
+      },
+      "EPC": {
+        "mediana": 5.3397,
+        "min": 0.8546,
+        "max": 14.1045,
+        "n": 8
+      }
+    },
+    "brazo_B": {
+      "total": {
+        "mediana": 5.1659,
+        "min": 0.7692,
+        "max": 15.6638,
+        "n": 12
+      },
+      "ECP": {
+        "mediana": 3.6015,
+        "min": 2.1029,
+        "max": 6.027,
+        "n": 4
+      },
+      "EPC": {
+        "mediana": 5.8984,
+        "min": 0.7692,
+        "max": 15.6638,
+        "n": 8
+      }
+    },
+    "oraculo": {
+      "total": {
+        "mediana": 0.9602,
+        "min": 0.25,
+        "max": 1.2874,
+        "n": 12
+      },
+      "ECP": {
+        "mediana": 1.1558,
+        "min": 0.4979,
+        "max": 1.24,
+        "n": 4
+      },
+      "EPC": {
+        "mediana": 0.7654,
+        "min": 0.25,
+        "max": 1.2874,
+        "n": 8
+      }
+    },
+    "sin_cambio": {
+      "total": {
+        "mediana": 5.7844,
+        "min": 1.6883,
+        "max": 8.1964,
+        "n": 12
+      },
+      "ECP": {
+        "mediana": 4.4644,
+        "min": 2.5856,
+        "max": 6.5696,
+        "n": 4
+      },
+      "EPC": {
+        "mediana": 5.9756,
+        "min": 1.6883,
+        "max": 8.1964,
+        "n": 8
+      }
+    },
+    "tendencia": {
+      "total": {
+        "mediana": 6.8229,
+        "min": 1.1828,
+        "max": 14.3529,
+        "n": 10
+      },
+      "ECP": {
+        "mediana": 5.8792,
+        "min": 1.1828,
+        "max": 7.7666,
+        "n": 3
+      },
+      "EPC": {
+        "mediana": 7.7846,
+        "min": 1.8401,
+        "max": 14.3529,
+        "n": 7
+      }
+    }
+  },
+  "brazo_B": {
+    "brazo": "brazo_B",
+    "predicciones": {
+      "P1": {
+        "umbral": "signo correcto en ≥ 8 de 11",
+        "valor": 8,
+        "se_cumple": true
+      },
+      "P2": {
+        "umbral": "mediana W1/piso < la de «sin cambio»",
+        "valor": [
+          5.1659,
+          5.7844
+        ],
+        "se_cumple": true
+      },
+      "P3": {
+        "umbral": "mejora sobre «tendencia» < 20 % (10 comunes)",
+        "valor": 0.291,
+        "se_cumple": false
+      },
+      "P4": {
+        "umbral": "error mediano de dispersión ≥ el de «sin cambio»",
+        "valor": [
+          0.0571,
+          0.0558
+        ],
+        "se_cumple": true
+      },
+      "P5": {
+        "umbral": "cobertura del nivel < 70 %",
+        "valor": 0.5,
+        "se_cumple": true
+      },
+      "P6": {
+        "umbral": "fuera de memoria, no le gana a «sin cambio»",
+        "valor": {
+          "n_fuera": 9,
+          "w1_piso_brazo": 6.027,
+          "w1_piso_sin_cambio": 5.9184,
+          "P6_se_cumple": true,
+          "c3": false
+        },
+        "se_cumple": true
+      }
+    },
+    "regla": {
+      "c1": false,
+      "c1_detalle": {
+        "mediana_brazo": 5.1659,
+        "mediana_sin_cambio": 5.7844,
+        "mediana_brazo_comunes": 4.8372,
+        "mediana_tendencia_comunes": 6.8229
+      },
+      "c2": false,
+      "c3": false,
+      "veredicto": "Falla 1: el LLM no aporta números. Se puede usar para redactar la descripción de un escenario, nunca para fijar sus cifras."
+    },
+    "secundarias": {
+      "cobertura_dispersion": 0.8333,
+      "cobertura_por_repeticion": 0.5333,
+      "proyectadas": 0,
+      "repeticiones_validas_min": 10
+    },
+    "sensibilidad_memoria_no_preregistrada": {
+      "n_fuera": 6,
+      "w1_piso_brazo": 6.1537,
+      "w1_piso_sin_cambio": 6.244,
+      "P6_se_cumple": false,
+      "c3": true
+    }
+  },
+  "brazo_A": {
+    "brazo": "brazo_A",
+    "predicciones": {
+      "P1": {
+        "umbral": "signo correcto en ≥ 8 de 11",
+        "valor": 7,
+        "se_cumple": false
+      },
+      "P2": {
+        "umbral": "mediana W1/piso < la de «sin cambio»",
+        "valor": [
+          4.7178,
+          5.7844
+        ],
+        "se_cumple": true
+      },
+      "P3": {
+        "umbral": "mejora sobre «tendencia» < 20 % (10 comunes)",
+        "valor": 0.399,
+        "se_cumple": false
+      },
+      "P4": {
+        "umbral": "error mediano de dispersión ≥ el de «sin cambio»",
+        "valor": [
+          0.0355,
+          0.0558
+        ],
+        "se_cumple": false
+      },
+      "P5": {
+        "umbral": "cobertura del nivel < 70 %",
+        "valor": 0.4167,
+        "se_cumple": true
+      },
+      "P6": {
+        "umbral": "fuera de memoria, no le gana a «sin cambio»",
+        "valor": {
+          "n_fuera": 9,
+          "w1_piso_brazo": 5.8268,
+          "w1_piso_sin_cambio": 5.9184,
+          "P6_se_cumple": false,
+          "c3": true
+        },
+        "se_cumple": false
+      }
+    },
+    "regla": {
+      "c1": false,
+      "c1_detalle": {
+        "mediana_brazo": 4.7178,
+        "mediana_sin_cambio": 5.7844,
+        "mediana_brazo_comunes": 4.1007,
+        "mediana_tendencia_comunes": 6.8229
+      },
+      "c2": false,
+      "c3": true,
+      "veredicto": "Falla 1: el LLM no aporta números. Se puede usar para redactar la descripción de un escenario, nunca para fijar sus cifras."
+    },
+    "secundarias": {
+      "cobertura_dispersion": 0.8333,
+      "cobertura_por_repeticion": 0.4917,
+      "proyectadas": 0,
+      "repeticiones_validas_min": 10
+    },
+    "sensibilidad_memoria_no_preregistrada": {
+      "n_fuera": 6,
+      "w1_piso_brazo": 6.7421,
+      "w1_piso_sin_cambio": 6.244,
+      "P6_se_cumple": true,
+      "c3": false
+    }
+  },
+  "control_permutacion_enmienda_5": {
+    "brazo_A": {
+      "n_permutaciones": 2000,
+      "mediana_w1_piso_brazo": 4.7178,
+      "p": 0.2455,
+      "fraccion_que_pasa_c1": 0.186,
+      "fraccion_que_se_adoptaria": 0.0,
+      "lectura": "La ventaja del brazo no se distingue de proponer las mismas cifras en otro periodo de la misma serie."
+    },
+    "brazo_B": {
+      "n_permutaciones": 2000,
+      "mediana_w1_piso_brazo": 5.1659,
+      "p": 0.3925,
+      "fraccion_que_pasa_c1": 0.2035,
+      "fraccion_que_se_adoptaria": 0.0005,
+      "lectura": "La ventaja del brazo no se distingue de proponer las mismas cifras en otro periodo de la misma serie."
+    }
+  }
+}

@@ -1,7 +1,7 @@
 # ESTADO DEL PROYECTO — punto de partida para una conversación nueva
 
 Proyecto: Bogotá Social Simulator
-Fecha de corte: **29 de septiembre de 2026**
+Fecha de corte: **29 de septiembre de 2026** (tarde: Experimento 9 cerrado)
 Para qué sirve: leer **este documento solo** basta para retomar. Los demás se
 leen cuando el trabajo los toque, no antes.
 
@@ -13,7 +13,7 @@ leen cuando el trabajo los toque, no antes.
 - El **modelo de opinión** falló contra lo pre-registrado, y ese resultado definió el producto: **escenarios**, no predicción. El motor de escenarios está construido (Fase 8).
 - La **capa visual** es el frente principal desde el 18/09 (decisión del jefe de Daniel). Hitos 1 y 2 completos; la página está en GitHub.
 - **A08 (escalar a 100.000 agentes) quedó sin argumento visual** el 25/09: más agentes dibujarían nítida la composición demográfica, y la composición no reproduce la geografía real de la opinión.
-- **La IA generativa como fuente de opinión se descartó** con datos (Experimento 8). El **Experimento 9** —la IA como proponente de escenarios, inspirado en MiroFish— está **pre-registrado (enmiendas 1 a 5), con dossiers y código probado sobre un modelo simulado**, y **sin ninguna llamada real**. Es lo siguiente.
+- **La IA generativa como fuente de opinión se descartó** con datos (Experimento 8). El **Experimento 9** —la IA como proponente de escenarios, inspirado en MiroFish— **se corrió y también falló** (29/09): el LLM no le gana a suponer que nada cambia, acierta donde recuerda, y el dossier no ayuda. **Los números de un escenario los sigue escribiendo una persona.**
 - Lo que sigue, en §6.
 
 ---
@@ -96,6 +96,18 @@ brazos (memoria propia / dossier), baselines «sin cambio», «tendencia» y or�
 **sonda de memoria**, seis predicciones y regla de decisión. **Enmienda 1 (28/09):**
 dossier desde las cronologías anuales de Wikipedia en español.
 
+### Experimento 9 — el LLM como proponente de escenarios: descartado
+`EXPERIMENT_9_RESULTS.md`. 12 transiciones, dos brazos, 262 llamadas, USD 0,18.
+**Falla el criterio 1 de la regla**: mediana de W1/piso 5,17 (brazo con dossier)
+contra 5,78 de «sin cambio»; hacía falta 4,63. Cobertura de sus intervalos del
+90 %: 50 %. Fuera de memoria no se separa de «sin cambio». El brazo **sin**
+dossier (4,72) queda por delante del brazo con dossier: leer el documento no es
+lo que ayuda. El control por permutación (enmienda 5, añadido antes de correr
+porque un proponente aleatorio le ganaba a «sin cambio» el 55 % de las veces)
+da *p* = 0,39: la ventaja no se distingue de proponer las mismas cifras en otro
+periodo. Permitido por la regla: usar el LLM para **redactar** la descripción de
+un escenario, nunca para fijar sus cifras.
+
 ### Material para la dirección
 Presentación de 7 diapositivas (artefacto de Claude, 25/09). **A Daniel no lo
 convenció: parecía que no hubiera avances.** El enfoque que sí sirve para la
@@ -113,6 +125,7 @@ límites después, como conocimiento ganado.
 2. **El hot-deck no predice individuos** (r = 0,003) y reproduce la distribución casi perfecto (W1 0,057, sd ratio 0,958). Es un emparejador de distribuciones.
 3. **La opinión sintética no tiene geografía propia** (el donante no trae localidad), y **la composición no reproduce la geografía real** (paso 0b).
 4. **Dos números exógenos por periodo** (nivel y dispersión, con ladeo categórico) llevan el ajuste al piso de ruido. Es la base del motor de escenarios y del Experimento 9.
+5. **Nadie sabe predecir esos dos números mejor que «sin cambio»**: ni el LLM (Exp. 9, 5,17 contra 5,78 veces el piso) ni la tendencia, que es **peor** que no suponer nada (6,82). Para un escenario escrito a mano, extrapolar el último cambio es peor supuesto por defecto que no suponer ninguno.
 
 ---
 
@@ -127,12 +140,13 @@ La capa de **Crecimiento** sí afirma geografía: son proyecciones oficiales.
 
 ## 6. Qué sigue
 
-**Frente activo: Experimento 9.** En orden:
-1. ~~Los **12 dossiers**~~ — hechos el 29/09 (enmiendas 2 y 3), huellas verificadas en `HUELLAS.txt`.
-2. ~~`src/experiments/experimento9.py` con pruebas sobre un modelo simulado~~ — hecho el 29/09; 42 pruebas sin red (`tests/test_experimento9.py`). **Enmienda 4** (§3.7 del pre-registro): cobertura, sonda de memoria, W1 exacto y piso con n = 1000. Control de cordura sobre los datos reales: el oráculo da 0,96× el piso (FORZAMIENTO_CATEGORICO: 0,97×); «sin cambio» 5,8×, «tendencia» 6,8×.
-3. ~~Decisión sobre el control nulo~~ — **enmienda 5** (29/09, §3.8): un proponente aleatorio le ganaba a «sin cambio» en el 55 % de las semillas y pasaba la regla en el 7 %. Se añade un control por **permutación** de las propias propuestas del LLM dentro de cada serie; *p* > 0,05 se lee como «no se distingue de proponer lo mismo en otro periodo». No cambia la regla. 46 pruebas.
-4. **Sonda de memoria**, luego los dos brazos: `python src/experiments/experimento9.py sonda --real`, `brazos --real`, `evaluar --real`. ~260 llamadas, clave de OpenRouter de Daniel; el script estima el costo y pide confirmación.
-5. `EXPERIMENT_9_RESULTS.md`, contra el pre-registro.
+**Frente activo: ninguno elegido.** El Experimento 9 se cerró el 29/09
+(`EXPERIMENT_9_RESULTS.md`): dossiers, código con 52 pruebas sin red, enmiendas
+4 y 5, sonda, brazos y evaluación. Lo que queda de él:
+- Las respuestas crudas y su costo están en `data/processed/exp9/cache.json`
+  (no se sube; se regenera solo con llamadas). El veredicto sí se sube.
+- La clave de OpenRouter usada es de la cuenta del jefe de Daniel: el costo se
+  mide desde el script (DI-E9), sin acceso a la página de actividad.
 
 **Otros frentes, sin elegir:**
 
