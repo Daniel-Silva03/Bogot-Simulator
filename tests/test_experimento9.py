@@ -553,8 +553,103 @@ def test_los_brazos_reales_exigen_la_sonda_antes():
 
 
 def test_el_costo_se_estima():
-    tokens, usd = e9.estimar_costo([("s" * 350, "u" * 3150, 350)] * 240)
-    assert tokens == 240 * 1350 and 0 < usd < 1
+    tokens, usd, base = e9.estimar_costo([("s" * 350, "u" * 3150, 350)] * 240)
+    assert tokens == 240 * 1350 and 0 < usd < 1 and "Exp. 8" in base
+
+
+def test_con_costo_medido_la_estimacion_usa_lo_medido():
+    medido = {"llamadas": 2, "llamadas_con_costo": 2, "costo_usd": 0.004,
+              "prompt_tokens": 1000, "completion_tokens": 3000}     # 1e-6 USD por token
+    tokens, usd, base = e9.estimar_costo([("s" * 350, "u" * 3150, 350)] * 10, medido)
+    # 1000 de entrada estimados + 1500 de salida medidos (razonamiento incluido)
+    assert tokens == 10 * 2500 and abs(usd - 0.025) < 1e-12 and "medido" in base
+
+
+# --- DI-E9 y DI-E10: quién respondió, cuánto costó, y el piloto --------------
+
+def _con_meta(llamar, modelo_servido="xiaomi/mimo-v2.6-pro", costo=0.001):
+    def envuelto(modelo, sistema, usuario, temp):
+        return {"texto": llamar(modelo, sistema, usuario, temp), "modelo_servido": modelo_servido,
+                "proveedor": "Xiaomi", "uso": {"prompt_tokens": 800, "completion_tokens": 1200,
+                                               "reasoning_tokens": 900, "costo_usd": costo}}
+    return envuelto
+
+
+def test_la_cache_guarda_el_modelo_que_respondio_y_el_costo():
+    cache = e9.Cache(Path(tempfile.mkdtemp()) / "c.json")
+    r = e9.recolectar_brazo(e9.TRANSICIONES[0], "A", ESTADOS, _con_meta(modelo_que(ORACULO)), cache, "m")
+    assert len(r["propuestas"]) == 10
+    g = e9.gasto_registrado(e9.Cache(cache.ruta))               # releído del disco
+    assert g["llamadas"] == 10 and abs(g["costo_usd"] - 0.01) < 1e-12
+    assert g["reasoning_tokens"] == 9000 and g["modelos_servidos"] == {"xiaomi/mimo-v2.6-pro": 10}
+
+
+def test_una_cache_vieja_sin_metadatos_sigue_sirviendo():
+    cache = e9.Cache(Path(tempfile.mkdtemp()) / "c.json")
+    e9.recolectar_brazo(e9.TRANSICIONES[0], "A", ESTADOS, modelo_que(ORACULO), cache, "m")
+    g = e9.gasto_registrado(cache)
+    assert g["llamadas"] == 0 and g["costo_usd"] == 0.0
+
+
+def test_el_limite_corta_y_no_se_cuenta_como_fallo():
+    cache = e9.Cache(Path(tempfile.mkdtemp()) / "c.json")
+    llamar = e9.con_limite(modelo_que(ORACULO), 3)
+    try:
+        e9.recolectar_brazo(e9.TRANSICIONES[0], "A", ESTADOS, llamar, cache, "m")
+    except e9.LimiteDeLlamadas:
+        assert len(cache.datos) == 3
+        return
+    raise AssertionError("el límite se tragó como un fallo más")
+
+
+def test_el_piloto_se_reutiliza_y_evaluar_rechaza_brazos_incompletos():
+    tmp = Path(tempfile.mkdtemp())
+    try:
+        e9._escribir(tmp / "sonda.json", {})
+        llamadas = []
+        m = _con_meta(modelo_que(ORACULO, llamadas=llamadas))
+        cache = e9.Cache(tmp / "cache.json")
+        e9.correr_brazos(ESTADOS, m, cache, e9.MODELO, tmp, entrada=lambda _: "si", maximo=2)
+        assert len(llamadas) == 2
+        try:
+            e9.correr_evaluacion(ESTADOS, tmp, {})
+            raise AssertionError("evaluó brazos incompletos")
+        except e9.Experimento9Error as err:
+            assert "incompleto" in str(err)
+        e9.correr_brazos(ESTADOS, m, e9.Cache(tmp / "cache.json"), e9.MODELO, tmp,
+                         entrada=lambda _: "si")
+        assert len(llamadas) == 240                   # las 2 del piloto no se repiten
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_el_cliente_real_pide_el_costo_y_lee_el_modelo_servido():
+    import os
+    from src.experiments import donante_llm
+    enviado = {}
+
+    def falso_post(url, cuerpo, cabeceras, timeout=90):
+        enviado.update(url=url, cuerpo=cuerpo, cabeceras=cabeceras)
+        return {"id": "gen-1", "model": "xiaomi/mimo-v2.6-pro", "provider": "Xiaomi",
+                "choices": [{"message": {"content": '{"media": 2.4}'}}],
+                "usage": {"prompt_tokens": 120, "completion_tokens": 800, "cost": 0.0021,
+                          "completion_tokens_details": {"reasoning_tokens": 780}}}
+    viejo_post, vieja_clave = donante_llm._post, os.environ.get("OPENROUTER_API_KEY")
+    donante_llm._post = falso_post
+    os.environ["OPENROUTER_API_KEY"] = "clave-de-prueba"
+    try:
+        r = e9.cliente_real()(e9.MODELO, "s", "u", 0.0)
+    finally:
+        donante_llm._post = viejo_post
+        if vieja_clave is None:
+            os.environ.pop("OPENROUTER_API_KEY")
+        else:
+            os.environ["OPENROUTER_API_KEY"] = vieja_clave
+    assert enviado["cuerpo"]["usage"] == {"include": True}
+    assert enviado["cuerpo"]["model"] == e9.MODELO and enviado["url"].startswith("https://openrouter.ai")
+    assert r["texto"] == '{"media": 2.4}' and r["modelo_servido"] == "xiaomi/mimo-v2.6-pro"
+    assert r["uso"] == {"prompt_tokens": 120, "completion_tokens": 800,
+                        "reasoning_tokens": 780, "costo_usd": 0.0021}
 
 
 def test_todo_simulado_sobre_los_datos_reales():

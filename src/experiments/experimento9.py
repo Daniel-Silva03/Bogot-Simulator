@@ -78,6 +78,22 @@ DI-E8. **La estimación de costo es de orden de magnitud.** Tokens ≈
     caracteres / 3,5 y un precio combinado derivado del Experimento 8
     (USD 0,48 por 1.269 llamadas de ~550 tokens). El precio vigente se
     confirma en OpenRouter; la cifra sirve para decidir, no para facturar.
+    **Corrección (29/09):** la sonda mostró llamadas de ~20 s, señal de que el
+    modelo gasta tokens de razonamiento que esta tarifa no ve. Desde DI-E9,
+    en cuanto hay llamadas con costo medido, la estimación usa ese costo.
+
+DI-E9. **Cada respuesta real guarda quién la atendió y cuánto costó.**
+    OpenRouter devuelve el modelo que respondió, el proveedor, los tokens
+    (incluidos los de razonamiento) y el costo en USD si se le pide
+    `usage.include`. Se guardan en la caché junto al texto: el informe puede
+    decir qué modelo contestó de verdad, y el costo se mide en vez de
+    suponerse. Las 20 llamadas de la sonda del 29/09 se hicieron antes de
+    este cambio y no tienen ese registro; solo consta el modelo pedido.
+
+DI-E10. **`--max-llamadas N` corta después de N llamadas nuevas.** Sirve para
+    un piloto que mide el costo real antes de comprometer las 240. Lo que el
+    piloto responde queda en la caché y la corrida completa lo reutiliza: no
+    se paga dos veces. `evaluar` se niega a correr con brazos incompletos.
 """
 
 from __future__ import annotations
@@ -128,6 +144,10 @@ Llamar = Callable[[str, str, str, float], str]
 
 class Experimento9Error(RuntimeError):
     """Algo impide correr el experimento como está pre-registrado."""
+
+
+class LimiteDeLlamadas(Experimento9Error):
+    """Se alcanzó el tope de `--max-llamadas` (DI-E10). No es un fallo de la llamada."""
 
 
 class DossierAlterado(Experimento9Error):
@@ -444,13 +464,34 @@ class Cache:
 
 def pedir(llamar: Llamar, cache: Cache, modelo: str, temp: float,
           sistema: str, usuario: str, rep: int) -> tuple[str, bool]:
-    """(texto, si fue una llamada nueva). Una excepción de red se propaga sin cachear."""
+    """(texto, si fue una llamada nueva). Una excepción de red se propaga sin cachear.
+
+    `llamar` puede devolver el texto o un dict con "texto" y metadatos
+    (modelo servido, uso), que se guardan junto a él (DI-E9).
+    """
     k = Cache.clave(modelo, temp, sistema, usuario, rep)
     if k in cache:
         return cache.get(k), False
-    texto = llamar(modelo, sistema, usuario, temp) or ""
-    cache.put(k, texto, modelo=modelo, temperatura=temp, rep=rep)
+    r = llamar(modelo, sistema, usuario, temp)
+    meta = {}
+    if isinstance(r, dict):
+        meta = {c: v for c, v in r.items() if c != "texto"}
+        r = r.get("texto")
+    texto = r or ""
+    cache.put(k, texto, modelo=modelo, temperatura=temp, rep=rep, **meta)
     return texto, True
+
+
+def con_limite(llamar: Llamar, maximo: int) -> Llamar:
+    """DI-E10: el mismo cliente, pero se detiene después de `maximo` llamadas."""
+    hechas = {"n": 0}
+
+    def limitado(modelo, sistema, usuario, temp):
+        if hechas["n"] >= maximo:
+            raise LimiteDeLlamadas(f"Se alcanzó --max-llamadas {maximo}.")
+        hechas["n"] += 1
+        return llamar(modelo, sistema, usuario, temp)
+    return limitado
 
 
 def recolectar_brazo(t: Transicion, brazo: str, estados: dict, llamar: Llamar,
@@ -464,7 +505,7 @@ def recolectar_brazo(t: Transicion, brazo: str, estados: dict, llamar: Llamar,
             break
         try:
             texto, nueva = pedir(llamar, cache, modelo, TEMPERATURA, sistema, usuario, rep)
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, LimiteDeLlamadas):
             raise
         except Exception as e:                           # noqa: BLE001
             fallos.append({"rep": rep, "motivo": f"{type(e).__name__}: {e}"})
@@ -487,7 +528,7 @@ def sondear(t: Transicion, estados: dict, llamar: Llamar, cache: Cache,
         for rep in range(INTENTOS_SONDA):
             try:
                 texto, _ = pedir(llamar, cache, modelo, TEMPERATURA_SONDA, sistema, usuario, rep)
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, LimiteDeLlamadas):
                 raise
             except Exception:                            # noqa: BLE001
                 continue
@@ -832,23 +873,72 @@ def cliente_real() -> Llamar:
     clave = (os.environ.get("OPENROUTER_API_KEY") or "").strip()
     if not clave:
         raise Experimento9Error('Falta OPENROUTER_API_KEY.  PowerShell:  $env:OPENROUTER_API_KEY = "..."')
-    from src.experiments.donante_llm import llamar_openrouter
-    return llamar_openrouter
+    from src.experiments import donante_llm
+    base = os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1").strip().rstrip("/")
+
+    def llamar(modelo, sistema, usuario, temp):
+        r = donante_llm._post(
+            f"{base}/chat/completions",
+            {"model": modelo, "temperature": temp,
+             "messages": [{"role": "system", "content": sistema},
+                          {"role": "user", "content": usuario}],
+             "usage": {"include": True}},                  # DI-E9: costo por llamada
+            {"authorization": f"Bearer {clave}"})
+        uso = r.get("usage") or {}
+        detalle = uso.get("completion_tokens_details") or {}
+        return {"texto": r["choices"][0]["message"].get("content") or "",
+                "modelo_servido": r.get("model"), "proveedor": r.get("provider"),
+                "id_respuesta": r.get("id"),
+                "uso": {"prompt_tokens": uso.get("prompt_tokens"),
+                        "completion_tokens": uso.get("completion_tokens"),
+                        "reasoning_tokens": detalle.get("reasoning_tokens"),
+                        "costo_usd": uso.get("cost")}}
+    return llamar
 
 
-def estimar_costo(pendientes: list[tuple[str, str, int]]) -> tuple[int, float]:
-    """(tokens, USD) de las llamadas pendientes: (sistema, usuario, tokens_salida). DI-E8."""
+def gasto_registrado(cache: Cache, temperatura: Optional[float] = None) -> dict:
+    """Lo que las llamadas con uso registrado costaron de verdad (DI-E9)."""
+    from collections import Counter
+    e = [v for v in cache.datos.values() if isinstance(v.get("uso"), dict)
+         and (temperatura is None or v.get("temperatura") == temperatura)]
+    con_costo = [v for v in e if v["uso"].get("costo_usd") is not None]
+
+    def suma(k):
+        return int(sum((v["uso"].get(k) or 0) for v in e))
+    return {"llamadas": len(e), "llamadas_con_costo": len(con_costo),
+            "costo_usd": float(sum(v["uso"]["costo_usd"] for v in con_costo)),
+            "prompt_tokens": suma("prompt_tokens"), "completion_tokens": suma("completion_tokens"),
+            "reasoning_tokens": suma("reasoning_tokens"),
+            "modelos_servidos": dict(Counter(v.get("modelo_servido") for v in e))}
+
+
+def estimar_costo(pendientes: list[tuple[str, str, int]],
+                  medido: Optional[dict] = None) -> tuple[int, float, str]:
+    """(tokens, USD, base) de las llamadas pendientes: (sistema, usuario, tokens_salida).
+
+    Con llamadas de costo medido, usa su precio por token y su salida media,
+    razonamiento incluido (DI-E9). Si no, la tarifa del Experimento 8 (DI-E8).
+    """
+    if medido and medido["llamadas_con_costo"] and (medido["prompt_tokens"] + medido["completion_tokens"]):
+        usd_token = medido["costo_usd"] / (medido["prompt_tokens"] + medido["completion_tokens"])
+        salida = medido["completion_tokens"] / medido["llamadas"]
+        tokens = sum(int((len(s) + len(u)) / 3.5 + salida) for s, u, _ in pendientes)
+        return tokens, tokens * usd_token, f"medido en {medido['llamadas_con_costo']} llamadas reales"
     tokens = sum(int((len(s) + len(u)) / 3.5) + salida for s, u, salida in pendientes)
-    return tokens, tokens * USD_POR_MILLON_TOKENS / 1e6
+    return (tokens, tokens * USD_POR_MILLON_TOKENS / 1e6,
+            "tarifa del Exp. 8, sin razonamiento: puede quedarse corta")
 
 
-def confirmar_gasto(pendientes: list[tuple[str, str, int]], entrada=input) -> bool:
+def confirmar_gasto(pendientes: list[tuple[str, str, int]], entrada=input,
+                    medido: Optional[dict] = None, maximo: Optional[int] = None) -> bool:
     if not pendientes:
         return True
-    tokens, usd = estimar_costo(pendientes)
+    tokens, usd, base = estimar_costo(pendientes, medido)
     print(f"\nLlamadas reales pendientes: {len(pendientes)} (sin contar reintentos)\n"
-          f"Tokens estimados: {tokens:,}  ·  costo estimado: USD {usd:.2f} "
-          f"(orden de magnitud; precio del Exp. 8, confirmar en OpenRouter)")
+          f"Tokens estimados: {tokens:,}  ·  costo estimado: USD {usd:.2f} ({base})")
+    if maximo is not None:
+        n = min(maximo, len(pendientes))
+        print(f"Con --max-llamadas {maximo} se harán solo {n}: unos USD {usd * n / len(pendientes):.3f}.")
     try:
         return entrada("¿Gastar estas llamadas? Escribe «si» para seguir: ").strip().lower() in ("si", "sí")
     except EOFError:
@@ -879,7 +969,7 @@ def correr_sonda(estados, llamar, cache, modelo, salida: Path, entrada=input) ->
         mensajes = [mensaje_sonda(t)] + ([mensaje_sonda_complementaria(t)] if t.serie == "EPC" else [])
         pend += [(s, u, TOKENS_SALIDA_SONDA) for s, u in mensajes
                  if Cache.clave(modelo, TEMPERATURA_SONDA, s, u, 0) not in cache]
-    if modelo != MODELO_SIMULADO and not confirmar_gasto(pend, entrada):
+    if modelo != MODELO_SIMULADO and not confirmar_gasto(pend, entrada, gasto_registrado(cache)):
         print("Cancelado: no se hizo ninguna llamada.")
         return None
     sonda = {t.clave: sondear(t, estados, llamar, cache, modelo) for t in TRANSICIONES}
@@ -891,7 +981,7 @@ def correr_sonda(estados, llamar, cache, modelo, salida: Path, entrada=input) ->
 
 
 def correr_brazos(estados, llamar, cache, modelo, salida: Path, brazos=("A", "B"),
-                  entrada=input) -> Optional[dict]:
+                  entrada=input, maximo: Optional[int] = None) -> Optional[dict]:
     if modelo != MODELO_SIMULADO:
         _leer(salida / "sonda.json")         # §3.6: la sonda va antes del experimento
     hechos = {t.clave: hechos_del_dossier(t.clave) for t in TRANSICIONES} if "B" in brazos else {}
@@ -901,15 +991,31 @@ def correr_brazos(estados, llamar, cache, modelo, salida: Path, brazos=("A", "B"
             s, u = mensaje_brazo(t, estados, b, hechos.get(t.clave))
             pend += [(s, u, TOKENS_SALIDA_BRAZO) for rep in range(REPETICIONES)
                      if Cache.clave(modelo, TEMPERATURA, s, u, rep) not in cache]
-    if modelo != MODELO_SIMULADO and not confirmar_gasto(pend, entrada):
+    if modelo != MODELO_SIMULADO and not confirmar_gasto(
+            pend, entrada, gasto_registrado(cache, TEMPERATURA), maximo):
         print("Cancelado: no se hizo ninguna llamada.")
         return None
+    if maximo is not None:
+        llamar = con_limite(llamar, maximo)
     previo = json.loads((salida / "brazos.json").read_text(encoding="utf-8")) \
         if (salida / "brazos.json").exists() else {}
     for b in brazos:
         previo[b] = {}
         for t in TRANSICIONES:
-            r = recolectar_brazo(t, b, estados, llamar, cache, modelo, hechos.get(t.clave))
+            try:
+                r = recolectar_brazo(t, b, estados, llamar, cache, modelo, hechos.get(t.clave))
+            except LimiteDeLlamadas:
+                # DI-E10: lo respondido ya está en la caché; los brazos quedan
+                # incompletos a propósito y `evaluar` no los acepta así.
+                _escribir(salida / "brazos.json", previo)
+                g = gasto_registrado(cache, TEMPERATURA)
+                print(f"\nPiloto terminado: {g['llamadas']} llamadas de brazo con uso registrado, "
+                      f"USD {g['costo_usd']:.4f} medidos; modelos que respondieron: "
+                      f"{g['modelos_servidos']}")
+                _, usd, base = estimar_costo(pend, g)
+                print(f"Costo estimado de la corrida completa ({len(pend)} llamadas): "
+                      f"USD {usd:.2f} ({base}).")
+                return previo
             previo[b][t.clave] = r
             _escribir(salida / "brazos.json", previo)
             print(f"  brazo {b} {t.clave:15s} válidas {len(r['propuestas'])}  "
@@ -920,6 +1026,12 @@ def correr_brazos(estados, llamar, cache, modelo, salida: Path, brazos=("A", "B"
 def correr_evaluacion(estados, salida: Path, meta: dict) -> dict:
     sonda = _leer(salida / "sonda.json")
     crudo = _leer(salida / "brazos.json")
+    for b, por_t in crudo.items():
+        faltan = [t.clave for t in TRANSICIONES if t.clave not in por_t]
+        if faltan:
+            raise Experimento9Error(
+                f"El brazo {b} está incompleto (faltan {len(faltan)} transiciones, p. ej. "
+                "por un piloto con --max-llamadas). Corre `brazos` completo antes de evaluar.")
     brazos = {b: {c: agregar(r["propuestas"]) for c, r in por_t.items()}
               for b, por_t in crudo.items()}
     pisos = pisos_de(estados)
@@ -940,6 +1052,8 @@ def main(argv=None, entrada=input) -> int:
                     help="llamar a OpenRouter de verdad (pide confirmar el costo)")
     ap.add_argument("--brazo", choices=("A", "B"), help="solo un brazo")
     ap.add_argument("--salida", type=Path, default=None)
+    ap.add_argument("--max-llamadas", type=int, default=None,
+                    help="piloto: detenerse después de N llamadas nuevas (DI-E10)")
     args = ap.parse_args(argv)
     if args.real and args.paso == "todo":
         print("Con --real los pasos se corren uno a uno: sonda, brazos, evaluar.")
@@ -957,8 +1071,15 @@ def main(argv=None, entrada=input) -> int:
                 return 1
         if args.paso in ("brazos", "todo"):
             brazos = (args.brazo,) if args.brazo else ("A", "B")
-            if correr_brazos(estados, llamar, cache, modelo, salida, brazos, entrada) is None:
+            if correr_brazos(estados, llamar, cache, modelo, salida, brazos, entrada,
+                             args.max_llamadas) is None:
                 return 1
+        if args.real and args.paso in ("sonda", "brazos"):
+            g = gasto_registrado(cache)
+            print(f"\nGasto registrado en esta caché: USD {g['costo_usd']:.4f} en "
+                  f"{g['llamadas_con_costo']} llamadas con costo medido "
+                  f"({len(cache.datos) - g['llamadas']} sin registro, anteriores a DI-E9). "
+                  f"Modelos que respondieron: {g['modelos_servidos'] or 'sin registro'}")
         if args.paso in ("evaluar", "todo"):
             v = correr_evaluacion(estados, salida, {"modelo": modelo, "simulado": not args.real})
             for b in ("brazo_B", "brazo_A"):
