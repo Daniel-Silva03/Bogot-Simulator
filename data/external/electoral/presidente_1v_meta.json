@@ -1,0 +1,216 @@
+{
+  "generado": "2026-09-29",
+  "regimen": "D16 (DATA_INVENTORY §14)",
+  "fuentes": {
+    "2014": {
+      "archivo": "MMV_PRESIDENTE_2014_1ERA_VUELTA.xlsx",
+      "hoja": "PRESIDENTE_1",
+      "sha256": "e0610d983a9116770c8ca52c7e06d836ab2c9bd6a0ae6d192ba56cd8a3b3610c"
+    },
+    "2018": {
+      "archivo": "MMV_NACIONAL_PRESIDENTE_2018_1v.xlsx",
+      "hoja": "MMV ESCRUTINIO FINAL",
+      "sha256": "f5ecc623cf6f978800c207c6e76227f431bdbe968fb9f9282b4784f634b94c99"
+    },
+    "2022": {
+      "archivo": "MMV_NACIONAL_PRESIDENTE_2022_1v.csv",
+      "hoja": null,
+      "sha256": "976fa0dac2728816f4e4ab43fd27a2d64e15173e70bdf96cf77d916dc2bf823e"
+    }
+  },
+  "verificacion": {
+    "2014": {
+      "coincide": null,
+      "nota": "sin archivo municipal para contrastar"
+    },
+    "2018": {
+      "fuente": "2018_presidencia_primera_vuelta.dta",
+      "coincide": true,
+      "diferencias_conocidas": [
+        {
+          "clave": "duque",
+          "mesa_a_mesa": 989771,
+          "municipal": 989744,
+          "diferencia": 27,
+          "esperada": 27
+        },
+        {
+          "clave": "petro",
+          "mesa_a_mesa": 1099928,
+          "municipal": 1099955,
+          "diferencia": -27,
+          "esperada": -27
+        }
+      ],
+      "por_opcion": [
+        {
+          "clave": "blanco",
+          "mesa_a_mesa": 55867,
+          "municipal": 55867,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "de_la_calle",
+          "mesa_a_mesa": 93401,
+          "municipal": 93401,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "duque",
+          "mesa_a_mesa": 989771,
+          "municipal": 989744,
+          "diferencia": 27,
+          "esperada": 27
+        },
+        {
+          "clave": "fajardo",
+          "mesa_a_mesa": 1244477,
+          "municipal": 1244477,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "morales",
+          "mesa_a_mesa": 5492,
+          "municipal": 5492,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "no_marcado",
+          "mesa_a_mesa": 1885,
+          "municipal": 1885,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "nulo",
+          "mesa_a_mesa": 27858,
+          "municipal": 27858,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "petro",
+          "mesa_a_mesa": 1099928,
+          "municipal": 1099955,
+          "diferencia": -27,
+          "esperada": -27
+        },
+        {
+          "clave": "promotores_blanco",
+          "mesa_a_mesa": 3901,
+          "municipal": 3901,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "trujillo",
+          "mesa_a_mesa": 10696,
+          "municipal": 10696,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "vargas_lleras",
+          "mesa_a_mesa": 172684,
+          "municipal": 172684,
+          "diferencia": 0,
+          "esperada": 0
+        }
+      ]
+    },
+    "2022": {
+      "fuente": "2022_presidencia_primera_vuelta.dta",
+      "coincide": true,
+      "diferencias_conocidas": [],
+      "por_opcion": [
+        {
+          "clave": "betancourt",
+          "mesa_a_mesa": 2374,
+          "municipal": 2374,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "blanco",
+          "mesa_a_mesa": 73445,
+          "municipal": 73445,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "fajardo",
+          "mesa_a_mesa": 299050,
+          "municipal": 299050,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "gomez",
+          "mesa_a_mesa": 9835,
+          "municipal": 9835,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "gutierrez",
+          "mesa_a_mesa": 725861,
+          "municipal": 725861,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "hernandez",
+          "mesa_a_mesa": 833770,
+          "municipal": 833770,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "no_marcado",
+          "mesa_a_mesa": 1410,
+          "municipal": 1410,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "nulo",
+          "mesa_a_mesa": 34014,
+          "municipal": 34014,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "perez",
+          "mesa_a_mesa": 2340,
+          "municipal": 2340,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "petro",
+          "mesa_a_mesa": 1772001,
+          "municipal": 1772001,
+          "diferencia": 0,
+          "esperada": 0
+        },
+        {
+          "clave": "rodriguez",
+          "mesa_a_mesa": 46913,
+          "municipal": 46913,
+          "diferencia": 0,
+          "esperada": 0
+        }
+      ]
+    }
+  },
+  "notas": [
+    "zona = localidad (DATA_INVENTORY §14.3); 90 = puesto censo Corferias, 98 = cárceles",
+    "la zona es dónde se está inscrito, no dónde se vive",
+    "proporciones de candidato: sobre votos_candidatos (DI-EL5)",
+    "promotores_blanco (2018) va aparte del voto en blanco (DI-EL6)"
+  ]
+}

@@ -668,7 +668,7 @@ los estudios de §12, y no deben mezclarse). En el PC del CNC no están.
 | `2022_presidencia_{primera,segunda}_vuelta.dta` | municipio | presidente 2022 | 13.068 / 5.940 |
 | `2018_camara.dta.csv` | municipio | Cámara 2018 por candidato, con curules y censo | 146.084 |
 | `2018 Camara.xlsx`, `2018 Senado.xlsx`, `2018 Consulta.xlsx` | municipio | votos por partido y censo, con color de partido | — |
-| `Datos_Camara.xlsx`, `Datos_Senado.xlsx` | municipio | votos por partido; hoja de totales (votantes, nulos, no marcados, blancos) | 76.095 / 29.701 |
+| `Datos_Camara.xlsx`, `Datos_Senado.xlsx` | municipio | **2022** (no 2018): votos por partido; hoja de totales (votantes, nulos, no marcados, blancos) | 76.095 / 29.701 |
 | `Data_Total_Coaliciones.xlsx` | municipio | 2022, votos de tres coaliciones (una hoja por coalición) | 5.941 × 3 |
 | `indice por municipio.xlsx` | municipio | **índice de ideología 0 (derecha) – 6 (izquierda)**, producto del CNC. Bogotá = 4 | 1.123 |
 
@@ -682,9 +682,14 @@ Los cinco archivos por mesa traen Bogotá (código de departamento de la Registr
 
 | Archivo | Puestos | Mesas | Votos |
 |---|---|---|---|
-| Presidente 2022, 1.ª vuelta | 1.296 | 14.937 | 3.801.013 |
+| Presidente 2022, 1.ª vuelta | **901** | **14.935** | 3.801.013 |
 | Senado 2018 | 642 | 15.462 | 2.809.019 |
 | DIVIPOL 2018 | 642 | 14.420 | potencial 5.702.805 |
+
+*Corrección (29/09):* la primera versión de esta tabla decía 1.296 puestos y 14.937 mesas
+en 2022. Era un artefacto de lectura: tres puestos de Kennedy tienen código alfanumérico
+(«A1», «A2», «A3») y pandas, al inferir tipos, leyó la columna mezclando números y texto
+y contó duplicados. Leída como texto: 901 puestos y 14.935 mesas.
 
 ### 14.3 Zona = localidad: verificado (29/09/2026)
 
@@ -714,8 +719,8 @@ DANE.** Dos pruebas independientes:
   el centro tiene más votantes que adultos y la periferia menos. Lectura probable:
   gente que se mudó a la periferia sin cambiar la inscripción. El mapa electoral queda
   **suavizado hacia el centro**, y eso hay que decirlo al lado de cualquier mapa.
-- **2022 tiene más puestos que 2018 en todas las zonas** (+25 % a +80 %; 1.296 contra
-  642). El aumento parejo apunta a una ampliación real de la Registraduría, no a una
+- **2022 tiene más puestos que 2018 en todas las zonas** (+25 % a +80 %; 901 contra
+  642 — *corregido el 29/09: decía 1.296, ver §14.2*). El aumento parejo apunta a una ampliación real de la Registraduría, no a una
   recodificación. **Comparar por zona entre años es seguro; por puesto, no.**
 
 **Sin verificar todavía:** el archivo de 2014 (`MMV_PRESIDENTE_2014_1ERA_VUELTA.xlsx`)
@@ -723,6 +728,28 @@ usa otros nombres de columna (`COD_ZZ`); la correspondencia se probó en 2018 y 
 
 Con esto, esta es la **primera fuente del proyecto con geografía real dentro de
 Bogotá**, en tres elecciones, que es el vacío que dejó `A08_PASO0B_RESULTS.md`.
+
+### 14.4 La tabla por localidad (29/09/2026)
+
+`src/population/electoral.py` (13 pruebas en `tests/test_electoral.py`) lee los tres
+archivos de primera vuelta presidencial y escribe en `data/external/electoral/`, que
+**sí se sube** (agregados de resultados públicos):
+
+| Archivo | Qué es |
+|---|---|
+| `presidente_1v_localidad.csv` | votos por año × zona × opción, con `cod_loc`, `localidad`, `clave` estable entre años (`petro` en 2018 y 2022) y `tipo` (candidato, blanco, nulo, no_marcado, promotores_blanco) |
+| `presidente_1v_zonas.csv` | por año × zona: puestos, mesas, `votos_total` y `votos_candidatos` |
+| `presidente_1v_meta.json` | huella sha256 de cada fuente, hoja usada, verificación y notas |
+
+| Año | Puestos | Mesas | Votos | Contra el archivo municipal |
+|---|---|---|---|---|
+| 2014 | 490 | 14.232 | 2.510.384 | sin archivo para contrastar |
+| 2018 | 642 | 14.420 | 3.705.960 | coincide, salvo 27 votos conocidos (DI-EL3) |
+| 2022 | 901 | 14.935 | 3.801.013 | coincide exacto |
+
+Para calcular proporciones de candidato, usar `votos_candidatos` como base (DI-EL5).
+Senado y Cámara 2018 no entran todavía (DI-EL1): la Cámara de Bogotá trae 723 filas
+duplicadas exactas sin explicar.
 
 ---
 

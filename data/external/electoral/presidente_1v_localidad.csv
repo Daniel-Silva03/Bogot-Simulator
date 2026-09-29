@@ -1,0 +1,658 @@
+anio,zona,cod_loc,localidad,clave,opcion,tipo,votos
+2014,1,1,Usaquén,blanco,Voto en blanco,blanco,12293
+2014,1,1,Usaquén,clara_lopez,Clara López,candidato,24596
+2014,1,1,Usaquén,no_marcado,Tarjetas no marcadas,no_marcado,63
+2014,1,1,Usaquén,nulo,Votos nulos,nulo,1393
+2014,1,1,Usaquén,penalosa,Enrique Peñalosa,candidato,51739
+2014,1,1,Usaquén,ramirez,Martha Lucía Ramírez,candidato,23024
+2014,1,1,Usaquén,santos,Juan Manuel Santos,candidato,39151
+2014,1,1,Usaquén,zuluaga,Óscar Iván Zuluaga,candidato,52074
+2014,2,2,Chapinero,blanco,Voto en blanco,blanco,4475
+2014,2,2,Chapinero,clara_lopez,Clara López,candidato,10034
+2014,2,2,Chapinero,no_marcado,Tarjetas no marcadas,no_marcado,29
+2014,2,2,Chapinero,nulo,Votos nulos,nulo,430
+2014,2,2,Chapinero,penalosa,Enrique Peñalosa,candidato,17992
+2014,2,2,Chapinero,ramirez,Martha Lucía Ramírez,candidato,7251
+2014,2,2,Chapinero,santos,Juan Manuel Santos,candidato,17586
+2014,2,2,Chapinero,zuluaga,Óscar Iván Zuluaga,candidato,19291
+2014,3,3,Santa Fe,blanco,Voto en blanco,blanco,3062
+2014,3,3,Santa Fe,clara_lopez,Clara López,candidato,8477
+2014,3,3,Santa Fe,no_marcado,Tarjetas no marcadas,no_marcado,44
+2014,3,3,Santa Fe,nulo,Votos nulos,nulo,992
+2014,3,3,Santa Fe,penalosa,Enrique Peñalosa,candidato,4188
+2014,3,3,Santa Fe,ramirez,Martha Lucía Ramírez,candidato,4909
+2014,3,3,Santa Fe,santos,Juan Manuel Santos,candidato,8500
+2014,3,3,Santa Fe,zuluaga,Óscar Iván Zuluaga,candidato,7167
+2014,4,4,San Cristóbal,blanco,Voto en blanco,blanco,10827
+2014,4,4,San Cristóbal,clara_lopez,Clara López,candidato,27836
+2014,4,4,San Cristóbal,no_marcado,Tarjetas no marcadas,no_marcado,184
+2014,4,4,San Cristóbal,nulo,Votos nulos,nulo,4445
+2014,4,4,San Cristóbal,penalosa,Enrique Peñalosa,candidato,10142
+2014,4,4,San Cristóbal,ramirez,Martha Lucía Ramírez,candidato,21398
+2014,4,4,San Cristóbal,santos,Juan Manuel Santos,candidato,20083
+2014,4,4,San Cristóbal,zuluaga,Óscar Iván Zuluaga,candidato,22504
+2014,5,5,Usme,blanco,Voto en blanco,blanco,6843
+2014,5,5,Usme,clara_lopez,Clara López,candidato,19874
+2014,5,5,Usme,no_marcado,Tarjetas no marcadas,no_marcado,167
+2014,5,5,Usme,nulo,Votos nulos,nulo,3570
+2014,5,5,Usme,penalosa,Enrique Peñalosa,candidato,6219
+2014,5,5,Usme,ramirez,Martha Lucía Ramírez,candidato,16536
+2014,5,5,Usme,santos,Juan Manuel Santos,candidato,12732
+2014,5,5,Usme,zuluaga,Óscar Iván Zuluaga,candidato,21263
+2014,6,6,Tunjuelito,blanco,Voto en blanco,blanco,6274
+2014,6,6,Tunjuelito,clara_lopez,Clara López,candidato,16419
+2014,6,6,Tunjuelito,no_marcado,Tarjetas no marcadas,no_marcado,71
+2014,6,6,Tunjuelito,nulo,Votos nulos,nulo,1954
+2014,6,6,Tunjuelito,penalosa,Enrique Peñalosa,candidato,7201
+2014,6,6,Tunjuelito,ramirez,Martha Lucía Ramírez,candidato,11129
+2014,6,6,Tunjuelito,santos,Juan Manuel Santos,candidato,11685
+2014,6,6,Tunjuelito,zuluaga,Óscar Iván Zuluaga,candidato,14697
+2014,7,7,Bosa,blanco,Voto en blanco,blanco,12530
+2014,7,7,Bosa,clara_lopez,Clara López,candidato,36148
+2014,7,7,Bosa,no_marcado,Tarjetas no marcadas,no_marcado,202
+2014,7,7,Bosa,nulo,Votos nulos,nulo,5558
+2014,7,7,Bosa,penalosa,Enrique Peñalosa,candidato,14767
+2014,7,7,Bosa,ramirez,Martha Lucía Ramírez,candidato,27367
+2014,7,7,Bosa,santos,Juan Manuel Santos,candidato,21784
+2014,7,7,Bosa,zuluaga,Óscar Iván Zuluaga,candidato,35214
+2014,8,8,Kennedy,blanco,Voto en blanco,blanco,25739
+2014,8,8,Kennedy,clara_lopez,Clara López,candidato,66061
+2014,8,8,Kennedy,no_marcado,Tarjetas no marcadas,no_marcado,262
+2014,8,8,Kennedy,nulo,Votos nulos,nulo,6822
+2014,8,8,Kennedy,penalosa,Enrique Peñalosa,candidato,38120
+2014,8,8,Kennedy,ramirez,Martha Lucía Ramírez,candidato,45213
+2014,8,8,Kennedy,santos,Juan Manuel Santos,candidato,47769
+2014,8,8,Kennedy,zuluaga,Óscar Iván Zuluaga,candidato,62239
+2014,9,9,Fontibón,blanco,Voto en blanco,blanco,10201
+2014,9,9,Fontibón,clara_lopez,Clara López,candidato,23287
+2014,9,9,Fontibón,no_marcado,Tarjetas no marcadas,no_marcado,70
+2014,9,9,Fontibón,nulo,Votos nulos,nulo,2356
+2014,9,9,Fontibón,penalosa,Enrique Peñalosa,candidato,19698
+2014,9,9,Fontibón,ramirez,Martha Lucía Ramírez,candidato,17813
+2014,9,9,Fontibón,santos,Juan Manuel Santos,candidato,22342
+2014,9,9,Fontibón,zuluaga,Óscar Iván Zuluaga,candidato,23970
+2014,10,10,Engativá,blanco,Voto en blanco,blanco,26969
+2014,10,10,Engativá,clara_lopez,Clara López,candidato,59405
+2014,10,10,Engativá,no_marcado,Tarjetas no marcadas,no_marcado,180
+2014,10,10,Engativá,nulo,Votos nulos,nulo,5299
+2014,10,10,Engativá,penalosa,Enrique Peñalosa,candidato,49526
+2014,10,10,Engativá,ramirez,Martha Lucía Ramírez,candidato,42201
+2014,10,10,Engativá,santos,Juan Manuel Santos,candidato,53859
+2014,10,10,Engativá,zuluaga,Óscar Iván Zuluaga,candidato,54691
+2014,11,11,Suba,blanco,Voto en blanco,blanco,23964
+2014,11,11,Suba,clara_lopez,Clara López,candidato,53084
+2014,11,11,Suba,no_marcado,Tarjetas no marcadas,no_marcado,210
+2014,11,11,Suba,nulo,Votos nulos,nulo,4617
+2014,11,11,Suba,penalosa,Enrique Peñalosa,candidato,69923
+2014,11,11,Suba,ramirez,Martha Lucía Ramírez,candidato,44655
+2014,11,11,Suba,santos,Juan Manuel Santos,candidato,57478
+2014,11,11,Suba,zuluaga,Óscar Iván Zuluaga,candidato,71106
+2014,12,12,Barrios Unidos,blanco,Voto en blanco,blanco,6421
+2014,12,12,Barrios Unidos,clara_lopez,Clara López,candidato,13157
+2014,12,12,Barrios Unidos,no_marcado,Tarjetas no marcadas,no_marcado,40
+2014,12,12,Barrios Unidos,nulo,Votos nulos,nulo,930
+2014,12,12,Barrios Unidos,penalosa,Enrique Peñalosa,candidato,15906
+2014,12,12,Barrios Unidos,ramirez,Martha Lucía Ramírez,candidato,9381
+2014,12,12,Barrios Unidos,santos,Juan Manuel Santos,candidato,16018
+2014,12,12,Barrios Unidos,zuluaga,Óscar Iván Zuluaga,candidato,15821
+2014,13,13,Teusaquillo,blanco,Voto en blanco,blanco,7205
+2014,13,13,Teusaquillo,clara_lopez,Clara López,candidato,17474
+2014,13,13,Teusaquillo,no_marcado,Tarjetas no marcadas,no_marcado,25
+2014,13,13,Teusaquillo,nulo,Votos nulos,nulo,631
+2014,13,13,Teusaquillo,penalosa,Enrique Peñalosa,candidato,19320
+2014,13,13,Teusaquillo,ramirez,Martha Lucía Ramírez,candidato,7836
+2014,13,13,Teusaquillo,santos,Juan Manuel Santos,candidato,20206
+2014,13,13,Teusaquillo,zuluaga,Óscar Iván Zuluaga,candidato,16495
+2014,14,14,Los Mártires,blanco,Voto en blanco,blanco,3015
+2014,14,14,Los Mártires,clara_lopez,Clara López,candidato,6782
+2014,14,14,Los Mártires,no_marcado,Tarjetas no marcadas,no_marcado,26
+2014,14,14,Los Mártires,nulo,Votos nulos,nulo,603
+2014,14,14,Los Mártires,penalosa,Enrique Peñalosa,candidato,4890
+2014,14,14,Los Mártires,ramirez,Martha Lucía Ramírez,candidato,4483
+2014,14,14,Los Mártires,santos,Juan Manuel Santos,candidato,7912
+2014,14,14,Los Mártires,zuluaga,Óscar Iván Zuluaga,candidato,9196
+2014,15,15,Antonio Nariño,blanco,Voto en blanco,blanco,4487
+2014,15,15,Antonio Nariño,clara_lopez,Clara López,candidato,11594
+2014,15,15,Antonio Nariño,no_marcado,Tarjetas no marcadas,no_marcado,39
+2014,15,15,Antonio Nariño,nulo,Votos nulos,nulo,947
+2014,15,15,Antonio Nariño,penalosa,Enrique Peñalosa,candidato,6983
+2014,15,15,Antonio Nariño,ramirez,Martha Lucía Ramírez,candidato,6636
+2014,15,15,Antonio Nariño,santos,Juan Manuel Santos,candidato,9154
+2014,15,15,Antonio Nariño,zuluaga,Óscar Iván Zuluaga,candidato,11073
+2014,16,16,Puente Aranda,blanco,Voto en blanco,blanco,10057
+2014,16,16,Puente Aranda,clara_lopez,Clara López,candidato,23585
+2014,16,16,Puente Aranda,no_marcado,Tarjetas no marcadas,no_marcado,75
+2014,16,16,Puente Aranda,nulo,Votos nulos,nulo,1978
+2014,16,16,Puente Aranda,penalosa,Enrique Peñalosa,candidato,16271
+2014,16,16,Puente Aranda,ramirez,Martha Lucía Ramírez,candidato,15759
+2014,16,16,Puente Aranda,santos,Juan Manuel Santos,candidato,20478
+2014,16,16,Puente Aranda,zuluaga,Óscar Iván Zuluaga,candidato,23476
+2014,17,17,La Candelaria,blanco,Voto en blanco,blanco,1736
+2014,17,17,La Candelaria,clara_lopez,Clara López,candidato,4441
+2014,17,17,La Candelaria,no_marcado,Tarjetas no marcadas,no_marcado,27
+2014,17,17,La Candelaria,nulo,Votos nulos,nulo,428
+2014,17,17,La Candelaria,penalosa,Enrique Peñalosa,candidato,2117
+2014,17,17,La Candelaria,ramirez,Martha Lucía Ramírez,candidato,2035
+2014,17,17,La Candelaria,santos,Juan Manuel Santos,candidato,4567
+2014,17,17,La Candelaria,zuluaga,Óscar Iván Zuluaga,candidato,3367
+2014,18,18,Rafael Uribe Uribe,blanco,Voto en blanco,blanco,10550
+2014,18,18,Rafael Uribe Uribe,clara_lopez,Clara López,candidato,26960
+2014,18,18,Rafael Uribe Uribe,no_marcado,Tarjetas no marcadas,no_marcado,151
+2014,18,18,Rafael Uribe Uribe,nulo,Votos nulos,nulo,3732
+2014,18,18,Rafael Uribe Uribe,penalosa,Enrique Peñalosa,candidato,11276
+2014,18,18,Rafael Uribe Uribe,ramirez,Martha Lucía Ramírez,candidato,18950
+2014,18,18,Rafael Uribe Uribe,santos,Juan Manuel Santos,candidato,20588
+2014,18,18,Rafael Uribe Uribe,zuluaga,Óscar Iván Zuluaga,candidato,25318
+2014,19,19,Ciudad Bolívar,blanco,Voto en blanco,blanco,12127
+2014,19,19,Ciudad Bolívar,clara_lopez,Clara López,candidato,34535
+2014,19,19,Ciudad Bolívar,no_marcado,Tarjetas no marcadas,no_marcado,314
+2014,19,19,Ciudad Bolívar,nulo,Votos nulos,nulo,6313
+2014,19,19,Ciudad Bolívar,penalosa,Enrique Peñalosa,candidato,10280
+2014,19,19,Ciudad Bolívar,ramirez,Martha Lucía Ramírez,candidato,27049
+2014,19,19,Ciudad Bolívar,santos,Juan Manuel Santos,candidato,23246
+2014,19,19,Ciudad Bolívar,zuluaga,Óscar Iván Zuluaga,candidato,38290
+2014,20,20,Sumapaz,blanco,Voto en blanco,blanco,17
+2014,20,20,Sumapaz,clara_lopez,Clara López,candidato,696
+2014,20,20,Sumapaz,no_marcado,Tarjetas no marcadas,no_marcado,1
+2014,20,20,Sumapaz,nulo,Votos nulos,nulo,22
+2014,20,20,Sumapaz,penalosa,Enrique Peñalosa,candidato,18
+2014,20,20,Sumapaz,ramirez,Martha Lucía Ramírez,candidato,17
+2014,20,20,Sumapaz,santos,Juan Manuel Santos,candidato,115
+2014,20,20,Sumapaz,zuluaga,Óscar Iván Zuluaga,candidato,156
+2014,90,,Puesto censo (Corferias),blanco,Voto en blanco,blanco,8612
+2014,90,,Puesto censo (Corferias),clara_lopez,Clara López,candidato,16069
+2014,90,,Puesto censo (Corferias),no_marcado,Tarjetas no marcadas,no_marcado,23
+2014,90,,Puesto censo (Corferias),nulo,Votos nulos,nulo,1562
+2014,90,,Puesto censo (Corferias),penalosa,Enrique Peñalosa,candidato,15831
+2014,90,,Puesto censo (Corferias),ramirez,Martha Lucía Ramírez,candidato,12658
+2014,90,,Puesto censo (Corferias),santos,Juan Manuel Santos,candidato,8707
+2014,90,,Puesto censo (Corferias),zuluaga,Óscar Iván Zuluaga,candidato,14939
+2014,98,,Cárceles,blanco,Voto en blanco,blanco,121
+2014,98,,Cárceles,clara_lopez,Clara López,candidato,89
+2014,98,,Cárceles,no_marcado,Tarjetas no marcadas,no_marcado,0
+2014,98,,Cárceles,nulo,Votos nulos,nulo,81
+2014,98,,Cárceles,penalosa,Enrique Peñalosa,candidato,53
+2014,98,,Cárceles,ramirez,Martha Lucía Ramírez,candidato,94
+2014,98,,Cárceles,santos,Juan Manuel Santos,candidato,117
+2014,98,,Cárceles,zuluaga,Óscar Iván Zuluaga,candidato,112
+2018,1,1,Usaquén,blanco,Voto en blanco,blanco,2793
+2018,1,1,Usaquén,de_la_calle,Humberto de la Calle,candidato,9624
+2018,1,1,Usaquén,duque,Iván Duque,candidato,114456
+2018,1,1,Usaquén,fajardo,Sergio Fajardo,candidato,110844
+2018,1,1,Usaquén,morales,Viviane Morales,candidato,300
+2018,1,1,Usaquén,no_marcado,Tarjetas no marcadas,no_marcado,80
+2018,1,1,Usaquén,nulo,Votos nulos,nulo,795
+2018,1,1,Usaquén,petro,Gustavo Petro,candidato,34571
+2018,1,1,Usaquén,promotores_blanco,Promotores del voto en blanco,promotores_blanco,153
+2018,1,1,Usaquén,trujillo,Jorge Antonio Trujillo,candidato,378
+2018,1,1,Usaquén,vargas_lleras,Germán Vargas Lleras,candidato,19704
+2018,2,2,Chapinero,blanco,Voto en blanco,blanco,837
+2018,2,2,Chapinero,de_la_calle,Humberto de la Calle,candidato,4877
+2018,2,2,Chapinero,duque,Iván Duque,candidato,37966
+2018,2,2,Chapinero,fajardo,Sergio Fajardo,candidato,36914
+2018,2,2,Chapinero,morales,Viviane Morales,candidato,58
+2018,2,2,Chapinero,no_marcado,Tarjetas no marcadas,no_marcado,24
+2018,2,2,Chapinero,nulo,Votos nulos,nulo,233
+2018,2,2,Chapinero,petro,Gustavo Petro,candidato,14595
+2018,2,2,Chapinero,promotores_blanco,Promotores del voto en blanco,promotores_blanco,40
+2018,2,2,Chapinero,trujillo,Jorge Antonio Trujillo,candidato,102
+2018,2,2,Chapinero,vargas_lleras,Germán Vargas Lleras,candidato,7611
+2018,3,3,Santa Fe,blanco,Voto en blanco,blanco,818
+2018,3,3,Santa Fe,de_la_calle,Humberto de la Calle,candidato,1809
+2018,3,3,Santa Fe,duque,Iván Duque,candidato,11168
+2018,3,3,Santa Fe,fajardo,Sergio Fajardo,candidato,14118
+2018,3,3,Santa Fe,morales,Viviane Morales,candidato,67
+2018,3,3,Santa Fe,no_marcado,Tarjetas no marcadas,no_marcado,39
+2018,3,3,Santa Fe,nulo,Votos nulos,nulo,563
+2018,3,3,Santa Fe,petro,Gustavo Petro,candidato,21500
+2018,3,3,Santa Fe,promotores_blanco,Promotores del voto en blanco,promotores_blanco,65
+2018,3,3,Santa Fe,trujillo,Jorge Antonio Trujillo,candidato,164
+2018,3,3,Santa Fe,vargas_lleras,Germán Vargas Lleras,candidato,2466
+2018,4,4,San Cristóbal,blanco,Voto en blanco,blanco,3093
+2018,4,4,San Cristóbal,de_la_calle,Humberto de la Calle,candidato,3333
+2018,4,4,San Cristóbal,duque,Iván Duque,candidato,32949
+2018,4,4,San Cristóbal,fajardo,Sergio Fajardo,candidato,45947
+2018,4,4,San Cristóbal,morales,Viviane Morales,candidato,353
+2018,4,4,San Cristóbal,no_marcado,Tarjetas no marcadas,no_marcado,130
+2018,4,4,San Cristóbal,nulo,Votos nulos,nulo,2238
+2018,4,4,San Cristóbal,petro,Gustavo Petro,candidato,78389
+2018,4,4,San Cristóbal,promotores_blanco,Promotores del voto en blanco,promotores_blanco,227
+2018,4,4,San Cristóbal,trujillo,Jorge Antonio Trujillo,candidato,584
+2018,4,4,San Cristóbal,vargas_lleras,Germán Vargas Lleras,candidato,6170
+2018,5,5,Usme,blanco,Voto en blanco,blanco,2434
+2018,5,5,Usme,de_la_calle,Humberto de la Calle,candidato,2172
+2018,5,5,Usme,duque,Iván Duque,candidato,28862
+2018,5,5,Usme,fajardo,Sergio Fajardo,candidato,27662
+2018,5,5,Usme,morales,Viviane Morales,candidato,312
+2018,5,5,Usme,no_marcado,Tarjetas no marcadas,no_marcado,145
+2018,5,5,Usme,nulo,Votos nulos,nulo,2197
+2018,5,5,Usme,petro,Gustavo Petro,candidato,71227
+2018,5,5,Usme,promotores_blanco,Promotores del voto en blanco,promotores_blanco,173
+2018,5,5,Usme,trujillo,Jorge Antonio Trujillo,candidato,540
+2018,5,5,Usme,vargas_lleras,Germán Vargas Lleras,candidato,3777
+2018,6,6,Tunjuelito,blanco,Voto en blanco,blanco,1629
+2018,6,6,Tunjuelito,de_la_calle,Humberto de la Calle,candidato,1973
+2018,6,6,Tunjuelito,duque,Iván Duque,candidato,23581
+2018,6,6,Tunjuelito,fajardo,Sergio Fajardo,candidato,29033
+2018,6,6,Tunjuelito,morales,Viviane Morales,candidato,171
+2018,6,6,Tunjuelito,no_marcado,Tarjetas no marcadas,no_marcado,56
+2018,6,6,Tunjuelito,nulo,Votos nulos,nulo,931
+2018,6,6,Tunjuelito,petro,Gustavo Petro,candidato,37204
+2018,6,6,Tunjuelito,promotores_blanco,Promotores del voto en blanco,promotores_blanco,103
+2018,6,6,Tunjuelito,trujillo,Jorge Antonio Trujillo,candidato,393
+2018,6,6,Tunjuelito,vargas_lleras,Germán Vargas Lleras,candidato,3791
+2018,7,7,Bosa,blanco,Voto en blanco,blanco,4715
+2018,7,7,Bosa,de_la_calle,Humberto de la Calle,candidato,4272
+2018,7,7,Bosa,duque,Iván Duque,candidato,57553
+2018,7,7,Bosa,fajardo,Sergio Fajardo,candidato,67123
+2018,7,7,Bosa,morales,Viviane Morales,candidato,536
+2018,7,7,Bosa,no_marcado,Tarjetas no marcadas,no_marcado,205
+2018,7,7,Bosa,nulo,Votos nulos,nulo,3251
+2018,7,7,Bosa,petro,Gustavo Petro,candidato,116017
+2018,7,7,Bosa,promotores_blanco,Promotores del voto en blanco,promotores_blanco,390
+2018,7,7,Bosa,trujillo,Jorge Antonio Trujillo,candidato,904
+2018,7,7,Bosa,vargas_lleras,Germán Vargas Lleras,candidato,7495
+2018,8,8,Kennedy,blanco,Voto en blanco,blanco,7478
+2018,8,8,Kennedy,de_la_calle,Humberto de la Calle,candidato,9779
+2018,8,8,Kennedy,duque,Iván Duque,candidato,112442
+2018,8,8,Kennedy,fajardo,Sergio Fajardo,candidato,154680
+2018,8,8,Kennedy,morales,Viviane Morales,candidato,702
+2018,8,8,Kennedy,no_marcado,Tarjetas no marcadas,no_marcado,220
+2018,8,8,Kennedy,nulo,Votos nulos,nulo,3434
+2018,8,8,Kennedy,petro,Gustavo Petro,candidato,146362
+2018,8,8,Kennedy,promotores_blanco,Promotores del voto en blanco,promotores_blanco,540
+2018,8,8,Kennedy,trujillo,Jorge Antonio Trujillo,candidato,1399
+2018,8,8,Kennedy,vargas_lleras,Germán Vargas Lleras,candidato,18384
+2018,9,9,Fontibón,blanco,Voto en blanco,blanco,2578
+2018,9,9,Fontibón,de_la_calle,Humberto de la Calle,candidato,4973
+2018,9,9,Fontibón,duque,Iván Duque,candidato,46647
+2018,9,9,Fontibón,fajardo,Sergio Fajardo,candidato,70681
+2018,9,9,Fontibón,morales,Viviane Morales,candidato,231
+2018,9,9,Fontibón,no_marcado,Tarjetas no marcadas,no_marcado,56
+2018,9,9,Fontibón,nulo,Votos nulos,nulo,1154
+2018,9,9,Fontibón,petro,Gustavo Petro,candidato,41217
+2018,9,9,Fontibón,promotores_blanco,Promotores del voto en blanco,promotores_blanco,156
+2018,9,9,Fontibón,trujillo,Jorge Antonio Trujillo,candidato,382
+2018,9,9,Fontibón,vargas_lleras,Germán Vargas Lleras,candidato,9304
+2018,10,10,Engativá,blanco,Voto en blanco,blanco,6597
+2018,10,10,Engativá,de_la_calle,Humberto de la Calle,candidato,11122
+2018,10,10,Engativá,duque,Iván Duque,candidato,104102
+2018,10,10,Engativá,fajardo,Sergio Fajardo,candidato,165164
+2018,10,10,Engativá,morales,Viviane Morales,candidato,573
+2018,10,10,Engativá,no_marcado,Tarjetas no marcadas,no_marcado,122
+2018,10,10,Engativá,nulo,Votos nulos,nulo,2161
+2018,10,10,Engativá,petro,Gustavo Petro,candidato,96545
+2018,10,10,Engativá,promotores_blanco,Promotores del voto en blanco,promotores_blanco,401
+2018,10,10,Engativá,trujillo,Jorge Antonio Trujillo,candidato,1599
+2018,10,10,Engativá,vargas_lleras,Germán Vargas Lleras,candidato,20689
+2018,11,11,Suba,blanco,Voto en blanco,blanco,6712
+2018,11,11,Suba,de_la_calle,Humberto de la Calle,candidato,13900
+2018,11,11,Suba,duque,Iván Duque,candidato,160243
+2018,11,11,Suba,fajardo,Sergio Fajardo,candidato,195023
+2018,11,11,Suba,morales,Viviane Morales,candidato,586
+2018,11,11,Suba,no_marcado,Tarjetas no marcadas,no_marcado,206
+2018,11,11,Suba,nulo,Votos nulos,nulo,2438
+2018,11,11,Suba,petro,Gustavo Petro,candidato,103164
+2018,11,11,Suba,promotores_blanco,Promotores del voto en blanco,promotores_blanco,397
+2018,11,11,Suba,trujillo,Jorge Antonio Trujillo,candidato,1295
+2018,11,11,Suba,vargas_lleras,Germán Vargas Lleras,candidato,27211
+2018,12,12,Barrios Unidos,blanco,Voto en blanco,blanco,1410
+2018,12,12,Barrios Unidos,de_la_calle,Humberto de la Calle,candidato,3406
+2018,12,12,Barrios Unidos,duque,Iván Duque,candidato,31140
+2018,12,12,Barrios Unidos,fajardo,Sergio Fajardo,candidato,38973
+2018,12,12,Barrios Unidos,morales,Viviane Morales,candidato,135
+2018,12,12,Barrios Unidos,no_marcado,Tarjetas no marcadas,no_marcado,33
+2018,12,12,Barrios Unidos,nulo,Votos nulos,nulo,372
+2018,12,12,Barrios Unidos,petro,Gustavo Petro,candidato,19060
+2018,12,12,Barrios Unidos,promotores_blanco,Promotores del voto en blanco,promotores_blanco,88
+2018,12,12,Barrios Unidos,trujillo,Jorge Antonio Trujillo,candidato,322
+2018,12,12,Barrios Unidos,vargas_lleras,Germán Vargas Lleras,candidato,6450
+2018,13,13,Teusaquillo,blanco,Voto en blanco,blanco,1167
+2018,13,13,Teusaquillo,de_la_calle,Humberto de la Calle,candidato,5286
+2018,13,13,Teusaquillo,duque,Iván Duque,candidato,31706
+2018,13,13,Teusaquillo,fajardo,Sergio Fajardo,candidato,45629
+2018,13,13,Teusaquillo,morales,Viviane Morales,candidato,93
+2018,13,13,Teusaquillo,no_marcado,Tarjetas no marcadas,no_marcado,20
+2018,13,13,Teusaquillo,nulo,Votos nulos,nulo,219
+2018,13,13,Teusaquillo,petro,Gustavo Petro,candidato,21937
+2018,13,13,Teusaquillo,promotores_blanco,Promotores del voto en blanco,promotores_blanco,74
+2018,13,13,Teusaquillo,trujillo,Jorge Antonio Trujillo,candidato,137
+2018,13,13,Teusaquillo,vargas_lleras,Germán Vargas Lleras,candidato,8080
+2018,14,14,Los Mártires,blanco,Voto en blanco,blanco,776
+2018,14,14,Los Mártires,de_la_calle,Humberto de la Calle,candidato,1338
+2018,14,14,Los Mártires,duque,Iván Duque,candidato,16398
+2018,14,14,Los Mártires,fajardo,Sergio Fajardo,candidato,15377
+2018,14,14,Los Mártires,morales,Viviane Morales,candidato,74
+2018,14,14,Los Mártires,no_marcado,Tarjetas no marcadas,no_marcado,26
+2018,14,14,Los Mártires,nulo,Votos nulos,nulo,313
+2018,14,14,Los Mártires,petro,Gustavo Petro,candidato,14297
+2018,14,14,Los Mártires,promotores_blanco,Promotores del voto en blanco,promotores_blanco,38
+2018,14,14,Los Mártires,trujillo,Jorge Antonio Trujillo,candidato,144
+2018,14,14,Los Mártires,vargas_lleras,Germán Vargas Lleras,candidato,3107
+2018,15,15,Antonio Nariño,blanco,Voto en blanco,blanco,1096
+2018,15,15,Antonio Nariño,de_la_calle,Humberto de la Calle,candidato,1767
+2018,15,15,Antonio Nariño,duque,Iván Duque,candidato,19933
+2018,15,15,Antonio Nariño,fajardo,Sergio Fajardo,candidato,24645
+2018,15,15,Antonio Nariño,morales,Viviane Morales,candidato,92
+2018,15,15,Antonio Nariño,no_marcado,Tarjetas no marcadas,no_marcado,20
+2018,15,15,Antonio Nariño,nulo,Votos nulos,nulo,453
+2018,15,15,Antonio Nariño,petro,Gustavo Petro,candidato,21561
+2018,15,15,Antonio Nariño,promotores_blanco,Promotores del voto en blanco,promotores_blanco,81
+2018,15,15,Antonio Nariño,trujillo,Jorge Antonio Trujillo,candidato,190
+2018,15,15,Antonio Nariño,vargas_lleras,Germán Vargas Lleras,candidato,3392
+2018,16,16,Puente Aranda,blanco,Voto en blanco,blanco,2386
+2018,16,16,Puente Aranda,de_la_calle,Humberto de la Calle,candidato,3891
+2018,16,16,Puente Aranda,duque,Iván Duque,candidato,41955
+2018,16,16,Puente Aranda,fajardo,Sergio Fajardo,candidato,56213
+2018,16,16,Puente Aranda,morales,Viviane Morales,candidato,203
+2018,16,16,Puente Aranda,no_marcado,Tarjetas no marcadas,no_marcado,65
+2018,16,16,Puente Aranda,nulo,Votos nulos,nulo,785
+2018,16,16,Puente Aranda,petro,Gustavo Petro,candidato,37361
+2018,16,16,Puente Aranda,promotores_blanco,Promotores del voto en blanco,promotores_blanco,132
+2018,16,16,Puente Aranda,trujillo,Jorge Antonio Trujillo,candidato,458
+2018,16,16,Puente Aranda,vargas_lleras,Germán Vargas Lleras,candidato,7845
+2018,17,17,La Candelaria,blanco,Voto en blanco,blanco,433
+2018,17,17,La Candelaria,de_la_calle,Humberto de la Calle,candidato,953
+2018,17,17,La Candelaria,duque,Iván Duque,candidato,5346
+2018,17,17,La Candelaria,fajardo,Sergio Fajardo,candidato,6701
+2018,17,17,La Candelaria,morales,Viviane Morales,candidato,35
+2018,17,17,La Candelaria,no_marcado,Tarjetas no marcadas,no_marcado,16
+2018,17,17,La Candelaria,nulo,Votos nulos,nulo,197
+2018,17,17,La Candelaria,petro,Gustavo Petro,candidato,10493
+2018,17,17,La Candelaria,promotores_blanco,Promotores del voto en blanco,promotores_blanco,32
+2018,17,17,La Candelaria,trujillo,Jorge Antonio Trujillo,candidato,64
+2018,17,17,La Candelaria,vargas_lleras,Germán Vargas Lleras,candidato,1425
+2018,18,18,Rafael Uribe Uribe,blanco,Voto en blanco,blanco,2911
+2018,18,18,Rafael Uribe Uribe,de_la_calle,Humberto de la Calle,candidato,3503
+2018,18,18,Rafael Uribe Uribe,duque,Iván Duque,candidato,37772
+2018,18,18,Rafael Uribe Uribe,fajardo,Sergio Fajardo,candidato,48179
+2018,18,18,Rafael Uribe Uribe,morales,Viviane Morales,candidato,288
+2018,18,18,Rafael Uribe Uribe,no_marcado,Tarjetas no marcadas,no_marcado,116
+2018,18,18,Rafael Uribe Uribe,nulo,Votos nulos,nulo,1813
+2018,18,18,Rafael Uribe Uribe,petro,Gustavo Petro,candidato,69334
+2018,18,18,Rafael Uribe Uribe,promotores_blanco,Promotores del voto en blanco,promotores_blanco,295
+2018,18,18,Rafael Uribe Uribe,trujillo,Jorge Antonio Trujillo,candidato,582
+2018,18,18,Rafael Uribe Uribe,vargas_lleras,Germán Vargas Lleras,candidato,6313
+2018,19,19,Ciudad Bolívar,blanco,Voto en blanco,blanco,4386
+2018,19,19,Ciudad Bolívar,de_la_calle,Humberto de la Calle,candidato,3743
+2018,19,19,Ciudad Bolívar,duque,Iván Duque,candidato,52252
+2018,19,19,Ciudad Bolívar,fajardo,Sergio Fajardo,candidato,52147
+2018,19,19,Ciudad Bolívar,morales,Viviane Morales,candidato,555
+2018,19,19,Ciudad Bolívar,no_marcado,Tarjetas no marcadas,no_marcado,275
+2018,19,19,Ciudad Bolívar,nulo,Votos nulos,nulo,3680
+2018,19,19,Ciudad Bolívar,petro,Gustavo Petro,candidato,118040
+2018,19,19,Ciudad Bolívar,promotores_blanco,Promotores del voto en blanco,promotores_blanco,340
+2018,19,19,Ciudad Bolívar,trujillo,Jorge Antonio Trujillo,candidato,857
+2018,19,19,Ciudad Bolívar,vargas_lleras,Germán Vargas Lleras,candidato,6722
+2018,20,20,Sumapaz,blanco,Voto en blanco,blanco,14
+2018,20,20,Sumapaz,de_la_calle,Humberto de la Calle,candidato,44
+2018,20,20,Sumapaz,duque,Iván Duque,candidato,166
+2018,20,20,Sumapaz,fajardo,Sergio Fajardo,candidato,36
+2018,20,20,Sumapaz,morales,Viviane Morales,candidato,2
+2018,20,20,Sumapaz,no_marcado,Tarjetas no marcadas,no_marcado,3
+2018,20,20,Sumapaz,nulo,Votos nulos,nulo,10
+2018,20,20,Sumapaz,petro,Gustavo Petro,candidato,942
+2018,20,20,Sumapaz,trujillo,Jorge Antonio Trujillo,candidato,2
+2018,20,20,Sumapaz,vargas_lleras,Germán Vargas Lleras,candidato,28
+2018,90,,Puesto censo (Corferias),blanco,Voto en blanco,blanco,1587
+2018,90,,Puesto censo (Corferias),de_la_calle,Humberto de la Calle,candidato,1621
+2018,90,,Puesto censo (Corferias),duque,Iván Duque,candidato,23007
+2018,90,,Puesto censo (Corferias),fajardo,Sergio Fajardo,candidato,39184
+2018,90,,Puesto censo (Corferias),morales,Viviane Morales,candidato,125
+2018,90,,Puesto censo (Corferias),no_marcado,Tarjetas no marcadas,no_marcado,26
+2018,90,,Puesto censo (Corferias),nulo,Votos nulos,nulo,608
+2018,90,,Puesto censo (Corferias),petro,Gustavo Petro,candidato,25766
+2018,90,,Puesto censo (Corferias),promotores_blanco,Promotores del voto en blanco,promotores_blanco,174
+2018,90,,Puesto censo (Corferias),trujillo,Jorge Antonio Trujillo,candidato,197
+2018,90,,Puesto censo (Corferias),vargas_lleras,Germán Vargas Lleras,candidato,2703
+2018,98,,Cárceles,blanco,Voto en blanco,blanco,17
+2018,98,,Cárceles,de_la_calle,Humberto de la Calle,candidato,15
+2018,98,,Cárceles,duque,Iván Duque,candidato,127
+2018,98,,Cárceles,fajardo,Sergio Fajardo,candidato,204
+2018,98,,Cárceles,morales,Viviane Morales,candidato,1
+2018,98,,Cárceles,no_marcado,Tarjetas no marcadas,no_marcado,2
+2018,98,,Cárceles,nulo,Votos nulos,nulo,13
+2018,98,,Cárceles,petro,Gustavo Petro,candidato,346
+2018,98,,Cárceles,promotores_blanco,Promotores del voto en blanco,promotores_blanco,2
+2018,98,,Cárceles,trujillo,Jorge Antonio Trujillo,candidato,3
+2018,98,,Cárceles,vargas_lleras,Germán Vargas Lleras,candidato,17
+2022,1,1,Usaquén,betancourt,Íngrid Betancourt,candidato,99
+2022,1,1,Usaquén,blanco,Voto en blanco,blanco,4590
+2022,1,1,Usaquén,fajardo,Sergio Fajardo,candidato,41436
+2022,1,1,Usaquén,gomez,Enrique Gómez,candidato,1049
+2022,1,1,Usaquén,gutierrez,Federico Gutiérrez,candidato,111234
+2022,1,1,Usaquén,hernandez,Rodolfo Hernández,candidato,59910
+2022,1,1,Usaquén,no_marcado,Tarjetas no marcadas,no_marcado,58
+2022,1,1,Usaquén,nulo,Votos nulos,nulo,951
+2022,1,1,Usaquén,perez,Luis Pérez,candidato,76
+2022,1,1,Usaquén,petro,Gustavo Petro,candidato,75751
+2022,1,1,Usaquén,rodriguez,John Milton Rodríguez,candidato,2094
+2022,2,2,Chapinero,betancourt,Íngrid Betancourt,candidato,30
+2022,2,2,Chapinero,blanco,Voto en blanco,blanco,1385
+2022,2,2,Chapinero,fajardo,Sergio Fajardo,candidato,16189
+2022,2,2,Chapinero,gomez,Enrique Gómez,candidato,471
+2022,2,2,Chapinero,gutierrez,Federico Gutiérrez,candidato,38661
+2022,2,2,Chapinero,hernandez,Rodolfo Hernández,candidato,14465
+2022,2,2,Chapinero,no_marcado,Tarjetas no marcadas,no_marcado,19
+2022,2,2,Chapinero,nulo,Votos nulos,nulo,256
+2022,2,2,Chapinero,perez,Luis Pérez,candidato,19
+2022,2,2,Chapinero,petro,Gustavo Petro,candidato,29796
+2022,2,2,Chapinero,rodriguez,John Milton Rodríguez,candidato,463
+2022,3,3,Santa Fe,betancourt,Íngrid Betancourt,candidato,39
+2022,3,3,Santa Fe,blanco,Voto en blanco,blanco,945
+2022,3,3,Santa Fe,fajardo,Sergio Fajardo,candidato,3374
+2022,3,3,Santa Fe,gomez,Enrique Gómez,candidato,126
+2022,3,3,Santa Fe,gutierrez,Federico Gutiérrez,candidato,6888
+2022,3,3,Santa Fe,hernandez,Rodolfo Hernández,candidato,8963
+2022,3,3,Santa Fe,no_marcado,Tarjetas no marcadas,no_marcado,29
+2022,3,3,Santa Fe,nulo,Votos nulos,nulo,659
+2022,3,3,Santa Fe,perez,Luis Pérez,candidato,46
+2022,3,3,Santa Fe,petro,Gustavo Petro,candidato,30652
+2022,3,3,Santa Fe,rodriguez,John Milton Rodríguez,candidato,426
+2022,4,4,San Cristóbal,betancourt,Íngrid Betancourt,candidato,165
+2022,4,4,San Cristóbal,blanco,Voto en blanco,blanco,3562
+2022,4,4,San Cristóbal,fajardo,Sergio Fajardo,candidato,7490
+2022,4,4,San Cristóbal,gomez,Enrique Gómez,candidato,372
+2022,4,4,San Cristóbal,gutierrez,Federico Gutiérrez,candidato,18519
+2022,4,4,San Cristóbal,hernandez,Rodolfo Hernández,candidato,33742
+2022,4,4,San Cristóbal,no_marcado,Tarjetas no marcadas,no_marcado,112
+2022,4,4,San Cristóbal,nulo,Votos nulos,nulo,2717
+2022,4,4,San Cristóbal,perez,Luis Pérez,candidato,184
+2022,4,4,San Cristóbal,petro,Gustavo Petro,candidato,108039
+2022,4,4,San Cristóbal,rodriguez,John Milton Rodríguez,candidato,2330
+2022,5,5,Usme,betancourt,Íngrid Betancourt,candidato,128
+2022,5,5,Usme,blanco,Voto en blanco,blanco,2863
+2022,5,5,Usme,fajardo,Sergio Fajardo,candidato,4553
+2022,5,5,Usme,gomez,Enrique Gómez,candidato,252
+2022,5,5,Usme,gutierrez,Federico Gutiérrez,candidato,12631
+2022,5,5,Usme,hernandez,Rodolfo Hernández,candidato,29707
+2022,5,5,Usme,no_marcado,Tarjetas no marcadas,no_marcado,99
+2022,5,5,Usme,nulo,Votos nulos,nulo,2462
+2022,5,5,Usme,perez,Luis Pérez,candidato,108
+2022,5,5,Usme,petro,Gustavo Petro,candidato,96449
+2022,5,5,Usme,rodriguez,John Milton Rodríguez,candidato,2382
+2022,6,6,Tunjuelito,betancourt,Íngrid Betancourt,candidato,80
+2022,6,6,Tunjuelito,blanco,Voto en blanco,blanco,1985
+2022,6,6,Tunjuelito,fajardo,Sergio Fajardo,candidato,5140
+2022,6,6,Tunjuelito,gomez,Enrique Gómez,candidato,199
+2022,6,6,Tunjuelito,gutierrez,Federico Gutiérrez,candidato,13835
+2022,6,6,Tunjuelito,hernandez,Rodolfo Hernández,candidato,22878
+2022,6,6,Tunjuelito,no_marcado,Tarjetas no marcadas,no_marcado,45
+2022,6,6,Tunjuelito,nulo,Votos nulos,nulo,1113
+2022,6,6,Tunjuelito,perez,Luis Pérez,candidato,70
+2022,6,6,Tunjuelito,petro,Gustavo Petro,candidato,54025
+2022,6,6,Tunjuelito,rodriguez,John Milton Rodríguez,candidato,1408
+2022,7,7,Bosa,betancourt,Íngrid Betancourt,candidato,229
+2022,7,7,Bosa,blanco,Voto en blanco,blanco,5432
+2022,7,7,Bosa,fajardo,Sergio Fajardo,candidato,10244
+2022,7,7,Bosa,gomez,Enrique Gómez,candidato,499
+2022,7,7,Bosa,gutierrez,Federico Gutiérrez,candidato,28451
+2022,7,7,Bosa,hernandez,Rodolfo Hernández,candidato,65377
+2022,7,7,Bosa,no_marcado,Tarjetas no marcadas,no_marcado,139
+2022,7,7,Bosa,nulo,Votos nulos,nulo,3890
+2022,7,7,Bosa,perez,Luis Pérez,candidato,224
+2022,7,7,Bosa,petro,Gustavo Petro,candidato,178923
+2022,7,7,Bosa,rodriguez,John Milton Rodríguez,candidato,4318
+2022,8,8,Kennedy,betancourt,Íngrid Betancourt,candidato,297
+2022,8,8,Kennedy,blanco,Voto en blanco,blanco,9629
+2022,8,8,Kennedy,fajardo,Sergio Fajardo,candidato,29983
+2022,8,8,Kennedy,gomez,Enrique Gómez,candidato,1073
+2022,8,8,Kennedy,gutierrez,Federico Gutiérrez,candidato,72181
+2022,8,8,Kennedy,hernandez,Rodolfo Hernández,candidato,112890
+2022,8,8,Kennedy,no_marcado,Tarjetas no marcadas,no_marcado,155
+2022,8,8,Kennedy,nulo,Votos nulos,nulo,4319
+2022,8,8,Kennedy,perez,Luis Pérez,candidato,336
+2022,8,8,Kennedy,petro,Gustavo Petro,candidato,237243
+2022,8,8,Kennedy,rodriguez,John Milton Rodríguez,candidato,6306
+2022,9,9,Fontibón,betancourt,Íngrid Betancourt,candidato,124
+2022,9,9,Fontibón,blanco,Voto en blanco,blanco,3860
+2022,9,9,Fontibón,fajardo,Sergio Fajardo,candidato,18453
+2022,9,9,Fontibón,gomez,Enrique Gómez,candidato,534
+2022,9,9,Fontibón,gutierrez,Federico Gutiérrez,candidato,39595
+2022,9,9,Fontibón,hernandez,Rodolfo Hernández,candidato,47575
+2022,9,9,Fontibón,no_marcado,Tarjetas no marcadas,no_marcado,53
+2022,9,9,Fontibón,nulo,Votos nulos,nulo,1510
+2022,9,9,Fontibón,perez,Luis Pérez,candidato,118
+2022,9,9,Fontibón,petro,Gustavo Petro,candidato,81083
+2022,9,9,Fontibón,rodriguez,John Milton Rodríguez,candidato,2382
+2022,10,10,Engativá,betancourt,Íngrid Betancourt,candidato,237
+2022,10,10,Engativá,blanco,Voto en blanco,blanco,9425
+2022,10,10,Engativá,fajardo,Sergio Fajardo,candidato,36464
+2022,10,10,Engativá,gomez,Enrique Gómez,candidato,1147
+2022,10,10,Engativá,gutierrez,Federico Gutiérrez,candidato,80196
+2022,10,10,Engativá,hernandez,Rodolfo Hernández,candidato,99030
+2022,10,10,Engativá,no_marcado,Tarjetas no marcadas,no_marcado,98
+2022,10,10,Engativá,nulo,Votos nulos,nulo,2883
+2022,10,10,Engativá,perez,Luis Pérez,candidato,276
+2022,10,10,Engativá,petro,Gustavo Petro,candidato,182779
+2022,10,10,Engativá,rodriguez,John Milton Rodríguez,candidato,5428
+2022,11,11,Suba,betancourt,Íngrid Betancourt,candidato,246
+2022,11,11,Suba,blanco,Voto en blanco,blanco,10636
+2022,11,11,Suba,fajardo,Sergio Fajardo,candidato,58679
+2022,11,11,Suba,gomez,Enrique Gómez,candidato,1581
+2022,11,11,Suba,gutierrez,Federico Gutiérrez,candidato,140155
+2022,11,11,Suba,hernandez,Rodolfo Hernández,candidato,124997
+2022,11,11,Suba,no_marcado,Tarjetas no marcadas,no_marcado,131
+2022,11,11,Suba,nulo,Votos nulos,nulo,3252
+2022,11,11,Suba,perez,Luis Pérez,candidato,272
+2022,11,11,Suba,petro,Gustavo Petro,candidato,206995
+2022,11,11,Suba,rodriguez,John Milton Rodríguez,candidato,5917
+2022,12,12,Barrios Unidos,betancourt,Íngrid Betancourt,candidato,50
+2022,12,12,Barrios Unidos,blanco,Voto en blanco,blanco,1875
+2022,12,12,Barrios Unidos,fajardo,Sergio Fajardo,candidato,11035
+2022,12,12,Barrios Unidos,gomez,Enrique Gómez,candidato,313
+2022,12,12,Barrios Unidos,gutierrez,Federico Gutiérrez,candidato,25100
+2022,12,12,Barrios Unidos,hernandez,Rodolfo Hernández,candidato,22140
+2022,12,12,Barrios Unidos,no_marcado,Tarjetas no marcadas,no_marcado,23
+2022,12,12,Barrios Unidos,nulo,Votos nulos,nulo,487
+2022,12,12,Barrios Unidos,perez,Luis Pérez,candidato,38
+2022,12,12,Barrios Unidos,petro,Gustavo Petro,candidato,35507
+2022,12,12,Barrios Unidos,rodriguez,John Milton Rodríguez,candidato,1460
+2022,13,13,Teusaquillo,betancourt,Íngrid Betancourt,candidato,40
+2022,13,13,Teusaquillo,blanco,Voto en blanco,blanco,1953
+2022,13,13,Teusaquillo,fajardo,Sergio Fajardo,candidato,14824
+2022,13,13,Teusaquillo,gomez,Enrique Gómez,candidato,396
+2022,13,13,Teusaquillo,gutierrez,Federico Gutiérrez,candidato,29453
+2022,13,13,Teusaquillo,hernandez,Rodolfo Hernández,candidato,17368
+2022,13,13,Teusaquillo,no_marcado,Tarjetas no marcadas,no_marcado,19
+2022,13,13,Teusaquillo,nulo,Votos nulos,nulo,290
+2022,13,13,Teusaquillo,perez,Luis Pérez,candidato,33
+2022,13,13,Teusaquillo,petro,Gustavo Petro,candidato,42879
+2022,13,13,Teusaquillo,rodriguez,John Milton Rodríguez,candidato,704
+2022,14,14,Los Mártires,betancourt,Íngrid Betancourt,candidato,29
+2022,14,14,Los Mártires,blanco,Voto en blanco,blanco,880
+2022,14,14,Los Mártires,fajardo,Sergio Fajardo,candidato,3079
+2022,14,14,Los Mártires,gomez,Enrique Gómez,candidato,148
+2022,14,14,Los Mártires,gutierrez,Federico Gutiérrez,candidato,9946
+2022,14,14,Los Mártires,hernandez,Rodolfo Hernández,candidato,12569
+2022,14,14,Los Mártires,no_marcado,Tarjetas no marcadas,no_marcado,15
+2022,14,14,Los Mártires,nulo,Votos nulos,nulo,308
+2022,14,14,Los Mártires,perez,Luis Pérez,candidato,20
+2022,14,14,Los Mártires,petro,Gustavo Petro,candidato,20941
+2022,14,14,Los Mártires,rodriguez,John Milton Rodríguez,candidato,558
+2022,15,15,Antonio Nariño,betancourt,Íngrid Betancourt,candidato,46
+2022,15,15,Antonio Nariño,blanco,Voto en blanco,blanco,1332
+2022,15,15,Antonio Nariño,fajardo,Sergio Fajardo,candidato,4736
+2022,15,15,Antonio Nariño,gomez,Enrique Gómez,candidato,159
+2022,15,15,Antonio Nariño,gutierrez,Federico Gutiérrez,candidato,12944
+2022,15,15,Antonio Nariño,hernandez,Rodolfo Hernández,candidato,15900
+2022,15,15,Antonio Nariño,no_marcado,Tarjetas no marcadas,no_marcado,25
+2022,15,15,Antonio Nariño,nulo,Votos nulos,nulo,528
+2022,15,15,Antonio Nariño,perez,Luis Pérez,candidato,33
+2022,15,15,Antonio Nariño,petro,Gustavo Petro,candidato,32063
+2022,15,15,Antonio Nariño,rodriguez,John Milton Rodríguez,candidato,904
+2022,16,16,Puente Aranda,betancourt,Íngrid Betancourt,candidato,80
+2022,16,16,Puente Aranda,blanco,Voto en blanco,blanco,3111
+2022,16,16,Puente Aranda,fajardo,Sergio Fajardo,candidato,11391
+2022,16,16,Puente Aranda,gomez,Enrique Gómez,candidato,439
+2022,16,16,Puente Aranda,gutierrez,Federico Gutiérrez,candidato,28745
+2022,16,16,Puente Aranda,hernandez,Rodolfo Hernández,candidato,36099
+2022,16,16,Puente Aranda,no_marcado,Tarjetas no marcadas,no_marcado,36
+2022,16,16,Puente Aranda,nulo,Votos nulos,nulo,1059
+2022,16,16,Puente Aranda,perez,Luis Pérez,candidato,89
+2022,16,16,Puente Aranda,petro,Gustavo Petro,candidato,62272
+2022,16,16,Puente Aranda,rodriguez,John Milton Rodríguez,candidato,2218
+2022,17,17,La Candelaria,betancourt,Íngrid Betancourt,candidato,24
+2022,17,17,La Candelaria,blanco,Voto en blanco,blanco,508
+2022,17,17,La Candelaria,fajardo,Sergio Fajardo,candidato,1566
+2022,17,17,La Candelaria,gomez,Enrique Gómez,candidato,62
+2022,17,17,La Candelaria,gutierrez,Federico Gutiérrez,candidato,3887
+2022,17,17,La Candelaria,hernandez,Rodolfo Hernández,candidato,3883
+2022,17,17,La Candelaria,no_marcado,Tarjetas no marcadas,no_marcado,19
+2022,17,17,La Candelaria,nulo,Votos nulos,nulo,244
+2022,17,17,La Candelaria,perez,Luis Pérez,candidato,12
+2022,17,17,La Candelaria,petro,Gustavo Petro,candidato,13755
+2022,17,17,La Candelaria,rodriguez,John Milton Rodríguez,candidato,211
+2022,18,18,Rafael Uribe Uribe,betancourt,Íngrid Betancourt,candidato,128
+2022,18,18,Rafael Uribe Uribe,blanco,Voto en blanco,blanco,3462
+2022,18,18,Rafael Uribe Uribe,fajardo,Sergio Fajardo,candidato,8166
+2022,18,18,Rafael Uribe Uribe,gomez,Enrique Gómez,candidato,406
+2022,18,18,Rafael Uribe Uribe,gutierrez,Federico Gutiérrez,candidato,21045
+2022,18,18,Rafael Uribe Uribe,hernandez,Rodolfo Hernández,candidato,35623
+2022,18,18,Rafael Uribe Uribe,no_marcado,Tarjetas no marcadas,no_marcado,116
+2022,18,18,Rafael Uribe Uribe,nulo,Votos nulos,nulo,2270
+2022,18,18,Rafael Uribe Uribe,perez,Luis Pérez,candidato,141
+2022,18,18,Rafael Uribe Uribe,petro,Gustavo Petro,candidato,94639
+2022,18,18,Rafael Uribe Uribe,rodriguez,John Milton Rodríguez,candidato,2348
+2022,19,19,Ciudad Bolívar,betancourt,Íngrid Betancourt,candidato,254
+2022,19,19,Ciudad Bolívar,blanco,Voto en blanco,blanco,4671
+2022,19,19,Ciudad Bolívar,fajardo,Sergio Fajardo,candidato,8561
+2022,19,19,Ciudad Bolívar,gomez,Enrique Gómez,candidato,469
+2022,19,19,Ciudad Bolívar,gutierrez,Federico Gutiérrez,candidato,23606
+2022,19,19,Ciudad Bolívar,hernandez,Rodolfo Hernández,candidato,52864
+2022,19,19,Ciudad Bolívar,no_marcado,Tarjetas no marcadas,no_marcado,201
+2022,19,19,Ciudad Bolívar,nulo,Votos nulos,nulo,4257
+2022,19,19,Ciudad Bolívar,perez,Luis Pérez,candidato,197
+2022,19,19,Ciudad Bolívar,petro,Gustavo Petro,candidato,159924
+2022,19,19,Ciudad Bolívar,rodriguez,John Milton Rodríguez,candidato,4387
+2022,20,20,Sumapaz,betancourt,Íngrid Betancourt,candidato,2
+2022,20,20,Sumapaz,blanco,Voto en blanco,blanco,14
+2022,20,20,Sumapaz,fajardo,Sergio Fajardo,candidato,22
+2022,20,20,Sumapaz,gutierrez,Federico Gutiérrez,candidato,77
+2022,20,20,Sumapaz,hernandez,Rodolfo Hernández,candidato,243
+2022,20,20,Sumapaz,no_marcado,Tarjetas no marcadas,no_marcado,1
+2022,20,20,Sumapaz,nulo,Votos nulos,nulo,7
+2022,20,20,Sumapaz,petro,Gustavo Petro,candidato,1409
+2022,20,20,Sumapaz,rodriguez,John Milton Rodríguez,candidato,6
+2022,90,,Puesto censo (Corferias),betancourt,Íngrid Betancourt,candidato,46
+2022,90,,Puesto censo (Corferias),blanco,Voto en blanco,blanco,1309
+2022,90,,Puesto censo (Corferias),fajardo,Sergio Fajardo,candidato,3639
+2022,90,,Puesto censo (Corferias),gomez,Enrique Gómez,candidato,138
+2022,90,,Puesto censo (Corferias),gutierrez,Federico Gutiérrez,candidato,8640
+2022,90,,Puesto censo (Corferias),hernandez,Rodolfo Hernández,candidato,17423
+2022,90,,Puesto censo (Corferias),no_marcado,Tarjetas no marcadas,no_marcado,16
+2022,90,,Puesto censo (Corferias),nulo,Votos nulos,nulo,544
+2022,90,,Puesto censo (Corferias),perez,Luis Pérez,candidato,46
+2022,90,,Puesto censo (Corferias),petro,Gustavo Petro,candidato,26358
+2022,90,,Puesto censo (Corferias),rodriguez,John Milton Rodríguez,candidato,655
+2022,98,,Cárceles,betancourt,Íngrid Betancourt,candidato,1
+2022,98,,Cárceles,blanco,Voto en blanco,blanco,18
+2022,98,,Cárceles,fajardo,Sergio Fajardo,candidato,26
+2022,98,,Cárceles,gomez,Enrique Gómez,candidato,2
+2022,98,,Cárceles,gutierrez,Federico Gutiérrez,candidato,72
+2022,98,,Cárceles,hernandez,Rodolfo Hernández,candidato,124
+2022,98,,Cárceles,no_marcado,Tarjetas no marcadas,no_marcado,1
+2022,98,,Cárceles,nulo,Votos nulos,nulo,8
+2022,98,,Cárceles,perez,Luis Pérez,candidato,2
+2022,98,,Cárceles,petro,Gustavo Petro,candidato,519
+2022,98,,Cárceles,rodriguez,John Milton Rodríguez,candidato,8

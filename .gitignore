@@ -57,6 +57,11 @@ data/**
 !data/external/
 !data/external/marginal_localidad_18mas.csv
 
+# resultados electorales por localidad (D16): agregados de resultados públicos de
+# la Registraduría. Los archivos por mesa NO: viven fuera del repo.
+!data/external/electoral/
+!data/external/electoral/presidente_1v_*
+
 # geometría oficial de localidades (fuente pública: Catastro Distrital)
 !data/external/geo/
 !data/external/geo/**
