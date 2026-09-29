@@ -97,6 +97,65 @@ enmienda fechada **antes** de armar el primer dossier.
 > Colombia, y eso se anota en el dossier. Se aplican sin excepción las reglas de
 > arriba (10 a 20 hechos, sin encuestas ni aprobación, mismo formato).
 
+> **Enmienda 2 — 29/09/2026, antes de abrir ninguna cronología.** Decisiones de
+> Daniel. Motivo: quien arma el dossier **conoce los cambios observados** (§2), así
+> que la selección no puede depender de su criterio.
+>
+> 1. **Fuente concreta.** Wikipedia en español no tiene cronología anual de
+>    Bogotá (solo `Anexo:Cronología de Bogotá`, general). Se usa la cláusula de
+>    respaldo de la enmienda 1 en **los doce** dossiers: la fuente es
+>    `Anexo:Colombia en AAAA`, y los hechos de Bogotá salen de ahí. Se anota la
+>    fecha de consulta.
+> 2. **Años.** Del año de inicio al año final de la transición, **inclusive**
+>    (2018→2019 usa 2018 y 2019). Limitación aceptada: pueden entrar hechos
+>    posteriores al trabajo de campo de la encuesta final, o anteriores al de la
+>    inicial.
+> 3. **Unidad.** Cada entrada fechada de la sección de acontecimientos. Se
+>    excluyen nacimientos, fallecimientos, deportes y espectáculos.
+> 4. **Filtro de opinión** (antes de seleccionar): se descarta toda entrada que
+>    contenga, sin distinguir mayúsculas ni tildes, *encuesta, sondeo,
+>    aprobación, favorabilidad, confianza* o *percepción*.
+> 5. **Selección: 15 hechos exactos por dossier.** Son de Bogotá las entradas que
+>    contienen *Bogotá, bogotano/a, Distrito Capital* o *TransMilenio*.
+>    - Si hay 15 o más de Bogotá, se toman 15 **espaciadas parejo** en orden
+>      cronológico: posiciones `round(i·(n−1)/14)`, i = 0…14.
+>    - Si hay menos, entran todas, y el resto hasta 15 sale de las demás
+>      entradas con la misma regla de espaciado.
+>    - La selección la hace un script sobre la extracción guardada, no una
+>      persona.
+> 6. **Texto.** Fecha y primera oración de la entrada, sin enlaces ni notas y
+>    **sin reescribir**.
+> 7. **Versionado.** Por transición se guardan en el repositorio la extracción
+>    completa (todas las entradas elegibles, para auditar) y el dossier final.
+>    Atribución: Wikipedia en español, CC BY-SA 4.0.
+
+> **Enmienda 3 — 29/09/2026, después de ver los dossiers y antes de cualquier
+> llamada al modelo.** Decisiones de Daniel.
+>
+> 1. **Texto: entrada completa**, no primera oración (cambia el punto 6 de la
+>    enmienda 2). Motivo técnico: cortar en el primer punto rompía dos entradas
+>    («Tigres F.» por la abreviatura F. C.; y el racionamiento de agua de abril
+>    de 2024, cuya primera oración en Wikipedia es un fragmento). **La selección
+>    no cambia**: el filtro y la marca de Bogotá ya se aplicaban a la entrada
+>    completa. Verificado: los doce conteos son idénticos antes y después.
+> 2. **La regla de selección se congela sin cambios**, aunque trae sobre todo
+>    conciertos, festivales y ferias, con pocos hechos de gobierno. Cambiarla
+>    después de ver el contenido, conociendo los resultados, sería elegir a
+>    criterio. **Limitación registrada:** el dossier refleja lo que la
+>    cronología nacional de Wikipedia dice de Bogotá, que no es lo que un
+>    analista pondría. En 2014→2015 (3 de Bogotá), 2022→2023 (6) y 2023→2024
+>    (8) el resto sale de hechos nacionales. El contraste brazo A / brazo B
+>    dirá si un dossier así aporta.
+> 3. **Versionado (ajusta el punto 7 de la enmienda 2).** En vez de copiar la
+>    extracción completa (~200 KB) al repositorio, se versionan las
+>    **revisiones fijas** de cada página y el **script exacto**
+>    (`config/experimento9/extraer_dossiers.js`), que la regenera y aplica la
+>    regla. `config/experimento9/dossiers/HUELLAS.txt` guarda la huella
+>    SHA-256 de cada dossier; volver a correr el script debe reproducirlas.
+>
+> Lo que va al modelo en el brazo B es solo la sección «Hechos» de cada
+> dossier; el encabezado (fuente, conteos) es para auditoría.
+
 ### 3.4 Cómo se evalúa
 
 La propuesta del LLM se aplica a la distribución inicial con el **ladeo
