@@ -149,7 +149,10 @@ geografía real dentro de la ciudad que tiene el proyecto. **Verificado el 29/09
 zona = localidad** (r = 0,991 en tamaño; nombres de puesto coinciden; §14.3), con
 la zona 90 (Corferias, 7,6 %) sin localidad y un sesgo de inscripción hacia el centro.
 **Tabla construida el 29/09:** `data/external/electoral/presidente_1v_*` (2014, 2018,
-2022 por localidad; verificada contra los archivos municipales; §14.4). Gana a «escenarios con preguntas reales» como
+2022 por localidad; verificada contra los archivos municipales; §14.4).
+**Pre-registrado el 29/09:** `GEOGRAFIA_ELECTORAL_SPECIFICATION.md` — ¿la composición
+de cada localidad explica su voto, y lo que no explica se repite entre elecciones?
+Sin código todavía; primero, mundos simulados. Gana a «escenarios con preguntas reales» como
 siguiente frente, porque resuelve un vacío de datos que ningún otro frente resuelve.
 
 **Experimento 9: cerrado.** Se cerró el 29/09
