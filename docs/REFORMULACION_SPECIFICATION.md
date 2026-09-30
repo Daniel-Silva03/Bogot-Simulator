@@ -28,6 +28,11 @@ tres respuestas**:
 pregunta, redacción neutral (sin inducir la respuesta), en el contexto de Bogotá, y una
 escala de cinco puntos con sus etiquetas. **Quien pregunta siempre ve la versión
 reformulada antes de que se responda, y puede editarla o rechazarla.**
+*(Cambio del 30/09, después de la validación, a pedido de Daniel: pedir un segundo clic
+confundía —«le doy preguntar y no me dice nada»—. Ahora la página responde de una vez y
+muestra la versión reformulada arriba de la respuesta, como «así entendimos tu pregunta»,
+con un botón para editarla y volver a suponer. No cambia la validación, que era de la
+clasificación y la redacción, no del flujo. `PAGINA_CONSULTA.md` §5.2.)*
 
 **Todo lo que la página responde después es una suposición**, y lo dice (D17).
 

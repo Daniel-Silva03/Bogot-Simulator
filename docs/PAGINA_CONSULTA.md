@@ -120,6 +120,24 @@ La página es ahora solo oscura. La portada va centrada, con dos botones (menta 
 nueva se apaga y dice en el centro por qué no se dibuja (lectura B del puente). Esto
 último es a propósito.
 
+## 5.2 Un solo paso (30/09/2026)
+
+Daniel: «selecciono una de las preguntas y le doy preguntar pero no me dice nada». La página
+pedía dos clics: el primero mostraba solo la sugerencia de reformulación, y había que dar un
+segundo botón para ver la respuesta; en una ventana angosta, además, la sugerencia quedaba
+fuera de la vista. Ahora:
+
+- **Preguntar responde de una vez:** reformulación, respuesta y mapa, sin segundo clic.
+- **La reformulación se muestra arriba de la respuesta**, como «así entendimos tu
+  pregunta». En una pregunta nueva hay un botón «Editar y volver a suponer».
+- **Fuera de alcance** no da respuesta: dice por qué y ofrece «Preguntar esto» con la
+  alternativa, que vuelve a pasar por la reformulación (DI-CO4).
+- **Cuando llega la respuesta**, en pantallas angostas la página baja hasta ella; en las
+  anchas, el mapa de al lado parpadea en menta para decir que cambió.
+
+Esto cambia una frase de `REFORMULACION_SPECIFICATION.md` §1 («siempre ve la versión
+reformulada antes de que se responda»); quedó anotado allí.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; opina como Bogotá en 2023; unas 80 personas por

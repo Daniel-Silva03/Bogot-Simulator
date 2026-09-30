@@ -36,6 +36,7 @@ button{font:inherit;cursor:pointer}
 .envoltura{max-width:1200px;margin:0 auto;padding:0 24px}
 .mono{font-family:var(--mono);letter-spacing:.01em}
 .oculto{display:none!important}
+#sugerencia,#resultado{scroll-margin-top:96px}
 :focus-visible{outline:2px solid var(--menta);outline-offset:2px}
 
 /* ---------- botones (siempre píldora) ---------- */
@@ -179,6 +180,8 @@ input[type=range]{width:100%;accent-color:var(--menta)}
 .ficha dt{color:var(--texto-2);font-size:12px;letter-spacing:.12px}
 .ficha dd{margin:0;text-align:right;font:400 12px var(--mono)}
 .velo{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(340px,80%);background:var(--elevado);border:1px solid var(--linea-2);border-radius:var(--r-card);padding:20px;font-size:14px;color:var(--texto-2);text-align:center;letter-spacing:.14px}
+@keyframes cambio{0%{box-shadow:0 0 0 0 rgba(122,255,180,.55);border-color:var(--menta)}100%{box-shadow:0 0 0 14px rgba(122,255,180,0);border-color:var(--linea)}}
+.lienzo.cambio{animation:cambio 1.2s ease-out}
 .velo b{display:block;color:var(--blanco);font-weight:500;font-size:16px;margin-bottom:6px}
 
 footer{background:var(--pino-abismo);padding:80px 0 56px;color:var(--texto-2);font-size:14px;letter-spacing:.14px}
@@ -260,7 +263,7 @@ footer .marca{margin-bottom:16px}
 
 <section class="trabajo" id="preguntar">
   <div class="envoltura">
-    <div class="cabeza"><span class="insignia ins-viva"><i></i><span id="modoTexto">Cada pregunta es independiente</span></span><h2>Pregúntale a Bogotá</h2><p>Escribe la pregunta o toca un ejemplo. El mapa cambia con cada respuesta.</p></div>
+    <div class="cabeza"><span class="insignia ins-viva"><i></i><span id="modoTexto">Cada pregunta es independiente</span></span><h2>Pregúntale a Bogotá</h2><p>Escribe una pregunta o toca un ejemplo: verás cómo respondería la ciudad, por grupos y, si la pregunta ya fue medida, en el mapa.</p></div>
     <div class="mesa">
       <div class="panel">
         <div>
@@ -456,41 +459,59 @@ async function api(ruta, cuerpo){
 const cargando = (el, texto) => { el.classList.remove('oculto'); el.innerHTML = `<div class="cargando"><i></i>${texto}</div>`; };
 const error = (el, texto) => { el.classList.remove('oculto'); el.innerHTML = `<p class="razon" style="margin:0">${esc(texto)}</p>`; };
 
+/* Un solo paso (30/09, a pedido de Daniel): preguntar → la respuesta y el mapa. La
+   reformulación ya no pide confirmación: se muestra arriba de la respuesta, como
+   «así entendimos tu pregunta», y se puede editar y volver a suponer. */
 async function preguntar(texto){
   const q = (texto ?? campo.value).trim(); if (!q) { campo.focus(); return; }
   if (texto) { campo.value = texto; campo.dispatchEvent(new Event('input')); }
-  $('#enviar').disabled = true; $('#resultado').classList.add('oculto');
+  $('#enviar').disabled = true;
+  $('#sugerencia').classList.add('oculto');
   estado = { ...estado, modo:'general', resp:null }; pintar(); titulosMapa();
-  const s = $('#sugerencia'); cargando(s, 'Buscando cómo decir tu pregunta…');
-  try { mostrarSugerencia(await api('/api/reformular', {pregunta:q})); }
-  catch (e) { error(s, e.message); }
+  const el = $('#resultado'); cargando(el, 'Entendiendo tu pregunta…');
+  try {
+    const r = await api('/api/reformular', {pregunta:q});
+    mostrarEntendida(r);
+    if (r.alcance === 'catalogo') await responder({codigo:r.codigo});
+    else if (r.alcance === 'nueva') await responder({pregunta:r.reformulada, escala:r.escala});
+    else { el.classList.add('oculto'); verResultado(); }
+  } catch (e) { error(el, e.message); }
   finally { $('#enviar').disabled = false; }
 }
 
-function mostrarSugerencia(r){
-  const s = $('#sugerencia');
+function mostrarEntendida(r){
+  const s = $('#sugerencia'); s.classList.remove('oculto');
   if (r.alcance === 'invalida') { s.innerHTML = `<p class="razon" style="margin:0">${esc(r.mensaje)}</p>`; return; }
-  const ins = {catalogo:['ins-cat','Ya medida en la encuesta'], nueva:['ins-nueva','Pregunta nueva'], fuera:['ins-fuera','Fuera de alcance']}[r.alcance];
-  let cuerpo = '', acciones = '';
-  if (r.alcance === 'catalogo') {
-    cuerpo = `<p class="propuesta">${esc(r.pregunta_catalogo)}</p><div class="escala-lista">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>`;
-    acciones = `<button class="btn btn-menta" id="usar">Ver cómo respondería</button>`;
-  } else if (r.alcance === 'nueva') {
-    cuerpo = `<label class="etq-min" for="editada" style="display:block;margin-top:12px">Así la preguntaría una encuesta · puedes editarla</label>
-      <textarea id="editada" class="editable">${esc(r.reformulada)}</textarea>
-      <div class="escala-lista">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>`;
-    acciones = `<button class="btn btn-menta" id="usar">Suponer la respuesta</button>`;
-  } else {
-    cuerpo = r.reformulada ? `<p class="razon" style="margin:12px 0 0">Algo cercano que sí se puede suponer:</p><p class="propuesta">${esc(r.reformulada)}</p>` : '';
-    acciones = r.reformulada ? `<button class="btn btn-fantasma" id="usar">Probar con esta</button>` : '';
+  const ins = {catalogo:['ins-cat','Ya medida en la encuesta'], nueva:['ins-nueva','Pregunta nueva · suposición'], fuera:['ins-fuera','Fuera de alcance']}[r.alcance];
+  if (r.alcance === 'fuera') {
+    s.innerHTML = `<span class="insignia ${ins[0]}">${ins[1]}</span>
+      <p class="propuesta">Esta pregunta no se puede suponer con la población.</p><p class="razon">${esc(r.razon || '')}</p>
+      ${r.reformulada ? `<p class="razon" style="margin:0 0 8px">Algo cercano que sí:</p><p class="propuesta" style="margin-top:0">${esc(r.reformulada)}</p>
+      <div class="acciones"><button class="btn btn-menta" id="usar">Preguntar esto</button></div>` : ''}`;
+    const b = $('#usar'); if (b) b.addEventListener('click', () => preguntar(r.reformulada));   /* DI-CO4 */
+    return;
   }
-  s.innerHTML = `<span class="insignia ${ins[0]}">${ins[1]}</span>${cuerpo}<p class="razon">${esc(r.razon || '')}</p><div class="acciones">${acciones}</div>`;
-  const b = $('#usar'); if (!b) return;
-  b.addEventListener('click', () => {
-    if (r.alcance === 'catalogo') responder({codigo:r.codigo});
-    else if (r.alcance === 'nueva') responder({pregunta:$('#editada').value.trim(), escala:r.escala});
-    else preguntar(r.reformulada);                  /* DI-CO4: la alternativa vuelve a reformularse */
-  });
+  const texto = r.alcance === 'catalogo' ? r.pregunta_catalogo : r.reformulada;
+  s.innerHTML = `<span class="insignia ${ins[0]}">${ins[1]}</span>
+    <div class="etq-min" style="margin-top:12px">Así entendimos tu pregunta</div>
+    <p class="propuesta" id="entendida">${esc(texto)}</p>
+    <div class="escala-lista">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>
+    ${r.alcance === 'nueva' ? `<div class="acciones"><button class="btn btn-fantasma" id="editar">Editar y volver a suponer</button></div>
+      <div class="oculto" id="edicion"><textarea id="editada" class="editable">${esc(r.reformulada)}</textarea>
+      <div class="acciones" style="margin-top:8px"><button class="btn btn-menta" id="resuponer">Volver a suponer</button></div></div>` : ''}`;
+  if (r.alcance === 'nueva') {
+    $('#editar').addEventListener('click', () => { $('#edicion').classList.remove('oculto'); $('#editar').classList.add('oculto'); $('#editada').focus(); });
+    $('#resuponer').addEventListener('click', () => {
+      const v = $('#editada').value.trim(); if (!v) return;
+      $('#entendida').textContent = v; responder({pregunta:v, escala:r.escala});
+    });
+  }
+}
+
+/* En pantallas angostas el resultado queda debajo: se lleva a la vista. En anchas,
+   el mapa está al lado y parpadea para decir que cambió. */
+function verResultado(){
+  if (innerWidth < 1000) $('#sugerencia').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 async function responder(cuerpo){
@@ -533,8 +554,8 @@ function mostrar(r){
       <p class="nota">${esc(r.justificacion || '')}</p>`;
     $('#nivel').addEventListener('input', e => { const v = +e.target.value; $('#nivelTxt').innerHTML = `${esc(nivelTxt(v))} <small>${f1(v)} de 5</small>`; });
   }
-  titulosMapa(); pintar();
-  if (innerWidth < 1000) el.scrollIntoView({behavior:'smooth', block:'start'});
+  titulosMapa(); pintar(); verResultado();
+  const lz = $('#lienzo'); lz.classList.remove('cambio'); void lz.offsetWidth; lz.classList.add('cambio');
 }
 
 function titulosMapa(){
