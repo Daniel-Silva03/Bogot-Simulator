@@ -124,7 +124,7 @@ def test_el_servidor_responde_las_tres_rutas_y_solo_en_localhost():
         with urllib.request.urlopen(base + "/", timeout=30) as r:
             html = r.read().decode("utf-8")
         assert "/*__DATOS__*/" not in html and "/*__BASE__*/" not in html
-        assert "Todo es una suposición" in html and "data-capa" not in html     # sin los botones de antes
+        assert "es una suposición" in html and "#mapa .loc:focus" in html and "data-capa" not in html     # sin los botones de antes
         s, d = _post(base + "/api/reformular", {"pregunta": "¿La gente se siente segura caminando por su barrio?"})
         assert s == 200 and d["alcance"] == "catalogo" and d["codigo"] == "VS8"
         s, d = _post(base + "/api/responder", {"codigo": "VS8"})

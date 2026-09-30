@@ -3,7 +3,7 @@
 **La página nueva del proyecto (D17): cualquiera le hace una pregunta de opinión a la población sintética y ve cómo respondería, en total, por grupos y, cuando hay con qué, por localidad. Todo rotulado como suposición.**
 
 Proyecto: Bogotá Social Simulator
-Versión: 0.1
+Versión: 0.2 (rediseño con `DESIGN.md`, 30/09/2026)
 Fecha: 30 de septiembre de 2026
 Código: `src/consulta/` (`motor.py`, `servidor.py`, `pagina.html`, `reformular.py`) · Pruebas: `tests/test_consulta.py` (8), `tests/test_reformular.py` (7)
 Reemplaza, como cara del proyecto, al tablero de `src/viz/` (que se conserva, sin cambios)
@@ -87,6 +87,38 @@ En todas: una banda que dice que es una suposición, no una medición.
 - **No se ha abierto con el modelo real todavía.**
 
 ---
+
+## 5.1 Rediseño con el sistema de Daniel (30/09/2026, v0.2)
+
+Daniel entregó un `DESIGN.md` («bioluminescent control room»): oscuro, bicromático
+(neutros casi negros + menta), titulares en peso 300 con tracking negativo, botones
+siempre en píldora, tarjetas planas sin sombra, y un brillo verde radial solo detrás de la
+«vitrina» (aquí, el espacio de preguntar). Se aplicó completo, con tres adaptaciones:
+
+- **Tipografías:** Inter y JetBrains Mono, los sustitutos que nombra el propio documento
+  (Euclid Circular A y Onsite SemiMono son de pago).
+- **Colores del mapa:** el sistema no admite otros tonos, así que la rampa de datos va del
+  pino a la menta pálida; la menta eléctrica queda para la acción principal y la
+  localidad seleccionada.
+- **Texto secundario más claro** que el gris del documento (#5e6262), que sobre #000a06 no
+  se lee.
+
+La página es ahora solo oscura. La portada va centrada, con dos botones (menta + fantasma).
+
+**Tres defectos que se corrigieron en el camino:**
+1. **El «amarillo» al tocar una localidad** (lo reportó Daniel): el foco del teclado dibuja
+   un contorno, y en un SVG que mide en grados ese contorno se agranda miles de veces y
+   tapa todo el mapa. Ahora la selección y el foco se marcan con el borde de la localidad.
+2. **Los nombres de las localidades se veían como letras sueltas:** el tracking negativo
+   del sistema, heredado dentro del SVG en grados, amontonaba las letras. El mapa usa
+   tracking 0.
+3. **La sección de preguntar se corría de lado** al saltar al mapa: su brillo de fondo es
+   más ancho que la pantalla y `overflow:hidden` deja que el navegador la desplace. Se
+   cambió a `overflow:clip`. De paso, parques y vías se recortan al contorno de la ciudad.
+
+**El mapa con cada pregunta:** con una del catálogo se colorea con la respuesta; con una
+nueva se apaga y dice en el centro por qué no se dibuja (lectura B del puente). Esto
+último es a propósito.
 
 ## 6. Límites que la página dice
 
