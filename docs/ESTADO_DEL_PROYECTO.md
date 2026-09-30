@@ -164,6 +164,17 @@ Lo que sigue en este frente:
 3. Escribir el escenario (los números los pone una persona, no el LLM: Exp. 9),
    correrlo y revisar el informe con quien hizo la pregunta.
 
+**Primera pregunta real (30/09), del jefe de Daniel:** ¿el simulador acierta que la
+población votaría por Abelardo de la Espriella y que ganaría? Así no se puede
+responder (el resultado ya se conoce, la población no tiene intención de voto y el
+proyecto es de Bogotá, no del país). Se reformuló en una que sí puede fallar:
+**¿el polo de derecha de 2014–2022 anticipa en qué localidades le fue mejor y peor a
+Abelardo de lo que dice su estrato, primera vuelta 2026?** Pre-registrada en
+`POLOS_2026_SPECIFICATION.md`, con la predicción localidad por localidad (§4), antes
+de descargar ni mirar nada de 2026. Es también la prueba pendiente de los dos polos.
+Siguen: código y mundos simulados; descarga de los escrutinios por mesa de la
+Registraduría (con permiso, fuera del repo); corrida y resultados.
+
 **Geografía electoral de Bogotá: cerrada el 30/09.** El 29/09 el CNC entregó
 resultados electorales por mesa (presidente 2014, 2018 y 2022; Senado y Cámara 2018)
 y por municipio, sin datos de personas. **D16** los saca de R10 (se pueden leer con un
