@@ -131,10 +131,14 @@ límites después, como conocimiento ganado.
 
 ## 5. La distinción que el tablero enseña
 
-**El tiempo se puede leer; la geografía no.** La media de ciudad recorre
-2,81 → 2,53 → 2,39 → 2,24 → 2,45 con márgenes de ±0,03. La variación entre
-localidades en la capa de opinión es composición, no medición (DI-V52, paso 0b).
-La capa de **Crecimiento** sí afirma geografía: son proyecciones oficiales.
+**El tiempo se puede leer; la geografía no — salvo donde se mide.** La confianza
+medida (ECP) recorre 2,81 → 2,50 → 2,36 → 2,24 → 2,43 con márgenes de ±0,03.
+*(Hasta el 29/09 aquí se citaban las medias de la población sintética publicada,
+2,81 → 2,53 → 2,39 → 2,24 → 2,45; eran de una corrida que no se podía reproducir
+(DI-M2) y ahora, regeneradas, son 2,78 → 2,55 → 2,41 → 2,23 → 2,42. La serie medida
+es la cifra que no depende de ninguna corrida.)* La variación entre localidades en la
+capa de opinión es composición, no medición (DI-V52, paso 0b). Las capas de
+**Crecimiento** y **Voto** sí afirman geografía: proyecciones oficiales y votos contados.
 
 ---
 
@@ -166,11 +170,15 @@ exploratoria con participación. 35 pruebas en `tests/test_viz_voto.py`.
 EPC caía al DEFF prestado en todas las olas sin avisar; y `preparar_mapa` solo leía
 `.csv` aunque `build_agents` escribe `.parquet` donde hay pyarrow. Las 7 suites pasan.
 **Dos hallazgos que quedan abiertos:**
-- **Las opiniones de la población sintética no se reproducen entre máquinas.** Con
-  semilla 42, el PC personal da los mismos agentes (posición, demografía) que el mapa
-  publicado, pero otras opiniones (2021: media 2,280 contra 2,241; 2019: sd entre
-  localidades 0,244 contra 0,147). El mapa publicado no se tocó. Hay que encontrar
-  la causa antes de reconstruir poblaciones en cualquiera de las dos máquinas.
+- ~~Las opiniones de la población sintética no se reproducen entre máquinas~~ —
+  **resuelto el 29/09 (DI-M2 en `matching.py`, DI-V57).** El sorteo de empates del
+  hot-deck dependía del orden en que `NearestNeighbors` devuelve a los empatados, que
+  cambia con el algoritmo y la versión de scikit-learn (52–62 % de las opiniones
+  cambiaban). Ahora el orden es canónico y el conjunto nunca se recorta: los cuatro
+  algoritmos dan la misma población, con datos reales. Las cinco poblaciones, el piso
+  territorial y el mapa se regeneraron (versión `v0.5-dim2`).
+  **En el PC del CNC:** después de `git pull`, no reconstruir poblaciones con código
+  anterior; con este código, las de las dos máquinas son iguales.
 - **Error con diseño de la EPC en 2018 y 2019:** desde el microdato da 0,0423 y
   0,0384; `deff_epc_seis_olas.csv` dice 0,0407 y 0,0382. Mismos casos (el error SRS
   coincide exacto); la diferencia está en el estrato de diseño con que se generó ese

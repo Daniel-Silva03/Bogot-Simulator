@@ -84,9 +84,19 @@ SEMILLAS = (42, 101, 202, 303, 404, 505, 606, 707, 808, 909,
             111, 222, 333, 444, 555, 666, 777, 888, 121, 232)
 
 
-def sd_entre_de(csv: Path) -> float:
-    d = pd.read_csv(csv)
+def sd_entre_de(ruta: Path) -> float:
+    d = pd.read_parquet(ruta) if ruta.suffix == ".parquet" else pd.read_csv(ruta)
     return float(d.groupby("localidad")["opinion_t0"].mean().std(ddof=1))
+
+
+def _archivo_de(base: Path) -> Path:
+    """El archivo que `build_agents` escribió: .parquet si hay motor, .csv si no.
+
+    Suponer siempre .csv rompía el script en una máquina con pyarrow (29/09/2026),
+    el mismo defecto que tenía `preparar_mapa`.
+    """
+    meta = json.loads(Path(str(base) + "_metadata.json").read_text(encoding="utf-8"))
+    return base.parent / meta["archivo_datos"]
 
 
 def medir(anio: int, semillas) -> list[float]:
@@ -99,8 +109,8 @@ def medir(anio: int, semillas) -> list[float]:
              "--donante", f"ecp:{anio}", "--n", "1000", "--seed", str(s),
              "--nombre-base", str(base)],
             capture_output=True, check=True, cwd=RAIZ)
-        vals.append(sd_entre_de(base.with_suffix(".csv")))
-        for ext in (".csv", "_metadata.json"):
+        vals.append(sd_entre_de(_archivo_de(base)))
+        for ext in (".csv", ".parquet", "_metadata.json"):
             try:
                 os.remove(str(base) + ext)
             except OSError:

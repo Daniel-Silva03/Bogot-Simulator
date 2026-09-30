@@ -1,6 +1,6 @@
 # VISUALIZATION SPECIFICATION — BOGOTÁ SOCIAL SIMULATOR
 
-**Versión:** 0.17
+**Versión:** 0.18
 **Fecha:** 29 de septiembre de 2026
 **Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados; cuatro capas, todas responden al año, y una de ellas —Crecimiento— es la primera que **sí** puede afirmar geografía. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. **Corrección del 25/09 (DI-V52):** la primera mitad de DI-V45 se sostiene; «no hay señal» no, porque la prueba que la sostenía no podía detectar señal. La capa de opinión sigue sin poder leerse por territorio, pero por otra razón: el donante no trae localidad. Hitos 3 a 5 especificados, sin construir. **29/09 — capa de Voto (DI-V53 a DI-V56):** la primera vuelta presidencial de 2014, 2018 y 2022 por localidad, un conteo completo que sí puede afirmar geografía, y «lo que el estrato no explica» (`GEOGRAFIA_ELECTORAL_RESULTS.md`).
 **Documentos relacionados:** PROJECT_CONTEXT.md §31 y §51, ARCHITECTURE.md, POPULATION_SPECIFICATION.md, claude/ANALISIS_DISENO_MUESTRAL.md
@@ -764,6 +764,33 @@ El detalle está en el docstring de `src/viz/preparar_voto.py`. Resumen:
 - **DI-V56** — Sumapaz tiene voto pero no residuo (quedó fuera del ajuste): va en
   gris en la vista de residuos y la ficha dice por qué.
 
+### Poblaciones regeneradas (29/09/2026)
+
+- **DI-V57** — **Las poblaciones del mapa se regeneraron después de DI-M2, y las
+  cifras sintéticas citadas antes son de una corrida que ya no se puede
+  reproducir.** *Hecho:* con la misma semilla, dos máquinas daban los mismos agentes
+  con otras opiniones, porque el sorteo de empates del hot-deck dependía del orden en
+  que scikit-learn devuelve a los empatados (`matching.py`, DI-M2). *Decisión:* se
+  corrigió el emparejamiento y se regeneraron las cinco poblaciones (versión
+  `v0.5-dim2`), el piso territorial (20 semillas) y el paquete.
+
+  | año | media antes → ahora | dispersión entre localidades | rango del piso |
+  |---|---|---|---|
+  | 2013 | 2,809 → 2,781 | 0,156 → 0,146 | 0,10–0,48 → 0,12–0,57 |
+  | 2017 | 2,525 → 2,552 | 0,196 → 0,187 | 0,16–0,53 → 0,14–0,43 |
+  | 2019 | 2,393 → 2,409 | 0,147 → 0,175 | 0,14–0,59 → 0,14–0,56 |
+  | 2021 | 2,241 → 2,227 | **0,341 → 0,221** | 0,15–0,51 → 0,16–0,50 |
+  | 2023 | 2,448 → 2,421 | 0,170 → 0,168 | 0,13–0,48 → 0,15–0,49 |
+
+  Los agentes y la capa de Crecimiento quedan idénticos. **Las cifras de corridas
+  anteriores que citan este documento y PROJECT_CONTEXT (0,156 en §2 y en §3.2;
+  0,341 en DI-V45) se conservan sin editar (§45)**: describen la corrida de entonces.
+  Ninguna conclusión cambia: la media de ciudad sigue a la medida dentro de ±0,03, y
+  la dispersión entre localidades sigue dentro del rango del piso en los cinco años
+  (percentiles 10 a 45), que es lo que ya decía DI-V52. El caso de 2021, que DI-V45
+  miró con atención por su 0,341, era una semilla alta: con la población nueva vale
+  0,221.
+
 La regla de §2 se aplica al revés aquí, y el aviso lo enseña: la capa de Opinión no
 puede decir «el sur confía menos»; esta sí puede decir «el sur votó más por Petro»,
 y además decir **dónde el estrato no alcanza a explicarlo**. Lo que no puede decir
@@ -778,7 +805,7 @@ data/external/geo/osm/verde.geojson            extracto Overpass: leisure=park (
 data/external/geo/osm/agua.geojson             extracto Overpass: agua — PENDIENTE (DI-V14)
 src/viz/preparar_mapa.py                       geometría + población → paquete de datos
 src/viz/preparar_serie.py                      ECP + EPC → serie temporal con márgenes (Hito 2)
-src/viz/piso_territorial.py                    rehace la población con 20 semillas → estabilidad de una corrida (DI-V45, DI-V52)
+src/viz/piso_territorial.py                    rehace la población con 20 semillas → estabilidad de una corrida (DI-V45, DI-V52; lee .parquet o .csv desde el 29/09)
 src/viz/simular_prueba_piso.py                 ciudad simulada: el criterio del piso no detecta señal (DI-V52)
 data/external/marginal_localidad_18mas_serie.csv  población 18+ por localidad y año, solo para dibujar (DI-V48)
 src/utils/revisar_datos.py                     qué datos hay en esta máquina y dónde va cada cosa

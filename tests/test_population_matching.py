@@ -348,6 +348,62 @@ def test_empates_se_sortean_y_no_se_aplanan():
             "el sorteo de empates es reproducible con la misma semilla")
 
 
+def _celdas_con_empates(seed=0, n_rec=400, n_don=900):
+    """Receptor y donante con variables discretas: muchos empates por celda."""
+    rng = np.random.default_rng(seed)
+    def base(n):
+        return pd.DataFrame({
+            "localidad": rng.choice(["Suba", "Bosa"], n),
+            "sexo": rng.choice(["F", "M"], n),
+            "edad": rng.choice([20, 35, 50, 65], n),
+            "estrato": rng.choice([1, 2, 3, 4], n),
+            "nivel_educativo": rng.choice([1, 2, 3], n),
+        })
+    receptor = base(n_rec).assign(agent_id=range(n_rec))
+    donante = base(n_don).assign(confianza_institucional=rng.uniform(1, 5, n_don).round(3),
+                                 factor_expansion=rng.uniform(1, 50, n_don))
+    return receptor, donante
+
+
+def test_el_algoritmo_de_vecinos_no_cambia_el_resultado():
+    """DI-M2 — el regresor de la población que no se reproducía entre máquinas.
+
+    Antes, forzar otro algoritmo de NearestNeighbors cambiaba la opinión de más
+    de la mitad de los agentes: el orden de los empatados decidía el sorteo.
+    """
+    import functools
+    import src.population.matching as m
+    from sklearn.neighbors import NearestNeighbors as NN
+
+    receptor, donante = _celdas_con_empates()
+    resultados = {}
+    try:
+        for alg in ("brute", "kd_tree", "ball_tree", "auto"):
+            m.NearestNeighbors = functools.partial(NN, algorithm=alg)
+            r = m.hot_deck_match(receptor, donante, "confianza_institucional",
+                                 random_state=42, peso_col="factor_expansion")
+            resultados[alg] = r.agentes["confianza_institucional"].to_numpy()
+    finally:
+        m.NearestNeighbors = NN
+    base = resultados["brute"]
+    for alg, o in resultados.items():
+        _assert(np.array_equal(o, base),
+                f"con algoritmo '{alg}' la población es idéntica a la de 'brute'")
+
+
+def test_los_empates_no_se_recortan_en_k():
+    """DI-M2 — con más empatados que k, se vuelve a consultar: pedir 3 o 500
+    vecinos tiene que dar exactamente lo mismo."""
+    receptor, donante = _celdas_con_empates(seed=1)
+    a = hot_deck_match(receptor, donante, "confianza_institucional",
+                       random_state=3, peso_col="factor_expansion", k_empates=3)
+    b = hot_deck_match(receptor, donante, "confianza_institucional",
+                       random_state=3, peso_col="factor_expansion", k_empates=500)
+    _assert(np.array_equal(a.agentes["confianza_institucional"].to_numpy(),
+                           b.agentes["confianza_institucional"].to_numpy()),
+            "k_empates=3 y k_empates=500 dan la misma población (el empate no se recorta)")
+
+
 if __name__ == "__main__":
     test_caso_basico_match_exacto()
     test_relajacion_por_falta_de_sexo()
@@ -357,4 +413,6 @@ if __name__ == "__main__":
     test_receptor_con_indice_no_trivial()
     test_exact_match_vars_tiene_efecto()
     test_empates_se_sortean_y_no_se_aplanan()
+    test_el_algoritmo_de_vecinos_no_cambia_el_resultado()
+    test_los_empates_no_se_recortan_en_k()
     print("\nTodos los tests pasaron.")

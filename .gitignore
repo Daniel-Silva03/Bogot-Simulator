@@ -56,6 +56,8 @@ data/**
 # marginal territorial (fuente pública: proyecciones DANE-SDP)
 !data/external/
 !data/external/marginal_localidad_18mas.csv
+# la misma fuente por año (DI-V48): sin ella el mapa pierde la capa de Crecimiento
+!data/external/marginal_localidad_18mas_serie.csv
 
 # resultados electorales por localidad (D16): agregados de resultados públicos de
 # la Registraduría. Los archivos por mesa NO: viven fuera del repo.

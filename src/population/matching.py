@@ -61,6 +61,9 @@ logger = logging.getLogger(__name__)
 EXACT_MATCH_VARS = ["localidad", "sexo"]
 DISTANCE_VARS = ["edad", "estrato", "nivel_educativo"]
 
+#: DI-M2: distancia hasta la que dos donantes cuentan como empatados.
+TOL_EMPATE = 1e-6
+
 
 def construir_escalera_relajacion(exact_match_vars: list[str]) -> list[list[str]]:
     """
@@ -201,6 +204,32 @@ def hot_deck_match(
 
     Sin empates el resultado es idéntico al anterior.
 
+    DI-M2 — EL SORTEO NO PUEDE DEPENDER DEL ORDEN EN QUE LLEGAN LOS EMPATES
+    ----------------------------------------------------------------------
+    *Hecho (29/09/2026).* Con la misma semilla y los mismos datos, dos máquinas
+    daban los mismos agentes con **otras opiniones**. La causa: `rng.choice`
+    elige «el candidato número i» de la lista de empatados, y el ORDEN de esa
+    lista lo decide el algoritmo interno de `NearestNeighbors` (brute, kd_tree,
+    ball_tree; `auto` elige uno según versión y datos). Forzar cada algoritmo
+    cambiaba la opinión del 52 % al 62 % de los agentes.
+
+    *Decisión.* Tres cambios, para que el resultado dependa solo de QUIÉNES están
+    empatados, no de cómo los devuelve la librería:
+
+    1. Los empatados se **ordenan por su posición en el donante** antes de sortear.
+    2. La tolerancia del empate pasa de 1e-9 a `TOL_EMPATE` (1e-6): el algoritmo
+       `brute` calcula la distancia por otra vía y su redondeo no puede decidir
+       quién cuenta como empatado. Las variables estandarizadas son discretas,
+       así que distancias distintas de verdad están separadas por mucho más.
+    3. Si los `k` vecinos pedidos están **todos** empatados, se vuelve a consultar
+       con el doble, hasta que el último ya no esté empatado o no queden más: el
+       conjunto de empatados nunca se recorta.
+
+    *Consecuencia.* Las poblaciones son las mismas en cualquier máquina y con
+    cualquier algoritmo (lo exige `tests/test_population_matching.py`), pero **no
+    son iguales a las construidas antes de este cambio**: cada una es otro sorteo
+    del mismo desempate. Las conclusiones distribucionales no cambian.
+
     Returns
     -------
     MatchingResult
@@ -298,16 +327,23 @@ def hot_deck_match(
             donante_std_bloque = donante_std_full[donante_mask]
             donante_pos_originales = np.where(donante_mask)[0]
 
-            k = int(min(max(1, k_empates), len(donante_std_bloque)))
-            nn = NearestNeighbors(n_neighbors=k)
+            nn = NearestNeighbors(n_neighbors=1)
             nn.fit(donante_std_bloque)
-            dist, idx_local = nn.kneighbors(receptor_std[filas])
+            n_bloque = len(donante_std_bloque)
 
             # DI-M1: sortear entre los empatados a la distancia mínima.
+            # DI-M2: el conjunto de empatados es completo y su orden, canónico.
             elegidos_local = np.empty(len(filas), dtype=int)
             for i in range(len(filas)):
-                d_i = dist[i]
-                empatados = idx_local[i][d_i <= d_i[0] + 1e-9]
+                k = int(min(max(1, k_empates), n_bloque))
+                while True:
+                    d_i, idx_i = nn.kneighbors(receptor_std[filas[i]][None, :], n_neighbors=k)
+                    d_i, idx_i = d_i[0], idx_i[0]
+                    saturado = d_i[-1] <= d_i[0] + TOL_EMPATE
+                    if not saturado or k == n_bloque:
+                        break
+                    k = min(2 * k, n_bloque)
+                empatados = np.sort(idx_i[d_i <= d_i[0] + TOL_EMPATE])
                 if len(empatados) == 1:
                     elegidos_local[i] = empatados[0]
                     continue
