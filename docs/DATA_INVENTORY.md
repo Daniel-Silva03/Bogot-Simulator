@@ -569,6 +569,42 @@ preguntas generales, 80 personas por localidad) o de 2024 (92) lleva a cada agen
 casi cien respuestas reales: material de sobra para el puente. Las 26 preguntas de las
 diez olas son las candidatas naturales para la validación con respuesta conocida.
 
+### 13.9 Juntar olas para el mapa: 2022-2024 *(30/09/2026)*
+
+`src/population/armonizar_epc.py` compara cada pregunta del catálogo de 2023 con la misma
+pregunta en 2022, 2024 y 2025 (código, etiquetas de valor normalizadas y códigos presentes
+en los datos) y mide cuánto mejora la confiabilidad de las medias por localidad al juntarlas.
+Salida en `data/processed/epc_armonizado/` (solo metadatos y confiabilidades).
+
+**Qué se puede juntar.** De las 102 preguntas del catálogo: **48 en tres olas** (2022, 2023 y
+2024), 26 en dos y 28 solo en 2023. Lo que deja fuera cada año:
+- 2022: 28 no están en el archivo, 7 tienen otras etiquetas, 1 otra escala (1-6).
+- 2024: 33 no están, 13 tienen otras etiquetas.
+- **2025: ninguna.** Sus variables no traen etiquetas ni textos, así que no hay cómo verificar
+  en el archivo que la escala sea la misma, y BCV dijo que el formulario cambió (§13.7). Queda
+  fuera hasta verificarlo contra `EPC2025_Formulario.pdf`. *Corrección antes del primer
+  commit:* una primera versión aceptaba 2025 comparando el texto del diccionario, que es uno
+  solo para todos los años: esa comprobación no verificaba nada.
+- **Las evaluaciones del gobierno de turno solo se juntan dentro de la misma administración**
+  (DI-AR5): la gestión del alcalde, la del Concejo y la inversión de recursos públicos juntan
+  2022 y 2023 (Claudia López), no 2024 (Carlos Fernando Galán).
+
+**Cuánto mejora** (74 preguntas con dos olas o más; mediana):
+
+| | Solo 2023 | 2022-2024 juntas |
+|---|---|---|
+| Personas por localidad | ~80 | **~250** |
+| Confiabilidad de las medias por localidad (dos mitades) | 0,19 | **0,37** |
+| La misma, para la muestra completa (Spearman-Brown) | 0,32 | **0,54** |
+
+La confiabilidad **casi se duplica**, pero no es uniforme: 28 preguntas quedan en 0,6 o más
+(seguridad en el barrio 0,82, hambre 0,82, bancas y canecas 0,81, internet 0,80), 22 entre
+0,4 y 0,6, y 24 por debajo de 0,4 (el ruido y la corrupción siguen sin geografía medible,
+incluso juntando años).
+
+**Qué cambia al juntar:** la población dejaría de ser «Bogotá en 2023» y sería «Bogotá
+2022-2024»; si algo cambió entre esos años, el mapa lo promedia.
+
 ---
 
 ## 11. Marginal territorial — estado real

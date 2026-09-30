@@ -1,0 +1,34 @@
+{
+ "preguntas_catalogo": 102,
+ "por_numero_de_olas": {
+  "1": 28,
+  "2": 29,
+  "3": 45
+ },
+ "motivos_de_exclusion": {
+  "2022": {
+   "mismas etiquetas": 66,
+   "no está en el archivo": 28,
+   "otras etiquetas": 7,
+   "otra escala (1-6)": 1
+  },
+  "2024": {
+   "mismas etiquetas": 53,
+   "no está en el archivo": 33,
+   "otras etiquetas": 13,
+   "otra administración (DI-AR5)": 3
+  },
+  "2025": {
+   "no está en el archivo": 58,
+   "sin etiquetas: no se puede verificar": 44
+  }
+ },
+ "con_2_o_mas_olas": {
+  "preguntas": 74,
+  "conf_2023_mediana": 0.192,
+  "conf_junto_mediana": 0.37,
+  "conf_2023_sb_mediana": 0.322,
+  "conf_junto_sb_mediana": 0.54,
+  "n_loc_mediana": 251.0
+ }
+}

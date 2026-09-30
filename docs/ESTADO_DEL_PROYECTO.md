@@ -194,6 +194,15 @@ del catálogo tiene mapa con margen; una nueva, grupos y nivel editable, sin map
 de alcance, su razón y una alternativa que se vuelve a reformular. 8 pruebas; revisada en
 el navegador en modo simulado. **Siguiente:** abrirla con el modelo real y probarla con
 preguntas de verdad. Pendiente para después: juntar olas de la EPC para el mapa.
+**Página rediseñada (30/09, tarde):** sistema de diseño de Daniel (`DESIGN.md`, Metaview), la
+composición de su referencia de Refero, un solo clic para responder, nada encima del mapa y
+una tabla de localidades; pautas de la skill ui-ux-pro-max (`PAGINA_CONSULTA.md` §5.1-5.4).
+**Opción 1, juntar olas (30/09):** `DATA_INVENTORY.md` §13.9. Juntando 2022-2024, 74 preguntas
+pasan de ~80 a ~250 personas por localidad y la confiabilidad de sus medias por localidad casi
+se duplica (0,19 → 0,37; muestra completa 0,32 → 0,54). 2025 queda fuera (sin etiquetas que
+verificar) y las evaluaciones del gobierno de turno solo juntan 2022-2023. **Siguiente:**
+especificar la población 2022-2024 y pre-registrar otra vez la prueba de localidades del
+puente, antes de calcular nada del puente con los datos juntos.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
