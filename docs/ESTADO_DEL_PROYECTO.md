@@ -169,6 +169,9 @@ exploratoria con participación. 35 pruebas en `tests/test_viz_voto.py`.
 verificados contra los archivos municipales (`DATA_INVENTORY.md` §14.5). Las 723 filas
 «duplicadas» de la Cámara eran candidatos sin nombre. Permiten probar el eje
 izquierda–derecha con voto por partido; no se han cruzado con la composición.
+**Pre-registrado el 30/09:** `EJE_PARTIDOS_SPECIFICATION.md` — ¿el resto territorial del
+voto presidencial aparece en el voto por partido? La prueba que decide es el Centro
+Democrático (P2), no la Lista de la Decencia, que es la de Petro. Sin código todavía.
 **Pruebas del tablero arregladas (29/09)**, con dos defectos reales detrás:
 `cargar_bcv` descartaba la manzana, así que con el microdato en disco la serie de la
 EPC caía al DEFF prestado en todas las olas sin avisar; y `preparar_mapa` solo leía
