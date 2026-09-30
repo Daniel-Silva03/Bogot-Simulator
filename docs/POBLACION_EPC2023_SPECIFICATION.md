@@ -3,7 +3,7 @@
 **Una población sintética de Bogotá en la que cada agente lleva a una persona real de la Encuesta de Percepción Ciudadana 2023, con todas sus respuestas, emparejada dentro de su localidad.**
 
 Proyecto: Bogotá Social Simulator
-Versión: 0.1 — especificación, sin código
+Versión: 0.2 — construida y verificada el 30/09/2026 (§6.1); código en `src/population/poblacion_epc.py`, 9 pruebas
 Fecha: 30 de septiembre de 2026
 Decisión que la origina: D17 (`PROJECT_CONTEXT.md` §39), pieza 1; reabre DI-B10
 Datos: receptor de Multipropósito 2021 (el de siempre) y EPC 2023 de Bogotá Cómo Vamos (`DATA_INVENTORY.md` §13.6 y §13.8)
@@ -79,6 +79,23 @@ receptor se escribe en el código y se prueba.
 
 ---
 
+### 3.2 Lo que cambió al construirla (30/09/2026)
+
+Tres cambios, anotados aquí y en el código (`poblacion_epc.py`), sin tocar el texto de
+arriba:
+- **1.000 agentes por localidad, no 20.000 repartidos según la población** (DI-PE6). Con
+  el reparto proporcional, La Candelaria recibía 40 agentes y Sumapaz 8, y la demografía
+  de La Candelaria se desviaba hasta 16 puntos por puro sorteo. Cada agente lleva un
+  `peso` (población adulta de su localidad / 1.000) para las cifras de la ciudad.
+- **La educación va en otros cuatro niveles** (DI-PE1): el receptor junta secundaria y
+  media, así que no se pueden separar. Quedan: primaria o menos, secundaria o media,
+  técnica o tecnológica, universitaria o posgrado.
+- **El emparejamiento se hace localidad por localidad** (DI-PE2): la escalera general de
+  `hot_deck_match` termina soltando todas las variables exactas, y la localidad no se
+  puede soltar. Dentro de cada localidad, el sexo es exacto y la edad, el estrato y la
+  educación van por distancia; cada agente registra si quedó idéntico a su donante en
+  las cuatro variables.
+
 ## 4. El catálogo de preguntas
 
 Una pregunta de 2023 entra al catálogo si:
@@ -117,6 +134,30 @@ Se escribe antes de construirla; los resultados se anotan aquí con fecha:
    población, en las dos máquinas (DI-M2).
 
 ---
+
+### 6.1 Resultado (30/09/2026)
+
+20.000 agentes, 1.000 por localidad; los 1.000 de Sumapaz, sin donante.
+
+| Verificación | Resultado | |
+|---|---|---|
+| 1. Demografía (peor diferencia en alguna localidad) | sexo 0.029 · edad 0.035 · estrato 0.021 · educación 0.034 | ruido de sorteo con 1.000 agentes; pasa |
+| 2. Opinión: pares pregunta × localidad fuera del margen del 95 % | **67 de 1938 (3.5 %)**; umbral 10 % | **pasa** |
+| 3. Emparejamiento idéntico en las cuatro variables | 64.3 % de los agentes (de 43 % a 86 % según la localidad) | se reporta |
+| 4. Reproducible con la misma semilla | sí | pasa |
+
+En la ciudad, la mayor diferencia de media entre los agentes y la EPC ponderada es
+0.056 puntos de escala, en alguna pregunta. Es esperable: los agentes
+pesan las personas por la composición del receptor dentro de cada localidad, no por
+`FEXP`.
+
+**El catálogo quedó en 102 preguntas**, no en 114: fuera las 11 de imagen (`GG1` y los
+`GP1_*`, códigos invertidos) y la tenencia de vivienda (`VS6`), que no es una escala.
+Construirlo encontró **el tercer error de documentación de BCV**: en 2023 la gestión del
+alcalde (`GG3`) etiqueta «Muy buena gestión» con el código 6 y no tiene 5; los datos usan
+1-5, como 2022 y 2024. Se corrige con una regla que el código verifica contra los datos
+(DI-PE7). Las `GP1N_*` (desempeño del gobierno por sector, solo 2023) no son las de
+imagen y sí entran.
 
 ## 7. Límites, dichos antes
 

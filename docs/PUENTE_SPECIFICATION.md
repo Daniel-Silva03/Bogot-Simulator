@@ -65,6 +65,15 @@ El catálogo que el puente puede usar son las otras **103** preguntas generales 
 
 ---
 
+> **Enmienda 1 — 30/09/2026, al construir la población, antes de calcular ninguna
+> correlación entre preguntas y antes de cualquier llamada al modelo.** El catálogo de
+> la población quedó en **102 preguntas**, no en 114 (§6.1 de
+> `POBLACION_EPC2023_SPECIFICATION.md`: fuera las 11 de imagen y `VS6`). De las 12
+> escondidas, 11 están en el catálogo y `SA4` no (la responde el 78 %, por debajo del
+> 80 %). **El catálogo que el puente puede usar es de 91 preguntas, no de 103**, y el
+> nivel ingenuo de §5 se calcula sobre esas 91. `GG3` entra con la corrección de
+> etiquetas de DI-PE7 (el 5 es «Muy buena gestión»). Nada más cambia.
+
 ## 4. El puente
 
 **Lo que recibe el modelo de lenguaje:** el texto de la pregunta escondida con sus

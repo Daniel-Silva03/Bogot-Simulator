@@ -163,7 +163,13 @@ agentes, localidad como bloque exacto, cada agente guarda el identificador de su
 donante, margen de la encuesta por bootstrap de conglomerados) y el pre-registro
 `PUENTE_SPECIFICATION.md` (12 preguntas escondidas; el puente tiene que ganarle a la
 demografía y al azar al ordenar personas y localidades; el nivel se prueba aparte y,
-aun si pasa, queda editable). **Siguiente:** construir y verificar la población.
+aun si pasa, queda editable). **Población construida y verificada el 30/09** (`src/population/poblacion_epc.py`, 9
+pruebas; §6.1 de su especificación): 20.000 agentes, 1.000 por localidad (Sumapaz sin
+donante); 67 de 1938 pares pregunta × localidad fuera del margen (3.5 %,
+umbral 10 %); reproducible. Catálogo de 102 preguntas. Tercer error de documentación de
+BCV: la etiqueta de `GG3` 2023 (corregida, DI-PE7). El puente quedó con 91 preguntas
+(enmienda 1). **Siguiente:** código del puente con un modelo simulado, antes de las 36
+llamadas reales.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

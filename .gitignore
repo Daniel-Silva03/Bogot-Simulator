@@ -105,6 +105,8 @@ data/**
 !data/processed/segunda_vuelta_2026/resultado.json
 !data/processed/epc_inventario/
 !data/processed/epc_inventario/*.csv
+!data/processed/poblacion_epc2023/
+!data/processed/poblacion_epc2023/*.json
 
 # --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
 data/external/cnc/

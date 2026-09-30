@@ -1,0 +1,12 @@
+{
+ "generado": "2026-09-30",
+ "especificacion": "docs/POBLACION_EPC2023_SPECIFICATION.md",
+ "donante": "EPC 2023 (Bogotá Cómo Vamos)",
+ "receptor": "Multipropósito 2021",
+ "n_agentes": 20000,
+ "semilla": 20260930,
+ "archivo_datos": "agentes.parquet",
+ "donantes_excluidos_por_educacion": 2,
+ "preguntas_en_catalogo": 102,
+ "preguntas_fuera": 12
+}
