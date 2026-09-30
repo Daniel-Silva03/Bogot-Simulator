@@ -76,24 +76,27 @@ resultó falso no se borra:** se anota la corrección al lado (§45).
 | `src/experiments/experimento9.py` | Experimento 9: LLM como proponente de escenarios (cerrado) |
 | `docs/` | especificaciones, resultados y `ESTADO_DEL_PROYECTO.md` |
 
-## Frente activo: escenarios con preguntas reales (desde el 30/09)
+## Frente activo: reestructuración D17 (desde el 30/09)
 
-El motor de escenarios (Fase 8, `docs/SCENARIO_SPECIFICATION.md`) funciona, pero sus
-dos escenarios son de ejemplo. El frente es **correr escenarios que respondan preguntas
-de proyectos reales del CNC** y ver si el informe le sirve a quien pregunta.
+Una página donde cualquiera le hace a la población una pregunta **de opinión o de
+aprobación de un cambio en la ciudad** y ve cómo «respondería», en total y por
+localidad. **Todo lo que responde es una suposición, no una verdad**, y la página lo
+dice. Decisión completa en `docs/PROJECT_CONTEXT.md` §39, D17.
 
-- **De un proyecto del CNC solo se usa la pregunta y su contexto**, nunca respuestas
-  de personas (eso es R10). Si una pregunta trae datos adjuntos, detente y pregunta.
-- **Una pregunta solo se puede simular si la mide una fuente pública** (ECP o EPC):
-  la población lleva una sola variable de opinión (`opinion_t0`); otra variable es
-  otra población, construida con `build_agents` desde el mismo donante.
-- **Los números del escenario los escribe una persona** (Experimento 9): el LLM puede
-  redactar la descripción, nunca fijar nivel ni dispersión.
-- El motor lee poblaciones en `.parquet` desde el 30/09 (DI-E5).
+- **La población lleva a la persona completa de la EPC** (todas sus respuestas) y se
+  empareja también por localidad (DI-B10 reabierto).
+- **Una pregunta nueva se responde con un «puente»:** el LLM propone qué preguntas
+  medidas se relacionan y en qué sentido; cada agente responde con **sus propias
+  respuestas reales**. El LLM **nunca contesta por los agentes** (Experimento 8).
+- **Reformulación sugerida:** la página propone una versión de la pregunta que el
+  simulador pueda responder bien, o dice que no hay con qué.
+- **Cada consulta es independiente**: no modifica la población ni deja rastro.
+- **Validación pre-registrada** con preguntas que la EPC midió y la población no vio.
+- Inventario de preguntas de la EPC: `docs/DATA_INVENTORY.md` §13.8.
 
-**Geografía electoral: cerrada el 30/09** (`docs/GEOGRAFIA_ELECTORAL_RESULTS.md`,
-`docs/EJE_PARTIDOS_RESULTS.md`, capa Voto del tablero). Queda como referencia
-territorial y como evidencia para reabrir DI-B10, decisión de proyecto sin tomar.
+**En espera:** la prueba de la segunda vuelta de 2026 está pre-registrada y con código
+(`docs/SEGUNDA_VUELTA_2026_SPECIFICATION.md`), pero la Registraduría no publicó la
+segunda vuelta mesa a mesa; Daniel la pedirá al CNC.
 
 ## Git
 

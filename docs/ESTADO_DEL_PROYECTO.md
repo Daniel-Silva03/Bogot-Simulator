@@ -15,7 +15,7 @@ leen cuando el trabajo los toque, no antes.
 - **A08 (escalar a 100.000 agentes) quedó sin argumento visual** el 25/09: más agentes dibujarían nítida la composición demográfica, y la composición no reproduce la geografía real de la opinión.
 - **La IA generativa como fuente de opinión se descartó** con datos (Experimento 8). El **Experimento 9** —la IA como proponente de escenarios, inspirado en MiroFish— **se corrió y también falló** (29/09): el LLM no le gana a suponer que nada cambia, acierta donde recuerda, y el dossier no ayuda. **Los números de un escenario los sigue escribiendo una persona.**
 - La **geografía electoral** (29–30/09) dio la primera geografía real dentro de la ciudad: hay un resto territorial estable, con dos polos, que la composición no ve. Cerrada; está en el tablero.
-- **Frente activo desde el 30/09: escenarios con preguntas reales** de proyectos del CNC. Lo que sigue, en §6.
+- **Reestructuración (D17, 30/09):** una página para hacerle preguntas de opinión a la población y verlas por localidad en el mapa, todo rotulado como suposición. Lo que sigue, en §6.
 
 ---
 
@@ -145,7 +145,25 @@ capa de opinión es composición, no medición (DI-V52, paso 0b). Las capas de
 
 ## 6. Qué sigue
 
-**Frente activo (30/09): escenarios con preguntas reales.** Las piezas ya funcionan de
+**Frente activo desde el 30/09 (tarde): reestructuración D17** (`PROJECT_CONTEXT.md`
+§39). La página deja de ser solo un tablero: cualquiera le pregunta a la población algo
+de opinión o de aprobación de un cambio en la ciudad, y ve la respuesta en total y por
+localidad, rotulada como suposición. Cinco piezas: población con la persona completa de
+la EPC y emparejada por localidad (reabre DI-B10); preguntas nuevas por «puente» (el LLM
+elige qué preguntas medidas se relacionan; cada agente responde con sus propios datos);
+reformulación sugerida de la pregunta; consultas independientes; validación
+pre-registrada con preguntas de respuesta conocida.
+**Hecho el 30/09:** inventario de la EPC por pregunta (`DATA_INVENTORY.md` §13.8,
+`src/population/inventario_epc.py`). 272 preguntas de respuesta única; 26 en las diez
+olas (el núcleo de opinión urbana) y 60-114 preguntas generales por ola, con 67-81
+personas por localidad. 93 casos que el diccionario da y el archivo no tiene.
+**Siguiente:** elegir la ola base de la población (2023 o 2024, las más ricas) y
+especificar la población nueva y la validación.
+
+**En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
+código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
+
+**Frente anterior (30/09): escenarios con preguntas reales.** Las piezas ya funcionan de
 punta a punta (población, tablero, motor); lo que falta es que el motor responda una
 pregunta de un proyecto real del CNC y que el informe le sirva a quien pregunta. Hecho
 el 30/09, antes de empezar:

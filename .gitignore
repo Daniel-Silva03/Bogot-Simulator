@@ -103,6 +103,8 @@ data/**
 !data/processed/polos_2026/resultado.json
 !data/processed/segunda_vuelta_2026/
 !data/processed/segunda_vuelta_2026/resultado.json
+!data/processed/epc_inventario/
+!data/processed/epc_inventario/*.csv
 
 # --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
 data/external/cnc/

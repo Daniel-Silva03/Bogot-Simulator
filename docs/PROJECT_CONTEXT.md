@@ -1417,6 +1417,69 @@ no se leen con un LLM, no salen del equipo.
 
 ---
 
+### D17 — Reestructuración: una población para consultar, con respuestas rotuladas como suposición
+
+**Fecha:** 30 de septiembre de 2026
+**Decisión:** El proyecto se reorienta a una página donde cualquiera le hace a la
+población sintética una pregunta **de opinión o de aprobación de un cambio en la
+ciudad**, y ve cómo «respondería» esa población, en total y **por localidad en el
+mapa**. **Nada de lo que responde es verdad: es una suposición**, y la página lo dice
+en cada respuesta. No predice ni pretende probar nada. Cinco piezas:
+
+1. **La población lleva a la persona completa de la EPC** (Bogotá Cómo Vamos). Cada
+   agente hereda, por hot-deck, a una persona real con **todas sus respuestas**, y el
+   emparejamiento incluye la **localidad**. Esto **reabre DI-B10** (donante con
+   localidad), aprobado por Daniel en esta decisión.
+2. **Una pregunta nueva se responde con un «puente».** Un modelo de lenguaje **no
+   contesta por los agentes** (Experimento 8): propone qué preguntas medidas se
+   relacionan con la nueva y en qué sentido. Cada agente responde a partir de **sus
+   propias respuestas reales** a esas preguntas. La página muestra el puente.
+3. **Reformulación sugerida.** Cuando alguien escribe su pregunta, la página le
+   propone automáticamente una versión reformulada que el simulador pueda responder
+   bien: sobre opinión o aprobación, con una escala clara y relacionada con lo que la
+   EPC mide. Si la pregunta no se puede acercar a nada medido, lo dice en vez de
+   inventar.
+4. **Cada consulta es independiente.** Todas parten de la misma población; ninguna la
+   modifica ni deja rastro.
+5. **Validación con respuestas conocidas.** Se apartan preguntas que la EPC sí midió;
+   la población no las ve al construirse; se le hacen como si fueran nuevas, por el
+   mismo camino del puente, y se comparan con lo que respondió la gente real, en la
+   ciudad y por localidad. Se **pre-registra** antes de correr. La página publica el
+   puntaje.
+
+**Justificación.**
+- Es lo que el proyecto sabe hacer bien: reproducir la **distribución** de opiniones
+  medidas (por debajo del piso de ruido), no predecir individuos (R² ≈ 0,02).
+- El puente pone la **variedad entre personas y localidades en los datos**, no en el
+  modelo de lenguaje, que es lo que falló en el Experimento 8 (aplanaba a las personas,
+  0,30× la variación real). El Experimento 9 dejó permitido usar el LLM para texto y
+  estructura, nunca para fijar cifras; el puente y la reformulación caben ahí.
+- La EPC es la única fuente pública de opinión con localidad (DI-B10); sin ella el
+  mapa mostraría composición, no geografía (paso 0b de A08).
+
+**Alternativas consideradas:**
+- *Que un LLM responda como cada agente* (estilo MiroFish) — descartada por el
+  Experimento 8.
+- *Solo un catálogo de preguntas medidas, sin preguntas nuevas* — más seguro, pero no
+  responde a lo que Daniel quiere (aprobación de cambios hipotéticos). Queda como el
+  modo base: una pregunta que la EPC midió se responde con el dato, sin puente.
+
+**Límites.**
+1. **No se usa nada del CNC con datos de personas** (R10 sigue igual).
+2. **Gasto:** el puente y la reformulación llaman a un LLM por pregunta, con la clave de
+   OpenRouter del jefe de Daniel (aprobado por Daniel). El costo se registra por
+   llamada, como en el Experimento 9.
+3. **Que el puente funcione no está probado.** Lo decide la validación (pieza 5).
+
+**Evidencia:** conversación del 30/09/2026; inventario de la EPC en
+`DATA_INVENTORY.md` §13.8.
+
+**Estado:** **APPROVED** (Daniel, en conversación, 30 de septiembre de 2026: «sí a las
+tres» —el diseño del puente, reabrir DI-B10 y el gasto en LLM—, y la reformulación
+sugerida).
+
+---
+
 # 40. DECISIONES ABIERTAS
 
 ### ~~A01~~ — RESUELTA → ver D12

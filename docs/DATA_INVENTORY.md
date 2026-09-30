@@ -512,6 +512,63 @@ BCV pregunta si, con el n que manejamos, podemos estimar la hipótesis de **capi
 
 **El proyecto tiene con qué responderla**, y probablemente mejor: la ECP trae `P2025S1`…`S6` —confianza interpersonal en seis objetos— en el **mismo cuestionario** que la batería institucional, unibles a nivel de persona (§10.7). Son 43.000-46.000 casos nacionales por ola, ~4.200 en Bogotá, en 2019, 2021 y 2023. La medición preliminar de `claude/ANALISIS_HOMOFILIA.md` ya da **r ≈ +0,25**. Queda como decisión abierta A21 en `PROJECT_CONTEXT.md`.
 
+### 13.8 Inventario por pregunta, para la reestructuración de D17 *(30/09/2026)*
+
+`src/population/inventario_epc.py` contrasta el diccionario (EPC Suprema, hoja
+`VARIABLES`) con los diez microdatos, pregunta por pregunta y año por año. Salida en
+`data/processed/epc_inventario/` (`items.csv`: pregunta × año; `resumen.csv`: una fila
+por pregunta, con su texto, módulo, años y personas por localidad). Solo metadatos y
+conteos: ningún microdato.
+
+**Qué hay.** 295 preguntas (sin los filtros): 272 de respuesta única y 23 de respuesta
+múltiple. Cuántos años tiene cada una de respuesta única:
+
+| Olas con datos | 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Preguntas | 26 | 20 | 7 | 7 | 8 | 12 | 14 | 10 | 18 | 150 |
+
+- **Las 150 de una sola ola son casi todas de 2024** (108), y de esas, la mayoría son del
+  módulo de **Educación** (104 preguntas, casi todas solo en 2024): satisfacción de
+  padres con cada servicio escolar, respondidas por una submuestra (mediana de 9
+  personas por localidad). No sirven para el mapa.
+- **Preguntas que responde al menos el 80 % de la muestra**, por año: 59 a 70 entre
+  2014 y 2019, 86 en 2022, 114 en 2023, 92 en 2024 y 62 en 2025. Esas tienen **mediana
+  de 67 a 81 personas por localidad**, en 19 localidades (18 en 2025; nunca Sumapaz).
+- **Las 26 de las diez olas** son el núcleo de opinión urbana: satisfacción con Bogotá,
+  orgullo, optimismo, seguridad en el barrio y en la ciudad, victimización,
+  corrupción, calidad del aire, ruido, agua, satisfacción con el transporte, con la
+  salud, con cada servicio público, situación económica del hogar, pobreza, hambre,
+  oferta cultural y recreativa. Les siguen, con nueve olas, la gestión del alcalde
+  (`GG3`) y del Concejo, el manejo de basuras y escombros, los árboles y la batería de
+  respeto hacia grupos (mayores, mujeres, diversidad sexual y étnica, desplazados,
+  reinsertados).
+
+**Por módulo** (respuesta única): Movilidad 16 preguntas (12 con cinco olas o más),
+Participación Ciudadana 22 (18), Medio Ambiente 7 (7), Servicios Públicos 6 (6),
+Seguridad 6 (5), Clima económico 5 (5), Gestión Global 4 (4), Gestión Pública 33 (8),
+Confianza 8 (0: solo 2024-2025) y Estado Abierto 7 (0).
+
+**Lo que el diccionario dice y el archivo no tiene: 93 casos pregunta × año**, repartidos
+en todos los años (5 a 14 por ola), sobre todo en Participación Ciudadana (23) y
+Cultura (18). Es la regla de §13.6 otra vez: el diccionario no basta. Esos casos no
+entran al catálogo hasta revisarlos uno por uno.
+
+**Tres advertencias para el catálogo:**
+1. **`GG1` y los `GP1_*` (imagen) tienen códigos invertidos** entre 2014-2023 y 2024
+   (§13.6, DI-B2). El inventario los cuenta porque existen; no se usan hasta
+   recodificarlos por año.
+2. **Las escalas cambian entre años** (confianza: 1-4 en 2024, 1-5 en 2025) y los
+   códigos de no respuesta también. El inventario cuenta como válido 1-10 (DI-IN2),
+   que es una cota: cada pregunta que entre al catálogo necesita su escala verificada.
+3. **Con 60-80 personas por localidad, el mapa de una sola ola es ruidoso.** Es lo que
+   ya se midió en el paso 0b de A08 (hay territorio en 7 de 9 olas, pero con márgenes
+   anchos). La página tendrá que mostrar el margen de cada localidad.
+
+**Lo que implica para D17.** Una población construida con la ola de 2023 (114
+preguntas generales, 80 personas por localidad) o de 2024 (92) lleva a cada agente con
+casi cien respuestas reales: material de sobra para el puente. Las 26 preguntas de las
+diez olas son las candidatas naturales para la validación con respuesta conocida.
+
 ---
 
 ## 11. Marginal territorial — estado real
