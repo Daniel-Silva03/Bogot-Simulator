@@ -1,5 +1,5 @@
 {
-  "generado": "2026-09-29",
+  "generado": "2026-09-30",
   "regimen": "D16 (DATA_INVENTORY §14)",
   "fuentes": {
     "2014": {
@@ -16,6 +16,15 @@
       "archivo": "MMV_NACIONAL_PRESIDENTE_2022_1v.csv",
       "hoja": null,
       "sha256": "976fa0dac2728816f4e4ab43fd27a2d64e15173e70bdf96cf77d916dc2bf823e"
+    },
+    "2026": {
+      "archivo": "registraduria_2026/MMV_XXX_16_000_XXX_XX_XX_XXX_1009.csv",
+      "hoja": null,
+      "sha256": "dfa5612022c2763666cd72d9553bbcfd5cfcab60076fc4a95889503a34a6ce25"
+    },
+    "2026_mms": {
+      "archivo": "registraduria_2026/MMS_XXX_16_000_XXX_XX_XX_XXX_1009.csv",
+      "sha256": "c4fa87ec06a955ddf30faac1cd9a2def1af279f2f239e933fb9e7cc671c73e92"
     }
   },
   "verificacion": {
@@ -205,6 +214,19 @@
           "esperada": 0
         }
       ]
+    },
+    "2026": {
+      "fuente": "registraduria_2026/MMS_XXX_16_000_XXX_XX_XX_XXX_1009.csv",
+      "criterio": "total contra SUFRAGANTES, ≤ 0.1% (mismo escrutinio, no fuente independiente)",
+      "coincide": "aproximado",
+      "votos_mmv": 4128330,
+      "sufragantes_mms": 4130103,
+      "diferencia_relativa": 0.000429,
+      "mesas_mmv": 17157,
+      "mesas_mms": 17164,
+      "mesas_solo_en_mmv": 0,
+      "mesas_excluidas_mms": 7,
+      "mesas_modificadas_mms": 3123
     }
   },
   "notas": [

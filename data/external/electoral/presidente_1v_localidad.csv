@@ -656,3 +656,306 @@ anio,zona,cod_loc,localidad,clave,opcion,tipo,votos
 2022,98,,Cárceles,perez,Luis Pérez,candidato,2
 2022,98,,Cárceles,petro,Gustavo Petro,candidato,519
 2022,98,,Cárceles,rodriguez,John Milton Rodríguez,candidato,8
+2026,1,1,Usaquén,barreras,Roy Barreras,candidato,104
+2026,1,1,Usaquén,blanco,Voto en blanco,blanco,3845
+2026,1,1,Usaquén,botero,Raúl Santiago Botero,candidato,784
+2026,1,1,Usaquén,cepeda,Iván Cepeda,candidato,71065
+2026,1,1,Usaquén,claudia_lopez,Claudia López,candidato,5486
+2026,1,1,Usaquén,de_la_espriella,Abelardo de la Espriella,candidato,172051
+2026,1,1,Usaquén,fajardo,Sergio Fajardo,candidato,26275
+2026,1,1,Usaquén,garvin,Sondra Macollins Garvin,candidato,178
+2026,1,1,Usaquén,lizcano,Óscar Mauricio Lizcano,candidato,246
+2026,1,1,Usaquén,matamoros,Gustavo Matamoros,candidato,32
+2026,1,1,Usaquén,no_marcado,Tarjetas no marcadas,no_marcado,201
+2026,1,1,Usaquén,nulo,Votos nulos,nulo,1005
+2026,1,1,Usaquén,uribe_londono,Miguel Uribe Londoño,candidato,210
+2026,1,1,Usaquén,valencia,Paloma Valencia,candidato,47922
+2026,2,2,Chapinero,barreras,Roy Barreras,candidato,59
+2026,2,2,Chapinero,blanco,Voto en blanco,blanco,1130
+2026,2,2,Chapinero,botero,Raúl Santiago Botero,candidato,195
+2026,2,2,Chapinero,cepeda,Iván Cepeda,candidato,27739
+2026,2,2,Chapinero,claudia_lopez,Claudia López,candidato,2078
+2026,2,2,Chapinero,de_la_espriella,Abelardo de la Espriella,candidato,48910
+2026,2,2,Chapinero,fajardo,Sergio Fajardo,candidato,8782
+2026,2,2,Chapinero,garvin,Sondra Macollins Garvin,candidato,57
+2026,2,2,Chapinero,lizcano,Óscar Mauricio Lizcano,candidato,104
+2026,2,2,Chapinero,matamoros,Gustavo Matamoros,candidato,9
+2026,2,2,Chapinero,no_marcado,Tarjetas no marcadas,no_marcado,63
+2026,2,2,Chapinero,nulo,Votos nulos,nulo,235
+2026,2,2,Chapinero,uribe_londono,Miguel Uribe Londoño,candidato,56
+2026,2,2,Chapinero,valencia,Paloma Valencia,candidato,21256
+2026,3,3,Santa Fe,barreras,Roy Barreras,candidato,35
+2026,3,3,Santa Fe,blanco,Voto en blanco,blanco,995
+2026,3,3,Santa Fe,botero,Raúl Santiago Botero,candidato,291
+2026,3,3,Santa Fe,cepeda,Iván Cepeda,candidato,30303
+2026,3,3,Santa Fe,claudia_lopez,Claudia López,candidato,1305
+2026,3,3,Santa Fe,de_la_espriella,Abelardo de la Espriella,candidato,15041
+2026,3,3,Santa Fe,fajardo,Sergio Fajardo,candidato,3365
+2026,3,3,Santa Fe,garvin,Sondra Macollins Garvin,candidato,42
+2026,3,3,Santa Fe,lizcano,Óscar Mauricio Lizcano,candidato,92
+2026,3,3,Santa Fe,matamoros,Gustavo Matamoros,candidato,17
+2026,3,3,Santa Fe,no_marcado,Tarjetas no marcadas,no_marcado,107
+2026,3,3,Santa Fe,nulo,Votos nulos,nulo,612
+2026,3,3,Santa Fe,uribe_londono,Miguel Uribe Londoño,candidato,63
+2026,3,3,Santa Fe,valencia,Paloma Valencia,candidato,4502
+2026,4,4,San Cristóbal,barreras,Roy Barreras,candidato,103
+2026,4,4,San Cristóbal,blanco,Voto en blanco,blanco,3685
+2026,4,4,San Cristóbal,botero,Raúl Santiago Botero,candidato,1376
+2026,4,4,San Cristóbal,cepeda,Iván Cepeda,candidato,104840
+2026,4,4,San Cristóbal,claudia_lopez,Claudia López,candidato,5643
+2026,4,4,San Cristóbal,de_la_espriella,Abelardo de la Espriella,candidato,47681
+2026,4,4,San Cristóbal,fajardo,Sergio Fajardo,candidato,8083
+2026,4,4,San Cristóbal,garvin,Sondra Macollins Garvin,candidato,159
+2026,4,4,San Cristóbal,lizcano,Óscar Mauricio Lizcano,candidato,382
+2026,4,4,San Cristóbal,matamoros,Gustavo Matamoros,candidato,42
+2026,4,4,San Cristóbal,no_marcado,Tarjetas no marcadas,no_marcado,413
+2026,4,4,San Cristóbal,nulo,Votos nulos,nulo,2692
+2026,4,4,San Cristóbal,uribe_londono,Miguel Uribe Londoño,candidato,264
+2026,4,4,San Cristóbal,valencia,Paloma Valencia,candidato,12165
+2026,5,5,Usme,barreras,Roy Barreras,candidato,104
+2026,5,5,Usme,blanco,Voto en blanco,blanco,3356
+2026,5,5,Usme,botero,Raúl Santiago Botero,candidato,1577
+2026,5,5,Usme,cepeda,Iván Cepeda,candidato,99725
+2026,5,5,Usme,claudia_lopez,Claudia López,candidato,4856
+2026,5,5,Usme,de_la_espriella,Abelardo de la Espriella,candidato,39709
+2026,5,5,Usme,fajardo,Sergio Fajardo,candidato,5826
+2026,5,5,Usme,garvin,Sondra Macollins Garvin,candidato,112
+2026,5,5,Usme,lizcano,Óscar Mauricio Lizcano,candidato,337
+2026,5,5,Usme,matamoros,Gustavo Matamoros,candidato,56
+2026,5,5,Usme,no_marcado,Tarjetas no marcadas,no_marcado,394
+2026,5,5,Usme,nulo,Votos nulos,nulo,2577
+2026,5,5,Usme,uribe_londono,Miguel Uribe Londoño,candidato,225
+2026,5,5,Usme,valencia,Paloma Valencia,candidato,9369
+2026,6,6,Tunjuelito,barreras,Roy Barreras,candidato,45
+2026,6,6,Tunjuelito,blanco,Voto en blanco,blanco,1945
+2026,6,6,Tunjuelito,botero,Raúl Santiago Botero,candidato,691
+2026,6,6,Tunjuelito,cepeda,Iván Cepeda,candidato,49472
+2026,6,6,Tunjuelito,claudia_lopez,Claudia López,candidato,2836
+2026,6,6,Tunjuelito,de_la_espriella,Abelardo de la Espriella,candidato,35510
+2026,6,6,Tunjuelito,fajardo,Sergio Fajardo,candidato,5245
+2026,6,6,Tunjuelito,garvin,Sondra Macollins Garvin,candidato,86
+2026,6,6,Tunjuelito,lizcano,Óscar Mauricio Lizcano,candidato,162
+2026,6,6,Tunjuelito,matamoros,Gustavo Matamoros,candidato,18
+2026,6,6,Tunjuelito,no_marcado,Tarjetas no marcadas,no_marcado,176
+2026,6,6,Tunjuelito,nulo,Votos nulos,nulo,1081
+2026,6,6,Tunjuelito,uribe_londono,Miguel Uribe Londoño,candidato,123
+2026,6,6,Tunjuelito,valencia,Paloma Valencia,candidato,7487
+2026,7,7,Bosa,barreras,Roy Barreras,candidato,141
+2026,7,7,Bosa,blanco,Voto en blanco,blanco,6514
+2026,7,7,Bosa,botero,Raúl Santiago Botero,candidato,2719
+2026,7,7,Bosa,cepeda,Iván Cepeda,candidato,186254
+2026,7,7,Bosa,claudia_lopez,Claudia López,candidato,9607
+2026,7,7,Bosa,de_la_espriella,Abelardo de la Espriella,candidato,91591
+2026,7,7,Bosa,fajardo,Sergio Fajardo,candidato,14438
+2026,7,7,Bosa,garvin,Sondra Macollins Garvin,candidato,199
+2026,7,7,Bosa,lizcano,Óscar Mauricio Lizcano,candidato,616
+2026,7,7,Bosa,matamoros,Gustavo Matamoros,candidato,69
+2026,7,7,Bosa,no_marcado,Tarjetas no marcadas,no_marcado,588
+2026,7,7,Bosa,nulo,Votos nulos,nulo,4067
+2026,7,7,Bosa,uribe_londono,Miguel Uribe Londoño,candidato,394
+2026,7,7,Bosa,valencia,Paloma Valencia,candidato,20054
+2026,8,8,Kennedy,barreras,Roy Barreras,candidato,226
+2026,8,8,Kennedy,blanco,Voto en blanco,blanco,9349
+2026,8,8,Kennedy,botero,Raúl Santiago Botero,candidato,3092
+2026,8,8,Kennedy,cepeda,Iván Cepeda,candidato,228375
+2026,8,8,Kennedy,claudia_lopez,Claudia López,candidato,14016
+2026,8,8,Kennedy,de_la_espriella,Abelardo de la Espriella,candidato,187077
+2026,8,8,Kennedy,fajardo,Sergio Fajardo,candidato,31293
+2026,8,8,Kennedy,garvin,Sondra Macollins Garvin,candidato,313
+2026,8,8,Kennedy,lizcano,Óscar Mauricio Lizcano,candidato,857
+2026,8,8,Kennedy,matamoros,Gustavo Matamoros,candidato,83
+2026,8,8,Kennedy,no_marcado,Tarjetas no marcadas,no_marcado,671
+2026,8,8,Kennedy,nulo,Votos nulos,nulo,4202
+2026,8,8,Kennedy,uribe_londono,Miguel Uribe Londoño,candidato,460
+2026,8,8,Kennedy,valencia,Paloma Valencia,candidato,39101
+2026,9,9,Fontibón,barreras,Roy Barreras,candidato,111
+2026,9,9,Fontibón,blanco,Voto en blanco,blanco,3720
+2026,9,9,Fontibón,botero,Raúl Santiago Botero,candidato,946
+2026,9,9,Fontibón,cepeda,Iván Cepeda,candidato,81092
+2026,9,9,Fontibón,claudia_lopez,Claudia López,candidato,5535
+2026,9,9,Fontibón,de_la_espriella,Abelardo de la Espriella,candidato,95947
+2026,9,9,Fontibón,fajardo,Sergio Fajardo,candidato,17963
+2026,9,9,Fontibón,garvin,Sondra Macollins Garvin,candidato,135
+2026,9,9,Fontibón,lizcano,Óscar Mauricio Lizcano,candidato,322
+2026,9,9,Fontibón,matamoros,Gustavo Matamoros,candidato,33
+2026,9,9,Fontibón,no_marcado,Tarjetas no marcadas,no_marcado,249
+2026,9,9,Fontibón,nulo,Votos nulos,nulo,1413
+2026,9,9,Fontibón,uribe_londono,Miguel Uribe Londoño,candidato,159
+2026,9,9,Fontibón,valencia,Paloma Valencia,candidato,22321
+2026,10,10,Engativá,barreras,Roy Barreras,candidato,171
+2026,10,10,Engativá,blanco,Voto en blanco,blanco,8161
+2026,10,10,Engativá,botero,Raúl Santiago Botero,candidato,1846
+2026,10,10,Engativá,cepeda,Iván Cepeda,candidato,170654
+2026,10,10,Engativá,claudia_lopez,Claudia López,candidato,11909
+2026,10,10,Engativá,de_la_espriella,Abelardo de la Espriella,candidato,178079
+2026,10,10,Engativá,fajardo,Sergio Fajardo,candidato,33626
+2026,10,10,Engativá,garvin,Sondra Macollins Garvin,candidato,237
+2026,10,10,Engativá,lizcano,Óscar Mauricio Lizcano,candidato,798
+2026,10,10,Engativá,matamoros,Gustavo Matamoros,candidato,75
+2026,10,10,Engativá,no_marcado,Tarjetas no marcadas,no_marcado,553
+2026,10,10,Engativá,nulo,Votos nulos,nulo,2632
+2026,10,10,Engativá,uribe_londono,Miguel Uribe Londoño,candidato,424
+2026,10,10,Engativá,valencia,Paloma Valencia,candidato,41601
+2026,11,11,Suba,barreras,Roy Barreras,candidato,213
+2026,11,11,Suba,blanco,Voto en blanco,blanco,9513
+2026,11,11,Suba,botero,Raúl Santiago Botero,candidato,2191
+2026,11,11,Suba,cepeda,Iván Cepeda,candidato,202720
+2026,11,11,Suba,claudia_lopez,Claudia López,candidato,14074
+2026,11,11,Suba,de_la_espriella,Abelardo de la Espriella,candidato,273550
+2026,11,11,Suba,fajardo,Sergio Fajardo,candidato,46860
+2026,11,11,Suba,garvin,Sondra Macollins Garvin,candidato,367
+2026,11,11,Suba,lizcano,Óscar Mauricio Lizcano,candidato,779
+2026,11,11,Suba,matamoros,Gustavo Matamoros,candidato,89
+2026,11,11,Suba,no_marcado,Tarjetas no marcadas,no_marcado,631
+2026,11,11,Suba,nulo,Votos nulos,nulo,3115
+2026,11,11,Suba,uribe_londono,Miguel Uribe Londoño,candidato,500
+2026,11,11,Suba,valencia,Paloma Valencia,candidato,65657
+2026,12,12,Barrios Unidos,barreras,Roy Barreras,candidato,42
+2026,12,12,Barrios Unidos,blanco,Voto en blanco,blanco,1554
+2026,12,12,Barrios Unidos,botero,Raúl Santiago Botero,candidato,338
+2026,12,12,Barrios Unidos,cepeda,Iván Cepeda,candidato,31679
+2026,12,12,Barrios Unidos,claudia_lopez,Claudia López,candidato,2299
+2026,12,12,Barrios Unidos,de_la_espriella,Abelardo de la Espriella,candidato,46855
+2026,12,12,Barrios Unidos,fajardo,Sergio Fajardo,candidato,7924
+2026,12,12,Barrios Unidos,garvin,Sondra Macollins Garvin,candidato,64
+2026,12,12,Barrios Unidos,lizcano,Óscar Mauricio Lizcano,candidato,125
+2026,12,12,Barrios Unidos,matamoros,Gustavo Matamoros,candidato,13
+2026,12,12,Barrios Unidos,no_marcado,Tarjetas no marcadas,no_marcado,103
+2026,12,12,Barrios Unidos,nulo,Votos nulos,nulo,401
+2026,12,12,Barrios Unidos,uribe_londono,Miguel Uribe Londoño,candidato,82
+2026,12,12,Barrios Unidos,valencia,Paloma Valencia,candidato,11194
+2026,13,13,Teusaquillo,barreras,Roy Barreras,candidato,45
+2026,13,13,Teusaquillo,blanco,Voto en blanco,blanco,1518
+2026,13,13,Teusaquillo,botero,Raúl Santiago Botero,candidato,304
+2026,13,13,Teusaquillo,cepeda,Iván Cepeda,candidato,38358
+2026,13,13,Teusaquillo,claudia_lopez,Claudia López,candidato,2202
+2026,13,13,Teusaquillo,de_la_espriella,Abelardo de la Espriella,candidato,41974
+2026,13,13,Teusaquillo,fajardo,Sergio Fajardo,candidato,9447
+2026,13,13,Teusaquillo,garvin,Sondra Macollins Garvin,candidato,57
+2026,13,13,Teusaquillo,lizcano,Óscar Mauricio Lizcano,candidato,94
+2026,13,13,Teusaquillo,matamoros,Gustavo Matamoros,candidato,12
+2026,13,13,Teusaquillo,no_marcado,Tarjetas no marcadas,no_marcado,73
+2026,13,13,Teusaquillo,nulo,Votos nulos,nulo,242
+2026,13,13,Teusaquillo,uribe_londono,Miguel Uribe Londoño,candidato,62
+2026,13,13,Teusaquillo,valencia,Paloma Valencia,candidato,12994
+2026,14,14,Los Mártires,barreras,Roy Barreras,candidato,29
+2026,14,14,Los Mártires,blanco,Voto en blanco,blanco,765
+2026,14,14,Los Mártires,botero,Raúl Santiago Botero,candidato,293
+2026,14,14,Los Mártires,cepeda,Iván Cepeda,candidato,18489
+2026,14,14,Los Mártires,claudia_lopez,Claudia López,candidato,926
+2026,14,14,Los Mártires,de_la_espriella,Abelardo de la Espriella,candidato,21823
+2026,14,14,Los Mártires,fajardo,Sergio Fajardo,candidato,2758
+2026,14,14,Los Mártires,garvin,Sondra Macollins Garvin,candidato,37
+2026,14,14,Los Mártires,lizcano,Óscar Mauricio Lizcano,candidato,63
+2026,14,14,Los Mártires,matamoros,Gustavo Matamoros,candidato,5
+2026,14,14,Los Mártires,no_marcado,Tarjetas no marcadas,no_marcado,75
+2026,14,14,Los Mártires,nulo,Votos nulos,nulo,302
+2026,14,14,Los Mártires,uribe_londono,Miguel Uribe Londoño,candidato,43
+2026,14,14,Los Mártires,valencia,Paloma Valencia,candidato,3940
+2026,15,15,Antonio Nariño,barreras,Roy Barreras,candidato,30
+2026,15,15,Antonio Nariño,blanco,Voto en blanco,blanco,1151
+2026,15,15,Antonio Nariño,botero,Raúl Santiago Botero,candidato,341
+2026,15,15,Antonio Nariño,cepeda,Iván Cepeda,candidato,27241
+2026,15,15,Antonio Nariño,claudia_lopez,Claudia López,candidato,1392
+2026,15,15,Antonio Nariño,de_la_espriella,Abelardo de la Espriella,candidato,27394
+2026,15,15,Antonio Nariño,fajardo,Sergio Fajardo,candidato,4086
+2026,15,15,Antonio Nariño,garvin,Sondra Macollins Garvin,candidato,28
+2026,15,15,Antonio Nariño,lizcano,Óscar Mauricio Lizcano,candidato,113
+2026,15,15,Antonio Nariño,matamoros,Gustavo Matamoros,candidato,11
+2026,15,15,Antonio Nariño,no_marcado,Tarjetas no marcadas,no_marcado,87
+2026,15,15,Antonio Nariño,nulo,Votos nulos,nulo,468
+2026,15,15,Antonio Nariño,uribe_londono,Miguel Uribe Londoño,candidato,47
+2026,15,15,Antonio Nariño,valencia,Paloma Valencia,candidato,6034
+2026,16,16,Puente Aranda,barreras,Roy Barreras,candidato,57
+2026,16,16,Puente Aranda,blanco,Voto en blanco,blanco,2629
+2026,16,16,Puente Aranda,botero,Raúl Santiago Botero,candidato,629
+2026,16,16,Puente Aranda,cepeda,Iván Cepeda,candidato,54917
+2026,16,16,Puente Aranda,claudia_lopez,Claudia López,candidato,3646
+2026,16,16,Puente Aranda,de_la_espriella,Abelardo de la Espriella,candidato,64679
+2026,16,16,Puente Aranda,fajardo,Sergio Fajardo,candidato,10112
+2026,16,16,Puente Aranda,garvin,Sondra Macollins Garvin,candidato,85
+2026,16,16,Puente Aranda,lizcano,Óscar Mauricio Lizcano,candidato,266
+2026,16,16,Puente Aranda,matamoros,Gustavo Matamoros,candidato,29
+2026,16,16,Puente Aranda,no_marcado,Tarjetas no marcadas,no_marcado,156
+2026,16,16,Puente Aranda,nulo,Votos nulos,nulo,824
+2026,16,16,Puente Aranda,uribe_londono,Miguel Uribe Londoño,candidato,114
+2026,16,16,Puente Aranda,valencia,Paloma Valencia,candidato,12906
+2026,17,17,La Candelaria,barreras,Roy Barreras,candidato,37
+2026,17,17,La Candelaria,blanco,Voto en blanco,blanco,417
+2026,17,17,La Candelaria,botero,Raúl Santiago Botero,candidato,119
+2026,17,17,La Candelaria,cepeda,Iván Cepeda,candidato,13162
+2026,17,17,La Candelaria,claudia_lopez,Claudia López,candidato,574
+2026,17,17,La Candelaria,de_la_espriella,Abelardo de la Espriella,candidato,6830
+2026,17,17,La Candelaria,fajardo,Sergio Fajardo,candidato,1168
+2026,17,17,La Candelaria,garvin,Sondra Macollins Garvin,candidato,26
+2026,17,17,La Candelaria,lizcano,Óscar Mauricio Lizcano,candidato,49
+2026,17,17,La Candelaria,matamoros,Gustavo Matamoros,candidato,9
+2026,17,17,La Candelaria,no_marcado,Tarjetas no marcadas,no_marcado,57
+2026,17,17,La Candelaria,nulo,Votos nulos,nulo,200
+2026,17,17,La Candelaria,uribe_londono,Miguel Uribe Londoño,candidato,44
+2026,17,17,La Candelaria,valencia,Paloma Valencia,candidato,2091
+2026,18,18,Rafael Uribe Uribe,barreras,Roy Barreras,candidato,76
+2026,18,18,Rafael Uribe Uribe,blanco,Voto en blanco,blanco,3336
+2026,18,18,Rafael Uribe Uribe,botero,Raúl Santiago Botero,candidato,1235
+2026,18,18,Rafael Uribe Uribe,cepeda,Iván Cepeda,candidato,88781
+2026,18,18,Rafael Uribe Uribe,claudia_lopez,Claudia López,candidato,4861
+2026,18,18,Rafael Uribe Uribe,de_la_espriella,Abelardo de la Espriella,candidato,53662
+2026,18,18,Rafael Uribe Uribe,fajardo,Sergio Fajardo,candidato,8473
+2026,18,18,Rafael Uribe Uribe,garvin,Sondra Macollins Garvin,candidato,132
+2026,18,18,Rafael Uribe Uribe,lizcano,Óscar Mauricio Lizcano,candidato,345
+2026,18,18,Rafael Uribe Uribe,matamoros,Gustavo Matamoros,candidato,43
+2026,18,18,Rafael Uribe Uribe,no_marcado,Tarjetas no marcadas,no_marcado,378
+2026,18,18,Rafael Uribe Uribe,nulo,Votos nulos,nulo,2197
+2026,18,18,Rafael Uribe Uribe,uribe_londono,Miguel Uribe Londoño,candidato,215
+2026,18,18,Rafael Uribe Uribe,valencia,Paloma Valencia,candidato,11979
+2026,19,19,Ciudad Bolívar,barreras,Roy Barreras,candidato,134
+2026,19,19,Ciudad Bolívar,blanco,Voto en blanco,blanco,5802
+2026,19,19,Ciudad Bolívar,botero,Raúl Santiago Botero,candidato,2702
+2026,19,19,Ciudad Bolívar,cepeda,Iván Cepeda,candidato,161686
+2026,19,19,Ciudad Bolívar,claudia_lopez,Claudia López,candidato,8232
+2026,19,19,Ciudad Bolívar,de_la_espriella,Abelardo de la Espriella,candidato,74635
+2026,19,19,Ciudad Bolívar,fajardo,Sergio Fajardo,candidato,10984
+2026,19,19,Ciudad Bolívar,garvin,Sondra Macollins Garvin,candidato,242
+2026,19,19,Ciudad Bolívar,lizcano,Óscar Mauricio Lizcano,candidato,511
+2026,19,19,Ciudad Bolívar,matamoros,Gustavo Matamoros,candidato,78
+2026,19,19,Ciudad Bolívar,no_marcado,Tarjetas no marcadas,no_marcado,649
+2026,19,19,Ciudad Bolívar,nulo,Votos nulos,nulo,4605
+2026,19,19,Ciudad Bolívar,uribe_londono,Miguel Uribe Londoño,candidato,399
+2026,19,19,Ciudad Bolívar,valencia,Paloma Valencia,candidato,16704
+2026,20,20,Sumapaz,barreras,Roy Barreras,candidato,1
+2026,20,20,Sumapaz,blanco,Voto en blanco,blanco,24
+2026,20,20,Sumapaz,botero,Raúl Santiago Botero,candidato,10
+2026,20,20,Sumapaz,cepeda,Iván Cepeda,candidato,1664
+2026,20,20,Sumapaz,claudia_lopez,Claudia López,candidato,21
+2026,20,20,Sumapaz,de_la_espriella,Abelardo de la Espriella,candidato,339
+2026,20,20,Sumapaz,fajardo,Sergio Fajardo,candidato,28
+2026,20,20,Sumapaz,garvin,Sondra Macollins Garvin,candidato,1
+2026,20,20,Sumapaz,no_marcado,Tarjetas no marcadas,no_marcado,5
+2026,20,20,Sumapaz,nulo,Votos nulos,nulo,11
+2026,20,20,Sumapaz,uribe_londono,Miguel Uribe Londoño,candidato,2
+2026,20,20,Sumapaz,valencia,Paloma Valencia,candidato,89
+2026,90,,Puesto censo (Corferias),barreras,Roy Barreras,candidato,28
+2026,90,,Puesto censo (Corferias),blanco,Voto en blanco,blanco,801
+2026,90,,Puesto censo (Corferias),botero,Raúl Santiago Botero,candidato,316
+2026,90,,Puesto censo (Corferias),cepeda,Iván Cepeda,candidato,16924
+2026,90,,Puesto censo (Corferias),claudia_lopez,Claudia López,candidato,938
+2026,90,,Puesto censo (Corferias),de_la_espriella,Abelardo de la Espriella,candidato,19823
+2026,90,,Puesto censo (Corferias),fajardo,Sergio Fajardo,candidato,1644
+2026,90,,Puesto censo (Corferias),garvin,Sondra Macollins Garvin,candidato,25
+2026,90,,Puesto censo (Corferias),lizcano,Óscar Mauricio Lizcano,candidato,57
+2026,90,,Puesto censo (Corferias),matamoros,Gustavo Matamoros,candidato,6
+2026,90,,Puesto censo (Corferias),no_marcado,Tarjetas no marcadas,no_marcado,66
+2026,90,,Puesto censo (Corferias),nulo,Votos nulos,nulo,370
+2026,90,,Puesto censo (Corferias),uribe_londono,Miguel Uribe Londoño,candidato,40
+2026,90,,Puesto censo (Corferias),valencia,Paloma Valencia,candidato,2806
+2026,98,,Cárceles,blanco,Voto en blanco,blanco,10
+2026,98,,Cárceles,botero,Raúl Santiago Botero,candidato,8
+2026,98,,Cárceles,cepeda,Iván Cepeda,candidato,315
+2026,98,,Cárceles,claudia_lopez,Claudia López,candidato,15
+2026,98,,Cárceles,de_la_espriella,Abelardo de la Espriella,candidato,122
+2026,98,,Cárceles,fajardo,Sergio Fajardo,candidato,20
+2026,98,,Cárceles,garvin,Sondra Macollins Garvin,candidato,5
+2026,98,,Cárceles,lizcano,Óscar Mauricio Lizcano,candidato,2
+2026,98,,Cárceles,no_marcado,Tarjetas no marcadas,no_marcado,4
+2026,98,,Cárceles,nulo,Votos nulos,nulo,6
+2026,98,,Cárceles,valencia,Paloma Valencia,candidato,38

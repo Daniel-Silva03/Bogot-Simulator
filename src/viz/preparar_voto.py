@@ -199,7 +199,8 @@ def construir() -> dict:
     especiales = zonas[zonas.cod_loc.isna()].groupby("anio").votos_total.sum()
     totales = zonas.groupby("anio").votos_total.sum()
     fuera = {str(a): {"votos": int(especiales.get(a, 0)),
-                      "fraccion": round(float(especiales.get(a, 0) / totales[a]), 4)} for a in totales.index}
+                      "fraccion": round(float(especiales.get(a, 0) / totales[a]), 4)}
+            for a in totales.index if a in {x for x, _ in ge.RESULTADOS}}    # 2026 no está en la capa
 
     todas = [v for l in localidades.values() for v in l["votos"].values() if v is not None]
     resid = [abs(v) for l in localidades.values() for v in l["residuo"].values() if v is not None]

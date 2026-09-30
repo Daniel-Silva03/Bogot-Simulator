@@ -109,7 +109,7 @@ def main():
 
     print("salvedades (DI-V53)")
     probar("el paquete trae los votos sin localidad por año", set(V["votos_sin_localidad"]) == {"2014", "2018", "2022", "senado_2018"})
-    esp = zonas[zonas.cod_loc.isna()].groupby("anio").votos_total.sum()
+    esp = zonas[zonas.cod_loc.isna() & zonas.anio.isin(V["elecciones"])].groupby("anio").votos_total.sum()
     probar("los votos sin localidad son los de las zonas 90 y 98",
            all(V["votos_sin_localidad"][str(a)]["votos"] == int(esp[a]) for a in esp.index))
     probar("la razón de inscripción está para las 20 localidades",

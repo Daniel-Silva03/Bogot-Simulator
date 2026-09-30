@@ -142,14 +142,17 @@ def test_sin_abelardo_o_con_dos_se_detiene():
         raise AssertionError(f"debió detenerse con {ops}")
 
 
-def test_sin_tabla_de_2026_no_corre_ni_imprime_votos():
-    """Hoy la tabla real no tiene 2026: main tiene que fallar antes de calcular nada."""
-    import contextlib
-    import io
-    buf = io.StringIO()
-    with contextlib.redirect_stdout(buf):
-        codigo = pz.main([])
-    assert codigo == 1 and "todavía" in buf.getvalue(), buf.getvalue()
+def test_sin_2026_en_la_tabla_se_detiene():
+    """Sin filas de 2026 no se calcula nada. *Corrección (30/09):* esta prueba
+    llamaba a main() con la tabla real; cuando la tabla recibió 2026, la prueba
+    corrió el análisis entero y escribió el resultado. Ahora usa la tabla real
+    sin 2026, y ninguna prueba llama a main()."""
+    try:
+        pz.proporcion_abelardo(_v[_v.anio < 2026], _z[_z.anio < 2026])
+    except pz.PolosError as e:
+        assert "todavía" in str(e)
+    else:
+        raise AssertionError("debió detenerse")
 
 
 def test_sumapaz_se_reporta_aparte():

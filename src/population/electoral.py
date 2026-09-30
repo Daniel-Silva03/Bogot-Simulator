@@ -3,7 +3,8 @@ src/population/electoral.py
 
 Resultados electorales de Bogotá por localidad, a partir de los archivos mesa a
 mesa que entregó el CNC: primera vuelta presidencial (2014, 2018, 2022) por
-candidato, y Senado y Cámara 2018 por partido (DI-EL8, DI-EL9, más abajo).
+candidato, y Senado y Cámara 2018 por partido (DI-EL8, DI-EL9, más abajo). La
+primera vuelta de 2026 se descargó de la Registraduría (DI-EL10).
 
 POR QUÉ EXISTE
 --------------
@@ -80,6 +81,37 @@ DI-EL7. **Se verifica contra una fuente independiente.** El total de Bogotá por
     Cualquier diferencia que no esté en `DIFERENCIAS_CONOCIDAS` detiene la
     escritura. 2014 no tiene archivo municipal: su total se reporta sin
     contraste, y así lo dice el metadato.
+
+DI-EL10. **2026 viene directo de la Registraduría, no del CNC** (30/09/2026).
+    `escrutiniospresidente2026.registraduria.gov.co`, comisión general de Bogotá
+    (1009): el MMV de todas las mesas de la ciudad y el MMS con las novedades de
+    cada mesa, en la subcarpeta `registraduria_2026/` de `BSS_ELECTORAL_DIR`.
+    Hechos de la revisión por estructura, antes de calcular ninguna proporción:
+    - El MMV tiene el formato del de 2022 y trae además el código de localidad de
+      cada puesto: coincide con la zona en los 1.078 puestos de las zonas 1-20
+      (zona = localidad, confirmado por la propia fuente); 90 y 98 van sin
+      localidad.
+    - **No hay archivo municipal.** El acta general (E-26) es una imagen escaneada,
+      sin texto. La verificación es contra el MMS: el total de votos del MMV
+      contra la suma de `SUFRAGANTES` (firmas del E-11) de las mesas no
+      excluidas, con tolerancia de 0,1 %. No es una fuente independiente —es el
+      mismo escrutinio—; es una prueba de que el archivo no está truncado ni mal
+      leído. Al 30/09: 4.128.330 votos contra 4.130.103 sufragantes (0,04 %). Las
+      7 mesas que el MMS marca como excluidas no están en el MMV (17.157 contra
+      17.164) y suman 1.097 sufragantes.
+      *Corrección (30/09, antes del primer commit):* una primera lectura del MMS
+      daba 4.128.556 sufragantes (0,005 %). Estaba mal: suponía los `;` de más
+      en el campo equivocado y dejaba sin sufragantes a 11 mesas, en silencio,
+      porque convertía a número con `errors="coerce"`. El lector actual convierte
+      con `errors="raise"`.
+    - `TOTALVOTOSURNA` del MMS no se usa: difiere del MMV en 431 mesas, porque es
+      el conteo en la mesa y 3.123 mesas se modificaron en el escrutinio. El MMV
+      es el resultado del escrutinio.
+    - El MMS trae un `;` de más al final de cada fila y 11 filas con `;` dentro de
+      los textos de observaciones, que van después de `SUFRAGANTES`: se lee campo
+      por campo (`leer_mms_2026`).
+    - Los dos archivos vienen en UTF-8, no en latin-1 como el de 2022. Leerlos en
+      latin-1 rompía cuatro nombres, y la lista de DI-EL4 lo detuvo.
 """
 
 from __future__ import annotations
@@ -112,7 +144,10 @@ FUENTES = {
     2014: {"archivo": "MMV_PRESIDENTE_2014_1ERA_VUELTA.xlsx", "hoja": "PRESIDENTE_1"},
     2018: {"archivo": "MMV_NACIONAL_PRESIDENTE_2018_1v.xlsx", "hoja": "MMV ESCRUTINIO FINAL"},
     2022: {"archivo": "MMV_NACIONAL_PRESIDENTE_2022_1v.csv", "hoja": None},
+    2026: {"archivo": "registraduria_2026/MMV_XXX_16_000_XXX_XX_XX_XXX_1009.csv", "hoja": None},
 }
+MMS_2026 = "registraduria_2026/MMS_XXX_16_000_XXX_XX_XX_XXX_1009.csv"      # DI-EL10
+TOLERANCIA_SUFRAGANTES = 0.001
 MUNICIPALES = {2018: "2018_presidencia_primera_vuelta.dta",
                2022: "2022_presidencia_primera_vuelta.dta"}
 
@@ -152,6 +187,20 @@ OPCIONES = {
         "ENRIQUE GOMEZ MARTINEZ": ("gomez", "Enrique Gómez", "candidato", "GOMEZ"),
         "INGRID BETANCOURT": ("betancourt", "Íngrid Betancourt", "candidato", "BETANCOURT"),
         "LUIS PEREZ": ("perez", "Luis Pérez", "candidato", "PEREZ"),
+        "VOTOS EN BLANCO": _B, "VOTOS NULOS": _N, "VOTOS NO MARCADOS": _M,
+    },
+    2026: {
+        "ABELARDO DE LA ESPRIELLA": ("de_la_espriella", "Abelardo de la Espriella", "candidato", None),
+        "IVAN CEPEDA CASTRO": ("cepeda", "Iván Cepeda", "candidato", None),
+        "PALOMA VALENCIA LASERNA": ("valencia", "Paloma Valencia", "candidato", None),
+        "SERGIO FAJARDO VALDERRAMA": ("fajardo", "Sergio Fajardo", "candidato", None),
+        "CLAUDIA LOPEZ": ("claudia_lopez", "Claudia López", "candidato", None),
+        "MIGUEL URIBE LONDONO": ("uribe_londono", "Miguel Uribe Londoño", "candidato", None),
+        "OSCAR MAURICIO LIZCANO ARANGO": ("lizcano", "Óscar Mauricio Lizcano", "candidato", None),
+        "RAUL SANTIAGO BOTERO JARAMILLO": ("botero", "Raúl Santiago Botero", "candidato", None),
+        "ROY LEONARDO BARRERAS MONTEALEGRE": ("barreras", "Roy Barreras", "candidato", None),
+        "GUSTAVO MATAMOROS CAMACHO": ("matamoros", "Gustavo Matamoros", "candidato", None),
+        "SONDRA MACOLLINS GARVIN PINTO": ("garvin", "Sondra Macollins Garvin", "candidato", None),
         "VOTOS EN BLANCO": _B, "VOTOS NULOS": _N, "VOTOS NO MARCADOS": _M,
     },
 }
@@ -241,7 +290,60 @@ def leer_2022(carpeta: Path) -> pd.DataFrame:
     return _estandar(df, "DEP", "ZONA", "PUESTO", "MESA", "CANNOMBRE", "VOTOS")
 
 
-LECTORES = {2014: leer_2014, 2018: leer_2018, 2022: leer_2022}
+def leer_2026(carpeta: Path) -> pd.DataFrame:
+    df = pd.read_csv(carpeta / FUENTES[2026]["archivo"], sep=";", encoding="utf-8",
+                     dtype=str, low_memory=False,
+                     usecols=["DEP", "ZONA", "PUESTO", "MESA", "CANNOMBRE", "VOTOS"])
+    return _estandar(df, "DEP", "ZONA", "PUESTO", "MESA", "CANNOMBRE", "VOTOS")
+
+
+LECTORES = {2014: leer_2014, 2018: leer_2018, 2022: leer_2022, 2026: leer_2026}
+
+
+def leer_mms_2026(ruta: Path) -> pd.DataFrame:
+    """DI-EL10: novedades por mesa. Cada fila trae un ';' final de más, y algunas
+    traen ';' dentro de los textos de observaciones, que van entre
+    OBSERVACIONTACHADURASBORRONES y OBSERVACIONRECONTADA. Los campos anteriores se
+    leen desde la izquierda y los posteriores desde la derecha; los textos del
+    medio, que no se usan, quedan como vengan."""
+    lineas = ruta.read_text(encoding="utf-8").splitlines()
+    H = lineas[0].split(";")
+    izq = H.index("OBSERVACIONTACHADURASBORRONES")      # todo lo anterior, desde la izquierda
+    der = len(H) - H.index("OBSERVACIONRECONTADA") - 1  # todo lo posterior, desde la derecha
+    filas = []
+    for linea in lineas[1:]:
+        p = linea.split(";")
+        if p and p[-1] == "":
+            p = p[:-1]
+        if len(p) < len(H):
+            raise ElectoralError(f"MMS 2026: fila con {len(p)} campos, se esperaban {len(H)}")
+        if len(p) > len(H):
+            medio = [";".join(p[izq:len(p) - der])] + [""] * (len(H) - izq - der - 1)
+            p = p[:izq] + medio + p[len(p) - der:]
+        filas.append(dict(zip(H, p)))
+    s = pd.DataFrame(filas)
+    return pd.DataFrame({"zona": s.ZONA.astype(int), "puesto": s.PUESTO.str.strip(),
+                         "mesa": s.MESA.str.strip(),
+                         "sufragantes": pd.to_numeric(s.SUFRAGANTES, errors="raise").astype(int),
+                         "excluida": s.EXCLUIDA.eq("SI"), "modificada": s.MODIFICADA.eq("SI")})
+
+
+def verificar_2026(carpeta: Path, mesas: pd.DataFrame) -> dict:
+    """DI-EL10: total del MMV contra los sufragantes de las mesas no excluidas del MMS."""
+    s = leer_mms_2026(carpeta / MMS_2026)
+    total, sufr = int(mesas.votos.sum()), int(s[~s.excluida].sufragantes.sum())
+    rel = abs(total - sufr) / sufr
+    if rel > TOLERANCIA_SUFRAGANTES:
+        raise ElectoralError(f"2026: el MMV suma {total:,} votos y el MMS {sufr:,} sufragantes "
+                             f"({rel:.3%}, tolerancia {TOLERANCIA_SUFRAGANTES:.1%})")
+    claves_v = set(map(tuple, mesas[["zona", "puesto", "mesa"]].drop_duplicates().to_numpy()))
+    claves_s = set(map(tuple, s[["zona", "puesto", "mesa"]].to_numpy()))
+    return {"fuente": MMS_2026, "criterio": f"total contra SUFRAGANTES, ≤ {TOLERANCIA_SUFRAGANTES:.1%} "
+            "(mismo escrutinio, no fuente independiente)", "coincide": "aproximado",
+            "votos_mmv": total, "sufragantes_mms": sufr, "diferencia_relativa": round(rel, 6),
+            "mesas_mmv": len(claves_v), "mesas_mms": len(claves_s),
+            "mesas_solo_en_mmv": len(claves_v - claves_s),
+            "mesas_excluidas_mms": int(s.excluida.sum()), "mesas_modificadas_mms": int(s.modificada.sum())}
 
 
 def potencial_2018(carpeta: Path, nombres_loc: dict[int, str]) -> pd.DataFrame:
@@ -336,7 +438,7 @@ def verificar(votos: pd.DataFrame, municipal: dict[str, int], anio: int) -> dict
 
 # --------------------------------------------------------------------------
 
-def construir(carpeta: Path, anios=(2014, 2018, 2022)) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+def construir(carpeta: Path, anios=(2014, 2018, 2022, 2026)) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     nombres_loc = localidades()
     todos_v, todos_z = [], []
     meta = {"generado": date.today().isoformat(), "regimen": "D16 (DATA_INVENTORY §14)",
@@ -348,9 +450,13 @@ def construir(carpeta: Path, anios=(2014, 2018, 2022)) -> tuple[pd.DataFrame, pd
     for anio in anios:
         f = FUENTES[anio]
         print(f"  {anio}: leyendo {f['archivo']} ...", flush=True)
-        v, z = agregar(LECTORES[anio](carpeta), anio, nombres_loc)
+        mesas = LECTORES[anio](carpeta)
+        v, z = agregar(mesas, anio, nombres_loc)
         meta["fuentes"][anio] = {**f, "sha256": huella(carpeta / f["archivo"])}
-        if anio in MUNICIPALES:
+        if anio == 2026:                                            # DI-EL10
+            meta["fuentes"]["2026_mms"] = {"archivo": MMS_2026, "sha256": huella(carpeta / MMS_2026)}
+            meta["verificacion"][anio] = verificar_2026(carpeta, mesas)
+        elif anio in MUNICIPALES:
             meta["verificacion"][anio] = verificar(v, totales_municipales(carpeta, anio), anio)
         else:
             meta["verificacion"][anio] = {"coincide": None,

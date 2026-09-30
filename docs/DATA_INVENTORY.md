@@ -775,6 +775,35 @@ gradiente norte–sur que el voto presidencial (`GEOGRAFIA_ELECTORAL_RESULTS.md`
 **Los productos del CNC de 2022 (`Datos_Senado`, `Datos_Camara`, coaliciones) no
 entran**: son por municipio, sin geografía dentro de Bogotá.
 
+### 14.6 Presidente 2026, primera vuelta (30/09/2026)
+
+**Fuente: la Registraduría directamente, no el CNC.** Escrutinios publicados en
+`escrutiniospresidente2026.registraduria.gov.co`, comisión general de Bogotá (1009).
+Mismo régimen que el resto de §14 (D16): resultados públicos, sin datos de personas.
+Descargados con permiso de Daniel a `BSS_ELECTORAL_DIR\registraduria_2026\`:
+
+| Archivo | Qué es | Tamaño |
+|---|---|---|
+| `MMV_XXX_16_000_XXX_XX_XX_XXX_1009.csv` | votos mesa a mesa, todo Bogotá (UTF-8, `;`) | 24,6 MB |
+| `MMS_XXX_16_000_XXX_XX_XX_XXX_1009.csv` | novedades por mesa: sufragantes, recuentos, exclusiones; **no trae votos** | 2,6 MB |
+| `E26_PRE_16_001_XXX_XX_XX_XXX_1009.pdf` | acta general del escrutinio; **imagen escaneada, sin texto** | 1,1 MB |
+
+Lo que **no** se descargó: las actas E-14 de cada mesa (unos 17.000 PDF escaneados),
+el E-24 y el documento AGE (84 MB): no hacen falta.
+
+**Revisión por estructura, antes de calcular proporciones** (DI-EL10 en `electoral.py`):
+- Primera vuelta: 11 candidatos, corporación PRESIDENTE, archivos del 2 al 10 de junio.
+- 17.157 mesas, 1.083 puestos, 22 zonas. **Zona = localidad confirmado por la propia
+  fuente**: el MMV trae el código de localidad de cada puesto, y coincide con la zona
+  en los 1.078 puestos de las zonas 1–20.
+- Verificación: 4.128.330 votos en el MMV contra 4.130.103 sufragantes de las mesas no
+  excluidas del MMS (0,04 %; tolerancia 0,1 %). Es el mismo escrutinio, no una fuente
+  independiente. Las 7 mesas excluidas no están en el MMV.
+- Las filas de 2014–2022 de la tabla quedaron idénticas al agregar 2026.
+
+2026 no entra a la capa de Voto del tablero (`preparar_voto.py` sigue con 2014–2022).
+Lo usa `POLOS_2026_SPECIFICATION.md`.
+
 ---
 
 *Documento vivo — actualizar el estado de la tabla de la sección 2 cada vez que un dataset entre al repositorio, y §12.4 cada vez que cambie algo del régimen de los datos del CNC.*

@@ -264,6 +264,42 @@ def test_2022_real_cuadra_con_el_archivo_municipal():
     assert z[z.cod_loc.notna()].cod_loc.nunique() == 20
 
 
+def test_el_mms_2026_se_lee_aunque_un_texto_traiga_punto_y_coma():
+    """DI-EL10: ';' final de más y ';' dentro de las observaciones, después de SUFRAGANTES."""
+    H = ["DEP", "ZONA", "PUESTO", "MESA", "SUFRAGANTES", "OBSERVACIONTACHADURASBORRONES",
+         "X", "OBSERVACIONRECONTADA", "EXCLUIDA", "MODIFICADA"]
+    filas = [";".join(H),
+             "16;01;01;001;250;;NO;;NO;SI;",
+             "16;01;01;002;260;TEXTO; CON; PUNTOS;NO;OTRO; MAS;SI;NO;",
+             "16;02;03;001;270;;NO;;NO;NO;"]
+    with tempfile.TemporaryDirectory() as tmp:
+        ruta = Path(tmp) / "mms.csv"
+        ruta.write_text("\n".join(filas), encoding="utf-8")
+        s = el.leer_mms_2026(ruta)
+    assert list(s.sufragantes) == [250, 260, 270]
+    assert list(s.excluida) == [False, True, False] and list(s.modificada) == [True, False, False]
+    assert list(s.zona) == [1, 1, 2] and list(s.mesa) == ["001", "002", "001"]
+
+
+def test_2026_real_cuadra_con_los_sufragantes():
+    carpeta = os.environ.get("BSS_ELECTORAL_DIR") or r"C:\Users\User\Desktop\CNC_datos"
+    if not (Path(carpeta) / el.FUENTES[2026]["archivo"]).exists():
+        print("         (sin los archivos de 2026 en esta máquina: se omite)")
+        return
+    v, z, meta = el.construir(Path(carpeta), anios=(2026,))
+    ver = meta["verificacion"][2026]
+    assert ver["votos_mmv"] == 4_128_330 and ver["sufragantes_mms"] == 4_130_103
+    assert ver["mesas_solo_en_mmv"] == 0 and ver["mesas_mmv"] == 17_157
+    assert z.zona.nunique() == 22 and z[z.cod_loc.notna()].cod_loc.nunique() == 20
+    assert v.votos.sum() == z.votos_total.sum()
+    assert (v[v.tipo == "candidato"].clave == "de_la_espriella").any()
+
+
+def test_fajardo_conserva_su_clave_en_2026():
+    """DI-EL4: la clave es estable entre años."""
+    assert "fajardo" in [c for c, *_ in el.OPCIONES[2026].values()]
+
+
 # -------------------------------------------------------------------------
 
 if __name__ == "__main__":
