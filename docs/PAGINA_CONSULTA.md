@@ -138,6 +138,29 @@ fuera de la vista. Ahora:
 Esto cambia una frase de `REFORMULACION_SPECIFICATION.md` §1 («siempre ve la versión
 reformulada antes de que se responda»); quedó anotado allí.
 
+## 5.3 Piezas copiadas de la referencia de Refero (30/09/2026)
+
+Daniel pasó la página de Refero del mismo sistema (Metaview) para copiar su composición, no
+solo sus colores. Se adaptaron:
+
+- **Franja de aviso** arriba de todo, con lo aprendido en la prueba del puente.
+- **Portada alineada a la izquierda**, con botón blanco y botón oscuro.
+- **La vitrina:** una franja de aurora verde azulada a todo lo ancho, con la «maqueta del
+  producto» encima: un **riel de temas** (Seguridad, La ciudad, Medio ambiente, Cambios en
+  la ciudad; cada uno lanza su pregunta de ejemplo), el campo de la pregunta con **botón
+  circular**, y la respuesta encabezada por el «asistente» con sus cifras en monoespaciada.
+- **Fichas de filtro** sobre la respuesta de una pregunta del catálogo: Todas, Por encima,
+  Por debajo y Sin diferencia clara, que atenúan en el mapa las demás localidades. **Una
+  localidad cuenta como «por encima» o «por debajo» solo si su margen del 95 % no incluye
+  el promedio de la ciudad**: la ficha no exagera diferencias que caben en el error.
+- **Declaración centrada con esfera luminosa** y un **muro de fuentes** (en oscuro, no en
+  blanco como la referencia, para no romper el sistema).
+- Se respeta `prefers-reduced-motion` en las animaciones.
+
+**La skill ui-ux-pro-max** que pidió Daniel no se instaló desde aquí: no está en el
+directorio revisado de plugins, y trae scripts que habría que ejecutar. Se le explicó cómo
+instalarla él mismo.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; opina como Bogotá en 2023; unas 80 personas por
