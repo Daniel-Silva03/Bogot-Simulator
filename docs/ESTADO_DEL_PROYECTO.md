@@ -187,6 +187,14 @@ se repartió con Valencia (sumada daría A) y el polo de izquierda se transfiri�
 **En el tablero desde el 30/09 (DI-V60):** el aviso de residuos dice «en 2014–2022
 fueron dos polos» y que la prueba pre-registrada de 2026 no lo confirmó, con sus cifras.
 
+**Segunda pregunta del jefe (30/09): la segunda vuelta de 2026, localidad por localidad.**
+Pre-registrada en `SEGUNDA_VUELTA_2026_SPECIFICATION.md` antes de mirar nada de la segunda
+vuelta. Predicción: sumando la primera vuelta por bloques, Abelardo gana 10 localidades
+(norte, occidente, centro ampliado) y Cepeda 10 (sur y suroriente); Kennedy es una moneda
+al aire; **Abelardo gana Bogotá (Cepeda 47,3 %)**. La regla ingenua (cada uno conserva lo
+suyo) da los mismos ganadores por localidad, así que lo que decide es el margen y la
+ciudad. Siguen: código y mundos simulados; revisar y descargar la segunda vuelta; corrida.
+
 **Geografía electoral de Bogotá: cerrada el 30/09.** El 29/09 el CNC entregó
 resultados electorales por mesa (presidente 2014, 2018 y 2022; Senado y Cámara 2018)
 y por municipio, sin datos de personas. **D16** los saca de R10 (se pueden leer con un
