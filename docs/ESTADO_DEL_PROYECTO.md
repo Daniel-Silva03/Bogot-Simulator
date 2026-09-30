@@ -181,7 +181,13 @@ olas), no de modelo. **Siguiente, elegido por Daniel:** la reformulación sugeri
 **Reformulación (30/09):** pre-registrada en `REFORMULACION_SPECIFICATION.md` (24 preguntas de
 prueba con su alcance esperado: 8 del catálogo dichas de otra forma, 10 nuevas, 6 fuera de
 alcance) y con código (`src/consulta/reformular.py`, 7 pruebas con modelo simulado).
-**Siguiente:** las 24 llamadas reales. Pendiente para después: juntar olas de la EPC para el mapa.
+**Validada el 30/09** (`REFORMULACION_RESULTS.md`, 24 llamadas, USD 0,081): **24 de 24**, las
+cuatro condiciones se cumplen y entra a la página. Las diez reformulaciones de preguntas nuevas
+salen neutrales; las alternativas que sugiere para lo que está fuera de alcance no siempre
+(dos tendenciosas), así que en la página una alternativa vuelve a pasar por la reformulación
+antes de responderse. **Siguiente:** unir población, puente y reformulación en una consulta
+de punta a punta y llevarla a la página. Pendiente para después: juntar olas de la EPC para
+el mapa.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

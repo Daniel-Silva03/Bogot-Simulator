@@ -6,6 +6,7 @@ Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro** de la validación
 Fecha: 30 de septiembre de 2026
 Estado: **código probado con un modelo simulado (`src/consulta/reformular.py`, 7 pruebas); sin ninguna llamada al modelo real**
+*(30/09: corrido; resultados en `REFORMULACION_RESULTS.md`. El texto de este documento no se tocó.)*
 Decisión que la origina: D17, pieza 3
 Depende de: `POBLACION_EPC2023_SPECIFICATION.md` (el catálogo de 102 preguntas) y `PUENTE_RESULTS.md` (qué se puede responder y cómo)
 

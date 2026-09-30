@@ -1,0 +1,499 @@
+{
+  "prueba": [
+    {
+      "pregunta": "¿La gente se siente segura caminando por su barrio?",
+      "esperado": [
+        "catalogo",
+        "VS8"
+      ],
+      "respuesta": {
+        "alcance": "catalogo",
+        "codigo": "VS8",
+        "reformulada": "",
+        "escala": [
+          "Nada seguro",
+          "Algo inseguro",
+          "Ni seguro ni inseguro",
+          "Algo seguro",
+          "Muy seguro"
+        ],
+        "razon": "La pregunta corresponde directamente al ítem VS8 sobre qué tan seguro se siente la persona en su barrio."
+      }
+    },
+    {
+      "pregunta": "¿Qué tan contentos están los bogotanos de vivir en la ciudad?",
+      "esperado": [
+        "catalogo",
+        "CV1"
+      ],
+      "respuesta": {
+        "alcance": "catalogo",
+        "codigo": "CV1",
+        "reformulada": "¿Qué tan satisfecho(a) se siente usted con Bogotá como un lugar para vivir?",
+        "escala": [
+          "Muy insatisfecho",
+          "Algo insatisfecho",
+          "Ni satisfecho ni insatisfecho",
+          "Algo satisfecho",
+          "Muy satisfecho"
+        ],
+        "razon": "La pregunta de satisfacción con Bogotá como lugar para vivir ya está medida en el catálogo con el código CV1."
+      }
+    },
+    {
+      "pregunta": "¿La gente cree que la corrupción ha aumentado?",
+      "esperado": [
+        "catalogo",
+        "GG7"
+      ],
+      "respuesta": {
+        "alcance": "catalogo",
+        "codigo": "GG7",
+        "reformulada": "",
+        "escala": null,
+        "razon": "La pregunta coincide con GG7 que mide cómo cree el ciudadano que ha cambiado el nivel de corrupción en Bogotá durante el último año."
+      }
+    },
+    {
+      "pregunta": "¿Cómo califica la gente la gestión del alcalde?",
+      "esperado": [
+        "catalogo",
+        "GG3"
+      ],
+      "respuesta": {
+        "alcance": "catalogo",
+        "codigo": "GG3",
+        "reformulada": "",
+        "escala": null,
+        "razon": "La pregunta busca una calificación de la gestión del alcalde, que es exactamente lo que mide GG3."
+      }
+    },
+    {
+      "pregunta": "¿Están satisfechos con la recolección de basuras?",
+      "esperado": [
+        "catalogo",
+        "SP4"
+      ],
+      "respuesta": {
+        "alcance": "catalogo",
+        "codigo": "SP4",
+        "reformulada": "",
+        "escala": null,
+        "razon": "La pregunta corresponde directamente al ítem SP4 sobre satisfacción con el servicio de aseo y recolección de basuras."
+      }
+    },
+    {
+      "pregunta": "¿Qué piensan de la calidad del aire en Bogotá?",
+      "esperado": [
+        "catalogo",
+        "MA3_1"
+      ],
+      "respuesta": {
+        "alcance": "catalogo",
+        "codigo": "MA3_1",
+        "reformulada": "",
+        "escala": [
+          "Muy insatisfecho",
+          "Algo insatisfecho",
+          "Ni satisfecho ni insatisfecho",
+          "Algo satisfecho",
+          "Muy satisfecho"
+        ],
+        "razon": "La pregunta sobre la calidad del aire en Bogotá ya está medida directamente en el ítem MA3_1 del catálogo."
+      }
+    },
+    {
+      "pregunta": "¿Las cosas en la ciudad van por buen camino?",
+      "esperado": [
+        "catalogo",
+        "AG1"
+      ],
+      "respuesta": {
+        "alcance": "catalogo",
+        "codigo": "AG1",
+        "reformulada": "",
+        "escala": null,
+        "razon": "La pregunta coincide exactamente con el ítem AG1 del catálogo sobre si las cosas en Bogotá van por buen camino o por mal camino."
+      }
+    },
+    {
+      "pregunta": "¿Qué tan orgullosos se sienten de Bogotá?",
+      "esperado": [
+        "catalogo",
+        "AG2"
+      ],
+      "respuesta": {
+        "alcance": "catalogo",
+        "codigo": "AG2",
+        "reformulada": "¿Qué tan orgulloso(a) se siente de Bogotá?",
+        "escala": [
+          "Nada orgulloso",
+          "Poco orgulloso",
+          "Ni orgulloso ni no orgulloso",
+          "Orgulloso",
+          "Muy orgulloso"
+        ],
+        "razon": "La pregunta coincide directamente con el ítem AG2 del catálogo sobre el orgullo por Bogotá."
+      }
+    },
+    {
+      "pregunta": "¿Estarían de acuerdo con cobrar por entrar en carro al centro?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo o en desacuerdo estaría usted con que se cobre una tarifa por el ingreso de vehículos automóviles al centro de Bogotá?",
+        "escala": [
+          "Muy en desacuerdo",
+          "Algo en desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "Algo de acuerdo",
+          "Muy de acuerdo"
+        ],
+        "razon": "Es una opinión sobre la aprobación de un posible cobro por ingresar en carro al centro de Bogotá, tema que no fue medido en el catálogo."
+      }
+    },
+    {
+      "pregunta": "¿Apoyarían extender el pico y placa a todo el día?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan favorable u opuesto(a) está usted a que se amplíe el pico y placa para que aplique durante todo el día en Bogotá?",
+        "escala": [
+          "1 Muy opuesto(a)",
+          "2 Algo opuesto(a)",
+          "3 Ni favorable ni opuesto(a)",
+          "4 Algo favorable",
+          "5 Muy favorable"
+        ],
+        "razon": "Es una pregunta de aprobación sobre un cambio de política de movilidad que la Encuesta de Percepción Ciudadana 2023 no midió."
+      }
+    },
+    {
+      "pregunta": "¿Les gustaría que el metro funcionara las 24 horas?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo o en desacuerdo está usted con que el sistema de metro de Bogotá preste servicio las 24 horas del día?",
+        "escala": [
+          "Muy en desacuerdo",
+          "Algo en desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "Algo de acuerdo",
+          "Muy de acuerdo"
+        ],
+        "razon": "Es una opinión sobre la aprobación de un cambio en el funcionamiento del metro que no está contemplada en el catálogo."
+      }
+    },
+    {
+      "pregunta": "¿Aprobarían subir el predial para pagar más policías?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo o en desacuerdo está usted con aumentar el impuesto predial en Bogotá para destinar esos recursos a contratar más policías?",
+        "escala": [
+          "Muy en desacuerdo",
+          "Algo en desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "Algo de acuerdo",
+          "Muy de acuerdo"
+        ],
+        "razon": "Es una pregunta de aprobación de un cambio tributario y de seguridad en Bogotá que la Encuesta de Percepción Ciudadana 2023 no midió."
+      }
+    },
+    {
+      "pregunta": "¿Estarían de acuerdo con prohibir las motos en las ciclorrutas?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo o en desacuerdo está usted con que se prohíba la circulación de motocicletas por las ciclorrutas de Bogotá?",
+        "escala": [
+          "Muy en desacuerdo",
+          "Algo en desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "Algo de acuerdo",
+          "Muy de acuerdo"
+        ],
+        "razon": "Es una pregunta de aprobación de un cambio en la ciudad no contemplada en el catálogo."
+      }
+    },
+    {
+      "pregunta": "¿Apoyarían volver peatonal toda la carrera séptima?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo o en desacuerdo está usted con que la carrera séptima se convierta en una vía exclusivamente peatonal?",
+        "escala": [
+          "Totalmente en desacuerdo",
+          "Algo en desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "Algo de acuerdo",
+          "Totalmente de acuerdo"
+        ],
+        "razon": "Es una pregunta de aprobación de un cambio urbano en Bogotá que no está medida en el catálogo."
+      }
+    },
+    {
+      "pregunta": "¿Qué opinan de poner más cámaras de vigilancia en los parques?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo o en desacuerdo está usted con que se instalen más cámaras de vigilancia en los parques de Bogotá?",
+        "escala": [
+          "Muy en desacuerdo",
+          "Algo en desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "Algo de acuerdo",
+          "Muy de acuerdo"
+        ],
+        "razon": "Es una opinión sobre la aprobación de una medida de seguridad en parques que no fue medida en la Encuesta de Percepción Ciudadana 2023."
+      }
+    },
+    {
+      "pregunta": "¿Estarían a favor de cerrar los bares a medianoche?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo o en desacuerdo está usted con que los bares de Bogotá deban cerrar a la medianoche?",
+        "escala": [
+          "Muy en desacuerdo",
+          "Algo en desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "Algo de acuerdo",
+          "Muy de acuerdo"
+        ],
+        "razon": "Es una opinión sobre la aprobación de un cambio regulatorio en Bogotá (horario de cierre de bares) que no fue medida en la Encuesta de Percepción Ciudadana 2023."
+      }
+    },
+    {
+      "pregunta": "¿Les parecería bien hacer más ciclorrutas aunque se quiten carriles a los carros?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo o en desacuerdo está usted con ampliar la red de ciclorrutas en Bogotá, incluso si esto implica reducir el número de carriles para automóviles?",
+        "escala": [
+          "Muy en desacuerdo",
+          "Algo en desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "Algo de acuerdo",
+          "Muy de acuerdo"
+        ],
+        "razon": "Es una opinión sobre una política de movilidad (ampliar ciclorrutas a costa de carriles vehiculares) que el catálogo no mide directamente, pues MV13_10 solo evalúa la satisfacción con los bicicarriles existentes."
+      }
+    },
+    {
+      "pregunta": "¿Apoyarían un toque de queda para menores de edad?",
+      "esperado": [
+        "nueva",
+        null
+      ],
+      "respuesta": {
+        "alcance": "nueva",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo o en desacuerdo está usted con que en Bogotá se establezca un toque de queda para los menores de edad?",
+        "escala": [
+          "Totalmente en desacuerdo",
+          "Algo en desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "Algo de acuerdo",
+          "Totalmente de acuerdo"
+        ],
+        "razon": "Es una pregunta de aprobación de una medida específica de seguridad que la Encuesta de Percepción Ciudadana 2023 no contempla en su catálogo."
+      }
+    },
+    {
+      "pregunta": "¿Por quién van a votar para la alcaldía?",
+      "esperado": [
+        "fuera",
+        null
+      ],
+      "respuesta": {
+        "alcance": "fuera",
+        "codigo": null,
+        "reformulada": "¿Cómo califica usted la gestión del actual alcalde o alcaldesa de Bogotá?",
+        "escala": [
+          "Muy mala gestión",
+          "Mala gestión",
+          "Regular gestión",
+          "Buena gestión",
+          "Muy buena gestión"
+        ],
+        "razon": "Es intención de voto y preferencia por candidatos, un dato electoral que la encuesta de percepción no mide ni se puede simular como opinión de la ciudadanía."
+      }
+    },
+    {
+      "pregunta": "¿Cuántos habitantes tiene Bogotá?",
+      "esperado": [
+        "fuera",
+        null
+      ],
+      "respuesta": {
+        "alcance": "fuera",
+        "codigo": null,
+        "reformulada": "¿Cómo cree usted que ha afectado el crecimiento de la población de Bogotá la calidad de vida de sus habitantes?",
+        "escala": [
+          "La ha empeorado mucho",
+          "La ha empeorado algo",
+          "No la ha afectado",
+          "La ha mejorado algo",
+          "La ha mejorado mucho"
+        ],
+        "razon": "Es un dato demográfico objetivo (una cifra poblacional), no una opinión ni aprobación de un cambio en la ciudad."
+      }
+    },
+    {
+      "pregunta": "¿Qué piensa mi vecino Carlos de la alcaldía?",
+      "esperado": [
+        "fuera",
+        null
+      ],
+      "respuesta": {
+        "alcance": "fuera",
+        "codigo": null,
+        "reformulada": "¿Usted cómo califica la gestión del alcalde o alcaldesa de Bogotá?",
+        "escala": [
+          "Muy mala gestión",
+          "Mala gestión",
+          "Regular gestión",
+          "Buena gestión",
+          "Muy buena gestión"
+        ],
+        "razon": "La pregunta indaga por la opinión de una persona concreta (el vecino Carlos), algo que la encuesta de percepción ciudadana no puede responder; lo cercano es la opinión del propio encuestado sobre la gestión de la alcaldía (GG3)."
+      }
+    },
+    {
+      "pregunta": "¿Cuánto cuesta el pasaje de TransMilenio?",
+      "esperado": [
+        "fuera",
+        null
+      ],
+      "respuesta": {
+        "alcance": "fuera",
+        "codigo": null,
+        "reformulada": "¿Qué tan satisfecho(a) está usted con la tarifa que debe pagar por el servicio de TransMilenio en Bogotá?",
+        "escala": [
+          "Muy insatisfecho",
+          "Algo insatisfecho",
+          "Ni satisfecho ni insatisfecho",
+          "Algo satisfecho",
+          "Muy satisfecho"
+        ],
+        "razon": "Es una pregunta de dato o cifra factual (el precio del pasaje), no una opinión o aprobación sobre Bogotá."
+      }
+    },
+    {
+      "pregunta": "¿Cuántas personas en Suba tienen VIH?",
+      "esperado": [
+        "fuera",
+        null
+      ],
+      "respuesta": {
+        "alcance": "fuera",
+        "codigo": null,
+        "reformulada": "¿Qué tan de acuerdo está usted con que la ciudad de Bogotá realiza acciones suficientes de prevención y atención del VIH?",
+        "escala": [
+          "Muy en desacuerdo",
+          "En desacuerdo",
+          "Ni de acuerdo ni en desacuerdo",
+          "De acuerdo",
+          "Muy de acuerdo"
+        ],
+        "razon": "Es una solicitud de una cifra sobre prevalencia de una condición de salud que no puede medirse con una encuesta de percepción y que además involucra información sensible."
+      }
+    },
+    {
+      "pregunta": "¿Va a ganar Abelardo las elecciones?",
+      "esperado": [
+        "fuera",
+        null
+      ],
+      "respuesta": {
+        "alcance": "fuera",
+        "codigo": null,
+        "reformulada": "En general, ¿qué tan satisfecho(a) está usted con el rumbo que ha tomado Bogotá en los últimos años?",
+        "escala": [
+          "Muy insatisfecho",
+          "Algo insatisfecho",
+          "Ni satisfecho ni insatisfecho",
+          "Algo satisfecho",
+          "Muy satisfecho"
+        ],
+        "razon": "Es una predicción electoral sobre un candidato, que no puede responderse con datos de percepción ciudadana; lo cercano sería una pregunta de opinión sobre el rumbo de la ciudad (AG1)."
+      }
+    }
+  ],
+  "criterios": {
+    "R1": {
+      "umbral": "alcance esperado en ≥ 20 de 24",
+      "valor": 24,
+      "se_cumple": true
+    },
+    "R2": {
+      "umbral": "código esperado en ≥ 6 de 8",
+      "valor": 8,
+      "se_cumple": true
+    },
+    "R3": {
+      "umbral": "fuera detectadas ≥ 5 de 6, ninguna como catálogo",
+      "valor": [
+        6,
+        0
+      ],
+      "se_cumple": true
+    },
+    "R4": {
+      "umbral": "respuesta válida en ≥ 23 de 24",
+      "valor": 24,
+      "se_cumple": true
+    }
+  },
+  "pasa": true,
+  "regla": "La reformulación entra a la página como está.",
+  "modelo": "xiaomi/mimo-v2.6-pro",
+  "gasto": {
+    "llamadas": 24,
+    "llamadas_con_costo": 24,
+    "costo_usd": 0.0809370096,
+    "prompt_tokens": 173936,
+    "completion_tokens": 6436,
+    "reasoning_tokens": 3518,
+    "modelos_servidos": {
+      "xiaomi/mimo-v2.6-pro": 24
+    }
+  }
+}
