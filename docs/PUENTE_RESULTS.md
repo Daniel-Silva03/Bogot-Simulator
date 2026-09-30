@@ -53,6 +53,12 @@ En negrita, donde el puente cumple el criterio de su columna.
 |---|---|---|---|---|
 | **P1** | El puente ordena a las personas | ρ_ind > azar 95 y > demografía, en ≥ 9 de 12 | **12 de 12** | se cumple |
 | **P2** | El puente ordena las localidades | r_loc > demografía, en ≥ 8 de 12 | **7 de 12** | **no se cumple** |
+
+> **Anotación (30/09, después; `PUENTE_LOCALIDADES_RESULTS.md` §4).** Este r_loc se calcula con el
+> puntaje y la respuesta real de las mismas personas. Cuando el puente acierta por persona, el ruido
+> de muestreo de las medias por localidad sale igual en los dos lados y sube r_loc sin que haya
+> geografía; a la demografía casi no le pasa. Los 7 de 12 tienen ese sesgo a favor del puente (no se
+> recalcularon). La lectura B no cambia: con el sesgo ya no alcanzaba.
 | P3 | El sentido es el correcto | ρ_ind > 0, en ≥ 11 de 12 | 12 de 12 | se cumple |
 | **P4** | El nivel propuesto es mejor que el tono general | e_nivel < tono, en ≥ 8 de 12 | **8 de 12** | se cumple, **justo** |
 

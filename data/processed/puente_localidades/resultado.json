@@ -1,0 +1,1383 @@
+{
+  "por_pregunta": {
+    "CV1": {
+      "anios": [
+        2023,
+        2022,
+        2024
+      ],
+      "n": 4522,
+      "n_loc_mediana": 251.0,
+      "r_loc": 0.4373829117807439,
+      "rho_ind": 0.4205391982642582,
+      "r_loc_llamadas": [
+        0.5034855379777234,
+        0.4373829117807439,
+        0.4052327087073204
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.02806124326012781,
+        "r_loc": 0.31458503228995444
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.17509615743066576,
+        "demografia": 0.2621961514081499
+      },
+      "confiabilidad_sb": 0.56,
+      "peso_disponible": [
+        {
+          "2022": 1.0,
+          "2023": 1.0,
+          "2024": 0.8333333333333334
+        },
+        {
+          "2022": 1.0,
+          "2023": 1.0,
+          "2024": 0.8333333333333334
+        },
+        {
+          "2022": 1.0,
+          "2023": 1.0,
+          "2024": 1.0
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "SP1",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ]
+    },
+    "AG2": {
+      "anios": [
+        2023,
+        2022,
+        2024
+      ],
+      "n": 4522,
+      "n_loc_mediana": 251.0,
+      "r_loc": 0.33872304463593583,
+      "rho_ind": 0.38990431815900245,
+      "r_loc_llamadas": [
+        0.33872304463593583,
+        0.49645394518389285,
+        0.31305747751752816
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.007061708908489676,
+        "r_loc": 0.03356942813822749
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.13723890992502386,
+        "demografia": 0.014151087658342065
+      },
+      "confiabilidad_sb": 0.567,
+      "peso_disponible": [
+        {
+          "2022": 0.7777777777777778,
+          "2023": 1.0,
+          "2024": 1.0
+        },
+        {
+          "2022": 0.8181818181818182,
+          "2023": 1.0,
+          "2024": 0.8181818181818182
+        },
+        {
+          "2022": 0.6,
+          "2023": 1.0,
+          "2024": 0.8
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_14",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_1",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ]
+    },
+    "VS8": {
+      "anios": [
+        2023,
+        2022,
+        2024
+      ],
+      "n": 4522,
+      "n_loc_mediana": 251.0,
+      "r_loc": 0.6115375967844399,
+      "rho_ind": 0.2999087253977768,
+      "r_loc_llamadas": [
+        0.6115375967844399,
+        0.6262262340220541,
+        0.5812400217048408
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.11509132968674274,
+        "r_loc": 0.5535751074795253
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.4330951043325177,
+        "demografia": 0.5129292265102472
+      },
+      "confiabilidad_sb": 0.824,
+      "peso_disponible": [
+        {
+          "2022": 0.4166666666666667,
+          "2023": 1.0,
+          "2024": 0.4166666666666667
+        },
+        {
+          "2022": 0.38461538461538464,
+          "2023": 1.0,
+          "2024": 0.38461538461538464
+        },
+        {
+          "2022": 0.4166666666666667,
+          "2023": 1.0,
+          "2024": 0.4166666666666667
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_17",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "RC5_17",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_7",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ]
+    },
+    "VS10": {
+      "anios": [
+        2023,
+        2022,
+        2024
+      ],
+      "n": 4522,
+      "n_loc_mediana": 251.0,
+      "r_loc": 0.6253149056312821,
+      "rho_ind": 0.3662194208955804,
+      "r_loc_llamadas": [
+        0.6253149056312821,
+        0.11142085593891815,
+        0.6569215877156559
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.06634066301372542,
+        "r_loc": 0.23661343281498506
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.3248828114490356,
+        "demografia": 0.19000307632198687
+      },
+      "confiabilidad_sb": 0.556,
+      "peso_disponible": [
+        {
+          "2022": 0.5384615384615384,
+          "2023": 1.0,
+          "2024": 0.5384615384615384
+        },
+        {
+          "2022": 0.38461538461538464,
+          "2023": 1.0,
+          "2024": 0.38461538461538464
+        },
+        {
+          "2022": 0.4166666666666667,
+          "2023": 1.0,
+          "2024": 0.4166666666666667
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_7",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_17",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ]
+    },
+    "GG7": {
+      "anios": [
+        2023,
+        2022,
+        2024
+      ],
+      "n": 4522,
+      "n_loc_mediana": 251.0,
+      "r_loc": 0.5406857432346714,
+      "rho_ind": 0.19931730568505318,
+      "r_loc_llamadas": [
+        0.5406857432346714,
+        0.5262815615749492,
+        0.5510405649179939
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.08054198126648601,
+        "r_loc": 0.2045745391829716
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.22848987679392807,
+        "demografia": 0.06786849336744608
+      },
+      "confiabilidad_sb": -0.351,
+      "peso_disponible": [
+        {
+          "2022": 0.36363636363636365,
+          "2023": 1.0,
+          "2024": 0.45454545454545453
+        },
+        {
+          "2022": 0.4,
+          "2023": 1.0,
+          "2024": 0.4
+        },
+        {
+          "2022": 0.4,
+          "2023": 1.0,
+          "2024": 0.5
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "GP1N_15",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MICE1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_15",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MICE1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_15",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MICE1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ]
+    },
+    "GG3": {
+      "anios": [
+        2023,
+        2022
+      ],
+      "n": 2539,
+      "n_loc_mediana": 131.0,
+      "r_loc": 0.5095818762451271,
+      "rho_ind": 0.6221558342046005,
+      "r_loc_llamadas": [
+        0.5456650329825641,
+        0.5095818762451271,
+        0.4785118265047222
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.09830962321131068,
+        "r_loc": 0.35248614917893234
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.03135085302750133,
+        "demografia": 0.21874665845656935
+      },
+      "confiabilidad_sb": 0.374,
+      "peso_disponible": [
+        {
+          "2022": 0.5833333333333334,
+          "2023": 1.0,
+          "2024": 0.3333333333333333
+        },
+        {
+          "2022": 0.6153846153846154,
+          "2023": 1.0,
+          "2024": 0.38461538461538464
+        },
+        {
+          "2022": 0.75,
+          "2023": 1.0,
+          "2024": 0.25
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MICE2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CC5A",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CC5A",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MICE2",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CC5A",
+            "sentido": "+",
+            "peso": 3
+          }
+        ]
+      ]
+    },
+    "MV4": {
+      "anios": [
+        2023,
+        2022,
+        2024
+      ],
+      "n": 4522,
+      "n_loc_mediana": 251.0,
+      "r_loc": 0.6686262289059037,
+      "rho_ind": 0.29437131412697803,
+      "r_loc_llamadas": [
+        0.7003254877743246,
+        0.6686262289059037,
+        0.6547229554066971
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.14473846288924572,
+        "r_loc": 0.6649735389329442
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.44047141543264784,
+        "demografia": 0.582525584482308
+      },
+      "confiabilidad_sb": 0.76,
+      "peso_disponible": [
+        {
+          "2022": 0.5555555555555556,
+          "2023": 1.0,
+          "2024": 0.7777777777777778
+        },
+        {
+          "2022": 0.6363636363636364,
+          "2023": 1.0,
+          "2024": 0.8181818181818182
+        },
+        {
+          "2022": 0.5454545454545454,
+          "2023": 1.0,
+          "2024": 0.7272727272727273
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "MV13_7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MV2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_8",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "MV13_7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_10",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_11",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "MV13_7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MV2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_11",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ]
+    },
+    "MA3_1": {
+      "anios": [
+        2023,
+        2022
+      ],
+      "n": 3001,
+      "n_loc_mediana": 163.0,
+      "r_loc": 0.4179911842637831,
+      "rho_ind": 0.5841179627867107,
+      "r_loc_llamadas": [
+        0.45223901220038926,
+        0.3880981104059167,
+        0.4179911842637831
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.04547077133314428,
+        "r_loc": 0.10802085755459276
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.08487162153467658,
+        "demografia": 0.05819188780121281
+      },
+      "confiabilidad_sb": 0.351,
+      "peso_disponible": [
+        {
+          "2022": 1.0,
+          "2023": 1.0,
+          "2024": 0.18181818181818182
+        },
+        {
+          "2022": 0.8333333333333334,
+          "2023": 1.0,
+          "2024": 0.16666666666666666
+        },
+        {
+          "2022": 0.8181818181818182,
+          "2023": 1.0,
+          "2024": 0.0
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "MA3_2",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_2",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_2",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ]
+    },
+    "MA3_3": {
+      "anios": [
+        2023,
+        2022
+      ],
+      "n": 3001,
+      "n_loc_mediana": 163.0,
+      "r_loc": 0.7650255108779197,
+      "rho_ind": 0.5673023589568448,
+      "r_loc_llamadas": [
+        0.7921766787117539,
+        0.7650255108779197,
+        0.0
+      ],
+      "respuestas_validas": 2,
+      "demografia": {
+        "rho_ind": 0.04048411630148126,
+        "r_loc": 0.2578885286589431
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.19848055042003226,
+        "demografia": 0.1631653497913776
+      },
+      "confiabilidad_sb": -0.001,
+      "peso_disponible": [
+        {
+          "2022": 1.0,
+          "2023": 1.0,
+          "2024": 0.0
+        },
+        {
+          "2022": 0.8181818181818182,
+          "2023": 1.0,
+          "2024": 0.36363636363636365
+        },
+        null
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "EP1B_6",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "RC5_16",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_8",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        null
+      ]
+    },
+    "CR2": {
+      "anios": [
+        2023,
+        2022,
+        2024
+      ],
+      "n": 4522,
+      "n_loc_mediana": 251.0,
+      "r_loc": 0.782106095673977,
+      "rho_ind": 0.49753016673540346,
+      "r_loc_llamadas": [
+        0.7715129428984406,
+        0.7840730966454431,
+        0.782106095673977
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.07897044125152111,
+        "r_loc": 0.7802354204147371
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.47014633901891417,
+        "demografia": 0.6773155515236522
+      },
+      "confiabilidad_sb": 0.639,
+      "peso_disponible": [
+        {
+          "2022": 0.5454545454545454,
+          "2023": 1.0,
+          "2024": 0.36363636363636365
+        },
+        {
+          "2022": 0.5,
+          "2023": 1.0,
+          "2024": 0.3
+        },
+        {
+          "2022": 0.5833333333333334,
+          "2023": 1.0,
+          "2024": 0.4166666666666667
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "EP1B_3",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 2
+          }
+        ]
+      ]
+    },
+    "CO2": {
+      "anios": [
+        2023,
+        2022,
+        2024
+      ],
+      "n": 4522,
+      "n_loc_mediana": 251.0,
+      "r_loc": 0.771549038911722,
+      "rho_ind": 0.4251407418634077,
+      "r_loc_llamadas": [
+        0.7698505272095852,
+        0.771549038911722,
+        0.7762503414603024
+      ],
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.27081357422297775,
+        "r_loc": 0.6692813522276944
+      },
+      "control_mitades_no_preregistrado": {
+        "r_loc": 0.5492575223548912,
+        "demografia": 0.5224662853622488
+      },
+      "confiabilidad_sb": 0.713,
+      "peso_disponible": [
+        {
+          "2022": 1.0,
+          "2023": 1.0,
+          "2024": 1.0
+        },
+        {
+          "2022": 0.5,
+          "2023": 1.0,
+          "2024": 0.5
+        },
+        {
+          "2022": 0.8333333333333334,
+          "2023": 1.0,
+          "2024": 0.8333333333333334
+        }
+      ],
+      "puentes": [
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_1",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_1",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_1",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_7",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ]
+    }
+  },
+  "predicciones": {
+    "P1": {
+      "umbral": "r_loc > demografía en ≥ 8 de 11",
+      "cuenta": 11,
+      "por_pregunta": {
+        "CV1": true,
+        "AG2": true,
+        "VS8": true,
+        "VS10": true,
+        "GG7": true,
+        "GG3": true,
+        "MV4": true,
+        "MA3_1": true,
+        "MA3_3": true,
+        "CR2": true,
+        "CO2": true
+      },
+      "se_cumple": true
+    },
+    "P2": {
+      "umbral": "ρ_ind > demografía en ≥ 8 de 11 (control)",
+      "cuenta": 11,
+      "por_pregunta": {
+        "CV1": true,
+        "AG2": true,
+        "VS8": true,
+        "VS10": true,
+        "GG7": true,
+        "GG3": true,
+        "MV4": true,
+        "MA3_1": true,
+        "MA3_3": true,
+        "CR2": true,
+        "CO2": true
+      },
+      "se_cumple": true
+    },
+    "P3": {
+      "umbral": "mediana de r_loc ≥ 0,5 en las 7 con confiabilidad ≥ 0,5 (se reporta)",
+      "preguntas": [
+        "CV1",
+        "AG2",
+        "VS8",
+        "VS10",
+        "MV4",
+        "CR2",
+        "CO2"
+      ],
+      "mediana": 0.6253149056312821,
+      "se_cumple": true
+    }
+  },
+  "lectura": "A",
+  "regla": "Las preguntas nuevas pasan a tener mapa, con la población 2022-2024, rotulado como suposición y con los filtros de margen de la página.",
+  "n_por_anio": {
+    "2022": 1500,
+    "2023": 1501,
+    "2024": 1521
+  },
+  "modelo": "xiaomi/mimo-v2.6-pro",
+  "llamadas_nuevas": 0
+}

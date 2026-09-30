@@ -95,6 +95,27 @@ def test_donde_no_se_transmite_gana_la_demografia():
     assert p["demografia"]["r_loc"] > p["r_loc"], p
 
 
+def test_sin_geografia_r_loc_sube_por_el_ruido_compartido_y_las_mitades_lo_quitan():
+    """DI-PL6: Y sin ninguna geografía, pero bien predicha por persona. El r_loc de las
+    mismas personas sale alto por el ruido de muestreo compartido; el de mitades, no."""
+    rng = np.random.default_rng(9)
+    n = 4500
+    loc = rng.integers(1, 20, n)
+    s = rng.normal(0, 1, n)
+    y = s + rng.normal(0, 0.8, n)
+    w = np.ones(n)
+    from src.experiments import puente as pu
+    ingenuo = pu.r_loc(s, y, w, loc)
+    cruzado = pl.r_loc_cruzado(s, y, w, loc, n=100)
+    assert ingenuo > 0.5 and abs(cruzado) < 0.3, (ingenuo, cruzado)
+
+
+def test_con_geografia_real_las_mitades_la_conservan():
+    d, fp, fe, anios, _ = mundo(10, transmite=True)
+    p = pl.analizar(d, fe, {"Y": [BUENO] * 3}, {"Y": 0.8}, anios, n_mitades=50)["por_pregunta"]["Y"]
+    assert p["control_mitades_no_preregistrado"]["r_loc"] > 0.5, p
+
+
 # --- cómo se juntan los años (§4, DI-PL2, DI-PL3) --------------------------------
 
 def test_cada_pregunta_se_estandariza_dentro_de_cada_anio():

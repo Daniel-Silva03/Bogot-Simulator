@@ -5,7 +5,10 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 30 de septiembre de 2026
-Estado: **sin código; ninguna correlación entre el puente y las respuestas de 2022 o 2024 calculada**
+Estado: ~~sin código; ninguna correlación entre el puente y las respuestas de 2022 o 2024 calculada~~
+**Corrida el 30/09** (`PUENTE_LOCALIDADES_RESULTS.md`): P1 11 de 11 (lectura A escrita), pero un
+control no pre-registrado muestra que r_loc estaba inflado por ruido de muestreo compartido; con él,
+6 de 11. Lectura pendiente de Daniel.
 Origen: `PUENTE_RESULTS.md` (lectura B: P2 falló, 7 de 12) y `DATA_INVENTORY.md` §13.9 (juntar 2022-2024)
 
 ---

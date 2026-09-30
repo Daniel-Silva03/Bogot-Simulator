@@ -40,6 +40,18 @@ DI-PL4. **Demografía** (§4): sexo, tramo de edad y estrato, con los códigos d
 DI-PL5. **Las 7 preguntas de P3** son las de confiabilidad de la muestra entera
     (Spearman-Brown, `conf_junto_sb`) ≥ 0,5, como en §2. Si del archivo no salen 7, la
     corrida se detiene: algo cambió desde el pre-registro.
+
+DI-PL6. **Control de mitades — NO PRE-REGISTRADO, añadido el 30/09 después de ver la
+    primera corrida.** Hecho: el ruido (`MA3_3`), cuya confiabilidad por localidad es
+    0,00, dio r_loc = 0,77. Eso no puede ser geografía. Supuesto: el puntaje y la
+    respuesta real salen de las mismas personas; si el puente acierta por persona,
+    el ruido de muestreo de las medias por localidad es el mismo en los dos lados y se
+    correlaciona solo. La demografía, que acierta poco por persona, casi no lo tiene.
+    Afectaba igual a la primera prueba (`PUENTE_RESULTS.md`). Control: medias del
+    puntaje en una mitad al azar de las personas contra medias reales en la otra
+    mitad, mediana de 200 particiones, para el puente y para la demografía. Se
+    reporta al lado de P1; **no cambia la regla de decisión escrita**, pero la
+    lectura se discute con él (RESULTS).
 """
 
 from __future__ import annotations
@@ -67,6 +79,7 @@ ESCONDIDAS = tuple(v for v in pu.ESCONDIDAS if v not in FUERA)
 UMBRAL_P1 = UMBRAL_P2 = 8
 UMBRAL_CONF_P3 = 0.5
 N_P3 = 7
+N_MITADES = 200
 
 
 class PuenteLocalidadesError(RuntimeError):
@@ -147,13 +160,30 @@ class DatosOlas:
 # --------------------------------------------------------------------------
 # Análisis
 
+def r_loc_cruzado(puntaje, y, w, loc, n: int = N_MITADES, semilla: int = pu.SEMILLA) -> float:
+    """DI-PL6 (no pre-registrado): medias del puntaje en una mitad de las personas contra
+    medias reales en la otra; mediana de `n` particiones. Quita el ruido de muestreo
+    compartido, que no es geografía."""
+    rng = np.random.default_rng(semilla)
+    locs = sorted(set(loc) - {pu.SUMAPAZ})
+    rs = []
+    for _ in range(n):
+        m = rng.random(len(y)) < 0.5
+        a = [pu._wmean(puntaje[m & (loc == l)], w[m & (loc == l)]) for l in locs]
+        b = [pu._wmean(y[~m & (loc == l)], w[~m & (loc == l)]) for l in locs]
+        rs.append(float(np.corrcoef(a, b)[0, 1]))
+    return float(np.median(rs))
+
+
 def analizar(datos: DatosOlas, fichas_esc: dict, respuestas: dict, confiabilidad: dict[str, float],
-             anios: dict[str, tuple]) -> dict:
+             anios: dict[str, tuple], n_mitades: int = N_MITADES) -> dict:
     por = {}
     for v in fichas_esc:
         x, ok = datos.y[v]
         med = [pu.medir(datos, v, fichas_esc[v], r) for r in respuestas[v]]
         dem = pu.base_demografia(datos, v)
+        cru = [r_loc_cruzado(datos.puntaje(r["preguntas"])[ok], x[ok], datos.w[ok], datos.loc[ok], n_mitades)
+               if r else 0.0 for r in respuestas[v]]
         por[v] = {
             "anios": list(anios[v]),
             "n": int(ok.sum()),
@@ -164,6 +194,9 @@ def analizar(datos: DatosOlas, fichas_esc: dict, respuestas: dict, confiabilidad
             "respuestas_validas": int(sum(m["valida"] for m in med)),
             "demografia": {"rho_ind": pu.rho_ind(dem, x[ok], datos.w[ok]),
                            "r_loc": pu.r_loc(dem, x[ok], datos.w[ok], datos.loc[ok])},
+            "control_mitades_no_preregistrado": {                                     # DI-PL6
+                "r_loc": float(np.median(cru)),
+                "demografia": r_loc_cruzado(dem, x[ok], datos.w[ok], datos.loc[ok], n_mitades)},
             "confiabilidad_sb": confiabilidad[v],
             "peso_disponible": [datos.peso_disponible(r["preguntas"]) if r else None for r in respuestas[v]],
             "puentes": [r["preguntas"] if r else None for r in respuestas[v]],
@@ -254,10 +287,13 @@ def main(argv=None) -> int:
         json.dumps({**a, **v, "n_por_anio": {int(k): int((datos.anio == k).sum()) for k in ANIOS},
                     "modelo": pu.MODELO, "llamadas_nuevas": 0},
                    ensure_ascii=False, indent=2, default=float), encoding="utf-8")
-    print(f"{'pregunta':8s} {'años':>14s} {'n/loc':>5s} {'conf':>5s} │ {'r_loc':>6s} {'demo':>6s} │ {'ρ_ind':>6s} {'demo':>6s}")
+    print(f"{'pregunta':8s} {'años':>14s} {'n/loc':>5s} {'conf':>5s} │ {'r_loc':>6s} {'demo':>6s} │ {'ρ_ind':>6s} {'demo':>6s}"
+          f" │ mitades (no pre-reg.) {'puente':>6s} {'demo':>6s}")
     for k, p in a["por_pregunta"].items():
+        c = p["control_mitades_no_preregistrado"]
         print(f"{k:8s} {'-'.join(map(str, p['anios'])):>14s} {p['n_loc_mediana']:5.0f} {p['confiabilidad_sb']:5.2f} │ "
-              f"{p['r_loc']:6.2f} {p['demografia']['r_loc']:6.2f} │ {p['rho_ind']:6.2f} {p['demografia']['rho_ind']:6.2f}")
+              f"{p['r_loc']:6.3f} {p['demografia']['r_loc']:6.3f} │ {p['rho_ind']:6.2f} {p['demografia']['rho_ind']:6.2f}"
+              f" │ {'':21s} {c['r_loc']:6.2f} {c['demografia']:6.2f}")
     for k, p in v["predicciones"].items():
         c = f"{p['cuenta']} de {len(a['por_pregunta'])}" if "cuenta" in p else f"mediana {p['mediana']:.2f}"
         print(f"  {k} {'se cumple' if p['se_cumple'] else 'NO se cumple'} — {p['umbral']} ({c})")

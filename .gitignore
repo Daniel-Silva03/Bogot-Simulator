@@ -111,6 +111,8 @@ data/**
 !data/processed/poblacion_epc2023/*.json
 !data/processed/puente/
 !data/processed/puente/resultado.json
+!data/processed/puente_localidades/
+!data/processed/puente_localidades/resultado.json
 !data/processed/reformulacion/
 !data/processed/reformulacion/resultado.json
 
