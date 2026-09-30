@@ -1,7 +1,8 @@
 # A19 — Estimación con diseño muestral complejo: qué se puede, qué no, y qué cambia
 
 Proyecto: Bogotá Social Simulator
-Versión: 1.1 — seis olas con diseño, no cuatro; y el proxy de conglomerado queda descartado con medición
+Versión: 1.2 — **corrección del 29/09/2026: el conglomerado es localidad × manzana** (§0.bis)
+Versión 1.1 — seis olas con diseño, no cuatro; y el proxy de conglomerado queda descartado con medición
 Versión 1.0 — 17 de septiembre de 2026
 Fecha: 18 de septiembre de 2026
 Resuelve: A19 de `PROJECT_CONTEXT.md`
@@ -14,6 +15,54 @@ Código: `src/utils/diseno.py` (DI-D1..DI-D5) · `tests/test_diseno.py`, 12 prue
 1. **En la ECP no se puede.** Los microdatos del DANE publican `FEX_P` y `REGION` y nada más — ni estrato de muestreo, ni UPM, ni pesos replicados, en ninguna de las cinco olas. Sin identificador de conglomerado no hay linealización posible. Es una limitación de la fuente, no del código.
 2. **En la EPC sí, en seis olas**, y el efecto de diseño queda **medido sobre la variable del proyecto**: **DEFF entre 1,39 y 2,69, mediana 1,86** sobre 11 mediciones. Los errores estándar que el proyecto venía usando estaban subestimados por un factor de ~1,4.
 3. **Y cambia una lectura sustantiva:** de las ocho transiciones de la serie de gestión del alcalde, **siete son distinguibles de cero y una no** — la de 2022→2023. Es exactamente la misma que el análisis de no respuesta había marcado como no establecida, por un camino completamente distinto.
+
+---
+
+## 0.bis Corrección v1.2 (29/09/2026) — la manzana se numera dentro de la localidad
+
+*Se agrega al principio y no se edita nada de lo de abajo (PROJECT_CONTEXT §45): las
+tablas de la v1.1 describen lo que se calculó entonces.*
+
+**Cómo apareció.** Al comparar la serie calculada desde el microdato con la que usaba
+el tablero, el error con diseño de 2018 no coincidía (0,0423 contra 0,0407). El
+archivo de origen, `deff_epc_seis_olas.csv`, no estaba versionado ni tenía script, y
+ninguna variable de la base reproducía su cifra. Buscando por qué, apareció otra cosa.
+
+**Qué estaba mal.** La v1.1 ya había notado (§2) que la «manzana» tenía ~40 valores de
+~30 personas y que eso no era una manzana. La razón: **el código se numera dentro de
+cada localidad**. El mismo número es otra manzana en otra localidad. Ninguno de los
+estratos de la tabla del §2 anidaba a sus manzanas (entre el 6 % y el 36 %), y en 2019
+el 94 % de las «manzanas» aparecía en más de una localidad. Con la localidad, la
+unidad son ~300 grupos de ~3 personas por ola, que es lo que corresponde a manzanas
+reales en una muestra de ~1.450. El nivel socioeconómico (NSE, D1_ORIGINAL,
+GRUPO_ESTRATOS) tampoco puede ser estrato de diseño: varía dentro de la misma manzana.
+
+**Corrección** (`diseno.py`, DI-D7): conglomerado = localidad × manzana, estrato =
+localidad, en las seis olas. Lo mide `src/utils/medir_deff_epc.py`, que escribe el CSV
+—ahora versionado— y se niega a hacerlo si la mediana no coincide con la constante.
+
+| Ola | Ítem | DEFF v1.1 | **DEFF v1.2** |
+|---|---|---|---|
+| 2014 | alcalde / Concejo | 2,18 / 2,35 | **2,51 / 2,22** |
+| 2015 | alcalde / Concejo | 2,10 / 1,42 | **3,21 / 1,61** |
+| 2018 | alcalde | 1,81 | **2,03** |
+| 2019 | alcalde / Concejo | 1,63 / 2,04 | 1,65 / 2,03 |
+| 2023 | alcalde / Concejo | 1,86 / 1,46 | 1,86 / 1,46 |
+| 2024 | alcalde / Concejo | 2,69 / 1,39 | 2,69 / 1,39 |
+
+En 2019, 2023 y 2024 no cambia nada: allí el estrato ya era la localidad y el estimador
+anidaba sin que se lo pidiera. **Mediana: 1,86 → 2,03; rango 1,39–2,69 → 1,39–3,21.**
+Los márgenes que usan el DEFF prestado (la ECP, las olas de la EPC sin manzana, el
+mapa) se ensanchan un 4,5 %.
+
+**Lo que no cambia.** Las ocho transiciones de gestión del alcalde conservan su
+veredicto: siete distinguibles de cero (z de 3,07 a 6,61) y 2022→2023 no (z = −1,43).
+La conclusión del §4.bis tampoco cambia —el proxy sigue siendo peor que el DEFF
+prestado—, aunque sus cifras «con manzana» (que no coinciden ni con el §3) no se
+rehicieron. `transiciones_epc_con_diseno.csv` queda desactualizado y sin versionar.
+
+**Los documentos que citan 1,86** (A08 paso 0, tercera perilla, la especificación
+visual) se conservan: describen lo que se usó entonces.
 
 ---
 

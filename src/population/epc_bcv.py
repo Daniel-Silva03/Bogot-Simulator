@@ -311,14 +311,16 @@ def cargar_bcv(anio: int, raiz: str | os.PathLike | None = None) -> Ola:
     # encuentra y cae en silencio al DEFF prestado en TODAS las olas: pasó en
     # `preparar_serie.py` con el microdato en disco (corregido el 29/09/2026).
     # Los nombres crudos cambian entre olas (MANZANA / Manzana); aquí no.
+    # DI-D7: la manzana se numera DENTRO de cada localidad, así que la unidad
+    # de muestreo es localidad|manzana y el estrato de diseño es la localidad.
     from src.utils.diseno import CONGLOMERADO_POR_ANIO
-    col_psu, col_estrato = CONGLOMERADO_POR_ANIO.get(anio, (None, None))
+    col_psu = CONGLOMERADO_POR_ANIO.get(anio, (None, None))[0]
+    col_estrato = DEMOGRAFICAS["localidad"].get(anio)
     psu = _columna(crudo, col_psu)
-    if psu is not None:
-        salida["diseno_psu"] = psu
-        est = _columna(crudo, col_estrato)
-        if est is not None:
-            salida["diseno_estrato"] = est
+    loc = _columna(crudo, col_estrato)
+    if psu is not None and loc is not None:
+        salida["diseno_estrato"] = loc
+        salida["diseno_psu"] = loc.astype(str) + "|" + psu.astype(str)
 
     meta = {
         "anio": anio,
@@ -331,8 +333,8 @@ def cargar_bcv(anio: int, raiz: str | os.PathLike | None = None) -> Ola:
         "items_disponibles": [k for k in ITEMS if k in salida.columns],
         "aviso": ANIOS_CON_AVISO.get(anio),
         "codificacion_de_respaldo": codificacion_de_respaldo,
-        "diseno": {"psu": col_psu if psu is not None else None,
-                   "estrato": col_estrato if "diseno_estrato" in salida.columns else None},
+        "diseno": ({"psu": f"{col_estrato}|{col_psu}", "estrato": col_estrato}
+                   if "diseno_psu" in salida.columns else None),
     }
     return Ola(anio=anio, datos=salida, metadatos=meta)
 

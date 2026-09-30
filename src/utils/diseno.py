@@ -95,6 +95,25 @@ DI-D6. **Un proxy de conglomerado armado con localidad × estrato NO sirve, y
 DI-D5. **Las diferencias entre olas se tratan como independientes.** La EPC
     y la ECP son cortes transversales distintos, sin panel: no hay
     covarianza que restar. Var(a − b) = Var(a) + Var(b).
+
+DI-D7. **Corrección (29/09/2026): el conglomerado es localidad × manzana, y el
+    estrato es la localidad.** *Hecho:* el código de manzana de la EPC se
+    numera dentro de cada localidad: el mismo número es otra manzana en otra
+    localidad. Tomado solo daba ~40 «manzanas» de ~30 personas que mezclaban
+    varias localidades (en 2019, el 94 % aparecía en más de una); con la
+    localidad da ~300 grupos de ~3 personas, que es lo que corresponde a
+    manzanas reales en una muestra de ~1.450. Ningún estrato de la tabla de
+    septiembre anidaba a sus manzanas (entre el 6 % y el 36 %), y el nivel
+    socioeconómico del hogar (NSE, D1_ORIGINAL, GRUPO_ESTRATOS) ni siquiera
+    puede ser estrato de diseño: varía dentro de la misma manzana.
+    *Decisión:* PSU = localidad|manzana y estrato = localidad en las seis
+    olas; el segundo elemento de `CONGLOMERADO_POR_ANIO` queda como registro de
+    lo que se usó antes y ya no se lee. *Efecto medido:* en 2019, 2023 y 2024
+    no cambia nada (allí el estrato ya era la localidad y el estimador anidaba
+    sin pedirlo); en 2014, 2015 y 2018 el DEFF sube de 2,18 / 2,10 / 1,95 a
+    2,51 / 3,21 / 2,03. La mediana de las 11 mediciones pasa de 1,86 a 2,03.
+    Las ocho transiciones de la EPC conservan su veredicto.
+    Quién calcula: `src/utils/medir_deff_epc.py`, que escribe el CSV versionado.
 """
 
 from __future__ import annotations
@@ -107,8 +126,10 @@ import pandas as pd
 
 Z_95 = 1.959963984540054
 
-#: Identificador de conglomerado y de estrato por ola de la EPC. Confirmado
-#: contra los microdatos; los años ausentes no traen ninguno (DI-D6).
+#: Identificador de manzana por ola de la EPC (primer elemento). El segundo es
+#: el estrato que se usó hasta el 29/09/2026 y **ya no se lee**: no anida a las
+#: manzanas (DI-D7). El diseño que se usa es PSU = localidad|manzana, estrato =
+#: localidad; lo arma `epc_bcv.cargar_bcv`. Los años ausentes no traen manzana.
 CONGLOMERADO_POR_ANIO = {
     2014: ("MANZANA", "GRUPO_ESTRATOS"),
     2015: ("MANZANA", "D1_ORIGINAL"),
@@ -131,8 +152,11 @@ SIN_CONGLOMERADO = {
 #: fuente no trae variables de diseño — diciendo que es prestado.
 #: 11 mediciones sobre 6 olas (antes: 8 sobre 4; la mediana se movió de 1,95
 #: a 1,86, lo que da cierta confianza en el factor).
+#: *Corrección del 29/09/2026 (DI-D7):* con la manzana anidada en la localidad,
+#: la mediana es 2,03 y el rango 1,39–3,21 (antes 1,86 y 1,39–2,69). La
+#: produce y la verifica `src/utils/medir_deff_epc.py`.
 DEFF_MEDIDO_EPC = {
-    "minimo": 1.39, "mediana": 1.86, "maximo": 2.69,
+    "minimo": 1.39, "mediana": 2.03, "maximo": 3.21,
     "olas": tuple(sorted(CONGLOMERADO_POR_ANIO)),
     "items": ("gestion_alcalde", "gestion_concejo"),
     "mediciones": 11,

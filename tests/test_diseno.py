@@ -149,6 +149,19 @@ def test_el_deff_medido_esta_registrado():
     assert DEFF_MEDIDO_EPC["mediana"] > 1
 
 
+def test_la_constante_coincide_con_la_medicion_versionada():
+    """DI-D7 — la mediana que usan la ECP y el mapa es la del CSV que la mide.
+
+    No necesita el microdato: corre también en la máquina que no lo tiene."""
+    import pandas as pd
+    ruta = Path(__file__).resolve().parents[1] / "data" / "processed" / "deff_epc_seis_olas.csv"
+    t = pd.read_csv(ruta)
+    assert len(t) == DEFF_MEDIDO_EPC["mediciones"], len(t)
+    assert abs(float(t.deff.median()) - DEFF_MEDIDO_EPC["mediana"]) <= 0.005, float(t.deff.median())
+    assert abs(t.deff.min() - DEFF_MEDIDO_EPC["minimo"]) <= 0.005 and abs(t.deff.max() - DEFF_MEDIDO_EPC["maximo"]) <= 0.005
+    assert (t.n_psu > 200).all(), "el CSV no viene del diseño anidado (DI-D7)"
+
+
 # -------------------------------------------------------------------------
 
 if __name__ == "__main__":

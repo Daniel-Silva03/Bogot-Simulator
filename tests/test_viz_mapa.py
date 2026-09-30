@@ -119,7 +119,9 @@ def main():
                ca["sd_dentro"] > ca["sd_entre"])
     # El error estándar usa el efecto de diseño medido, no muestreo aleatorio
     # simple: sin esa corrección saldría un factor sqrt(1.86) = 1.36 más chico.
-    probar("el efecto de diseño aplicado es el medido en la EPC", abs(d["deff"] - 1.86) < 1e-9)
+    from src.utils.diseno import DEFF_MEDIDO_EPC
+    probar("el efecto de diseño aplicado es el medido en la EPC",
+           abs(d["deff"] - DEFF_MEDIDO_EPC["mediana"]) < 1e-9)
 
     # DI-V45: el ruido analítico subestima, y el paquete tiene que traer el
     # medido. Sin esta prueba, la página podría volver a afirmar que hay señal

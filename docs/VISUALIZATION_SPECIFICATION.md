@@ -1,6 +1,6 @@
 # VISUALIZATION SPECIFICATION — BOGOTÁ SOCIAL SIMULATOR
 
-**Versión:** 0.18
+**Versión:** 0.19
 **Fecha:** 29 de septiembre de 2026
 **Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados; cuatro capas, todas responden al año, y una de ellas —Crecimiento— es la primera que **sí** puede afirmar geografía. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. **Corrección del 25/09 (DI-V52):** la primera mitad de DI-V45 se sostiene; «no hay señal» no, porque la prueba que la sostenía no podía detectar señal. La capa de opinión sigue sin poder leerse por territorio, pero por otra razón: el donante no trae localidad. Hitos 3 a 5 especificados, sin construir. **29/09 — capa de Voto (DI-V53 a DI-V56):** la primera vuelta presidencial de 2014, 2018 y 2022 por localidad, un conteo completo que sí puede afirmar geografía, y «lo que el estrato no explica» (`GEOGRAFIA_ELECTORAL_RESULTS.md`).
 **Documentos relacionados:** PROJECT_CONTEXT.md §31 y §51, ARCHITECTURE.md, POPULATION_SPECIFICATION.md, claude/ANALISIS_DISENO_MUESTRAL.md
@@ -790,6 +790,14 @@ El detalle está en el docstring de `src/viz/preparar_voto.py`. Resumen:
   (percentiles 10 a 45), que es lo que ya decía DI-V52. El caso de 2021, que DI-V45
   miró con atención por su 0,341, era una semilla alta: con la población nueva vale
   0,221.
+
+- **DI-V58** — **El DEFF de la página pasa de 1,86 a 2,03** (29/09/2026, DI-D7 en
+  `diseno.py`). El conglomerado de la EPC es localidad × manzana, no la manzana sola,
+  que se numera dentro de cada localidad. DI-V4 se conserva sin editar. Efecto: el
+  error estándar de cada localidad en la capa de Opinión y los márgenes de la serie de
+  la ECP se ensanchan un 4,5 %; en la serie de la EPC, 2014, 2015 y 2018 toman su
+  error con el diseño corregido (2015: 0,042 → 0,052). Ninguna media cambia. La página
+  ya no lleva el DEFF escrito: `preparar_mapa.py` lo lee de `DEFF_MEDIDO_EPC`.
 
 La regla de §2 se aplica al revés aquí, y el aviso lo enseña: la capa de Opinión no
 puede decir «el sur confía menos»; esta sí puede decir «el sur votó más por Petro»,

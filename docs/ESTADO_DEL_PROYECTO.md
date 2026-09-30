@@ -179,10 +179,13 @@ EPC caía al DEFF prestado en todas las olas sin avisar; y `preparar_mapa` solo 
   territorial y el mapa se regeneraron (versión `v0.5-dim2`).
   **En el PC del CNC:** después de `git pull`, no reconstruir poblaciones con código
   anterior; con este código, las de las dos máquinas son iguales.
-- **Error con diseño de la EPC en 2018 y 2019:** desde el microdato da 0,0423 y
-  0,0384; `deff_epc_seis_olas.csv` dice 0,0407 y 0,0382. Mismos casos (el error SRS
-  coincide exacto); la diferencia está en el estrato de diseño con que se generó ese
-  CSV, cuyo script no está en el repo. La serie publicada sigue usando el CSV. Gana a «escenarios con preguntas reales» como
+- ~~Error con diseño de la EPC en 2018 y 2019~~ — **resuelto el 29/09, y destapó
+  algo mayor (DI-D7, `ANALISIS_DISENO_MUESTRAL.md` v1.2).** La manzana de la EPC se
+  numera dentro de cada localidad: el conglomerado es localidad × manzana. El DEFF
+  mediano pasa de 1,86 a **2,03**; los márgenes que lo usan se ensanchan 4,5 %;
+  ninguna transición cambia de veredicto. Los dos CSV de la EPC ahora tienen script
+  (`src/utils/medir_deff_epc.py`) y se versionan: las dos máquinas publican la misma
+  serie. Serie y mapa regenerados. Gana a «escenarios con preguntas reales» como
 siguiente frente, porque resuelve un vacío de datos que ningún otro frente resuelve.
 
 **Experimento 9: cerrado.** Se cerró el 29/09

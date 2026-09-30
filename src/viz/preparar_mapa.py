@@ -189,7 +189,12 @@ SALIDA = RAIZ / "data" / "processed" / "viz" / "mapa_bogota.json"
 #: tarda ~4 minutos; por eso no se recalcula acá, se lee.
 PISO = RAIZ / "data" / "processed" / "viz" / "piso_territorial.json"
 
-DEFF = 1.86  # mediana medida en la EPC sobre 11 mediciones (DI-V4)
+# Mediana medida en la EPC sobre 11 mediciones (DI-V4). Se lee de diseno.py y no
+# se escribe aquí: era 1,86 hasta la corrección DI-D7 (29/09/2026), ahora 2,03.
+import sys  # noqa: E402
+sys.path.insert(0, str(RAIZ))
+from src.utils.diseno import DEFF_MEDIDO_EPC  # noqa: E402
+DEFF = DEFF_MEDIDO_EPC["mediana"]
 SEMILLA = 42
 
 BANDAS_EDAD = [(18, 29), (30, 44), (45, 59), (60, 200)]

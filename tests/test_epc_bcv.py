@@ -168,6 +168,20 @@ def test_el_concejo_se_mueve_menos_que_el_alcalde():
     )
 
 
+def test_el_conglomerado_esta_anidado_en_el_estrato():
+    """DI-D7 — cada unidad de muestreo cae en un solo estrato, en las seis olas.
+
+    Con la manzana sola no pasaba: el mismo número aparecía en varias
+    localidades y el estimador fusionaba manzanas distintas."""
+    from src.utils.diseno import CONGLOMERADO_POR_ANIO
+    for a in sorted(CONGLOMERADO_POR_ANIO):
+        d = cargar_bcv(a).datos
+        assert "diseno_psu" in d.columns and "diseno_estrato" in d.columns, f"{a}: sin diseño"
+        por_psu = d.groupby("diseno_psu")["diseno_estrato"].nunique()
+        assert (por_psu == 1).all(), f"{a}: {int((por_psu > 1).sum())} conglomerados en más de un estrato"
+        assert d["diseno_psu"].nunique() > 200, f"{a}: {d['diseno_psu'].nunique()} conglomerados; ¿volvió la manzana sola?"
+
+
 def test_un_anio_que_no_existe_falla_con_su_motivo():
     for a in (2020, 2021):
         try:
