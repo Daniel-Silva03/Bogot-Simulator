@@ -202,7 +202,25 @@ mapa. Lo que cambia es la población detrás de las preguntas del catálogo
 Verificado: 11 pruebas de `tests/test_consulta.py` (3 nuevas: años por pregunta,
 estandarización por año, sin educación) y la página en modo simulado. En seguridad en el
 barrio el mapa colorea las 19 localidades y la nota dice «unas 251 personas encuestadas por
-localidad». Sigue sin probarse con el modelo real.
+localidad». ~~Sigue sin probarse con el modelo real.~~
+
+**Primera prueba con el modelo real (30/09, servidor abierto por Daniel; 5 llamadas, USD 0,010):**
+- «¿La gente se siente segura caminando por su barrio?» → `VS8`, EPC 2022–2024, 44 % algo o muy
+  seguro, mapa con las 19 localidades.
+- «¿Qué tan probable cree la gente que es que un delito sea castigado en Bogotá?» → `VS18`, **EPC
+  2023**, unas 79 personas por localidad.
+- «¿Les gustaría que el metro funcionara las 24 horas?» → nueva, bien reformulada; puente de 4
+  preguntas, nivel propuesto 3,8 de 5, diferencias entre grupos de 0,10 DE o menos; sin mapa.
+- «¿Quién va a ganar las próximas elecciones?» → fuera de alcance (predicción electoral), con una
+  alternativa de opinión.
+
+**Detalles vistos, sin arreglar todavía:**
+1. La frase «Consulté a 20.000 personas sintéticas» sale igual en una pregunta que solo tiene
+   2023, donde responden solo los agentes con donante de 2023 (~un tercio).
+2. Algunas etiquetas traen el número del código («4. alta o 5. muy alta»).
+3. El puente del metro eligió dos preguntas que solo existen en 2023 (optimismo con el metro y la
+   evaluación del gobierno en movilidad): para los donantes de 2022 y 2024 valen 0 (DI-CO7), así
+   que las diferencias entre grupos salen sobre todo de los de 2023.
 
 ## 6. Límites que la página dice
 
