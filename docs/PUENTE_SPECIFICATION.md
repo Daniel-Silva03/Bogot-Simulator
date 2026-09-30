@@ -5,7 +5,8 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 30 de septiembre de 2026
-Estado: **código probado con datos inventados (§8.1); sin ninguna correlación entre preguntas de la EPC calculada y sin ninguna llamada al modelo.** Lo único visto de la EPC 2023 es el inventario (qué preguntas existen, cuántas respuestas tienen y cuántas personas por localidad), no sus valores
+Estado: **código probado con datos inventados (§8.1); sin ninguna correlación entre preguntas de la EPC calculada y sin ninguna llamada al modelo.**
+*(30/09: corrido; resultados en `PUENTE_RESULTS.md`. El texto de este documento no se tocó.)* Lo único visto de la EPC 2023 es el inventario (qué preguntas existen, cuántas respuestas tienen y cuántas personas por localidad), no sus valores
 Decisión que la origina: D17, piezas 2 y 5
 Población: `POBLACION_EPC2023_SPECIFICATION.md`
 

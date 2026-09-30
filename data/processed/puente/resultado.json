@@ -1,0 +1,1356 @@
+{
+  "por_pregunta": {
+    "CV1": {
+      "rho_ind": 0.43269485661814916,
+      "r_loc": 0.5293911011362437,
+      "e_nivel": 0.053696623592559334,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.05004560441308702,
+        "r_loc": 0.41408114675836616
+      },
+      "azar": {
+        "rho_ind_p95": 0.26661877934646455,
+        "r_loc_p95": 0.40107724676232753
+      },
+      "nivel": {
+        "real": 3.4147864943702375,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.14104580217457308,
+        "propuestos": [
+          3.2,
+          3.2,
+          3.2
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "SP1",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.11106596832202309,
+      "direccion_favorable": 1
+    },
+    "AG2": {
+      "rho_ind": 0.36128708846963287,
+      "r_loc": 0.6009054558259523,
+      "e_nivel": 0.05942635793801743,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": -0.006634966742218576,
+        "r_loc": 0.31444192447350555
+      },
+      "azar": {
+        "rho_ind_p95": 0.20750717871764707,
+        "r_loc_p95": 0.43883177792229344
+      },
+      "nivel": {
+        "real": 3.43770543175207,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.14677553652003117,
+        "propuestos": [
+          3.4,
+          3.2,
+          3.2
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_14",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_1",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.320495860599088,
+      "direccion_favorable": 1
+    },
+    "VS8": {
+      "rho_ind": 0.3144546722882792,
+      "r_loc": 0.4960306722217488,
+      "e_nivel": 0.09794157404565518,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.0617100079207357,
+        "r_loc": 0.422321931556566
+      },
+      "azar": {
+        "rho_ind_p95": 0.2494855212732607,
+        "r_loc_p95": 0.5124697005582635
+      },
+      "nivel": {
+        "real": 3.091766296182621,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.06029075262766892,
+        "propuestos": [
+          2.6,
+          2.8,
+          2.7
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_17",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "RC5_17",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_7",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.47429101064862,
+      "direccion_favorable": 1
+    },
+    "VS10": {
+      "rho_ind": 0.4145301341281951,
+      "r_loc": 0.32393463034012315,
+      "e_nivel": 0.06443250447698434,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.05352791139821371,
+        "r_loc": 0.05231666421496416
+      },
+      "azar": {
+        "rho_ind_p95": 0.2604265782400379,
+        "r_loc_p95": 0.4168777695010069
+      },
+      "nivel": {
+        "real": 2.442269982092063,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.1020833258949706,
+        "propuestos": [
+          2.7,
+          2.4,
+          2.7
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_7",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_17",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.1508030959144565,
+      "direccion_favorable": 1
+    },
+    "GG7": {
+      "rho_ind": 0.2341439184988441,
+      "r_loc": 0.23792289953943813,
+      "e_nivel": 0.09147369112151382,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.04775199614777275,
+        "r_loc": 0.08649685833480773
+      },
+      "azar": {
+        "rho_ind_p95": 0.13342370341645696,
+        "r_loc_p95": 0.41566401938180036
+      },
+      "nivel": {
+        "real": 3.334105235513945,
+        "ingenuo": 3.0,
+        "e_ingenuo": 0.08352630887848622,
+        "propuestos": [
+          3.8,
+          3.5,
+          3.7
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "GP1N_15",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MICE1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_15",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MICE1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_15",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MICE1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.1542566499416589,
+      "direccion_favorable": null
+    },
+    "GG3": {
+      "rho_ind": 0.6564679813381807,
+      "r_loc": 0.48870349151112846,
+      "e_nivel": 0.014778008473543602,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.043409181548886615,
+        "r_loc": 0.5278480549053536
+      },
+      "azar": {
+        "rho_ind_p95": 0.2785016610475139,
+        "r_loc_p95": 0.4498159622079433
+      },
+      "nivel": {
+        "real": 2.8591120338941742,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.002127187055557256,
+        "propuestos": [
+          2.8,
+          2.7,
+          2.9
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MICE2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CC5A",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CC5A",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MICE2",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_15",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CC5A",
+            "sentido": "+",
+            "peso": 3
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.13850198031065566,
+      "direccion_favorable": 1
+    },
+    "MV4": {
+      "rho_ind": 0.2911657849588899,
+      "r_loc": 0.0788925516520974,
+      "e_nivel": 0.13294260920981937,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": -0.019171325628104013,
+        "r_loc": 0.3042786269991605
+      },
+      "azar": {
+        "rho_ind_p95": 0.21387684704843213,
+        "r_loc_p95": 0.4378061891092317
+      },
+      "nivel": {
+        "real": 3.4317704368392774,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.14529178779183305,
+        "propuestos": [
+          2.9,
+          3.0,
+          2.9
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "MV13_7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MV2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_8",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "MV13_7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_10",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_11",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "MV13_7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MV2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_11",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.17398664417913526,
+      "direccion_favorable": 1
+    },
+    "SA4": {
+      "rho_ind": 0.43730391334837265,
+      "r_loc": 0.3380590182630934,
+      "e_nivel": 0.08415372714274527,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.025678935105314892,
+        "r_loc": 0.5767894058913516
+      },
+      "azar": {
+        "rho_ind_p95": 0.2170572351028118,
+        "r_loc_p95": 0.45933589848796513
+      },
+      "nivel": {
+        "real": 3.436614908570981,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.146502905724759,
+        "propuestos": [
+          3.1,
+          3.1,
+          3.3
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "SP1",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "SA22A",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "SA22A",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "SP1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "SA22B",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "SA22A",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "SP1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "confiabilidad_loc": -0.07586403690765786,
+      "direccion_favorable": 1
+    },
+    "MA3_1": {
+      "rho_ind": 0.5500680925158703,
+      "r_loc": 0.4503430961349593,
+      "e_nivel": 0.04053638420782557,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": -0.029349725698319756,
+        "r_loc": 0.002696277942825684
+      },
+      "azar": {
+        "rho_ind_p95": 0.32918466000473967,
+        "r_loc_p95": 0.39232208192904694
+      },
+      "nivel": {
+        "real": 2.562145536831302,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.07211443721016075,
+        "propuestos": [
+          2.8,
+          2.4,
+          2.4
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "MA3_2",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_2",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_2",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.18406790592364297,
+      "direccion_favorable": 1
+    },
+    "MA3_3": {
+      "rho_ind": 0.5293757790560967,
+      "r_loc": 0.32266913462025626,
+      "e_nivel": 0.12949432431975205,
+      "respuestas_validas": 2,
+      "demografia": {
+        "rho_ind": 0.010252361208077623,
+        "r_loc": 0.3508592746435963
+      },
+      "azar": {
+        "rho_ind_p95": 0.3022222006956147,
+        "r_loc_p95": 0.48353528387018585
+      },
+      "nivel": {
+        "real": 2.2820227027209916,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.1421451457377384,
+        "propuestos": [
+          2.8,
+          2.8,
+          null
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "EP1B_6",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "RC5_16",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_8",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        null
+      ],
+      "confiabilidad_loc": 0.02921126941676974,
+      "direccion_favorable": 1
+    },
+    "CR2": {
+      "rho_ind": 0.4701315798037822,
+      "r_loc": 0.6150460768052094,
+      "e_nivel": 0.132597279250235,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.03551692937967345,
+        "r_loc": 0.6777008623438686
+      },
+      "azar": {
+        "rho_ind_p95": 0.24060399129704943,
+        "r_loc_p95": 0.4821553325534425
+      },
+      "nivel": {
+        "real": 3.53038911700094,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.1699464578322487,
+        "propuestos": [
+          3.1,
+          3.0,
+          2.9
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_5",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "EP1B_3",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 2
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.2605984061707359,
+      "direccion_favorable": 1
+    },
+    "CO2": {
+      "rho_ind": 0.46985309604335973,
+      "r_loc": 0.5163955716658489,
+      "e_nivel": 0.030991667129872336,
+      "respuestas_validas": 3,
+      "demografia": {
+        "rho_ind": 0.3067713646579536,
+        "r_loc": 0.3132336160601882
+      },
+      "azar": {
+        "rho_ind_p95": 0.20628643365576482,
+        "r_loc_p95": 0.4478028087707095
+      },
+      "nivel": {
+        "real": 2.8239666685194895,
+        "ingenuo": 2.850603285671945,
+        "e_ingenuo": 0.006659154288113922,
+        "propuestos": [
+          2.7,
+          2.8,
+          2.7
+        ]
+      },
+      "puentes": [
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_1",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_1",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_1",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO1_1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_7",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ],
+      "confiabilidad_loc": 0.23761900423268584,
+      "direccion_favorable": 1
+    }
+  },
+  "tono_general": 0.46265082141798636,
+  "sin_direccion_en_catalogo": [
+    "CO4",
+    "CO1_1",
+    "CO1_2",
+    "CO1_3",
+    "AL1",
+    "VS15",
+    "VS18",
+    "MICE1",
+    "MICE2",
+    "MICE3",
+    "RC5_1",
+    "RC5_4",
+    "RC5_6",
+    "RC5_7",
+    "RC5_16",
+    "RC5_17",
+    "RC5_30",
+    "RC5_31",
+    "MV2",
+    "CC2",
+    "CC9",
+    "PE_EL1"
+  ],
+  "n_catalogo_puente": 91,
+  "predicciones": {
+    "P1": {
+      "umbral": "ρ_ind > p95 del azar y > demografía, en ≥ 9 de 12",
+      "cuenta": 12,
+      "por_pregunta": {
+        "CV1": true,
+        "AG2": true,
+        "VS8": true,
+        "VS10": true,
+        "GG7": true,
+        "GG3": true,
+        "MV4": true,
+        "SA4": true,
+        "MA3_1": true,
+        "MA3_3": true,
+        "CR2": true,
+        "CO2": true
+      },
+      "se_cumple": true
+    },
+    "P2": {
+      "umbral": "r_loc > demografía, en ≥ 8 de 12",
+      "cuenta": 7,
+      "por_pregunta": {
+        "CV1": true,
+        "AG2": true,
+        "VS8": true,
+        "VS10": true,
+        "GG7": true,
+        "GG3": false,
+        "MV4": false,
+        "SA4": false,
+        "MA3_1": true,
+        "MA3_3": false,
+        "CR2": false,
+        "CO2": true
+      },
+      "se_cumple": false
+    },
+    "P3": {
+      "umbral": "ρ_ind > 0, en ≥ 11 de 12",
+      "cuenta": 12,
+      "por_pregunta": {
+        "CV1": true,
+        "AG2": true,
+        "VS8": true,
+        "VS10": true,
+        "GG7": true,
+        "GG3": true,
+        "MV4": true,
+        "SA4": true,
+        "MA3_1": true,
+        "MA3_3": true,
+        "CR2": true,
+        "CO2": true
+      },
+      "se_cumple": true
+    },
+    "P4": {
+      "umbral": "e_nivel < el del tono general, en ≥ 8 de 12",
+      "cuenta": 8,
+      "por_pregunta": {
+        "CV1": true,
+        "AG2": true,
+        "VS8": false,
+        "VS10": true,
+        "GG7": false,
+        "GG3": false,
+        "MV4": true,
+        "SA4": true,
+        "MA3_1": true,
+        "MA3_3": true,
+        "CR2": true,
+        "CO2": false
+      },
+      "se_cumple": true
+    }
+  },
+  "lectura_orden": "B",
+  "regla_orden": "El puente ordena personas pero no localidades: para preguntas nuevas, diferencias entre grupos; el mapa, solo para preguntas del catálogo.",
+  "regla_nivel": "El nivel por defecto es el que propone el modelo, rotulado y editable.",
+  "revisar_etiquetas": false,
+  "modelo": "xiaomi/mimo-v2.6-pro",
+  "gasto": {
+    "llamadas": 36,
+    "llamadas_con_costo": 36,
+    "costo_usd": 0.050907259999999996,
+    "prompt_tokens": 232338,
+    "completion_tokens": 21633,
+    "reasoning_tokens": 13598,
+    "modelos_servidos": {
+      "xiaomi/mimo-v2.6-pro": 36
+    }
+  }
+}

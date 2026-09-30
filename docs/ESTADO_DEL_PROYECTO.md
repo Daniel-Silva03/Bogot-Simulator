@@ -169,8 +169,16 @@ donante); 67 de 1938 pares pregunta × localidad fuera del margen (3.5 %,
 umbral 10 %); reproducible. Catálogo de 102 preguntas. Tercer error de documentación de
 BCV: la etiqueta de `GG3` 2023 (corregida, DI-PE7). El puente quedó con 91 preguntas
 (enmienda 1). **Código del puente listo el 30/09** (`src/experiments/puente.py`, 11 pruebas con datos
-inventados; §8.1 del pre-registro). **Siguiente:** las 36 llamadas reales, con confirmación
-de gasto, y `PUENTE_RESULTS.md`.
+inventados; §8.1 del pre-registro). **Corrido el 30/09** (`PUENTE_RESULTS.md`, 36 llamadas, USD 0,051): **lectura B.** El puente
+ordena a las personas mucho mejor que la demografía y el azar en las 12 preguntas (ρ mediana
+0,44 contra 0,04), pero en localidades le gana a la demografía en 7 de 12 (hacían falta 8).
+El nivel pasa justo (8 de 12) y queda editable. Lo que más pesa: **la confiabilidad de las
+medias por localidad de la propia EPC es de 0,16 (mediana, dos mitades)**; con 80 personas
+por localidad y una sola ola, casi no hay geografía que reproducir, tampoco en el mapa de
+las preguntas del catálogo. Consecuencia para la página: preguntas nuevas por grupos, mapa
+solo para el catálogo y con su margen muy visible; la mejora del mapa es de datos (juntar
+olas), no de modelo. **Siguiente, a decidir con Daniel:** la reformulación sugerida, o juntar
+olas de la EPC para el mapa.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
