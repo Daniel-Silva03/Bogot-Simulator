@@ -2,7 +2,7 @@
 tests/test_consulta.py
 
 Pruebas de la consulta de punta a punta (src/consulta/motor.py y servidor.py), con
-el modelo simulado: ninguna llama a la API. Usan la población EPC 2023 si está en
+el modelo simulado: ninguna llama a la API. Usan la población EPC 2022-2024 si está en
 esta máquina.
 Se ejecuta directo:  python tests/test_consulta.py
 """
@@ -35,7 +35,7 @@ if HAY:
 
 def check(nombre, cuerpo):
     if not HAY:
-        print(f"  --     {nombre} (sin la población EPC 2023 en esta máquina)")
+        print(f"  --     {nombre} (sin la población EPC 2022-2024 en esta máquina)")
         return
     try:
         cuerpo()
@@ -58,10 +58,10 @@ def test_una_pregunta_del_catalogo_trae_ciudad_grupos_y_19_localidades():
 
 
 def test_el_margen_de_una_localidad_es_el_de_la_encuesta():
-    """DI-CO1: con ~80 encuestados, el margen del 95 % no puede ser de centésimas."""
+    """DI-CO1: con ~250 encuestados, el margen del 95 % no puede ser de centésimas."""
     r = M.responder_catalogo("VS8")
     anchos = [v["margen"][1] - v["margen"][0] for v in r["localidades"].values()]
-    assert np.median(anchos) > 0.2, np.median(anchos)
+    assert np.median(anchos) > 0.1, np.median(anchos)
 
 
 def test_no_sabe_no_entra_a_la_media():
@@ -97,6 +97,32 @@ def test_una_pregunta_vacia_o_un_codigo_inexistente_son_error():
         except mo.ConsultaError:
             continue
         raise AssertionError("debió fallar")
+
+
+def test_cada_pregunta_responde_con_los_donantes_de_sus_anios():
+    """DI-CO6: VS8 junta tres años; GG3 solo 2022-2023 (DI-AR5)."""
+    tres, dos = M.responder_catalogo("VS8"), M.responder_catalogo("GG3")
+    assert tres["anios"] == [2022, 2023, 2024] and dos["anios"] == [2022, 2023]
+    assert tres["encuestados_mediana_localidad"] > 200 > dos["encuestados_mediana_localidad"] > 100
+    assert "2022, 2023 y 2024" in tres["fuente"]
+    solo = [v for v, a in M.anios.items() if a == [2023]][0]
+    r = M.responder_catalogo(solo)
+    assert r["anios"] == [2023] and r["encuestados_mediana_localidad"] < 120 and r["ciudad"]["respondieron"] > 0.5
+
+
+def test_el_puente_estandariza_cada_pregunta_dentro_de_su_anio():
+    """DI-CO7: en cada año, cada pregunta del puente tiene media ponderada 0."""
+    anio = M.donante.anio.to_numpy()
+    w = M.donante.peso.to_numpy(float)
+    z = M.datos_puente.z["VS8"]
+    for a in (2022, 2023, 2024):
+        m = anio == a
+        assert abs(np.sum(z[m] * w[m]) / np.sum(w[m])) < 0.05
+
+
+def test_sin_grupo_de_educacion():
+    """DI-CO5: la población 2022-2024 no empareja por educación."""
+    assert "educacion" not in mo.GRUPOS and "educacion" not in M.responder_catalogo("VS8")["grupos"]
 
 
 # --- servidor y página -------------------------------------------------------------

@@ -3,7 +3,7 @@
 **La página nueva del proyecto (D17): cualquiera le hace una pregunta de opinión a la población sintética y ve cómo respondería, en total, por grupos y, cuando hay con qué, por localidad. Todo rotulado como suposición.**
 
 Proyecto: Bogotá Social Simulator
-Versión: 0.2 (rediseño con `DESIGN.md`, 30/09/2026)
+Versión: 0.3 (población 2022-2024, 30/09/2026; §5.5)
 Fecha: 30 de septiembre de 2026
 Código: `src/consulta/` (`motor.py`, `servidor.py`, `pagina.html`, `reformular.py`) · Pruebas: `tests/test_consulta.py` (8), `tests/test_reformular.py` (7)
 Reemplaza, como cara del proyecto, al tablero de `src/viz/` (que se conserva, sin cambios)
@@ -22,8 +22,9 @@ python src/consulta/servidor.py              # http://127.0.0.1:8765
 python src/consulta/servidor.py --simulado   # sin clave ni gasto, para mirar la página
 ```
 
-Necesita la población EPC 2023 construida (`python src/population/poblacion_epc.py`) y el
-microdato de la EPC en su ruta (`BSS_EPC_DIR`).
+Necesita la población EPC 2022-2024 construida (`python src/population/poblacion_epc_olas.py`,
+que a su vez usa `poblacion_epc.py` y la armonización) y el microdato de la EPC en su ruta
+(`BSS_EPC_DIR`). *Hasta el 30/09 usaba la población 2023; ver §5.5.*
 
 **Gasto:** una pregunta del catálogo cuesta una llamada (la reformulación, unos USD 0,003);
 una nueva, dos (reformulación y puente, unos USD 0,006). Las respuestas se guardan en
@@ -182,9 +183,31 @@ de prueba solo reconoce las 24 preguntas de la validación, y los ejemplos de «
 ejemplos ahora usan esa misma redacción. «Cambios en la ciudad» es siempre una pregunta
 nueva, no tiene mapa, y el botón lo dice («sin mapa»).
 
+## 5.5 La población 2022-2024 (30/09/2026, v0.3)
+
+Daniel mantuvo la lectura B (`PUENTE_LOCALIDADES_RESULTS.md`): las preguntas nuevas siguen sin
+mapa. Lo que cambia es la población detrás de las preguntas del catálogo
+(`POBLACION_EPC2022_2024_SPECIFICATION.md`; DI-CO5 a DI-CO8 en `motor.py`):
+
+- **Cada pregunta del catálogo responde con los donantes de sus años.** 45 con 2022-2024 (~250
+  encuestados por localidad), 29 con dos años y 28 solo con 2023 (~80, con los márgenes de
+  siempre). La insignia dice «EPC 2022–2024» (o los años que sean) y la nota, cuántos
+  encuestados hay por localidad.
+- **Los grupos ya no incluyen educación:** la población no empareja por educación, así que ese
+  grupo solo repetiría estrato y edad.
+- **En una pregunta nueva, cada pregunta del puente se estandariza dentro de su año.**
+- **Textos:** 4.522 encuestados entre 2022 y 2024; «opina como Bogotá entre 2022 y 2024»; las
+  fuentes y el pie. El prompt de la reformulación no cambió (DI-CO8).
+
+Verificado: 11 pruebas de `tests/test_consulta.py` (3 nuevas: años por pregunta,
+estandarización por año, sin educación) y la página en modo simulado. En seguridad en el
+barrio el mapa colorea las 19 localidades y la nota dice «unas 251 personas encuestadas por
+localidad». Sigue sin probarse con el modelo real.
+
 ## 6. Límites que la página dice
 
-No predice ni reemplaza una encuesta; opina como Bogotá en 2023; unas 80 personas por
-localidad dan márgenes anchos (la confiabilidad de las medias por localidad es baja,
-`PUENTE_RESULTS.md` §4); Sumapaz no tiene encuestados; el nivel de una pregunta nueva lo
-propone el modelo y se puede cambiar.
+No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por
+localidad~~ opina como Bogotá entre 2022 y 2024 (v0.3); unas 250 personas por localidad en
+las preguntas que se juntan, y 80 en las que solo tiene 2023, dan márgenes anchos (la
+confiabilidad de las medias por localidad es baja, `PUENTE_RESULTS.md` §4); Sumapaz no tiene
+encuestados; el nivel de una pregunta nueva lo propone el modelo y se puede cambiar.

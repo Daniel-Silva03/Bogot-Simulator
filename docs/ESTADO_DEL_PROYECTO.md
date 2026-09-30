@@ -213,7 +213,9 @@ gana 6 de 11 y 3 de las 7 con geografía. **Daniel: «mantenemos B»** (D17 actu
 §7 de su especificación): 4.522 donantes, 1,2 % de pares fuera del margen, 98 % de
 emparejamiento exacto. Al construirla apareció que el `PONDERA` de 2022 no corrige el
 sobremuestreo de las localidades pequeñas; se reescala por ola × localidad (DI-PO5).
-**Siguiente:** conectarla a la página (motor, y el aviso de qué años responden).
+**Conectada a la página el 30/09** (`PAGINA_CONSULTA.md` §5.5): cada pregunta del catálogo
+responde con los donantes de sus años y lo dice; sin grupo de educación; el puente estandariza
+por año. **Siguiente:** abrir la página con el modelo real (pocas llamadas, con permiso).
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

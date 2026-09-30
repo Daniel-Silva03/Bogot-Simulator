@@ -5,7 +5,7 @@ La consulta de punta a punta (D17): de la pregunta que alguien escribe a la
 respuesta que ve en la página. Une las tres piezas validadas:
 
     reformulación (`reformular.py`, 24 de 24)
-        ├─ catálogo → el dato medido: población EPC 2023, por ciudad, grupo y localidad
+        ├─ catálogo → el dato medido: población EPC 2022-2024, por ciudad, grupo y localidad
         ├─ nueva    → el puente (`puente.py`, lectura B): diferencias entre grupos
         │             y un nivel propuesto, editable; SIN mapa por localidad
         └─ fuera    → por qué no, y una alternativa que vuelve a pasar por aquí
@@ -37,6 +37,24 @@ DI-CO4. **Una alternativa sugerida para una pregunta fuera de alcance no se resp
 
 DI-CO5. **Grupos:** estrato en tres niveles (1-2, 3-4, 5-6; el 0 va con 1-2), los
     cinco tramos de edad, sexo y los cuatro niveles de educación de DI-PE1.
+    *Cambio (30/09, población 2022-2024): sin educación.* Esa población no empareja
+    por educación (2024 no la pregunta), así que la educación del agente no dice
+    nada de su donante: un grupo por educación solo repetiría estrato y edad.
+
+DI-CO6. **La página usa la población 2022-2024** (`poblacion_epc_olas.py`, lectura B
+    mantenida por Daniel el 30/09). Una pregunta del catálogo la responden los
+    agentes cuyo donante es de un año que se puede juntar para esa pregunta (DI-PO2);
+    los demás no cuentan, ni como «no sabe». La respuesta dice de qué años sale y
+    cuántos encuestados hay por localidad. El margen remuestrea los conglomerados de
+    DI-PO3.
+
+DI-CO7. **En una pregunta nueva, cada pregunta del puente se estandariza dentro de su
+    año** (como `puente_localidades.py`, DI-PL3), con los pesos de los donantes; si
+    no existe ese año, vale 0. Así un cambio de nivel entre años no se vuelve una
+    diferencia entre grupos.
+
+DI-CO8. **El prompt de la reformulación no cambia** (sigue diciendo «EPC 2023»): es el
+    que se validó 24 de 24, y el catálogo que ve el modelo es el mismo (102 preguntas).
 """
 
 from __future__ import annotations
@@ -56,7 +74,7 @@ from src.consulta import reformular as rf                  # noqa: E402
 from src.experiments import experimento9 as e9            # noqa: E402
 from src.experiments import puente as pu                  # noqa: E402
 
-POBLACION = RAIZ / "data" / "processed" / "poblacion_epc2023"
+POBLACION = RAIZ / "data" / "processed" / "poblacion_epc2022_2024"
 MARGINAL = RAIZ / "data" / "external" / "marginal_localidad_18mas.csv"
 CACHE = RAIZ / "data" / "processed" / "consulta" / "cache.json"
 N_BOOT = 200
@@ -67,11 +85,9 @@ GRUPOS = {
     "estrato": {"titulo": "Estrato", "orden": ["1 y 2", "3 y 4", "5 y 6"]},
     "edad": {"titulo": "Edad", "orden": ["18 a 25", "26 a 35", "36 a 45", "46 a 55", "56 o más"]},
     "sexo": {"titulo": "Sexo", "orden": ["Mujeres", "Hombres"]},
-    "educacion": {"titulo": "Educación", "orden": ["Primaria o menos", "Secundaria o media",
-                                                   "Técnica o tecnológica", "Universitaria o posgrado"]},
 }
 AVISO = ("Esto es una suposición, no una medición: muestra cómo respondería una población sintética "
-         "construida con la Encuesta de Percepción Ciudadana 2023 de Bogotá Cómo Vamos.")
+         "construida con la Encuesta de Percepción Ciudadana 2022, 2023 y 2024 de Bogotá Cómo Vamos.")
 
 
 class ConsultaError(RuntimeError):
@@ -88,8 +104,42 @@ def _grupos(ag: pd.DataFrame) -> dict[str, pd.Series]:
     est = ag.estrato.map(lambda e: "1 y 2" if e <= 2 else ("3 y 4" if e <= 4 else "5 y 6"))
     edad = ag.edad_tramo.map(dict(enumerate(GRUPOS["edad"]["orden"])))
     sexo = ag.sexo.map({"F": "Mujeres", "M": "Hombres"})
-    edu = ag.educ_h.map(dict(enumerate(GRUPOS["educacion"]["orden"])))
-    return {"estrato": est, "edad": edad, "sexo": sexo, "educacion": edu}
+    return {"estrato": est, "edad": edad, "sexo": sexo}                          # DI-CO5
+
+
+def cargar_donantes() -> pd.DataFrame:
+    return pd.read_parquet(POBLACION / "donantes.parquet")
+
+
+def cargar_anios() -> dict[str, list[int]]:
+    cat = json.loads((POBLACION / "catalogo.json").read_text(encoding="utf-8"))["dentro"]
+    return {f["variable"]: f["anios"] for f in cat}
+
+
+def _texto_anios(a: list[int]) -> str:
+    a = sorted(a)
+    return str(a[0]) if len(a) == 1 else ", ".join(map(str, a[:-1])) + f" y {a[-1]}"
+
+
+class _PuenteOlas:
+    """DI-CO7: la interfaz de `puente.Datos` con cada pregunta estandarizada por año."""
+
+    def __init__(self, x: dict[str, np.ndarray], catalogo: dict, w: np.ndarray, anio: np.ndarray):
+        self.w = w
+        self.z = {}
+        for v, f in catalogo.items():
+            z = np.zeros(len(w))
+            ok = np.isin(x[v], f["escala"])
+            for a in np.unique(anio):
+                m = ok & (anio == a)
+                if m.any():
+                    mu = _wmean(x[v][m], w[m])
+                    sd = np.sqrt(_wmean((x[v][m] - mu) ** 2, w[m])) or 1.0
+                    z[m] = (x[v][m] - mu) / sd
+            self.z[v] = z
+
+    def puntaje(self, puente: list[dict]) -> np.ndarray:
+        return pu.Datos.puntaje(self, puente)
 
 
 class Motor:
@@ -97,11 +147,11 @@ class Motor:
 
     def __init__(self, llamar: rf.Llamar, modelo: str, donante: Optional[pd.DataFrame] = None,
                  agentes: Optional[pd.DataFrame] = None, catalogo: Optional[dict] = None,
-                 cache: Optional[e9.Cache] = None):
-        from src.population import poblacion_epc as pe
+                 cache: Optional[e9.Cache] = None, anios: Optional[dict] = None):
         self.llamar, self.modelo = llamar, modelo
         self.catalogo = catalogo if catalogo is not None else rf.cargar_catalogo()
-        self.donante = donante if donante is not None else pe.cargar_donante()
+        self.donante = donante if donante is not None else cargar_donantes()
+        self.anios = anios if anios is not None else cargar_anios()
         ag = agentes if agentes is not None else pd.read_parquet(POBLACION / "agentes.parquet")
         self.agentes = ag[ag.donante_id.notna()].reset_index(drop=True)
         self.idx = self.agentes.donante_id.astype(int).to_numpy()
@@ -112,7 +162,10 @@ class Motor:
         col = {c.upper(): c for c in self.donante.columns}
         self._x = {v: pd.to_numeric(self.donante[col[str(f["codigo"]).upper()]], errors="coerce").to_numpy(float)
                    for v, f in self.catalogo.items()}
-        self.datos_puente = pu.Datos(self.donante, self.catalogo, {})
+        anio_d = (self.donante.anio.to_numpy() if "anio" in self.donante.columns
+                  else np.full(len(self.donante), 2023))
+        self.anio_agente = anio_d[self.idx]
+        self.datos_puente = _PuenteOlas(self._x, self.catalogo, self.donante.peso.to_numpy(float), anio_d)   # DI-CO7
         self._conglo = {}
         loc_d = self.donante.cod_loc.to_numpy()
         for l in sorted(set(self.loc)):
@@ -140,7 +193,9 @@ class Motor:
         esc = list(f["escala"])
         k = len(esc)
         x = self._x[codigo][self.idx]
-        ok = np.isin(x, esc)
+        anios = sorted(self.anios.get(codigo, [2023]))
+        cubre = np.isin(self.anio_agente, anios)                                  # DI-CO6
+        ok = np.isin(x, esc) & cubre
         w = self.peso * ok
         dist = [_wmean((x == c).astype(float), w) for c in esc]
         alto = [c for c in esc if c > (k + 1) / 2]           # la mitad superior de la escala
@@ -170,6 +225,7 @@ class Motor:
                 "margen": [round(float(np.percentile(boot, 2.5)), 3), round(float(np.percentile(boot, 97.5)), 3)],
                 "alto": round(_wmean(np.isin(x[m], alto).astype(float), self.peso[m]), 3),
                 "encuestados": int(validos_d.sum())}
+        n_loc = int(np.median([v["encuestados"] for v in por_loc.values()]))
         grupos = {}
         for gname, etq in self.grupos.items():
             e = etq.to_numpy()
@@ -182,9 +238,11 @@ class Motor:
                            "alto": round(sum(d for c, d in zip(esc, dist) if c in alto), 4),
                            "bajo": round(sum(d for c, d in zip(esc, dist) if c in bajo), 4),
                            "etiqueta_alto": f"{f['etiquetas'][str(esc[-2])]} o {f['etiquetas'][str(esc[-1])].lower()}" if k >= 4 else f["etiquetas"][str(esc[-1])],
-                           "respondieron": round(float(ok.mean()), 4)},
-                "localidades": por_loc, "grupos": grupos,
-                "fuente": "Dato medido en la EPC 2023, reponderado por la población sintética (DI-CO1)."}
+                           "respondieron": round(float(ok.sum() / cubre.sum()), 4)},
+                "localidades": por_loc, "grupos": grupos, "anios": anios,
+                "encuestados_mediana_localidad": n_loc,
+                "fuente": (f"Dato medido en la EPC {_texto_anios(anios)}, reponderado por la población sintética; "
+                           f"unas {n_loc} personas encuestadas por localidad.")}
 
     # ---------------------------------------------------------------- paso 2b
     def responder_nueva(self, pregunta: str, escala: list[str]) -> dict:
@@ -209,8 +267,9 @@ class Motor:
         return {"tipo": "nueva", "suposicion": True, "aviso": AVISO, "pregunta": pregunta.strip(), "escala": escala,
                 "nivel_propuesto": round(r["nivel"], 2), "grupos": grupos, "puente": puente,
                 "justificacion": r["justificacion"],
-                "sin_mapa": ("Para preguntas nuevas el simulador no dibuja localidades: en la prueba con preguntas "
-                             "conocidas ordenó bien a las personas, pero no a las localidades (PUENTE_RESULTS.md)."),
+                "sin_mapa": ("Para preguntas nuevas el simulador no dibuja localidades: en las pruebas con preguntas "
+                             "conocidas ordenó bien a las personas, pero no a las localidades "
+                             "(PUENTE_RESULTS.md, PUENTE_LOCALIDADES_RESULTS.md)."),
                 "fuente": ("Puente: el modelo eligió preguntas medidas relacionadas; cada persona responde con sus "
                            "propias respuestas. El nivel lo propone el modelo y se puede cambiar.")}
 
@@ -220,10 +279,9 @@ class Motor:
 
 def informacion_general(agentes: Optional[pd.DataFrame] = None, donante: Optional[pd.DataFrame] = None) -> dict:
     """Por localidad: nombre, adultos (proyección oficial), estrato medio de la población y
-    cuántas personas de la EPC 2023 viven ahí. Nada de opinión."""
-    from src.population import poblacion_epc as pe
+    cuántas personas de la EPC 2022-2024 viven ahí. Nada de opinión."""
     ag = agentes if agentes is not None else pd.read_parquet(POBLACION / "agentes.parquet")
-    don = donante if donante is not None else pe.cargar_donante()
+    don = donante if donante is not None else cargar_donantes()
     m = pd.read_csv(MARGINAL).set_index("COD_LOC")
     enc = don.cod_loc.value_counts()
     out = {}

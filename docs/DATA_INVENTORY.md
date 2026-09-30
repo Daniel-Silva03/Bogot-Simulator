@@ -576,8 +576,9 @@ pregunta en 2022, 2024 y 2025 (código, etiquetas de valor normalizadas y códig
 en los datos) y mide cuánto mejora la confiabilidad de las medias por localidad al juntarlas.
 Salida en `data/processed/epc_armonizado/` (solo metadatos y confiabilidades).
 
-**Qué se puede juntar.** De las 102 preguntas del catálogo: **48 en tres olas** (2022, 2023 y
-2024), 26 en dos y 28 solo en 2023. Lo que deja fuera cada año:
+**Qué se puede juntar.** De las 102 preguntas del catálogo: ~~48 en tres olas~~ **45 en tres olas** (2022, 2023 y
+2024), ~~26~~ 29 en dos y 28 solo en 2023. *(Corrección 30/09: el texto decía 48 y 26; `resumen.json`
+siempre dijo 45 y 29. La diferencia son las tres evaluaciones del gobierno de turno, DI-AR5.)* Lo que deja fuera cada año:
 - 2022: 28 no están en el archivo, 7 tienen otras etiquetas, 1 otra escala (1-6).
 - 2024: 33 no están, 13 tienen otras etiquetas.
 - **2025: ninguna.** Sus variables no traen etiquetas ni textos, así que no hay cómo verificar

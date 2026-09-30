@@ -55,7 +55,8 @@ año × localidad × manzana.
 Cada pregunta del catálogo se responde con los donantes de los años en que se puede juntar
 (`data/processed/epc_armonizado/items.csv`, DI-AR1 y DI-AR5):
 
-- **48 preguntas con tres años** y 26 con dos: tienen ~250 (o ~160) personas por localidad.
+- ~~48 preguntas con tres años y 26 con dos~~ **45 preguntas con tres años y 29 con dos** *(corregido el
+  30/09: la cifra venía mal copiada de §13.9)*: tienen ~250 (o ~160) personas por localidad.
 - **28 solo con 2023:** para esas, solo responden los agentes cuyo donante es de 2023, y el
   mapa tiene los márgenes de siempre.
 - **Evaluaciones del gobierno de turno** (gestión del alcalde, del Concejo, inversión de
@@ -121,5 +122,5 @@ medias por localidad. La «mayor diferencia de media en la ciudad» (0,07) compa
 donantes cuyos pesos ya no reproducen el tamaño de cada localidad (DI-PO5); no dice nada de
 la población.
 
-**Falta:** conectarla a la página (el motor y el aviso «Bogotá 2022-2024» con los años de cada
-respuesta, §4).
+~~**Falta:** conectarla a la página (el motor y el aviso «Bogotá 2022-2024» con los años de cada
+respuesta, §4).~~ Conectada el 30/09 (`PAGINA_CONSULTA.md` §5.5).
