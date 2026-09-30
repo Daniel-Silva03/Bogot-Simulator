@@ -5,7 +5,7 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 30 de septiembre de 2026
-Estado: **sin código y sin ningún dato de la segunda vuelta abierto.** Nadie en este proyecto ha descargado ni mirado la segunda vuelta de 2026
+Estado: **código probado en mundos simulados (§8.1); sin ningún dato de la segunda vuelta abierto.** Nadie en este proyecto ha descargado ni mirado la segunda vuelta de 2026
 Datos: `data/external/electoral/presidente_1v_*` (primera vuelta 2026, `DATA_INVENTORY.md` §14.6) y, después de este documento, el escrutinio mesa a mesa de la segunda vuelta (21 de junio de 2026)
 Origen: la segunda pregunta del jefe de Daniel (30/09), después de `POLOS_2026_RESULTS.md`
 
@@ -183,6 +183,22 @@ P3 y P4 se reportan siempre, con la advertencia de que no deciden.
 casi parejo (§6), mejorar el margen en las localidades y perder la ciudad a la vez
 exige que el voto se mueva distinto en las localidades que en las zonas 90 y 98. Se
 deja en la regla porque puede pasar, no porque se espere.
+
+### 8.1 Resultado de la verificación (30/09/2026, antes de descargar la segunda vuelta)
+
+`tests/test_segunda_vuelta_2026.py`, 13 pruebas, `src/experiments/segunda_vuelta_2026.py`.
+Ruido de 1,5 puntos por localidad y 0,5 en la ciudad; 200 semillas por mundo:
+
+| Mundo inventado | Lectura |
+|---|---|
+| Regla de bloques + ruido | **A en el 100 %** |
+| Regla ingenua + ruido | **C en el 100 %** |
+| A mitad de camino, sin ruido | los dos errores son idénticos y la ciudad queda en 49,9 %: **intermedio**, como da la cuenta a mano |
+
+Las pruebas verifican además que la tabla de §5 y las cifras de la ciudad salen del
+código tal cual, que un candidato sin bloque detiene el análisis, que la segunda vuelta
+tiene que traer solo a Cepeda y Abelardo, y que sin ella nada se calcula. La tabla de la
+segunda vuelta irá en archivos propios (`presidente_2v_*`, DI-SV3).
 
 Las pruebas verifican también que la tabla de §5 sale del código tal cual (si alguien
 cambia la primera vuelta o la asignación a bloques, falla), y que sin datos de la

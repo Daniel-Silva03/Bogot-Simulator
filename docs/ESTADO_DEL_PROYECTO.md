@@ -193,7 +193,9 @@ vuelta. Predicción: sumando la primera vuelta por bloques, Abelardo gana 10 loc
 (norte, occidente, centro ampliado) y Cepeda 10 (sur y suroriente); Kennedy es una moneda
 al aire; **Abelardo gana Bogotá (Cepeda 47,3 %)**. La regla ingenua (cada uno conserva lo
 suyo) da los mismos ganadores por localidad, así que lo que decide es el margen y la
-ciudad. Siguen: código y mundos simulados; revisar y descargar la segunda vuelta; corrida.
+ciudad. Código y mundos simulados listos el 30/09 (`segunda_vuelta_2026.py`, 13 pruebas; A
+100 % en el mundo de bloques, C 100 % en el ingenuo). Siguen: revisar y descargar la
+segunda vuelta; corrida.
 
 **Geografía electoral de Bogotá: cerrada el 30/09.** El 29/09 el CNC entregó
 resultados electorales por mesa (presidente 2014, 2018 y 2022; Senado y Cámara 2018)

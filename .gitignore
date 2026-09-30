@@ -63,6 +63,7 @@ data/**
 # la Registraduría. Los archivos por mesa NO: viven fuera del repo.
 !data/external/electoral/
 !data/external/electoral/presidente_1v_*
+!data/external/electoral/presidente_2v_*
 !data/external/electoral/congreso_2018_*
 
 # geometría oficial de localidades (fuente pública: Catastro Distrital)
@@ -100,6 +101,8 @@ data/**
 !data/processed/eje_partidos/resultado.json
 !data/processed/polos_2026/
 !data/processed/polos_2026/resultado.json
+!data/processed/segunda_vuelta_2026/
+!data/processed/segunda_vuelta_2026/resultado.json
 
 # --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
 data/external/cnc/
