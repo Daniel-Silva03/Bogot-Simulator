@@ -96,6 +96,8 @@ data/**
 # geografía electoral: el resultado del análisis pre-registrado (kilobytes, agregados)
 !data/processed/geografia_electoral/
 !data/processed/geografia_electoral/resultado.json
+!data/processed/eje_partidos/
+!data/processed/eje_partidos/resultado.json
 
 # --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
 data/external/cnc/

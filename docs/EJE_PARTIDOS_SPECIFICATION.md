@@ -5,7 +5,7 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 30 de septiembre de 2026
-Estado: **sin código y sin ningún cruce entre el voto por partido y la composición o los residuos**
+Estado: **código probado en mundos simulados (§4.1); sin ningún cruce entre el voto por partido real y la composición o los residuos**
 Datos: `data/external/electoral/congreso_2018_*` (DATA_INVENTORY §14.5), `data/processed/geografia_electoral/resultado.json`, receptor de Multipropósito 2021
 Origen: `GEOGRAFIA_ELECTORAL_RESULTS.md` §4.2 y §8, punto 5
 
@@ -106,6 +106,24 @@ permutación) ya pasaron los tres mundos simulados de ese pre-registro, y se usa
 cambios. Lo nuevo es solo cómo se arma la proporción por partido, y eso se prueba con
 datos inventados antes de la corrida real. La permutación de dos colas se agrega como
 función nueva y se prueba contra la de una cola.
+
+### 4.1 Verificación antes de la corrida real (30/09/2026)
+
+`tests/test_eje_partidos.py`, 13 pruebas, con la composición real y votos por partido
+inventados; 200 semillas por mundo:
+
+| Mundo simulado | Lectura que sale |
+|---|---|
+| Los dos partidos siguen al eje (con signos opuestos) | **A** en el 100 % |
+| Solo la Lista de la Decencia lo sigue | **B** en el 97,5 %, intermedio en el 2,5 % |
+| Ningún partido lo sigue | **C** en el 97 %, intermedio 2,5 %, B 0,5 % |
+| Control de inscripción: la «señal» es la inscripción | intermedio, siempre |
+
+Permutación de dos colas sin relación: falsos positivos en el **3,9 %** (1.000
+repeticiones). Construirlo destapó dos cosas que ya están corregidas: una prueba que
+suponía que una sola semilla alcanza para el mundo sin eje (una de cada ~40 da
+|r| > 0,5 por azar con 19 localidades), y que las predicciones salían como booleanos
+de numpy, que habrían roto la escritura del resultado.
 
 ---
 
