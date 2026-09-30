@@ -1,0 +1,23 @@
+{
+ "generado": "2026-09-30",
+ "especificacion": "docs/POBLACION_EPC2022_2024_SPECIFICATION.md",
+ "donante": "EPC 2022, 2023 y 2024 (Bogotá Cómo Vamos)",
+ "receptor": "Multipropósito 2021",
+ "n_agentes": 20000,
+ "n_donantes": 4522,
+ "donantes_por_anio": {
+  "2022": 1500,
+  "2023": 1501,
+  "2024": 1521
+ },
+ "semilla": 20260930,
+ "vars_distancia": [
+  "edad_tramo",
+  "estrato"
+ ],
+ "preguntas_por_numero_de_anios": {
+  "1": 28,
+  "2": 29,
+  "3": 45
+ }
+}

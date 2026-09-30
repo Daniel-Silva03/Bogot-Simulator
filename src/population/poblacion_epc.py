@@ -159,31 +159,34 @@ def cargar_receptor(ruta: Path = RECEPTOR) -> pd.DataFrame:
 # --------------------------------------------------------------------------
 # Construcción
 
-def emparejar(agentes: pd.DataFrame, donante: pd.DataFrame, semilla: int) -> pd.DataFrame:
-    """DI-PE2: hot-deck localidad por localidad. Sumapaz (sin donantes) queda sin donante."""
-    don = donante.dropna(subset=["cod_loc", "sexo", "edad_tramo", "estrato", "educ_h", "peso"])
+def emparejar(agentes: pd.DataFrame, donante: pd.DataFrame, semilla: int,
+              vars_distancia: list[str] = VARS_DISTANCIA) -> pd.DataFrame:
+    """DI-PE2: hot-deck localidad por localidad. Sumapaz (sin donantes) queda sin donante.
+    `vars_distancia`: la población 2022-2024 no usa la educación (su especificación, §2)."""
+    VARS = list(vars_distancia)
+    don = donante.dropna(subset=["cod_loc", "sexo", "peso"] + VARS)
     partes = []
     for loc, a in agentes.groupby("cod_loc", sort=True):
         d = don[don.cod_loc == loc]
         if d.empty:
             partes.append(a.assign(donante_id=pd.NA))
             continue
-        m = hot_deck_match(a[["agent_id", "sexo"] + VARS_DISTANCIA].astype({"edad_tramo": float}),
-                           d[["donante_id", "sexo", "peso"] + VARS_DISTANCIA].astype({"edad_tramo": float}),
+        m = hot_deck_match(a[["agent_id", "sexo"] + VARS].astype({"edad_tramo": float}),
+                           d[["donante_id", "sexo", "peso"] + VARS].astype({"edad_tramo": float}),
                            opinion_col="donante_id", exact_match_vars=["sexo"],
-                           distance_vars=VARS_DISTANCIA, random_state=semilla + int(loc), peso_col="peso")
+                           distance_vars=VARS, random_state=semilla + int(loc), peso_col="peso")
         partes.append(a.assign(donante_id=m.agentes["donante_id"].to_numpy()))
     out = pd.concat(partes).sort_values("agent_id").reset_index(drop=True)
     out["donante_id"] = out.donante_id.astype("Int64")
-    # ¿Quedó a distancia 0? (las cuatro variables iguales a las de su donante)
+    # ¿Quedó a distancia 0? (sexo y las variables de distancia iguales a las de su donante)
     dd = donante.set_index("donante_id")
     con = out.donante_id.notna()
     igual = pd.Series(False, index=out.index)
     ref = dd.loc[out.loc[con, "donante_id"].astype(int)]
-    igual[con] = ((out.loc[con, "sexo"].to_numpy() == ref.sexo.to_numpy())
-                  & (out.loc[con, "edad_tramo"].astype(float).to_numpy() == ref.edad_tramo.astype(float).to_numpy())
-                  & (out.loc[con, "estrato"].to_numpy() == ref.estrato.to_numpy())
-                  & (out.loc[con, "educ_h"].to_numpy() == ref.educ_h.to_numpy()))
+    ig = out.loc[con, "sexo"].to_numpy() == ref.sexo.to_numpy()
+    for v in VARS:
+        ig &= out.loc[con, v].astype(float).to_numpy() == ref[v].astype(float).to_numpy()
+    igual[con] = ig
     out["emparejamiento_exacto"] = igual
     if (dd.loc[out.loc[con, "donante_id"].astype(int), "cod_loc"].to_numpy() != out.loc[con, "cod_loc"].to_numpy()).any():
         raise PoblacionError("Un agente heredó a un donante de otra localidad (viola §3).")
@@ -191,7 +194,7 @@ def emparejar(agentes: pd.DataFrame, donante: pd.DataFrame, semilla: int) -> pd.
 
 
 def construir(n_por_localidad: int = N_POR_LOCALIDAD, semilla: int = SEMILLA, receptor=None,
-              donante=None) -> pd.DataFrame:
+              donante=None, vars_distancia: list[str] = VARS_DISTANCIA) -> pd.DataFrame:
     """DI-PE6: el mismo número de agentes en cada localidad, con su peso."""
     receptor = cargar_receptor() if receptor is None else receptor
     donante = cargar_donante() if donante is None else donante
@@ -202,7 +205,7 @@ def construir(n_por_localidad: int = N_POR_LOCALIDAD, semilla: int = SEMILLA, re
     muestra = pd.concat(partes, ignore_index=True)
     muestra["agent_id"] = np.arange(len(muestra))
     cols = ["agent_id", "cod_loc", "localidad", "sexo", "edad", "edad_tramo", "estrato", "educ_h", "peso"]
-    return emparejar(muestra[cols], donante, semilla)
+    return emparejar(muestra[cols], donante, semilla, vars_distancia)
 
 
 # --------------------------------------------------------------------------
@@ -277,7 +280,8 @@ def _medias_ponderadas(X: np.ndarray, validos: np.ndarray, w: np.ndarray) -> np.
 
 
 def verificar(agentes: pd.DataFrame, donante: pd.DataFrame, cat: list[dict], receptor: pd.DataFrame,
-              n_boot: int = N_BOOT, semilla: int = SEMILLA) -> dict:
+              n_boot: int = N_BOOT, semilla: int = SEMILLA,
+              vars_demo: tuple[str, ...] = ("sexo", "edad_tramo", "estrato", "educ_h")) -> dict:
     rng = np.random.default_rng(semilla)
     col = {c.upper(): c for c in donante.columns}
     X = np.column_stack([pd.to_numeric(donante[col[str(c["codigo"]).upper()]], errors="coerce").to_numpy(float)
@@ -289,7 +293,7 @@ def verificar(agentes: pd.DataFrame, donante: pd.DataFrame, cat: list[dict], rec
 
     # 1. Demografía: agentes contra el receptor ponderado, por localidad
     dif_demo = {}
-    for v in ["sexo", "edad_tramo", "estrato", "educ_h"]:
+    for v in vars_demo:
         peor = 0.0
         for l in locs:
             a = agentes[agentes.cod_loc == l][v].value_counts(normalize=True)

@@ -3,7 +3,7 @@
 **La misma población de `POBLACION_EPC2023_SPECIFICATION.md`, pero con las encuestas de 2022, 2023 y 2024 juntas: unas 250 personas por localidad en vez de 80.**
 
 Proyecto: Bogotá Social Simulator
-Versión: 0.1 — especificación, sin código
+Versión: 0.2 — construida y verificada el 30/09 (`src/population/poblacion_epc_olas.py`, §7)
 Fecha: 30 de septiembre de 2026
 Origen: opción 1 para el mapa (`PUENTE_RESULTS.md` §7) y la armonización de `DATA_INVENTORY.md` §13.9
 Lo que no cambia: todo lo que no se diga aquí es igual a la población 2023
@@ -41,6 +41,12 @@ parecerá en tres. La verificación de §5 dice si eso se nota en las respuestas
 **Donantes y pesos:** cada año con su factor de expansión (`PONDERA`, `FEXP`, `PONDERADOR`),
 reescalado para que cada ola sume su tamaño de muestra (DI-AR2). El conglomerado es
 año × localidad × manzana.
+
+> *Corrección (30/09, al construirla).* **Pesos:** reescalar por ola no bastó. El `PONDERA`
+> de 2022 no corrige el sobremuestreo de las localidades pequeñas, y el 74 % de los agentes
+> de La Candelaria heredaba a alguien de 2022. Se reescala por **ola × localidad**
+> (DI-PO5). **Conglomerado:** 2022 no trae manzana; ese año cada persona es su propio
+> conglomerado (DI-PO3), lo que subestima un poco su margen.
 
 ---
 
@@ -90,3 +96,30 @@ La misma de §6 de la población 2023, con estos cambios:
 2. La verificación de §5, anotada aquí.
 3. La prueba de localidades del puente se corre **sobre los encuestados**, no sobre esta
    población (`PUENTE_LOCALIDADES_SPECIFICATION.md`), así que no depende de este paso.
+
+---
+
+## 7. Resultado de la verificación (30/09)
+
+`data/processed/poblacion_epc2022_2024/verificacion.json`. 20.000 agentes (1.000 por localidad;
+Sumapaz sin donante), 4.522 donantes (1.500 de 2022, 1.501 de 2023, 1.521 de 2024).
+
+| §5 | Resultado | Población 2023, para comparar |
+|---|---|---|
+| 1. Demografía, peor diferencia por localidad | sexo 2,9 pts, edad 3,5, estrato 2,1 | iguales (mismo receptor) |
+| 2. Opinión fuera del margen del 95 % | **23 de 1.938 pares (1,2 %)**, umbral 10 %: **pasa** | 3,5 % |
+| 3. Emparejamiento exacto (sexo, edad, estrato) | **98,2 %**; 97,8 / 98,2 / 98,7 % según el año | 64 % (con educación, cuatro variables) |
+| 4. Mayor fracción de un solo año en una localidad | **39 %** (antes de DI-PO5: 74 %) | — |
+| 5. Reproducible con la misma semilla | sí | sí |
+
+Donantes por localidad: de 86 (La Candelaria) a 456 (Suba); mediana 251.
+
+**Lectura.** Sin la educación, el emparejamiento es casi siempre exacto, porque quedan menos
+variables que igualar. Lo que se pierde es que dentro de un mismo sexo, edad y estrato ya no
+se distingue la educación; la verificación de opinión no muestra que eso se note en las
+medias por localidad. La «mayor diferencia de media en la ciudad» (0,07) compara agentes con
+donantes cuyos pesos ya no reproducen el tamaño de cada localidad (DI-PO5); no dice nada de
+la población.
+
+**Falta:** conectarla a la página (el motor y el aviso «Bogotá 2022-2024» con los años de cada
+respuesta, §4).

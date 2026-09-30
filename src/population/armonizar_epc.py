@@ -32,6 +32,12 @@ DI-AR2. **Los pesos de cada ola se reescalan para sumar su tamaño de muestra**
     antes de juntar: cada ola pesa por las personas que encuestó, no por la
     población a la que expande (2022-2025 expanden todas a ~6 millones, así que
     en la práctica cambia poco, pero deja explícita la regla).
+    *Corrección (30/09, después): «cambia poco» es falso dentro de las localidades
+    pequeñas.* El `PONDERA` de 2022 casi no varía (DI-B5) y no corrige el
+    sobremuestreo: en La Candelaria un encuestado de 2022 pesa 0,99 y uno de 2023,
+    0,11, así que en las medias por localidad juntadas domina 2022. La población
+    2022-2024 reescala por ola × localidad (`poblacion_epc_olas.py`, DI-PO5). Las
+    confiabilidades de `items.csv` no se recalcularon.
 
 DI-AR3. **La confiabilidad es la del paso del puente** (§8 de su pre-registro):
     correlación entre las medias por localidad de dos mitades al azar de los

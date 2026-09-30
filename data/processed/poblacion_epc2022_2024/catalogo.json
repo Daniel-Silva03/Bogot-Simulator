@@ -1,0 +1,2559 @@
+{
+ "dentro": [
+  {
+   "variable": "AG1",
+   "codigo": "AG1",
+   "nombre": "Optimismo sobre Bogotá",
+   "pregunta": "Las cosas en Bogotá ¿van por buen camino o por mal camino?",
+   "escala": [
+    1,
+    2
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Buen camino",
+    "2": "Mal camino"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "AG2",
+   "codigo": "AG2",
+   "nombre": "Orgullo de Bogotá",
+   "pregunta": "¿Qué tan orgulloso(a) se siente de Bogotá?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Nada orgulloso",
+    "2": "Poco orgulloso",
+    "3": "Ni orgulloso ni no orgulloso",
+    "4": "Orgulloso",
+    "5": "Muy orgulloso"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "CV1",
+   "codigo": "CV1",
+   "nombre": "Satisfacción con Bogotá",
+   "pregunta": " ¿Qué tan satisfecho(a) se siente usted con Bogotá como un lugar para vivir?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "CO2",
+   "codigo": "CO2",
+   "nombre": "Situación económica del hogar",
+   "pregunta": "Durante el último año, la situación económica de su hogar…",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Ha empeorado mucho",
+    "2": "Ha empeorado algo",
+    "3": "Sigue igual",
+    "4": "Ha mejorado algo",
+    "5": "Ha mejorado mucho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "CO4",
+   "codigo": "CO4",
+   "nombre": "Autopercepción de pobreza",
+   "pregunta": "¿Usted se considera pobre?",
+   "escala": [
+    1,
+    2
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Sí",
+    "2": "No"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "CO1_1",
+   "codigo": "CO1_1",
+   "nombre": "Facilidad para encontrar empleo",
+   "pregunta": "¿En Bogotá es fácil encontrar trabajo?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "NADA",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "TOTALMENTE"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "CO1_2",
+   "codigo": "CO1_2",
+   "nombre": "Optimismo sobre el futuro de la economía",
+   "pregunta": "¿Se puede ser optimista sobre la situación futura de la economía de Bogotá?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "NADA",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "TOTALMENTE"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "CO1_3",
+   "codigo": "CO1_3",
+   "nombre": "Facilidad para emprender",
+   "pregunta": "¿En Bogotá es fácil emprender con éxito una actividad económica independiente?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "NADA",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "TOTALMENTE"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "AL1",
+   "codigo": "AL1",
+   "nombre": "Hambre",
+   "pregunta": "En las últimas cuatro semanas, ¿usted o algún miembro de su hogar tuvo que comer menos de tres comidas diarias porque no había suficientes alimentos ?",
+   "escala": [
+    1,
+    2
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Sí",
+    "2": "No"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "SA22A",
+   "codigo": "SA22A",
+   "nombre": "Estado de salud física",
+   "pregunta": " ¿Considera usted que durante el último año su estado de salud física ha sido bueno, regular o malo?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [
+    0
+   ],
+   "etiquetas": {
+    "0": "No sabe",
+    "1": "Malo",
+    "2": "Regular",
+    "3": "Bueno"
+   },
+   "anios": [
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "SA22B",
+   "codigo": "SA22B",
+   "nombre": "Estado de salud mental",
+   "pregunta": " ¿Considera usted que durante el último año su estado de salud mental ha sido bueno, regular o malo?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [
+    0
+   ],
+   "etiquetas": {
+    "0": "No sabe",
+    "1": "Malo",
+    "2": "Regular",
+    "3": "Bueno"
+   },
+   "anios": [
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "SP1",
+   "codigo": "SP1",
+   "nombre": "Satisfacción con acueducto",
+   "pregunta": "¿Qué tan satisfecho(a) está usted en general con el servicio de agua que recibe?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "5 Muy satisfecho",
+    "90": "No recibió"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "SP2",
+   "codigo": "SP2",
+   "nombre": "Satisfacción con alcantarillado",
+   "pregunta": "¿Qué tan satisfecho(a) está usted en general con el servicio de alcantarillado que recibe?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "5 Muy satisfecho",
+    "90": "No recibió"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "SP3",
+   "codigo": "SP3",
+   "nombre": "Satisfacción con energía",
+   "pregunta": "¿Qué tan satisfecho(a) está usted en general con el servicio de energía que recibe?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "5 Muy satisfecho",
+    "90": "No recibió"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "SP4",
+   "codigo": "SP6",
+   "nombre": "Satisfacción con aseo y basura",
+   "pregunta": "¿Qué tan satisfecho(a) está usted en general con el servicio de aseo y recolección de basuras que recibe?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "5 Muy satisfecho",
+    "90": "No recibió"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "SP5",
+   "codigo": "SP7",
+   "nombre": "Satisfacción con gas domiciliario",
+   "pregunta": "¿Qué tan satisfecho(a) está usted en general con el servicio de gas domiciliario que recibe?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "5 Muy satisfecho",
+    "90": "No recibió"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "SP6",
+   "codigo": "SP8",
+   "nombre": "Satisfacción con internet",
+   "pregunta": "¿Qué tan satisfecho(a) está usted en general con el servicio de internet que recibe?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "5 Muy satisfecho",
+    "90": "No recibió"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "VS7",
+   "codigo": "VS7",
+   "nombre": "Satisfacción con vivienda",
+   "pregunta": "¿Qué tan satisfecho se siente con la vivienda que habita?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "VS8",
+   "codigo": "VS8",
+   "nombre": "Percepción de seguridad en el barrio",
+   "pregunta": "¿Qué tan seguro se siente usted en su barrio?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Nada seguro",
+    "2": "Algo inseguro",
+    "3": "Ni seguro ni inseguro",
+    "4": "Algo seguro",
+    "5": "Muy seguro"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "VS10",
+   "codigo": "VS10",
+   "nombre": "Percepción de seguridad en la ciudad",
+   "pregunta": "¿Qué tan seguro en general se siente usted en Bogotá?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Nada seguro",
+    "2": "Algo inseguro",
+    "3": "Ni seguro ni inseguro",
+    "4": "Algo seguro",
+    "5": "Muy seguro"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "VS15",
+   "codigo": "VS15",
+   "nombre": "Victimización",
+   "pregunta": "Durante el último año, ¿usted ha sido víctima de algún delito en Bogotá?",
+   "escala": [
+    1,
+    2
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Sí",
+    "2": "No"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "VS18",
+   "codigo": "VS18",
+   "nombre": "Probabilidad de que un delito sea sancionado",
+   "pregunta": "Usted considera que la probabilidad de que un delito sea sancionado en Bogotá es…",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [
+    91
+   ],
+   "etiquetas": {
+    "1": "1. Muy baja",
+    "2": "2. Baja",
+    "3": "3. Media",
+    "4": "4. Alta",
+    "5": "5. Muy alta",
+    "91": "91. (ENC: NO LEA) No sabe"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "MICE1",
+   "codigo": "PC20_1",
+   "nombre": "Percepción de transparencia",
+   "pregunta": "El gobierno de su ciudad está adelantando acciones que contribuyen a la transparencia y la garantía del derecho de acceso a la información pública",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "NADA",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "TOTALMENTE"
+   },
+   "anios": [
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MICE2",
+   "codigo": "PC20_2",
+   "nombre": "Percepción de la respuesta a solicitudes ciudadanas",
+   "pregunta": "El gobierno de su ciudad atiende y responde de manera efectiva a las necesidades y solicitudes de la ciudadanía, realiza mejora de trámites y adecúa permanentemente los canales de servicio al ciudadano. ",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "NADA",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "TOTALMENTE"
+   },
+   "anios": [
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MICE3",
+   "codigo": "PC20_3",
+   "nombre": "Percepción sobre la generación de espacios de participación",
+   "pregunta": "El gobierno de su ciudad genera espacios de interacción y diálogo con la ciudadanía, promueve la participación en la formulación de planes y políticas públicas, rinde cuentas y permite la petición de cuentas permanente sobre la gestión",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "NADA",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "TOTALMENTE"
+   },
+   "anios": [
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC3_0",
+   "codigo": "RC3_1",
+   "nombre": "Respeto por la vida",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por la vida?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC3_1",
+   "codigo": "RC3_2",
+   "nombre": "Respeto y cuidado de espacios y bienes públicos",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al cuidado y respeto de los espacios públicos y bienes públicos?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC3_2",
+   "codigo": "RC3_3",
+   "nombre": "Respeto por normas de tránsito",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto a las normas básicas de tránsito?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC3_3",
+   "codigo": "RC3_4",
+   "nombre": "Respeto por normas ambientales",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto a las normas ambientales?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_1",
+   "codigo": "RC4_1",
+   "nombre": "Respeto por las personas mayores",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los adultos mayores (ancianos)?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_2",
+   "codigo": "RC4_2",
+   "nombre": "Respeto por los niños y niñas",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los niños y las niñas?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_3",
+   "codigo": "RC4_3",
+   "nombre": "Respeto por las personas con discapacidad",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al Respeto por las personas con discapacidad",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_4",
+   "codigo": "RC4_4",
+   "nombre": "Respeto por los desplazados por la violencia",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los desplazados por la violencia?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_5",
+   "codigo": "RC4_5",
+   "nombre": "Respeto por los reinsertados o desmovilizados",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los reinsertados o desmovilizados?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_6",
+   "codigo": "RC4_6",
+   "nombre": "Respeto por la población migrante",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por la población migrante?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_7",
+   "codigo": "RC4_7",
+   "nombre": "Respeto por las mujeres",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por las mujeres?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_8",
+   "codigo": "RC4_8",
+   "nombre": "Respeto por personas de diversa orientación sexual",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por personas de diversa orientación sexual (gays, lesbianas, bisexuales y transgénero)?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_9",
+   "codigo": "RC4_9",
+   "nombre": "Respeto por personas de diversidad étnica",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por las minorías étnicas, afrodescendientes, indígenas y rom o gitanos?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC4_12",
+   "codigo": "RC4_12",
+   "nombre": "Respeto por los vecinos",
+   "pregunta": "¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los vecinos?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "1 Muy mal",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5 Muy bien"
+   },
+   "anios": [
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "RC5_1",
+   "codigo": "RC5_1",
+   "nombre": "Probabilidad de sanción por violar una norma de construcción",
+   "pregunta": "¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por violar una norma de construcción?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Baja",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Alta"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "RC5_4",
+   "codigo": "RC5_4",
+   "nombre": "Probabilidad de sanción por conectarse ilegalmente a servicios públicos",
+   "pregunta": "¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por conectarse ilegalmente a servicios públicos?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Baja",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Alta"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "RC5_6",
+   "codigo": "RC5_6",
+   "nombre": "Probabilidad de sanción por no pagar impuestos",
+   "pregunta": "¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por no pagar impuestos?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Baja",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Alta"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "RC5_7",
+   "codigo": "RC5_7",
+   "nombre": "Probabilidad de sanción por agredir a otra persona",
+   "pregunta": "¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por agredir a otra persona?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Baja",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Alta"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "RC5_16",
+   "codigo": "RC5_16",
+   "nombre": "Probabilidad de sanción por poner música a alto volumen",
+   "pregunta": "¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por poner música a alto volumen?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Baja",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Alta"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "RC5_17",
+   "codigo": "RC5_17",
+   "nombre": "Probabilidad de sanción por portar armas blancas",
+   "pregunta": "¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por portar armas blancas?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Baja",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Alta"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "RC5_30",
+   "codigo": "RC5_30",
+   "nombre": "Probabilidad de sanción por no recoger los excrementos de su mascota",
+   "pregunta": "¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por no recoger los excrementos de su mascota?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Baja",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Alta"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "RC5_31",
+   "codigo": "RC5_31",
+   "nombre": "Probabilidad de sanción por lavar vehículos en la vía pública",
+   "pregunta": "¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por lavar carros, motos y otros bienes en la vía pública?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Baja",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Alta"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "CR2",
+   "codigo": "CR2",
+   "nombre": "Oferta cultural",
+   "pregunta": "¿Qué tan satisfecho(a) está usted en general con la oferta cultural que hay en Bogotá?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "CR4",
+   "codigo": "CR4",
+   "nombre": "Oferta recreativa y deportiva",
+   "pregunta": "¿Qué tan satisfecho(a) está usted en general con la oferta recreativa y deportiva que hay en Bogotá?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV4",
+   "codigo": "MV4",
+   "nombre": "Satisfacción con su modo de transporte",
+   "pregunta": "¿Qué tan satisfecho(a) está usted con el modo de transporte que utiliza principalmente? (todos los modos)",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV2",
+   "codigo": "MV2",
+   "nombre": "Tiempos de desplazamiento",
+   "pregunta": "Usted percibe que, en general sus trayectos habituales en el último año, ¿toman el mismo tiempo, toman más tiempo, o toman menos tiempo que el año pasado?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Más tiempo",
+    "2": "Lo mismo",
+    "3": "Menos tiempo"
+   },
+   "anios": [
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV13_1",
+   "codigo": "MV13_1",
+   "nombre": "Satisfacción con semáforos",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) está usted con el funcionamiento de semáforos?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV13_2",
+   "codigo": "MV13_2",
+   "nombre": "Satisfacción con cebras",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) está usted con las cebras para paso peatonal?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV13_3",
+   "codigo": "MV13_3",
+   "nombre": "Satisfacción con agentes de tránsito",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) está usted con los agentes de tránsito?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "MV13_4",
+   "codigo": "MV13_4",
+   "nombre": "Satisfacción con campañas educativas de tránsito",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) está usted con las campañas educativas de tránsito?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "MV13_5",
+   "codigo": "MV13_5",
+   "nombre": "Satisfacción con control de normas de tránsito",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) está usted con el control al cumplimiento de normas de tránsito?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV13_6",
+   "codigo": "MV13_6",
+   "nombre": "Satisfacción con atención de siniestros",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) está usted con la atención de siniestros viales?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "MV13_7",
+   "codigo": "MV13_7",
+   "nombre": "Satisfacción con paraderos",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) está usted con los paraderos en la ciudad?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV13_8",
+   "codigo": "MV13_8",
+   "nombre": "Satisfacción con cultura ciudadana en las vías",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) está usted con la cultura ciudadana en las vías?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV13_9",
+   "codigo": "MV13_9",
+   "nombre": "Satisfacción con puentes peatonales",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) está usted con los puentes peatonales?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV13_10",
+   "codigo": "EP1B_10",
+   "nombre": "Satisfacción con bicicarriles",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los bicicarriles?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV13_11",
+   "codigo": "EP1B_9",
+   "nombre": "Satisfacción con andenes",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los andenes?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MV150",
+   "codigo": "MV150",
+   "nombre": "Optimismo frente al metro",
+   "pregunta": "Sobre la posibilidad de que Bogotá tenga su primera línea del metro, usted se siente…",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy pesimista",
+    "2": "Algo pesimista",
+    "3": "Ni pesimista ni optimista",
+    "4": "Algo optimista",
+    "5": "Muy optimista"
+   },
+   "anios": [
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "EP1B_1",
+   "codigo": "EP1B_1",
+   "nombre": "Plazas",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las plazas/plazoletas?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "EP1B_2",
+   "codigo": "EP1B_2",
+   "nombre": "Escenarios deportivos",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los escenarios deportivos?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "EP1B_3",
+   "codigo": "EP1B_3",
+   "nombre": "Parques",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los parques?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "EP1B_4",
+   "codigo": "EP1B_4",
+   "nombre": "Baños públicos",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los baños públicos?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "EP1B_5",
+   "codigo": "EP1B_5",
+   "nombre": "Canecas",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las canecas?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "EP1B_6",
+   "codigo": "EP1B_6",
+   "nombre": "Zonas verdes",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las zonas verdes?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "EP1B_7",
+   "codigo": "EP1B_7",
+   "nombre": "Bancas",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las bancas?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "EP1B_8",
+   "codigo": "EP1B_8",
+   "nombre": "Luminarias públicas",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las luminarias públicas (alumbrado público)?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "MA3_1",
+   "codigo": "MA3_1",
+   "nombre": "Calidad del aire",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con la calidad del aire?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "MA3_2",
+   "codigo": "MA3_2",
+   "nombre": "Calidad del agua (ríos, quebradas, humedales…)",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con la calidad del agua (ríos, quebradas, humedales, etc.)?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "MA3_3",
+   "codigo": "MA3_3",
+   "nombre": "Nivel de ruido",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con el nivel de ruido de la ciudad?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "MA3_4",
+   "codigo": "MA3_4",
+   "nombre": "Cantidad de árboles",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con la cantidad de árboles en la ciudad?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "MA3_5",
+   "codigo": "MA3_5",
+   "nombre": "Contaminación visual",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con la contaminación visual de la ciudad?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "MA3_6",
+   "codigo": "MA3_6",
+   "nombre": "Manejo de basuras",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las basuras en las calles?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "MA3_7",
+   "codigo": "MA3_7",
+   "nombre": "Manejo de escombros",
+   "pregunta": "¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los escombros en las calles?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni satisfecho ni insatisfecho",
+    "4": "Algo satisfecho",
+    "5": "Muy satisfecho"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_1",
+   "codigo": "GP1N_1",
+   "nombre": "Desempeño en pobreza y vulnerabilidad",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en pobreza y vulnerabilidad?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_2",
+   "codigo": "GP1N_2",
+   "nombre": "Desempeño en igualdad de oportunidades",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en igualdad de oportunidades (o equidad)?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_3",
+   "codigo": "GP1N_3",
+   "nombre": "Desempeño en educación",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en educación?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_4",
+   "codigo": "GP1N_4",
+   "nombre": "Desempeño en salud",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en salud?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_5",
+   "codigo": "GP1N_5",
+   "nombre": "Desempeño en cultura  ",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en cultura (promoción y acceso a diferentes expresiones artísticas)?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_6",
+   "codigo": "GP1N_6",
+   "nombre": "Desempeño en recreación y deporte",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en recreación y deporte?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_7",
+   "codigo": "GP1N_7",
+   "nombre": "Desempeño en empleo",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en empleo?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_8",
+   "codigo": "GP1N_8",
+   "nombre": "Desempeño en seguridad y convivencia",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en seguridad ciudadana y convivencia?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_9",
+   "codigo": "GP1N_9",
+   "nombre": "Desempeño en vivienda",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Vivienda?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_10",
+   "codigo": "GP1N_10",
+   "nombre": "Desempeño en servicios públicos",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Servicios públicos?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_11",
+   "codigo": "GP1N_11",
+   "nombre": "Desempeño en movilidad y transporte",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Movilidad y transporte?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_12",
+   "codigo": "GP1N_12",
+   "nombre": "Desempeño en espacio Público",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Espacio público?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_13",
+   "codigo": "GP1N_13",
+   "nombre": "Desempeño en medio ambiente",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Medio ambiente?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_14",
+   "codigo": "GP1N_14",
+   "nombre": "Desempeño en comportamiento ciudadano y cultura",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Comportamiento ciudadano y cultura?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_15",
+   "codigo": "GP1N_15",
+   "nombre": "Desempeño en gestión pública",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Gestión pública (eficiencia y transparencia)?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_16",
+   "codigo": "GP1N_16",
+   "nombre": "Desempeño en migración",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Migración?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GP1N_17",
+   "codigo": "GP1N_17",
+   "nombre": "Desempeño en ruralidad",
+   "pregunta": "Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo la evaluaría usted en Ruralidad?",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Desmejoro",
+    "2": "Ni mejoro ni desmejoro",
+    "3": "Mejoró"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "GG3",
+   "codigo": "GG3",
+   "nombre": "Percepción de la gestión del alcalde/sa",
+   "pregunta": "¿Usted cómo califica la gestión del alcalde/sa?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy mala gestión",
+    "2": "Mala gestión",
+    "3": "Regular gestión",
+    "4": "Buena gestión",
+    "5": "Muy buena gestión"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "CV5",
+   "codigo": "CV5",
+   "nombre": "Percepción de la inversión de recursos públicos",
+   "pregunta": "¿Qué tan satisfecho está usted con la forma como la Alcaldía invierte los recursos públicos de la ciudad?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [
+    90
+   ],
+   "etiquetas": {
+    "1": "Muy insatisfecho",
+    "2": "Algo insatisfecho",
+    "3": "Ni insatisfecho ni satisfecho",
+    "4": "Satisfecho",
+    "5": "Muy satisfecho",
+    "90": "No sabe / No opina"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "GG7",
+   "codigo": "GG7",
+   "nombre": "Percepción de la corrupción",
+   "pregunta": "¿Qué tanto cree usted que ha cambiado el nivel de corrupción en Bogotá durante el último año?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Ha disminuido mucho",
+    "2": "Ha disminuido algo",
+    "3": "Sigue igual",
+    "4": "Ha aumentado algo",
+    "5": "Ha aumentado mucho"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "CC2",
+   "codigo": "CC2",
+   "nombre": "Imagen del Concejo",
+   "pregunta": "¿La imagen que usted tiene del Concejo de la ciudad es favorable o desfavorable?",
+   "escala": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Favorable",
+    "2": "Desfavorable",
+    "3": "No tiene opinión",
+    "4": "No lo conoce"
+   },
+   "anios": [
+    2023
+   ]
+  },
+  {
+   "variable": "CC5A",
+   "codigo": "CC5",
+   "nombre": "Percepción de la gestión del Concejo",
+   "pregunta": "¿Usted cómo califica, en términos generales, la gestión del Concejo de Bogotá?",
+   "escala": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Muy mala gestión",
+    "2": "Mala gestión",
+    "3": "Regular gestión",
+    "4": "Buena gestión",
+    "5": "Muy buena gestión"
+   },
+   "anios": [
+    2022,
+    2023
+   ]
+  },
+  {
+   "variable": "CC9",
+   "codigo": "CC9",
+   "nombre": "Conocimiento de BCV",
+   "pregunta": "¿Usted conoce, ha oído hablar, o ha visto algo del programa Bogotá Cómo Vamos?",
+   "escala": [
+    1,
+    2
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Sí",
+    "2": "No"
+   },
+   "anios": [
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "variable": "PE_EL1",
+   "codigo": "PE_EL1",
+   "nombre": "Votación",
+   "pregunta": "Cuando en Colombia hay elecciones, usted:",
+   "escala": [
+    1,
+    2,
+    3
+   ],
+   "no_respuesta": [],
+   "etiquetas": {
+    "1": "Siempre vota",
+    "2": "A veces vota",
+    "3": "Nunca vota"
+   },
+   "anios": [
+    2023
+   ]
+  }
+ ],
+ "fuera": [
+  {
+   "variable": "VS6",
+   "codigo": "VS6",
+   "nombre": "Tenencia de vivienda",
+   "pregunta": "Usted vive en una vivienda…",
+   "razon": "las etiquetas no forman una escala 1..k"
+  },
+  {
+   "variable": "GP1_CADE",
+   "codigo": "GP1_1",
+   "nombre": "Imagen de los CADES",
+   "pregunta": "Sobre los Cades y Supercades (centros de atención) usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GP1_IDRD",
+   "codigo": "GP1_2",
+   "nombre": "Imagen del IDRD",
+   "pregunta": "Sobre el Instituto de Recreación y Deporte usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GP1_SDS",
+   "codigo": "GP1_3",
+   "nombre": "Imagen de la Secretaría de Salud",
+   "pregunta": "Sobre la Secretaría de Salud usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GP1_SED",
+   "codigo": "GP1_4",
+   "nombre": "Imagen de la Secretaría de Educación",
+   "pregunta": "Sobre la Secretaría de Educación usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GP1_IDPAC",
+   "codigo": "GP1_10",
+   "nombre": "Imagen del IDPAC",
+   "pregunta": "Sobre el Instituto Distrital de la Participación y Acción Comunal (IDPAC) usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GP1_TM",
+   "codigo": "GP1_5",
+   "nombre": "Imagen de Transmilenio S.A",
+   "pregunta": "Sobre Transmilenio S.A usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GP1_METRO",
+   "codigo": "GP1_6",
+   "nombre": "Imagen de la Empresa Metro de Bogotá",
+   "pregunta": "Sobre la Empresa Metro de Bogotá usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GP1_IDU",
+   "codigo": "GP1_7",
+   "nombre": "Imagen del IDU",
+   "pregunta": "Sobre el Instituto de Desarrollo Urbano (IDU) usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GP1_VD",
+   "codigo": "GP1_8",
+   "nombre": "Imagen de la Veeduría Distrital",
+   "pregunta": "Sobre la Veeduría Distrital usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GP1_AL",
+   "codigo": "GP1_9",
+   "nombre": "Imagen de la Alcaldía Local",
+   "pregunta": "Sobre su Alcaldía Local usted tiene una imagen…",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  },
+  {
+   "variable": "GG1",
+   "codigo": "GG1",
+   "nombre": "Imagen del alcalde/sa",
+   "pregunta": "¿Quisiera saber si la imagen que usted tiene del alcalde/sa es favorable o desfavorable?",
+   "razon": "imagen: códigos invertidos en 2023 (DI-B2)"
+  }
+ ]
+}

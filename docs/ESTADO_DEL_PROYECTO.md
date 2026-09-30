@@ -208,8 +208,12 @@ la demografía por localidad en 8 de 11; declara que no es del todo a ciegas). *
 sin gasto** (`PUENTE_LOCALIDADES_RESULTS.md`): contra el pre-registro, 11 de 11 (lectura A). Pero
 el ruido, sin geografía, dio r_loc 0,77: el puntaje y la respuesta salen de las mismas personas y
 el ruido de muestreo se correlaciona solo. Con un control de mitades (no pre-registrado), el puente
-gana 6 de 11 y 3 de las 7 con geografía. **Recomendación: mantener B.** Pendiente: que Daniel
-decida la lectura; después, construir la población 2022-2024 para el mapa del catálogo.
+gana 6 de 11 y 3 de las 7 con geografía. **Daniel: «mantenemos B»** (D17 actualizada).
+**Población 2022-2024 construida y verificada el 30/09** (`src/population/poblacion_epc_olas.py`,
+§7 de su especificación): 4.522 donantes, 1,2 % de pares fuera del margen, 98 % de
+emparejamiento exacto. Al construirla apareció que el `PONDERA` de 2022 no corrige el
+sobremuestreo de las localidades pequeñas; se reescala por ola × localidad (DI-PO5).
+**Siguiente:** conectarla a la página (motor, y el aviso de qué años responden).
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

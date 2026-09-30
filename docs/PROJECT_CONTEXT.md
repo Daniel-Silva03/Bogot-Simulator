@@ -1478,6 +1478,13 @@ en cada respuesta. No predice ni pretende probar nada. Cinco piezas:
 tres» —el diseño del puente, reabrir DI-B10 y el gasto en LLM—, y la reformulación
 sugerida).
 
+**Actualización (30/09/2026): las preguntas nuevas siguen sin mapa (lectura B).** La
+prueba de localidades con 2022-2024 (`PUENTE_LOCALIDADES_RESULTS.md`) cumplió su regla
+escrita (lectura A, 11 de 11), pero un control no pre-registrado mostró que r_loc estaba
+inflado por el ruido de muestreo compartido; con el control, el puente no le gana a la
+demografía (6 de 11). Daniel, en conversación: «mantenemos B». La población 2022-2024 se
+construye para el mapa de las preguntas del catálogo.
+
 ---
 
 # 40. DECISIONES ABIERTAS

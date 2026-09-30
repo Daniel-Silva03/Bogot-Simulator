@@ -114,7 +114,17 @@ Lo que sí queda en pie:
   cada localidad (estrato, edad, sexo)». No es la opinión supuesta, es demografía, y hay que
   decirlo así. Necesitaría su propio pre-registro.
 
+**Decisión (30/09, Daniel): «mantenemos B».** Las preguntas nuevas siguen sin mapa; D17
+quedó actualizada en `PROJECT_CONTEXT.md` §39.
+
 ## 6. Límites
+
+- **Anotado después (30/09), al construir la población 2022-2024 (DI-PO5):** los pesos
+  de esta prueba se reescalaron por ola (DI-AR2), no por ola × localidad. Como el
+  `PONDERA` de 2022 no corrige el sobremuestreo de las localidades pequeñas (DI-B5),
+  dentro de La Candelaria, Los Mártires y Antonio Nariño las medias estaban dominadas
+  por los encuestados de 2022. Afecta por igual al puente y a la demografía, y no se
+  recalculó; la decisión ya era B.
 
 - El control de §4 se diseñó **después** de ver la primera corrida. Lo motivó una cifra
   imposible (r_loc 0,77 sin geografía), no el deseo de que el resultado saliera de una forma;
