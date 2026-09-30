@@ -89,6 +89,8 @@ data/**
 # versionan, cada máquina publica su propia copia.
 !data/processed/deff_epc_seis_olas.csv
 !data/processed/serie_epc_bcv.csv
+!data/processed/transiciones_epc_con_diseno.csv
+!data/processed/validacion_proxy_conglomerado.csv
 
 # geografía electoral: el resultado del análisis pre-registrado (kilobytes, agregados)
 !data/processed/geografia_electoral/

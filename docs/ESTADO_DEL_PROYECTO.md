@@ -185,7 +185,9 @@ EPC caía al DEFF prestado en todas las olas sin avisar; y `preparar_mapa` solo 
   mediano pasa de 1,86 a **2,03**; los márgenes que lo usan se ensanchan 4,5 %;
   ninguna transición cambia de veredicto. Los dos CSV de la EPC ahora tienen script
   (`src/utils/medir_deff_epc.py`) y se versionan: las dos máquinas publican la misma
-  serie. Serie y mapa regenerados. Gana a «escenarios con preguntas reales» como
+  serie. Serie y mapa regenerados. También se regeneraron y versionan las transiciones
+  y la validación del proxy (§4.bis): el proxy infla el DEFF un 21 %, no un 94 %, y se
+  equivoca lo mismo que el prestado; la decisión (prestado) se mantiene con esa razón. Gana a «escenarios con preguntas reales» como
 siguiente frente, porque resuelve un vacío de datos que ningún otro frente resuelve.
 
 **Experimento 9: cerrado.** Se cerró el 29/09

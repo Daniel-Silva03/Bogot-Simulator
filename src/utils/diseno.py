@@ -92,6 +92,13 @@ DI-D6. **Un proxy de conglomerado armado con localidad × estrato NO sirve, y
 
     Evidencia en `data/processed/validacion_proxy_conglomerado.csv`.
 
+    *Corrección (29/09/2026, con DI-D7):* las cifras de arriba comparaban contra la
+    manzana sin anidar. Con el diseño corregido el proxy infla el DEFF un 21 % en la
+    mediana (rango 0,80–1,73), no un 94 %, y `Zona + SEG_1` da 3,32, no 4,94. La
+    decisión se mantiene por otra razón: el proxy y el DEFF prestado se equivocan lo
+    mismo (~10 % en el error estándar), así que no hay ganancia que justifique fingir
+    conglomerados. Detalle en ANALISIS_DISENO_MUESTRAL.md §4.bis, actualización v1.2.
+
 DI-D5. **Las diferencias entre olas se tratan como independientes.** La EPC
     y la ECP son cortes transversales distintos, sin panel: no hay
     covarianza que restar. Var(a − b) = Var(a) + Var(b).

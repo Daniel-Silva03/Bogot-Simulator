@@ -60,6 +60,8 @@ veredicto: siete distinguibles de cero (z de 3,07 a 6,61) y 2022→2023 no (z = 
 La conclusión del §4.bis tampoco cambia —el proxy sigue siendo peor que el DEFF
 prestado—, aunque sus cifras «con manzana» (que no coinciden ni con el §3) no se
 rehicieron. `transiciones_epc_con_diseno.csv` queda desactualizado y sin versionar.
+*(Resuelto el mismo día: los dos archivos se regeneraron con script y se versionan;
+ver la actualización al pie del §4.bis y la corrección del §5.)*
 
 **Los documentos que citan 1,86** (A08 paso 0, tercera perilla, la especificación
 visual) se conservan: describen lo que se usó entonces.
@@ -157,11 +159,55 @@ Lo mismo ocurre con la hipótesis para 2025, `Zona + SEG_1`: da **DEFF 4,94**, c
 
 **Conclusión: para las olas sin identificador se usa el DEFF prestado, no un proxy inventado.** Un factor prestado y marcado como tal es honesto; un proxy que duplica el error sin decirlo, no.
 
+> **Actualización v1.2 (29/09/2026).** La tabla de arriba comparaba el proxy contra la
+> «manzana» sin anidar (§0.bis), y su columna «con manzana» ni siquiera coincide con el
+> §3: se calculó sobre otra base y sin script. Se rehízo con
+> `src/utils/medir_deff_epc.py` sobre los mismos casos que el §3, con el diseño
+> corregido y con el proxy en su forma más favorable (conglomerado =
+> localidad|estrato socioeconómico, estrato = localidad). Está en
+> `data/processed/validacion_proxy_conglomerado.csv`, ahora versionado.
+>
+> | Ola | DEFF real | DEFF con el proxy | razón | error en el ee: proxy · prestado (2,03) |
+> |---|---|---|---|---|
+> | 2014 | 2,51 | 3,28 | 1,30 | 14 % · 10 % |
+> | 2015 | 3,21 | 3,54 | 1,10 | 5 % · 21 % |
+> | 2018 | 2,03 | 2,46 | 1,21 | 10 % · 0 % |
+> | 2019 | 1,65 | 2,01 | 1,22 | 10 % · 11 % |
+> | 2023 | 1,86 | 3,21 | 1,73 | 32 % · 5 % |
+> | 2024 | 2,69 | 2,15 | 0,80 | 11 % · 13 % |
+> | | | **mediana** | **1,21** | **10,4 % · 10,5 %** |
+>
+> **Lo que cambia:** el proxy **no duplica** el efecto de diseño. Lo infla un 21 % en
+> la mediana (rango 0,80–1,73), no un 94 %. El «factor cercano a dos» venía sobre
+> todo de comparar contra conglomerados mal definidos.
+>
+> **Lo que no cambia es la decisión, pero sí su razón:** el proxy y el DEFF prestado
+> se equivocan lo mismo (un 10 % en el error estándar, en la mediana). El proxy es
+> conservador en 5 de 6 olas, pero su peor caso es mayor (2023: +32 %); el prestado se
+> queda corto donde el DEFF real es alto (2015: −21 %). Sin ventaja de precisión, se
+> conserva el prestado: es una sola cifra, medida y declarada, y no finge una
+> estructura de conglomerados que la ola no trae.
+>
+> **Las hipótesis de 2025** también se rehicieron con el mismo estimador: `Zona|SEG_1`
+> da 3,32 (antes 4,94) y `Localidad|SEG_1` 1,90 (antes 2,90). Las dos caen ahora
+> dentro del rango medido (1,39–3,21), pero `SEG_1` tiene 5 valores y no anida en
+> ninguna localidad: no es un conglomerado, y sin la manzana no hay contra qué
+> validarlas. 2025 sigue con el prestado.
+
 ## 5. Una advertencia sobre 2022, y por qué no cambia nada
 
 El DEFF medido de 2022 da **0,70**, por debajo de 1. Es posible —la posestratificación puede reducir varianza— pero aquí es sospechoso por dos razones: la UPM disponible es `BARRIO_ENC`, más gruesa que la manzana, y el ponderador de esa ola toma solo 10 valores distintos (`claude/ANALISIS_EPC_BCV.md` §1). Lo más probable es que subestime.
 
 **Se probó la alternativa conservadora** —descartar el diseño de 2022 y usar el DEFF prestado de 1,95—, y **las ocho transiciones dan el mismo veredicto en las dos variantes**. El resultado no depende de esa decisión. Ambas variantes quedan en `data/processed/transiciones_epc_con_diseno.csv`.
+
+> **Corrección v1.2 (29/09/2026).** Ese archivo nunca tuvo las dos variantes: solo la
+> de 2022 prestado. Y la otra no se puede reconstruir de forma defendible:
+> `BARRIO_ENC` es **texto libre y está vacío para 501 de las 1.500 personas**, así
+> que no es una unidad de muestreo. 2022 va con el DEFF prestado, sin variante. El
+> archivo se regeneró con el diseño corregido, ahora con script
+> (`src/utils/medir_deff_epc.py`) y versionado; trae además las transiciones de la
+> gestión del Concejo. Gestión del alcalde: siete de ocho distinguibles de cero (z de
+> 3,07 a 6,62) y 2022→2023 no (z = −1,43), el mismo veredicto que la tabla del §4.
 
 ## 6. Qué hay que hacer con esto
 

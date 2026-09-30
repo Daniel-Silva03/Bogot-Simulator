@@ -1,0 +1,17 @@
+item,transicion,delta,ee,z,significativa,fuente
+gestion_alcalde,2014->2015,-0.4367,0.0752,-5.81,True,diseño/diseño
+gestion_alcalde,2015->2017,-0.3036,0.0667,-4.55,True,diseño/prest.
+gestion_alcalde,2017->2018,0.2622,0.0598,4.38,True,prest./diseño
+gestion_alcalde,2018->2019,0.1772,0.0577,3.07,True,diseño/diseño
+gestion_alcalde,2019->2022,0.4085,0.0617,6.62,True,diseño/prest.
+gestion_alcalde,2022->2023,-0.0933,0.0654,-1.43,False,prest./diseño
+gestion_alcalde,2023->2024,0.3213,0.0682,4.71,True,diseño/diseño
+gestion_alcalde,2024->2025,-0.4278,0.069,-6.2,True,diseño/prest.
+gestion_concejo,2014->2015,-0.0218,0.0548,-0.4,False,diseño/diseño
+gestion_concejo,2015->2016,-0.0823,0.0553,-1.49,False,diseño/prest.
+gestion_concejo,2016->2017,-0.297,0.0609,-4.88,True,prest./prest.
+gestion_concejo,2017->2019,0.436,0.0556,7.84,True,prest./diseño
+gestion_concejo,2019->2022,-0.075,0.0591,-1.27,False,diseño/prest.
+gestion_concejo,2022->2023,-0.0615,0.0554,-1.11,False,prest./diseño
+gestion_concejo,2023->2024,0.1113,0.0469,2.37,True,diseño/diseño
+gestion_concejo,2024->2025,-0.0812,0.0538,-1.51,False,diseño/prest.
