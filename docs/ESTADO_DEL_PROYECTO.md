@@ -165,6 +165,10 @@ DI-B10.
 **En el tablero desde el 29/09:** capa **Voto** (DI-V53 a DI-V56), con el voto por
 localidad de los 9 candidatos y «lo que el estrato no explica», más una vista
 exploratoria con participación. 35 pruebas en `tests/test_viz_voto.py`.
+**Senado y Cámara 2018 en la tabla electoral (29/09):** por partido y circunscripción,
+verificados contra los archivos municipales (`DATA_INVENTORY.md` §14.5). Las 723 filas
+«duplicadas» de la Cámara eran candidatos sin nombre. Permiten probar el eje
+izquierda–derecha con voto por partido; no se han cruzado con la composición.
 **Pruebas del tablero arregladas (29/09)**, con dos defectos reales detrás:
 `cargar_bcv` descartaba la manzana, así que con el microdato en disco la serie de la
 EPC caía al DEFF prestado en todas las olas sin avisar; y `preparar_mapa` solo leía

@@ -63,6 +63,7 @@ data/**
 # la Registraduría. Los archivos por mesa NO: viven fuera del repo.
 !data/external/electoral/
 !data/external/electoral/presidente_1v_*
+!data/external/electoral/congreso_2018_*
 
 # geometría oficial de localidades (fuente pública: Catastro Distrital)
 !data/external/geo/

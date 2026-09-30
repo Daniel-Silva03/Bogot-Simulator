@@ -748,8 +748,32 @@ archivos de primera vuelta presidencial y escribe en `data/external/electoral/`,
 | 2022 | 901 | 14.935 | 3.801.013 | coincide exacto |
 
 Para calcular proporciones de candidato, usar `votos_candidatos` como base (DI-EL5).
-Senado y Cámara 2018 no entran todavía (DI-EL1): la Cámara de Bogotá trae 723 filas
-duplicadas exactas sin explicar.
+
+### 14.5 Senado y Cámara 2018, por partido (29/09/2026)
+
+`congreso_2018_localidad.csv` y `congreso_2018_zonas.csv`: votos por corporación ×
+circunscripción × localidad × partido (votos de lista y de candidato juntos), con
+`votos_partidos` como base para proporciones.
+
+**Las 723 filas «duplicadas» de la Cámara no son duplicados** (DI-EL8). Están todas
+en las circunscripciones especiales, con el candidato vacío: son candidatos distintos
+de una lista cuyo nombre no viene. La prueba: con todas las filas, la circunscripción
+indígena suma 74.176, exactamente el archivo municipal; sin ellas, 73.603. No se
+descarta ninguna fila.
+
+| Corporación | Circunscripción | Votos en Bogotá | Verificación |
+|---|---|---|---|
+| Cámara | territorial | 2.653.552 | **exacta, partido por partido** (`2018 Camara.xlsx`) |
+| Cámara | indígena | 74.176 | exacta en el total (`2018_camara.dta.csv`) |
+| Cámara | afrodescendiente | 72.042 | diferencia conocida: el municipal suma 6.345 más, casi exactamente los votos de lista sin candidato (6.344); parece doble conteo del municipal |
+| Senado | nacional | 2.714.213 | aproximada: ≤ 0,6 % por partido, 0,05 % en el total (`2018 Senado.xlsx`; cortes distintos del escrutinio). Tolerancia fijada: 1 % y 0,1 % |
+| Senado | indígena | 94.806 | sin archivo municipal para contrastar |
+
+Primera lectura, sin análisis: la Lista de la Decencia (la de Petro) va del 4 % en
+Usaquén al 16 % en Ciudad Bolívar; el Centro Democrático, del 33 % al 15 %. El mismo
+gradiente norte–sur que el voto presidencial (`GEOGRAFIA_ELECTORAL_RESULTS.md`).
+**Los productos del CNC de 2022 (`Datos_Senado`, `Datos_Camara`, coaliciones) no
+entran**: son por municipio, sin geografía dentro de Bogotá.
 
 ---
 

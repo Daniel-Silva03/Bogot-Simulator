@@ -1,0 +1,55 @@
+{
+  "generado": "2026-09-29",
+  "regimen": "D16 (DATA_INVENTORY §14)",
+  "fuentes": {
+    "senado": {
+      "archivo": "RESULTADOS_ELECTORALES_2018_SENADO_DE_LA_REPUBLICA_20250530.csv",
+      "sha256": "2b769ac8666018a730ad36cb56ad3a863f8500f8d313fb498d8b638af42dddb0"
+    },
+    "camara": {
+      "archivo": "RESULTADOS_ELECTORALES_2018_CAMARA_DE_REPRESENTANTES_20250530.csv",
+      "sha256": "5e86b05db0031e350553fddd5d3874fca180b3844ad4bcb23401aed0cc4d8092"
+    }
+  },
+  "verificacion": {
+    "senado": {
+      "nacional": {
+        "fuente": "2018 Senado.xlsx",
+        "criterio": "aproximado: ≤ 1% por partido, ≤ 0.1% en el total",
+        "coincide": "aproximado",
+        "peor_partido": 0.0085,
+        "total_mesa": 2714213,
+        "total_municipal": 2715678
+      },
+      "indigena": {
+        "coincide": null,
+        "criterio": "sin archivo municipal para contrastar"
+      }
+    },
+    "camara": {
+      "territorial": {
+        "fuente": "2018 Camara.xlsx",
+        "criterio": "exacto por partido",
+        "coincide": true
+      },
+      "indigena": {
+        "fuente": "2018_camara.dta.csv",
+        "criterio": "exacto en el total",
+        "coincide": true
+      },
+      "afro": {
+        "fuente": "2018_camara.dta.csv",
+        "criterio": "diferencia conocida (DI-EL9)",
+        "coincide": "diferencia conocida",
+        "total_mesa": 72042,
+        "total_municipal": 78387
+      }
+    }
+  },
+  "notas": [
+    "una fila por partido: votos de lista y de candidato juntos (DI-EL8)",
+    "ninguna fila se descarta: las 723 'duplicadas' de la Cámara son candidatos sin nombre",
+    "zona = localidad (DATA_INVENTORY §14.3); 90 = Corferias, 98 = cárceles",
+    "proporciones de partido: sobre votos_partidos"
+  ]
+}

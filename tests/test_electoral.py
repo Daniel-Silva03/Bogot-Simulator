@@ -176,6 +176,80 @@ def test_la_verificacion_acepta_solo_las_diferencias_conocidas():
               {"petro": 100, "duque": 90, "blanco": 6}, 2018, texto="blanco")
 
 
+# --- Congreso 2018 (DI-EL8, DI-EL9) -------------------------------------------
+
+def _csv_congreso(tmp, filas, corp="camara"):
+    cab = "NCircunscripcion,NDepto,NMpio,ZZ,PP,Npuesto,mesa,partido,candidato,votos"
+    (tmp / el.CONGRESO[corp]).write_text("\n".join([cab] + filas), encoding="utf-8")
+
+
+def test_el_congreso_filtra_bogota_y_tipifica_los_especiales():
+    tmp = Path(tempfile.mkdtemp())
+    try:
+        _csv_congreso(tmp, [
+            "TERRITORIAL DEPARTAMENTAL,BOGOTA D.C.,BOGOTA. D.C.,1,01,USAQUEN,1,PARTIDO ALIANZA VERDE,ANA PEREZ,10",
+            "TERRITORIAL DEPARTAMENTAL,BOGOTA D.C.,BOGOTA. D.C.,1,01,USAQUEN,1,PARTIDO ALIANZA VERDE,,4",
+            "TERRITORIAL DEPARTAMENTAL,BOGOTA D.C.,BOGOTA. D.C.,1,01,USAQUEN,1,,VOTOS EN BLANCO,3",
+            "TERRITORIAL DEPARTAMENTAL,ANTIOQUIA,MEDELLIN,1,01,X,1,PARTIDO ALIANZA VERDE,ANA,999",
+        ])
+        m = el.leer_congreso(tmp, "camara")
+        assert len(m) == 3 and m.votos.sum() == 17
+        assert set(m.tipo) == {"partido", "blanco"} and set(m.circunscripcion) == {"territorial"}
+        v, z = el.agregar_congreso(m, "camara", LOC)
+        verde = v[v.partido == "PARTIDO ALIANZA VERDE"].votos.iloc[0]
+        assert verde == 14, verde                        # lista y candidato juntos
+        assert z.votos_partidos.iloc[0] == 14 and z.votos_total.iloc[0] == 17
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_las_filas_identicas_se_suman_no_se_descartan():
+    """DI-EL8: dos candidatos sin nombre con 1 voto en la misma mesa son dos votos."""
+    tmp = Path(tempfile.mkdtemp())
+    try:
+        fila = "INDIGENAS,BOGOTA D.C.,BOGOTA. D.C.,1,01,USAQUEN,56,MOVIMIENTO ALTERNATIVO INDIGENA Y SOCIAL MAIS,,1"
+        _csv_congreso(tmp, [fila, fila])
+        v, _ = el.agregar_congreso(el.leer_congreso(tmp, "camara"), "camara", LOC)
+        assert v.votos.sum() == 2
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_una_circunscripcion_o_un_especial_desconocido_detiene_todo():
+    tmp = Path(tempfile.mkdtemp())
+    try:
+        _csv_congreso(tmp, ["INVENTADA,BOGOTA D.C.,BOGOTA. D.C.,1,01,X,1,PARTIDO X,A,1"])
+        falla_con(el.ElectoralError, el.leer_congreso, tmp, "camara", texto="INVENTADA")
+        _csv_congreso(tmp, ["NACIONAL,BOGOTA D.C.,BOGOTA. D.C.,1,01,X,1,,VOTOS RAROS,1"], corp="senado")
+        falla_con(el.ElectoralError, el.leer_congreso, tmp, "senado", texto="VOTOS RAROS")
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_un_nombre_truncado_se_empareja_con_el_completo():
+    a = {"PARTIDO FUERZA ALTERNATIVA REVOLUCIONARIA DEL COMU": 10, "PARTIDO X": 5}
+    b = {"PARTIDO FUERZA ALTERNATIVA REVOLUCIONARIA DEL COMUN": 10, "PARTIDO X": 5}
+    pares = el._cruzar_nombres(a, b)
+    assert pares["PARTIDO FUERZA ALTERNATIVA REVOLUCIONARIA DEL COMU"] == (10, 10) and len(pares) == 2
+    # un prefijo corto NO cuenta como el mismo partido
+    assert el._cruzar_nombres({"PARTIDO": 1}, {"PARTIDO LIBERAL": 1})["PARTIDO"] == (1, None)
+
+
+def test_congreso_real_verificado():
+    carpeta = os.environ.get("BSS_ELECTORAL_DIR") or r"C:\Users\User\Desktop\CNC_datos"
+    if not (Path(carpeta) / el.CONGRESO["camara"]).exists():
+        print("         (sin los archivos del Congreso en esta máquina: se omite)")
+        return
+    v, z, meta = el.construir_congreso(Path(carpeta))
+    ver = meta["verificacion"]
+    assert ver["camara"]["territorial"]["coincide"] is True and ver["camara"]["indigena"]["coincide"] is True
+    assert ver["camara"]["afro"]["coincide"] == "diferencia conocida"
+    assert ver["senado"]["nacional"]["coincide"] == "aproximado" and ver["senado"]["indigena"]["coincide"] is None
+    tot = z.groupby(["corporacion", "circunscripcion"]).votos_total.sum()
+    assert tot[("camara", "territorial")] == 2_653_552 and tot[("camara", "indigena")] == 74_176
+    assert z[z.cod_loc.notna()].groupby("corporacion").cod_loc.nunique().eq(20).all()
+
+
 # --- datos reales ------------------------------------------------------------
 
 def test_2022_real_cuadra_con_el_archivo_municipal():

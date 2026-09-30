@@ -1,0 +1,111 @@
+anio,corporacion,circunscripcion,zona,cod_loc,localidad,puestos,votos_total,mesas,votos_partidos
+2018,senado,indigena,1,1,Usaquén,35,3979,1027,725
+2018,senado,indigena,2,2,Chapinero,19,1131,362,288
+2018,senado,indigena,3,3,Santa Fe,14,1545,255,387
+2018,senado,indigena,4,4,San Cristóbal,40,6271,773,1074
+2018,senado,indigena,5,5,Usme,33,4844,621,915
+2018,senado,indigena,6,6,Tunjuelito,17,2847,436,472
+2018,senado,indigena,7,7,Bosa,47,8534,1131,1532
+2018,senado,indigena,8,8,Kennedy,74,12856,1816,2133
+2018,senado,indigena,9,9,Fontibón,27,4595,683,707
+2018,senado,indigena,10,10,Engativá,58,10906,1562,1500
+2018,senado,indigena,11,11,Suba,65,10751,1833,1782
+2018,senado,indigena,12,12,Barrios Unidos,21,1988,419,348
+2018,senado,indigena,13,13,Teusaquillo,26,1683,452,550
+2018,senado,indigena,14,14,Los Mártires,15,1176,253,213
+2018,senado,indigena,15,15,Antonio Nariño,15,1840,312,294
+2018,senado,indigena,16,16,Puente Aranda,30,3762,618,623
+2018,senado,indigena,17,17,La Candelaria,5,733,127,247
+2018,senado,indigena,18,18,Rafael Uribe Uribe,43,5437,735,906
+2018,senado,indigena,19,19,Ciudad Bolívar,48,8002,1123,1493
+2018,senado,indigena,20,20,Sumapaz,4,9,7,1
+2018,senado,indigena,90,,Puesto censo (Corferias),1,1888,357,410
+2018,senado,indigena,98,,Cárceles,4,29,5,8
+2018,senado,nacional,1,1,Usaquén,35,229166,1149,209935
+2018,senado,nacional,2,2,Chapinero,19,83851,474,78367
+2018,senado,nacional,3,3,Santa Fe,15,38377,265,32299
+2018,senado,nacional,4,4,San Cristóbal,40,121670,780,95897
+2018,senado,nacional,5,5,Usme,33,95192,635,74554
+2018,senado,nacional,6,6,Tunjuelito,17,71300,440,58775
+2018,senado,nacional,7,7,Bosa,47,177017,1142,138947
+2018,senado,nacional,8,8,Kennedy,74,329232,1832,272625
+2018,senado,nacional,9,9,Fontibón,27,135756,700,114775
+2018,senado,nacional,10,10,Engativá,58,307732,1587,259320
+2018,senado,nacional,11,11,Suba,65,375480,1921,326878
+2018,senado,nacional,12,12,Barrios Unidos,21,80426,438,71017
+2018,senado,nacional,13,13,Teusaquillo,26,93590,473,85733
+2018,senado,nacional,14,14,Los Mártires,15,39603,258,34036
+2018,senado,nacional,15,15,Antonio Nariño,15,53203,313,45163
+2018,senado,nacional,16,16,Puente Aranda,30,117030,631,100032
+2018,senado,nacional,17,17,La Candelaria,5,19588,130,16907
+2018,senado,nacional,18,18,Rafael Uribe Uribe,43,121610,746,97687
+2018,senado,nacional,19,19,Ciudad Bolívar,48,169225,1136,132640
+2018,senado,nacional,20,20,Sumapaz,4,1167,11,1043
+2018,senado,nacional,90,,Puesto censo (Corferias),1,53474,394,44737
+2018,senado,nacional,98,,Cárceles,4,524,6,429
+2018,camara,afro,1,1,Usaquén,35,3931,1031,1052
+2018,camara,afro,2,2,Chapinero,19,1348,398,503
+2018,camara,afro,3,3,Santa Fe,14,1435,258,645
+2018,camara,afro,4,4,San Cristóbal,40,4037,753,870
+2018,camara,afro,5,5,Usme,33,3027,593,737
+2018,camara,afro,6,6,Tunjuelito,17,2013,416,440
+2018,camara,afro,7,7,Bosa,47,5268,1056,1134
+2018,camara,afro,8,8,Kennedy,74,9543,1762,2253
+2018,camara,afro,9,9,Fontibón,27,3656,660,744
+2018,camara,afro,10,10,Engativá,58,8314,1528,1906
+2018,camara,afro,11,11,Suba,65,9208,1820,2121
+2018,camara,afro,12,12,Barrios Unidos,21,1848,420,480
+2018,camara,afro,13,13,Teusaquillo,26,1961,455,699
+2018,camara,afro,14,14,Los Mártires,15,1005,248,300
+2018,camara,afro,15,15,Antonio Nariño,15,1530,299,360
+2018,camara,afro,16,16,Puente Aranda,30,3084,599,753
+2018,camara,afro,17,17,La Candelaria,5,656,126,321
+2018,camara,afro,18,18,Rafael Uribe Uribe,43,3634,707,771
+2018,camara,afro,19,19,Ciudad Bolívar,48,5260,1077,1265
+2018,camara,afro,20,20,Sumapaz,4,10,6,7
+2018,camara,afro,90,,Puesto censo (Corferias),1,1252,337,294
+2018,camara,afro,98,,Cárceles,4,22,6,4
+2018,camara,indigena,1,1,Usaquén,35,3529,1011,814
+2018,camara,indigena,2,2,Chapinero,18,1030,362,259
+2018,camara,indigena,3,3,Santa Fe,14,1205,255,431
+2018,camara,indigena,4,4,San Cristóbal,40,4559,766,1370
+2018,camara,indigena,5,5,Usme,33,3411,614,1035
+2018,camara,indigena,6,6,Tunjuelito,17,2227,428,578
+2018,camara,indigena,7,7,Bosa,47,6494,1112,1914
+2018,camara,indigena,8,8,Kennedy,74,9780,1784,2513
+2018,camara,indigena,9,9,Fontibón,27,3624,680,803
+2018,camara,indigena,10,10,Engativá,58,8593,1554,1803
+2018,camara,indigena,11,11,Suba,65,8694,1825,2079
+2018,camara,indigena,12,12,Barrios Unidos,21,1624,419,350
+2018,camara,indigena,13,13,Teusaquillo,26,1647,451,504
+2018,camara,indigena,14,14,Los Mártires,15,1016,252,289
+2018,camara,indigena,15,15,Antonio Nariño,15,1326,301,352
+2018,camara,indigena,16,16,Puente Aranda,30,3000,613,701
+2018,camara,indigena,17,17,La Candelaria,5,592,123,259
+2018,camara,indigena,18,18,Rafael Uribe Uribe,43,4079,732,1079
+2018,camara,indigena,19,19,Ciudad Bolívar,48,6204,1108,1941
+2018,camara,indigena,20,20,Sumapaz,3,12,5,5
+2018,camara,indigena,90,,Puesto censo (Corferias),1,1509,346,454
+2018,camara,indigena,98,,Cárceles,4,21,6,9
+2018,camara,territorial,1,1,Usaquén,35,224956,1149,199950
+2018,camara,territorial,2,2,Chapinero,19,82390,474,75043
+2018,camara,territorial,3,3,Santa Fe,15,37115,265,30488
+2018,camara,territorial,4,4,San Cristóbal,40,119080,780,91999
+2018,camara,territorial,5,5,Usme,33,93009,635,72853
+2018,camara,territorial,6,6,Tunjuelito,17,69755,440,56249
+2018,camara,territorial,7,7,Bosa,47,173220,1142,133051
+2018,camara,territorial,8,8,Kennedy,74,321521,1832,258362
+2018,camara,territorial,9,9,Fontibón,27,132779,700,108258
+2018,camara,territorial,10,10,Engativá,58,300665,1587,244337
+2018,camara,territorial,11,11,Suba,65,367029,1921,309441
+2018,camara,territorial,12,12,Barrios Unidos,21,78711,438,67326
+2018,camara,territorial,13,13,Teusaquillo,26,91167,473,80171
+2018,camara,territorial,14,14,Los Mártires,15,38556,258,32691
+2018,camara,territorial,15,15,Antonio Nariño,15,52039,313,42992
+2018,camara,territorial,16,16,Puente Aranda,30,114391,631,94890
+2018,camara,territorial,17,17,La Candelaria,5,19015,130,16043
+2018,camara,territorial,18,18,Rafael Uribe Uribe,43,118863,746,93255
+2018,camara,territorial,19,19,Ciudad Bolívar,48,165076,1137,127996
+2018,camara,territorial,20,20,Sumapaz,4,1141,11,1032
+2018,camara,territorial,90,,Puesto censo (Corferias),1,52571,394,42633
+2018,camara,territorial,98,,Cárceles,4,503,6,409
