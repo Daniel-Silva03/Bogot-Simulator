@@ -177,8 +177,11 @@ medias por localidad de la propia EPC es de 0,16 (mediana, dos mitades)**; con 8
 por localidad y una sola ola, casi no hay geografía que reproducir, tampoco en el mapa de
 las preguntas del catálogo. Consecuencia para la página: preguntas nuevas por grupos, mapa
 solo para el catálogo y con su margen muy visible; la mejora del mapa es de datos (juntar
-olas), no de modelo. **Siguiente, a decidir con Daniel:** la reformulación sugerida, o juntar
-olas de la EPC para el mapa.
+olas), no de modelo. **Siguiente, elegido por Daniel:** la reformulación sugerida.
+**Reformulación (30/09):** pre-registrada en `REFORMULACION_SPECIFICATION.md` (24 preguntas de
+prueba con su alcance esperado: 8 del catálogo dichas de otra forma, 10 nuevas, 6 fuera de
+alcance) y con código (`src/consulta/reformular.py`, 7 pruebas con modelo simulado).
+**Siguiente:** las 24 llamadas reales. Pendiente para después: juntar olas de la EPC para el mapa.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
