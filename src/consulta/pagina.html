@@ -677,7 +677,7 @@ function mostrar(r){
   if (r.tipo === 'catalogo') {
     const n = r.escala.length, c = clasificar(r);
     el.innerHTML = `<div class="asistente"><span class="avatar" aria-hidden="true"></span><span><b>Bogotá Sintética</b> · Consulté a
-        <span class="num">${fmt(20000)}</span> personas sintéticas. En <span class="num">${c.arriba.length}</span> localidades la respuesta
+        <span class="num">${fmt(r.consultados)}</span> personas sintéticas${r.anios.length === 1 ? ` (las que heredan a alguien encuestado en ${r.anios[0]})` : ''}. En <span class="num">${c.arriba.length}</span> localidades la respuesta
         queda por encima de la ciudad y en <span class="num">${c.abajo.length}</span> por debajo, con su margen de error.</span></div>
       <span class="insignia ins-cat">Dato medido · EPC ${r.anios.length > 1 ? r.anios[0] + '–' + r.anios[r.anios.length-1] : r.anios[0]}</span>
       <h3>${esc(r.pregunta)}</h3>${banda(r)}
@@ -710,7 +710,7 @@ function mostrar(r){
       <p class="nota">${esc(r.justificacion || '')}</p>`;
     $('#nivel').addEventListener('input', e => { const v = +e.target.value; $('#nivelTxt').innerHTML = `${esc(nivelTxt(v))} <small>${f1(v)} de 5</small>`; });
     el.insertAdjacentHTML('afterbegin', `<div class="asistente"><span class="avatar" aria-hidden="true"></span><span><b>Bogotá Sintética</b> · Construí un puente con
-      <span class="num">${r.puente.length}</span> preguntas medidas y consulté a <span class="num">${fmt(20000)}</span> personas sintéticas. Esto no se dibuja por localidad.</span></div>`);
+      <span class="num">${r.puente.length}</span> preguntas medidas y consulté a <span class="num">${fmt(r.consultados)}</span> personas sintéticas. Esto no se dibuja por localidad.</span></div>`);
   }
   el.querySelectorAll('.filtro').forEach(b => b.addEventListener('click', () => {
     el.querySelectorAll('.filtro').forEach(x => x.setAttribute('aria-pressed', x === b));

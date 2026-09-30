@@ -55,11 +55,21 @@ DI-CO7. **En una pregunta nueva, cada pregunta del puente se estandariza dentro 
 
 DI-CO8. **El prompt de la reformulación no cambia** (sigue diciendo «EPC 2023»): es el
     que se validó 24 de 24, y el catálogo que ve el modelo es el mismo (102 preguntas).
+
+DI-CO9. **La respuesta dice a cuántas personas sintéticas consultó**: las que tienen
+    donante (Sumapaz no) y, en una pregunta del catálogo, cuyo donante es de un año de
+    esa pregunta. Hecho, en la prueba con el modelo real (30/09): la página decía
+    siempre «20.000», también en una pregunta solo de 2023, donde responden 6.492.
+
+DI-CO10. **Las etiquetas se muestran sin el número del código** («4. Alta» → «Alta»).
+    Algunas etiquetas de la EPC lo traen; en la página se leía «4. alta o 5. muy
+    alta». Solo cambia lo que se muestra: el catálogo y lo que ve el modelo no cambian.
 """
 
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Optional
@@ -105,6 +115,11 @@ def _grupos(ag: pd.DataFrame) -> dict[str, pd.Series]:
     edad = ag.edad_tramo.map(dict(enumerate(GRUPOS["edad"]["orden"])))
     sexo = ag.sexo.map({"F": "Mujeres", "M": "Hombres"})
     return {"estrato": est, "edad": edad, "sexo": sexo}                          # DI-CO5
+
+
+def _etq(texto: str) -> str:
+    """DI-CO10."""
+    return re.sub(r"^\s*\d+\s*[.)-]\s*", "", str(texto)).strip()
 
 
 def cargar_donantes() -> pd.DataFrame:
@@ -182,7 +197,7 @@ class Motor:
         if r["alcance"] == "catalogo":
             f = self.catalogo[r["codigo"]]
             r["pregunta_catalogo"] = f["pregunta"].strip()
-            r["escala"] = [f["etiquetas"][str(k)] for k in f["escala"]]
+            r["escala"] = [_etq(f["etiquetas"][str(k)]) for k in f["escala"]]
         return r
 
     # ---------------------------------------------------------------- paso 2a
@@ -233,11 +248,13 @@ class Motor:
                               "alto": round(_wmean(np.isin(x[(e == o) & ok], alto).astype(float), self.peso[(e == o) & ok]), 3)}
                              for o in GRUPOS[gname]["orden"] if ((e == o) & ok).any()]
         return {"tipo": "catalogo", "suposicion": True, "aviso": AVISO, "codigo": codigo,
-                "pregunta": f["pregunta"].strip(), "escala": [f["etiquetas"][str(c)] for c in esc],
+                "pregunta": f["pregunta"].strip(), "escala": [_etq(f["etiquetas"][str(c)]) for c in esc],
+                "consultados": int(cubre.sum()),                                    # DI-CO9
                 "ciudad": {"media": round(_wmean(x[ok], self.peso[ok]), 3), "distribucion": [round(d, 4) for d in dist],
                            "alto": round(sum(d for c, d in zip(esc, dist) if c in alto), 4),
                            "bajo": round(sum(d for c, d in zip(esc, dist) if c in bajo), 4),
-                           "etiqueta_alto": f"{f['etiquetas'][str(esc[-2])]} o {f['etiquetas'][str(esc[-1])].lower()}" if k >= 4 else f["etiquetas"][str(esc[-1])],
+                           "etiqueta_alto": (f"{_etq(f['etiquetas'][str(esc[-2])])} o {_etq(f['etiquetas'][str(esc[-1])]).lower()}"
+                                             if k >= 4 else _etq(f["etiquetas"][str(esc[-1])])),
                            "respondieron": round(float(ok.sum() / cubre.sum()), 4)},
                 "localidades": por_loc, "grupos": grupos, "anios": anios,
                 "encuestados_mediana_localidad": n_loc,
@@ -265,6 +282,7 @@ class Motor:
                              for o in GRUPOS[gname]["orden"] if (e == o).any()]
         puente = [{**p, "pregunta": self.catalogo[p["codigo"]]["pregunta"].strip()} for p in r["preguntas"]]
         return {"tipo": "nueva", "suposicion": True, "aviso": AVISO, "pregunta": pregunta.strip(), "escala": escala,
+                "consultados": len(self.agentes),                                   # DI-CO9
                 "nivel_propuesto": round(r["nivel"], 2), "grupos": grupos, "puente": puente,
                 "justificacion": r["justificacion"],
                 "sin_mapa": ("Para preguntas nuevas el simulador no dibuja localidades: en las pruebas con preguntas "

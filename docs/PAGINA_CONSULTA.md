@@ -214,7 +214,9 @@ localidad». ~~Sigue sin probarse con el modelo real.~~
 - «¿Quién va a ganar las próximas elecciones?» → fuera de alcance (predicción electoral), con una
   alternativa de opinión.
 
-**Detalles vistos, sin arreglar todavía:**
+**Detalles vistos** *(1 y 2 arreglados el 30/09, DI-CO9 y DI-CO10: la frase dice cuántos
+respondieron —19.000 en una pregunta de tres años, 6.492 en `VS18`, «las que heredan a alguien
+encuestado en 2023»— y las etiquetas salen sin número; el 3 queda para decidir)*:
 1. La frase «Consulté a 20.000 personas sintéticas» sale igual en una pregunta que solo tiene
    2023, donde responden solo los agentes con donante de 2023 (~un tercio).
 2. Algunas etiquetas traen el número del código («4. alta o 5. muy alta»).

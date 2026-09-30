@@ -120,6 +120,15 @@ def test_el_puente_estandariza_cada_pregunta_dentro_de_su_anio():
         assert abs(np.sum(z[m] * w[m]) / np.sum(w[m])) < 0.05
 
 
+def test_dice_a_cuantos_consulto_y_sin_numeros_en_las_etiquetas():
+    """DI-CO9 y DI-CO10: VS18 solo tiene 2023 y sus etiquetas traen «4. Alta»."""
+    tres, solo = M.responder_catalogo("VS8"), M.responder_catalogo("VS18")
+    assert tres["consultados"] == len(M.agentes) == 19_000
+    assert 5_000 < solo["consultados"] < 8_000
+    assert not any(e[0].isdigit() for e in solo["escala"]) and not solo["ciudad"]["etiqueta_alto"][0].isdigit()
+    assert mo._etq("4. Alta") == "Alta" and mo._etq("Muy alta") == "Muy alta" and mo._etq("0. Sin estrato") == "Sin estrato"
+
+
 def test_sin_grupo_de_educacion():
     """DI-CO5: la población 2022-2024 no empareja por educación."""
     assert "educacion" not in mo.GRUPOS and "educacion" not in M.responder_catalogo("VS8")["grupos"]
