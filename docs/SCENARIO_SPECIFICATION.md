@@ -1,9 +1,9 @@
 # SCENARIO SPECIFICATION — el motor de escenarios (Fase 8)
 
 Proyecto: Bogotá Social Simulator
-Versión: 1.0
-Fecha: 17 de septiembre de 2026
-Código: `src/scenarios/` (`especificacion.py`, `motor.py`, `informe.py`) · `tests/test_scenarios.py`, 13 pruebas
+Versión: 1.1
+Fecha: 17 de septiembre de 2026 · v1.1: 30 de septiembre (DI-E5)
+Código: `src/scenarios/` (`especificacion.py`, `motor.py`, `informe.py`) · `tests/test_scenarios.py`, 14 pruebas
 Escenarios de ejemplo: `config/escenarios/`
 
 ---
@@ -43,6 +43,8 @@ periodos:
 **La incertidumbre es obligatoria** (DI-E1). Puede ser 0, pero hay que escribirlo. Un escenario sin incertidumbre declarada produce una línea, y una línea se lee como predicción — el riesgo R05, que el proyecto tiene marcado como elevado. Que la decisión quede en el archivo y no en el olvido.
 
 **El cambio es relativo al periodo anterior** por defecto (DI-E2): un escenario es una historia sobre lo que pasa, no una lista de destinos. `valor:` absoluto existe para replicar una serie observada.
+
+**La población se lee en `.csv` o `.parquet`** (DI-E5, 30/09): las poblaciones reproducibles (DI-M2) solo existen en `.parquet`, y hasta el 30/09 el motor no podía leerlas.
 
 **La grilla sale de la población, no del archivo** (DI-E4). Es una propiedad de la variable medida, y dejar que un YAML la declare invita a inventarse una escala que los datos no tienen.
 

@@ -38,6 +38,13 @@ DI-E4. **La grilla sale de la población, no del archivo.** Es una propiedad
     de la variable medida, y dejar que un YAML la declare invita a
     inventarse una escala que los datos no tienen. Se puede sobrescribir,
     pero entonces se verifica que la población quepa en ella.
+
+DI-E5. **La población se lee en .csv o en .parquet** (30/09/2026). `build_agents`
+    escribe .parquet donde hay pyarrow, y las poblaciones ECP regeneradas el
+    29/09 (DI-M2) solo existen así. Hecho: el motor leía solo .csv, así que
+    no podía usar ninguna población reproducible; las pruebas no lo veían
+    porque escriben su población en .csv. El formato lo dice la extensión
+    de la ruta declarada en el YAML.
 """
 
 from __future__ import annotations
@@ -160,7 +167,9 @@ def cargar(ruta: str | Path, raiz: Optional[Path] = None) -> Escenario:
     if not rp.exists():
         raise EscenarioError(f"No existe la población {rp}.")
     col = d.get("columna", "opinion_t0")
-    tabla = pd.read_csv(rp)
+    # DI-E5: `build_agents` escribe .parquet donde hay pyarrow (las poblaciones
+    # regeneradas el 29/09 solo existen así); leer solo .csv las dejaba fuera.
+    tabla = pd.read_parquet(rp) if rp.suffix == ".parquet" else pd.read_csv(rp)
     if col not in tabla.columns:
         raise EscenarioError(f"La población {rp.name} no tiene la columna '{col}'.")
     poblacion = tabla[col].to_numpy(float)

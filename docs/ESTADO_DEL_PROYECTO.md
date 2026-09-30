@@ -1,7 +1,7 @@
 # ESTADO DEL PROYECTO — punto de partida para una conversación nueva
 
 Proyecto: Bogotá Social Simulator
-Fecha de corte: **29 de septiembre de 2026** (tarde: Experimento 9 cerrado)
+Fecha de corte: **30 de septiembre de 2026** (geografía electoral cerrada; frente nuevo: escenarios con preguntas reales)
 Para qué sirve: leer **este documento solo** basta para retomar. Los demás se
 leen cuando el trabajo los toque, no antes.
 
@@ -14,7 +14,8 @@ leen cuando el trabajo los toque, no antes.
 - La **capa visual** es el frente principal desde el 18/09 (decisión del jefe de Daniel). Hitos 1 y 2 completos; la página está en GitHub.
 - **A08 (escalar a 100.000 agentes) quedó sin argumento visual** el 25/09: más agentes dibujarían nítida la composición demográfica, y la composición no reproduce la geografía real de la opinión.
 - **La IA generativa como fuente de opinión se descartó** con datos (Experimento 8). El **Experimento 9** —la IA como proponente de escenarios, inspirado en MiroFish— **se corrió y también falló** (29/09): el LLM no le gana a suponer que nada cambia, acierta donde recuerda, y el dossier no ayuda. **Los números de un escenario los sigue escribiendo una persona.**
-- Lo que sigue, en §6.
+- La **geografía electoral** (29–30/09) dio la primera geografía real dentro de la ciudad: hay un resto territorial estable, con dos polos, que la composición no ve. Cerrada; está en el tablero.
+- **Frente activo desde el 30/09: escenarios con preguntas reales** de proyectos del CNC. Lo que sigue, en §6.
 
 ---
 
@@ -144,7 +145,26 @@ capa de opinión es composición, no medición (DI-V52, paso 0b). Las capas de
 
 ## 6. Qué sigue
 
-**Frente propuesto: geografía electoral de Bogotá.** El 29/09 el CNC entregó
+**Frente activo (30/09): escenarios con preguntas reales.** Las piezas ya funcionan de
+punta a punta (población, tablero, motor); lo que falta es que el motor responda una
+pregunta de un proyecto real del CNC y que el informe le sirva a quien pregunta. Hecho
+el 30/09, antes de empezar:
+- `tests/test_scenarios.py` fallaba en esta máquina porque al `venv` le faltaba
+  `pyyaml` (estaba en `requirements.txt`; se instaló). Pasan las 14.
+- **El motor solo leía `.csv`** y las poblaciones reproducibles (DI-M2) solo existen en
+  `.parquet`: no podía usar ninguna. Corregido (DI-E5 en `especificacion.py`, con prueba).
+
+Lo que sigue en este frente:
+1. Daniel trae una o dos preguntas de proyectos del CNC: **solo el texto y el
+   contexto**, nunca respuestas de personas (R10).
+2. Ver si alguna fuente pública (ECP, EPC) mide esa pregunta. La población lleva una
+   sola variable (`opinion_t0`: confianza institucional en la ECP, gestión del alcalde
+   en la EPC 2014); otra variable es otra población, con `build_agents` y el mismo
+   donante.
+3. Escribir el escenario (los números los pone una persona, no el LLM: Exp. 9),
+   correrlo y revisar el informe con quien hizo la pregunta.
+
+**Geografía electoral de Bogotá: cerrada el 30/09.** El 29/09 el CNC entregó
 resultados electorales por mesa (presidente 2014, 2018 y 2022; Senado y Cámara 2018)
 y por municipio, sin datos de personas. **D16** los saca de R10 (se pueden leer con un
 LLM; viven fuera del repo, en `BSS_ELECTORAL_DIR`); inventario en `DATA_INVENTORY.md`
@@ -203,8 +223,10 @@ EPC caía al DEFF prestado en todas las olas sin avisar; y `preparar_mapa` solo 
   (`src/utils/medir_deff_epc.py`) y se versionan: las dos máquinas publican la misma
   serie. Serie y mapa regenerados. También se regeneraron y versionan las transiciones
   y la validación del proxy (§4.bis): el proxy infla el DEFF un 21 %, no un 94 %, y se
-  equivoca lo mismo que el prestado; la decisión (prestado) se mantiene con esa razón. Gana a «escenarios con preguntas reales» como
-siguiente frente, porque resuelve un vacío de datos que ningún otro frente resuelve.
+  equivoca lo mismo que el prestado; la decisión (prestado) se mantiene con esa razón. Ganó a «escenarios con preguntas reales» como
+siguiente frente, porque resolvía un vacío de datos que ningún otro frente resolvía. *(Cerrado el
+30/09: lo que dio es referencia territorial y evidencia para DI-B10; no acerca más el
+motor a una pregunta real, que es lo que falta.)*
 
 **Experimento 9: cerrado.** Se cerró el 29/09
 (`EXPERIMENT_9_RESULTS.md`): dossiers, código con 52 pruebas sin red, enmiendas
@@ -218,7 +240,8 @@ siguiente frente, porque resuelve un vacío de datos que ningún otro frente res
 
 | | por qué |
 |---|---|
-| **Escenarios con preguntas reales** | Los dos escenarios que existen son de ejemplo. Ninguno salió de una pregunta de un proyecto del CNC; es lo que haría útil el motor |
+| **Reabrir DI-B10** (donante con localidad) | La geografía electoral la respalda (resto territorial estable, dos polos). Decisión de proyecto, de Daniel o su jefe |
+| **Pre-registrar los dos polos** | Sobre una elección que no se haya mirado (`EJE_PARTIDOS_RESULTS.md` §6.4) |
 | **Simulación sobre la serie** | Poner una corrida del modelo junto a la serie medida en el tablero |
 | **Hito 3 — bajo la localidad** | UPZ; ahora con la advertencia del paso 0b: sin donante con localidad, no hay geografía de opinión que bajar |
 

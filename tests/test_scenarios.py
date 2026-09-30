@@ -1,8 +1,8 @@
 """
 tests/test_scenarios.py
 
-Pruebas del motor de escenarios (DI-E1..DI-E4, DI-M1s..DI-M4s).
-Se ejecuta directo:  python3 tests/test_scenarios.py
+Pruebas del motor de escenarios (DI-E1..DI-E5, DI-M1s..DI-M4s).
+Se ejecuta directo:  python tests/test_scenarios.py
 """
 
 import sys
@@ -87,6 +87,16 @@ periodos:
             assert "incertidumbre" in str(e) and "predicción" in str(e)
         else:
             raise AssertionError("debería exigir incertidumbre")
+
+
+def test_la_poblacion_puede_venir_en_parquet():
+    """DI-E5: las poblaciones reproducibles (DI-M2) se escriben en .parquet."""
+    with tempfile.TemporaryDirectory() as tmp:
+        valores = np.repeat([1., 2, 3, 4, 5], 100)
+        p = Path(tmp) / "pob.parquet"
+        pd.DataFrame({"opinion_t0": valores}).to_parquet(p, index=False)
+        esc = cargar(escribir(BASE.format(pob=str(p), n=-0.1, iu=0.02), tmp), raiz=Path("/"))
+        assert len(esc.poblacion) == 500 and list(esc.grilla) == [1., 2, 3, 4, 5]
 
 
 def test_cambio_y_valor_son_excluyentes():

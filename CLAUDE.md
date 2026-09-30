@@ -76,18 +76,24 @@ resultó falso no se borra:** se anota la corrección al lado (§45).
 | `src/experiments/experimento9.py` | Experimento 9: LLM como proponente de escenarios (cerrado) |
 | `docs/` | especificaciones, resultados y `ESTADO_DEL_PROYECTO.md` |
 
-## Frente activo: geografía electoral de Bogotá (propuesto el 29/09)
+## Frente activo: escenarios con preguntas reales (desde el 30/09)
 
-El Experimento 9 se cerró el 29/09 (`docs/EXPERIMENT_9_RESULTS.md`): el LLM no fija
-las cifras de un escenario. Lo siguiente es la fuente nueva de D16: **resultados
-electorales por mesa, con Bogotá dividida en 22 zonas** (2014, 2018, 2022).
+El motor de escenarios (Fase 8, `docs/SCENARIO_SPECIFICATION.md`) funciona, pero sus
+dos escenarios son de ejemplo. El frente es **correr escenarios que respondan preguntas
+de proyectos reales del CNC** y ver si el informe le sirve a quien pregunta.
 
-- **Verificado (29/09):** las zonas 1–20 son las localidades, con el código del DANE
-  (`docs/DATA_INVENTORY.md` §14.3). La zona 90 (Corferias, 7,6 % del electorado) no es
-  una localidad, y la zona es dónde se está inscrito, no dónde se vive.
-- El voto es otro constructo: sirve como **referencia territorial**, no reemplaza la
-  confianza institucional ni la evaluación del alcalde.
-- El frente alternativo, sin elegir: escenarios con preguntas reales de proyectos del CNC.
+- **De un proyecto del CNC solo se usa la pregunta y su contexto**, nunca respuestas
+  de personas (eso es R10). Si una pregunta trae datos adjuntos, detente y pregunta.
+- **Una pregunta solo se puede simular si la mide una fuente pública** (ECP o EPC):
+  la población lleva una sola variable de opinión (`opinion_t0`); otra variable es
+  otra población, construida con `build_agents` desde el mismo donante.
+- **Los números del escenario los escribe una persona** (Experimento 9): el LLM puede
+  redactar la descripción, nunca fijar nivel ni dispersión.
+- El motor lee poblaciones en `.parquet` desde el 30/09 (DI-E5).
+
+**Geografía electoral: cerrada el 30/09** (`docs/GEOGRAFIA_ELECTORAL_RESULTS.md`,
+`docs/EJE_PARTIDOS_RESULTS.md`, capa Voto del tablero). Queda como referencia
+territorial y como evidencia para reabrir DI-B10, decisión de proyecto sin tomar.
 
 ## Git
 
