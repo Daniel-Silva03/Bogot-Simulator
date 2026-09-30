@@ -172,7 +172,8 @@ proyecto es de Bogotá, no del país). Se reformuló en una que sí puede fallar
 Abelardo de lo que dice su estrato, primera vuelta 2026?** Pre-registrada en
 `POLOS_2026_SPECIFICATION.md`, con la predicción localidad por localidad (§4), antes
 de descargar ni mirar nada de 2026. Es también la prueba pendiente de los dos polos.
-Siguen: código y mundos simulados; descarga de los escrutinios por mesa de la
+Código y mundos simulados listos el 30/09 (`src/experiments/polos_2026.py`, 15
+pruebas; A 94 % con polo, 0 % sin polo; §8.1). Siguen: descarga de los escrutinios por mesa de la
 Registraduría (con permiso, fuera del repo); corrida y resultados.
 
 **Geografía electoral de Bogotá: cerrada el 30/09.** El 29/09 el CNC entregó

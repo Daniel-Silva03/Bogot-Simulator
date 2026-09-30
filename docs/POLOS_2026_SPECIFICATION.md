@@ -5,7 +5,7 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 30 de septiembre de 2026
-Estado: **sin código y sin ningún dato de 2026 abierto.** Nadie en este proyecto ha descargado ni mirado los resultados de 2026 por mesa o por localidad
+Estado: **código probado en mundos simulados (§8.1); sin ningún dato de 2026 abierto.** Nadie en este proyecto ha descargado ni mirado los resultados de 2026 por mesa o por localidad
 Datos: `data/processed/geografia_electoral/resultado.json` (residuos 2014–2022, ya publicados), receptor de Multipropósito 2021 y, después de este documento, los escrutinios por mesa de la Registraduría (primera vuelta, 31 de mayo de 2026)
 Origen: la primera pregunta real del frente de escenarios (el jefe de Daniel, 30/09) y `EJE_PARTIDOS_RESULTS.md` §6.4 (probar los dos polos en una elección no mirada)
 
@@ -212,6 +212,34 @@ Abelardo **inventados**; 200 semillas por mundo:
 El tamaño del ruido de los mundos se fija con el de los residuos reales de 2014–2022.
 **Si el método no pasa estas pruebas, no se abre 2026.** Los porcentajes que salgan se
 anotan aquí, con fecha, antes de la corrida real.
+
+### 8.1 Resultado de la verificación (30/09/2026, antes de descargar 2026)
+
+`tests/test_polos_2026.py`, 15 pruebas. Composición real, polos reales, base del estrato
+tomada del ajuste de M1 de Gutiérrez 2022 y ruido del tamaño de los residuos reales de la
+derecha; en el mundo «con polo» el resto de Abelardo se parece al polo con peso 0,85 (lo
+que se parecen entre sí los candidatos de derecha, §3.2). 200 semillas por mundo:
+
+| Mundo simulado | Lecturas | P2 se cumple | |
+|---|---|---|---|
+| Con polo | **A 94 %**, B 5,5 %, intermedio 0,5 % | 99 % | pasa |
+| Sin polo | **C 94 %**, intermedio 5 %, B 1 %, **A 0 %** | — | pasa |
+| Espejo de la izquierda | — | **0,5 %** | pasa |
+| La señal es la inscripción | **intermedio 100 %** | — | pasa |
+
+Las pruebas verifican además que el polo calculado es exactamente la tabla de §4
+(DI-P26-3), que Abelardo se busca por nombre y el análisis se detiene si no aparece o
+aparece dos veces, y que hoy, sin tabla de 2026, el script falla sin calcular nada.
+
+**Dos cosas que la verificación enseña, sin cambiar la regla:**
+- **P2 tiene más potencia de la que §6 suponía**: en estos mundos separa polo de espejo
+  casi siempre (99 % contra 0,5 %). Sigue sin decidir, como quedó escrito.
+- **La lectura A es exigente cuando el polo es moderado.** Descriptivo, fuera de las
+  pruebas: con peso 0,7 sale A el 52 % y B el 41 %; con 0,6, A el 32 %; con 0,5, A el
+  13 %. Lo que la frena es P3 (ΔR²_LOO ≥ 0,05): con 19 localidades y un estrato que ya
+  explica mucho, un resto que se parece al polo pero no mucho no alcanza a mejorar la
+  predicción fuera de muestra. **Un resultado B no querrá decir que el polo no está**;
+  querrá decir que no alcanza para mejorar lo que ya dice el estrato.
 
 ---
 
