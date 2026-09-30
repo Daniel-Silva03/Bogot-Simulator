@@ -476,7 +476,7 @@ footer b{font-weight:500; color:var(--ink-2)}
 <footer>
   <p><b>Geometría:</b> Unidad Administrativa Especial de Catastro Distrital, capa <code>Localidad</code>, simplificada a ~70 m para dibujo.</p>
   <p><b>Población:</b> 1.000 agentes sintéticos, versión <code>v0.5-dim2</code> (reproducible en cualquier máquina desde DI-M2); marginal territorial de población de 18 años o más.</p>
-  <p><b>Voto:</b> resultados de la Registraduría Nacional, primera vuelta presidencial de 2014, 2018 y 2022, mesa a mesa, sumados por zona electoral (zonas 1–20 = localidades, verificado). Proporciones sobre los votos por candidato. «Lo que el estrato no explica» es el residuo del análisis pre-registrado en <code>docs/GEOGRAFIA_ELECTORAL_SPECIFICATION.md</code>, con el estrato medio de Multipropósito 2021. Senado 2018: Lista de la Decencia y Centro Democrático, proporción sobre votos por partido y residuo de <code>docs/EJE_PARTIDOS_SPECIFICATION.md</code>. La lectura de dos polos es descriptiva (<code>docs/EJE_PARTIDOS_RESULTS.md</code> §4).</p>
+  <p><b>Voto:</b> resultados de la Registraduría Nacional, primera vuelta presidencial de 2014, 2018 y 2022, mesa a mesa, sumados por zona electoral (zonas 1–20 = localidades, verificado). Proporciones sobre los votos por candidato. «Lo que el estrato no explica» es el residuo del análisis pre-registrado en <code>docs/GEOGRAFIA_ELECTORAL_SPECIFICATION.md</code>, con el estrato medio de Multipropósito 2021. Senado 2018: Lista de la Decencia y Centro Democrático, proporción sobre votos por partido y residuo de <code>docs/EJE_PARTIDOS_SPECIFICATION.md</code>. La lectura de dos polos es descriptiva (<code>docs/EJE_PARTIDOS_RESULTS.md</code> §4); su prueba pre-registrada en la primera vuelta de 2026 dio lectura B y no la confirmó (<code>docs/POLOS_2026_RESULTS.md</code>).</p>
   <p><b>Advertencia de método:</b> la posición de cada punto dentro de su localidad es aleatoria. El modelo no tiene geografía por debajo de la localidad; los puntos no son domicilios.</p>
   <p><b>Navegación:</b> se arrastra para mover y se acerca con Ctrl + rueda, con el pellizco del trackpad, con doble clic o con los botones. Al acercar aparecen las vías secundarias y los parques pequeños. La barra de escala se recalcula sola; la geometría está simplificada a resolución de pantalla, así que sirve para ubicarse, no para medir.</p>
   <p><b>Capa base urbana:</b> vías arteriales y áreas verdes de OpenStreetMap (© colaboradores de OpenStreetMap, <a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>), extracto del 21 de septiembre de 2026, simplificado a ~22 m para dibujo. Es orientación visual: <b>ninguna cifra de esta página se calcula con ella</b>. El recorte es regional, no político, así que dentro del encuadre se ven vías y parques de municipios vecinos; lo único que delimita el Distrito son los polígonos de localidad.</p>
@@ -614,9 +614,11 @@ const pp = v => (v>=0?'+':'−') + f1(Math.abs(100*v)) + ' pp';
 const poloDe = k => !V ? null : V.polos.izquierda.includes(k) ? 'izquierda'
                   : V.polos.derecha.includes(k) ? 'derecha' : null;
 const etiquetaPolo = k => { const x = candDe(k); return x.tipo==='partido' ? x.nombre : `${x.boton} ${x.anio}`; };
-const nombrePolo = p => `Su resto territorial pertenece al polo de <b>${p}</b>, que tiene geografía propia
-  (lectura descriptiva, no pre-registrada).`;
+const nombrePolo = p => `Su resto territorial pertenece al polo de <b>${p}</b>, que tuvo geografía propia
+  en 2014–2022 (lectura descriptiva, no pre-registrada${V.polos.prueba_2026 ? '; la prueba de 2026 no la confirmó' : ''}).`;
 const pc = v => f1(100*v) + ' %';
+/* DI-V60: tres decimales para una cifra que se compara con un umbral de dos: redondeada a dos, una que no lo alcanza parecería alcanzarlo. */
+const f3 = v => v.toFixed(3).replace('.', ',');
 const interp = (ramp,t) => {
   t = Math.max(0,Math.min(1,t));
   const s = t*(ramp.length-1), i = Math.min(ramp.length-2, Math.floor(s));
@@ -1652,7 +1654,7 @@ function avisoVoto(){
        cada adulto que vive allí, y en ${ins[0].n}, ${f2(ins[0].ins)}. Y el ${pc(fuera.fraccion)} de los votos de
        ${c.eleccion} (${fmt(fuera.votos)}) se depositó en el puesto censo de Corferias y en las cárceles, que no son
        de ninguna localidad y no se pintan.</p>`;
-  const polo = poloDe(votoSel), P = V.polos, corr = P.correlaciones[votoSel];
+  const polo = poloDe(votoSel), P = V.polos, corr = P.correlaciones[votoSel], T = P.prueba_2026;
   if(votoModo==='voto'){
     el.innerHTML = `
       <h3>Esta capa también puede afirmar geografía</h3>
@@ -1681,7 +1683,7 @@ function avisoVoto(){
        la Decencia sigue al de Petro (r = ${f2(A.eje_partidos.r_decencia)}) y en el Centro Democrático va en contra
        (r = ${f2(A.eje_partidos.r_cd)}). El mapa por composición se equivoca siempre en los mismos lugares, y no lo
        explica el desajuste entre inscripción y residencia (r = ${f2(Math.max(...Object.values(A.inscripcion_r).map(Math.abs)))}).</p>
-    <p><b>Son dos polos, no un eje.</b> ${polo && c.tipo==='partido'
+    <p><b>En 2014–2022 fueron dos polos, no un eje.</b> ${polo && c.tipo==='partido'
         ? `${c.nombre} es el partido que marca el polo de <b>${polo}</b> en el Senado 2018; con el otro polo
            se relaciona con r = ${f2(P.entre_polos)}.`
         : polo
@@ -1693,6 +1695,11 @@ function avisoVoto(){
        tienen cada una su geografía. Van en sentidos opuestos (r = ${f2(P.entre_polos)} entre los dos partidos), pero no
        son espejo: el café de un candidato de izquierda no es el violeta de uno de derecha.
        <i>Lectura descriptiva, no pre-registrada</i> (<code>${P.fuente}</code>).</p>
+    ${T ? `<p><b>Puesta a prueba en 2026, no se confirmó.</b> Antes de abrir la primera vuelta de 2026 se
+       pre-registró que el resto de ${T.candidato} seguiría al polo de derecha. Se parece a él (r = ${f2(T.r_der)}),
+       pero ${T.p2 ? 'también' : 'más'} al revés del polo de izquierda (r = ${f2(-T.r_izq)}), y el polo apenas mejora
+       lo que ya dice el estrato: ${f3(T.delta_r2_loo)} fuera de muestra, y hacía falta ${f2(T.umbral_delta)}. Lectura ${T.lectura}: en 2026 la geografía se
+       parece más a un solo eje, izquierda contra no izquierda (<code>${T.documento}</code>).</p>` : ''}
     ${exploratorio
       ? `<p><b>No pre-registrado.</b> Esta vista añade la participación al modelo, un control que se decidió
          después de ver los resultados. Cambia el residuo de algunas localidades, pero no el patrón: por eso

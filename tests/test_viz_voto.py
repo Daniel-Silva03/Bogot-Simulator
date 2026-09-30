@@ -94,6 +94,13 @@ def main():
            all(abs(P["correlaciones"][k]["con_cd"] - np.corrcoef(vec(k), vec("senado2018_cd"))[0, 1]) < 0.006
                for k in P["correlaciones"]))
 
+    T = P.get("prueba_2026")
+    R26 = json.loads((RAIZ / "data" / "processed" / "polos_2026" / "resultado.json").read_text(encoding="utf-8"))
+    probar("la prueba de 2026 está en el paquete, pre-registrada y con su lectura (DI-V60)",
+           T is not None and T["pre_registrado"] is True and T["lectura"] == R26["lectura"]
+           and T["r_der"] == R26["r_der"] and T["r_izq"] == R26["r_izq"]
+           and T["delta_r2_loo"] == R26["delta_r2_loo"] and T["p2"] == R26["predicciones"]["P2"]["se_cumple"])
+
     print("residuos (DI-V55, DI-V56)")
     iguales = all(L[f"{int(cod):02d}"]["residuo"][k] == round(v, 4)
                   for k, r in R["resultados"].items() for cod, v in r["residuos"].items())
@@ -135,7 +142,10 @@ def main():
         ("inscrita</i>, no donde vive", "el aviso dice la salvedad de inscripción"),
         ("V.votos_sin_localidad", "el aviso cita los votos sin localidad desde el paquete"),
         ("ecológico", "el aviso dice que es ecológico"),
-        ("Son dos polos, no un eje.", "el aviso da la lectura de dos polos (DI-V59)"),
+        ("En 2014–2022 fueron dos polos, no un eje.", "el aviso da la lectura de dos polos (DI-V59)"),
+        ("Puesta a prueba en 2026, no se confirmó.", "el aviso dice que 2026 no confirmó los dos polos (DI-V60)"),
+        ("P.prueba_2026", "las cifras de 2026 salen del paquete"),
+        ("${f3(T.delta_r2_loo)}", "la mejora del polo no se redondea hasta su umbral"),
         ("const poloDe =", "una sola puerta para saber el polo de una opción"),
         ("Lectura descriptiva, no pre-registrada", "la lectura de dos polos se declara no pre-registrada en el aviso"),
         ("if(!V) document.querySelector('[data-capa=\"voto\"]').remove();", "sin paquete, no hay botón"),
@@ -146,7 +156,7 @@ def main():
     # rehace el análisis, la página tiene que cambiar sola (como DI-V34 con la escala).
     plantilla = (RAIZ / "src" / "viz" / "plantilla_mapa.html").read_text(encoding="utf-8")
     probar("la plantilla no trae escritas las cifras del análisis",
-           all(x not in plantilla for x in ("0,87", "0,874", "84 %", "84,0", "3,04", "0,70", "0,77", "0,86", "0,42")))
+           all(x not in plantilla for x in ("0,87", "0,874", "84 %", "84,0", "3,04", "0,70", "0,77", "0,86", "0,42", "0,51", "0,84", "0,047", "0,0473")))
     probar("las rampas nuevas son distintas de las que ya existían",
            "[[175,158,205]" in p and "[[128, 70, 15]" in p and "[[  0,143,137]" in p and "[[ 20, 88,146]" in p)
     probar("la página sigue siendo autocontenida salvo tipografías (DI-V6)",

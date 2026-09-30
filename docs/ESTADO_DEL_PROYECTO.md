@@ -184,6 +184,8 @@ claridad: su geografía se parece más al revés de la izquierda (0,84) que al p
 derecha, así que **la lectura de dos polos se debilita**. No pre-registrado: la derecha
 se repartió con Valencia (sumada daría A) y el polo de izquierda se transfirió a Cepeda
 (r = 0,93).
+**En el tablero desde el 30/09 (DI-V60):** el aviso de residuos dice «en 2014–2022
+fueron dos polos» y que la prueba pre-registrada de 2026 no lo confirmó, con sus cifras.
 
 **Geografía electoral de Bogotá: cerrada el 30/09.** El 29/09 el CNC entregó
 resultados electorales por mesa (presidente 2014, 2018 y 2022; Senado y Cámara 2018)

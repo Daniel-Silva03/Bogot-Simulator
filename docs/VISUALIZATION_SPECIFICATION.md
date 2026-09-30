@@ -1,7 +1,7 @@
 # VISUALIZATION SPECIFICATION — BOGOTÁ SOCIAL SIMULATOR
 
-**Versión:** 0.20
-**Fecha:** 29 de septiembre de 2026
+**Versión:** 0.21
+**Fecha:** 29 de septiembre de 2026 · v0.21: 30 de septiembre (DI-V60)
 **Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados; cuatro capas, todas responden al año, y una de ellas —Crecimiento— es la primera que **sí** puede afirmar geografía. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. **Corrección del 25/09 (DI-V52):** la primera mitad de DI-V45 se sostiene; «no hay señal» no, porque la prueba que la sostenía no podía detectar señal. La capa de opinión sigue sin poder leerse por territorio, pero por otra razón: el donante no trae localidad. Hitos 3 a 5 especificados, sin construir. **29/09 — capa de Voto (DI-V53 a DI-V56):** la primera vuelta presidencial de 2014, 2018 y 2022 por localidad, un conteo completo que sí puede afirmar geografía, y «lo que el estrato no explica» (`GEOGRAFIA_ELECTORAL_RESULTS.md`).
 **Documentos relacionados:** PROJECT_CONTEXT.md §31 y §51, ARCHITECTURE.md, POPULATION_SPECIFICATION.md, claude/ANALISIS_DISENO_MUESTRAL.md
 
@@ -802,6 +802,19 @@ El detalle está en el docstring de `src/viz/preparar_voto.py`. Resumen:
   paquete, no en la plantilla, y una prueba exige que cada opción de un polo se parezca
   a su partido con r ≥ 0,69. Los botones se agrupan por elección («Senado 2018» es un
   grupo más) y los textos dicen la elección, no solo el año.
+
+- **DI-V60** — **La página dice que 2026 no confirmó los dos polos** (30/09/2026). La
+  lectura de DI-V59 se puso a prueba, pre-registrada, en la primera vuelta de 2026
+  (`POLOS_2026_RESULTS.md`): lectura B, y el resto de Abelardo se parece más al revés
+  del polo de izquierda que al polo de derecha. El aviso de residuos pasa de «Son dos
+  polos, no un eje» a «En 2014–2022 fueron dos polos, no un eje», y agrega un párrafo
+  «Puesta a prueba en 2026, no se confirmó» con las cifras de la prueba, que vienen del
+  paquete (`polos.prueba_2026`, leído de `data/processed/polos_2026/resultado.json`),
+  no de la plantilla. La vista de voto y el pie dicen lo mismo en una frase. 2026 no
+  entra como opción del mapa: la capa sigue siendo 2014–2022 y Senado 2018.
+  **Tres decimales para la mejora del polo:** redondeada a dos, 0,047 se leía «0,05»,
+  que es exactamente el umbral que no alcanzó; se encontró revisando la página y una
+  prueba lo vigila.
 
 - **DI-V58** — **El DEFF de la página pasa de 1,86 a 2,03** (29/09/2026, DI-D7 en
   `diseno.py`). El conglomerado de la EPC es localidad × manzana, no la manzana sola,

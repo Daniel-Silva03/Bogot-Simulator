@@ -88,8 +88,10 @@ def residuos_con_participacion(prop: pd.DataFrame, comp: pd.DataFrame,
 
 
 from src.experiments import eje_partidos as ep          # noqa: E402
+from src.experiments import polos_2026 as pz            # noqa: E402
 
 RESULTADO_PARTIDOS = RAIZ / "data" / "processed" / "eje_partidos" / "resultado.json"
+RESULTADO_2026 = RAIZ / "data" / "processed" / "polos_2026" / "resultado.json"      # DI-V60
 PARTIDOS = {"senado2018_decencia": (ep.DECENCIA, "Lista de la Decencia", "Decencia"),
             "senado2018_cd": (ep.CENTRO_DEMOCRATICO, "Centro Democrático", "C. Democrático")}
 #: DI-V59 — la pertenencia a cada polo, tal como la describe EJE_PARTIDOS_RESULTS §4.
@@ -160,6 +162,15 @@ def agregar_polos(datos: dict) -> dict:
                                          "r_cd": S[ep.CENTRO_DEMOCRATICO]["r_eje"],
                                          "documento": "docs/EJE_PARTIDOS_RESULTS.md"}
     datos["grupos"] = ["2014", "2018", "2022", "Senado 2018"]
+    # DI-V60: la prueba pre-registrada de los polos en 2026, tal como salió.
+    if RESULTADO_2026.exists():
+        r = json.loads(RESULTADO_2026.read_text(encoding="utf-8"))
+        datos["polos"]["prueba_2026"] = {
+            "pre_registrado": True, "candidato": "Abelardo de la Espriella", "lectura": r["lectura"],
+            "r_der": r["r_der"], "r_izq": r["r_izq"], "delta_r2_loo": r["delta_r2_loo"],
+            "umbral_delta": pz.UMBRAL_DR2,
+            "p2": r["predicciones"]["P2"]["se_cumple"],
+            "documento": "docs/POLOS_2026_RESULTS.md"}
     return datos
 
 
