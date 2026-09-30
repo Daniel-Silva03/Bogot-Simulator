@@ -171,7 +171,14 @@ verificados contra los archivos municipales (`DATA_INVENTORY.md` §14.5). Las 72
 izquierda–derecha con voto por partido; no se han cruzado con la composición.
 **Pre-registrado el 30/09:** `EJE_PARTIDOS_SPECIFICATION.md` — ¿el resto territorial del
 voto presidencial aparece en el voto por partido? La prueba que decide es el Centro
-Democrático (P2), no la Lista de la Decencia, que es la de Petro. Sin código todavía.
+Democrático (P2), no la Lista de la Decencia, que es la de Petro.
+**Corrido el 30/09** (`EJE_PARTIDOS_RESULTS.md`): cinco de cinco predicciones, **lectura A**
+—el resto territorial aparece en el voto por partido, en la Lista de la Decencia (+0,77)
+y en contra en el Centro Democrático (−0,56, por poco), replicado en la Cámara—. Lo que
+precisa (descriptivo, no pre-registrado): son **dos polos con geografía propia**, no un
+eje simétrico. El del Centro Democrático es el de la derecha presidencial (0,81–0,86 con
+Zuluaga, Duque y Gutiérrez); el de la Lista, el de la izquierda. La Alianza Verde no
+sigue ninguno; el Polo y el Liberal siguen la inscripción.
 **Pruebas del tablero arregladas (29/09)**, con dos defectos reales detrás:
 `cargar_bcv` descartaba la manzana, así que con el microdato en disco la serie de la
 EPC caía al DEFF prestado en todas las olas sin avisar; y `preparar_mapa` solo leía
