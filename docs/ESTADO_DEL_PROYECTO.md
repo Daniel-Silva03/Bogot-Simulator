@@ -200,9 +200,12 @@ una tabla de localidades; pautas de la skill ui-ux-pro-max (`PAGINA_CONSULTA.md`
 **Opción 1, juntar olas (30/09):** `DATA_INVENTORY.md` §13.9. Juntando 2022-2024, 74 preguntas
 pasan de ~80 a ~250 personas por localidad y la confiabilidad de sus medias por localidad casi
 se duplica (0,19 → 0,37; muestra completa 0,32 → 0,54). 2025 queda fuera (sin etiquetas que
-verificar) y las evaluaciones del gobierno de turno solo juntan 2022-2023. **Siguiente:**
-especificar la población 2022-2024 y pre-registrar otra vez la prueba de localidades del
-puente, antes de calcular nada del puente con los datos juntos.
+verificar) y las evaluaciones del gobierno de turno solo juntan 2022-2023. **Especificado y pre-registrado el 30/09:**
+`POBLACION_EPC2022_2024_SPECIFICATION.md` (~4.500 donantes, ~250 por localidad, emparejados
+sin educación porque 2024 no la pregunta) y `PUENTE_LOCALIDADES_SPECIFICATION.md` (las 11
+escondidas del catálogo, con los 36 puentes ya guardados, sin gasto; P1: el puente le gana a
+la demografía por localidad en 8 de 11; declara que no es del todo a ciegas). **Siguiente:**
+código de la prueba con encuestados inventados, y la corrida.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
