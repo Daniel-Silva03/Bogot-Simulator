@@ -98,6 +98,8 @@ data/**
 !data/processed/geografia_electoral/resultado.json
 !data/processed/eje_partidos/
 !data/processed/eje_partidos/resultado.json
+!data/processed/polos_2026/
+!data/processed/polos_2026/resultado.json
 
 # --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
 data/external/cnc/

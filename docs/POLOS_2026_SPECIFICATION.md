@@ -5,7 +5,8 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 30 de septiembre de 2026
-Estado: **código probado en mundos simulados (§8.1); sin ningún dato de 2026 abierto.** Nadie en este proyecto ha descargado ni mirado los resultados de 2026 por mesa o por localidad
+Estado: **código probado en mundos simulados (§8.1); sin ningún dato de 2026 abierto.**
+*(30/09: corrido; resultados en `POLOS_2026_RESULTS.md`. El texto de este documento no se tocó.)* Nadie en este proyecto ha descargado ni mirado los resultados de 2026 por mesa o por localidad
 Datos: `data/processed/geografia_electoral/resultado.json` (residuos 2014–2022, ya publicados), receptor de Multipropósito 2021 y, después de este documento, los escrutinios por mesa de la Registraduría (primera vuelta, 31 de mayo de 2026)
 Origen: la primera pregunta real del frente de escenarios (el jefe de Daniel, 30/09) y `EJE_PARTIDOS_RESULTS.md` §6.4 (probar los dos polos en una elección no mirada)
 

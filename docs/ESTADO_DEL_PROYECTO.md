@@ -175,6 +175,15 @@ de descargar ni mirar nada de 2026. Es también la prueba pendiente de los dos p
 Código y mundos simulados listos el 30/09 (`src/experiments/polos_2026.py`, 15
 pruebas; A 94 % con polo, 0 % sin polo; §8.1). Siguen: descarga de los escrutinios por mesa de la
 Registraduría (con permiso, fuera del repo); corrida y resultados.
+**Corrido el 30/09** (`POLOS_2026_RESULTS.md`), con la tabla de 2026 bajada de la
+Registraduría (`DATA_INVENTORY.md` §14.6): **lectura B, en el borde.** El resto de
+Abelardo sigue al polo de derecha con r = 0,51 (P1 pasa por 0,006), pero el polo le
+añade al estrato 0,047 fuera de muestra y hacía falta 0,05 (P3 falla). 7 de las 9
+localidades nombradas salieron en el sentido previsto; 9 de 19 en total. P2 falla con
+claridad: su geografía se parece más al revés de la izquierda (0,84) que al polo de
+derecha, así que **la lectura de dos polos se debilita**. No pre-registrado: la derecha
+se repartió con Valencia (sumada daría A) y el polo de izquierda se transfirió a Cepeda
+(r = 0,93).
 
 **Geografía electoral de Bogotá: cerrada el 30/09.** El 29/09 el CNC entregó
 resultados electorales por mesa (presidente 2014, 2018 y 2022; Senado y Cámara 2018)
