@@ -168,8 +168,9 @@ pruebas; §6.1 de su especificación): 20.000 agentes, 1.000 por localidad (Suma
 donante); 67 de 1938 pares pregunta × localidad fuera del margen (3.5 %,
 umbral 10 %); reproducible. Catálogo de 102 preguntas. Tercer error de documentación de
 BCV: la etiqueta de `GG3` 2023 (corregida, DI-PE7). El puente quedó con 91 preguntas
-(enmienda 1). **Siguiente:** código del puente con un modelo simulado, antes de las 36
-llamadas reales.
+(enmienda 1). **Código del puente listo el 30/09** (`src/experiments/puente.py`, 11 pruebas con datos
+inventados; §8.1 del pre-registro). **Siguiente:** las 36 llamadas reales, con confirmación
+de gasto, y `PUENTE_RESULTS.md`.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

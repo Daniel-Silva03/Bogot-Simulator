@@ -107,6 +107,8 @@ data/**
 !data/processed/epc_inventario/*.csv
 !data/processed/poblacion_epc2023/
 !data/processed/poblacion_epc2023/*.json
+!data/processed/puente/
+!data/processed/puente/resultado.json
 
 # --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
 data/external/cnc/

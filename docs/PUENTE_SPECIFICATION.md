@@ -5,7 +5,7 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 30 de septiembre de 2026
-Estado: **sin código y sin ninguna correlación entre preguntas de la EPC calculada.** Lo único visto de la EPC 2023 es el inventario (qué preguntas existen, cuántas respuestas tienen y cuántas personas por localidad), no sus valores
+Estado: **código probado con datos inventados (§8.1); sin ninguna correlación entre preguntas de la EPC calculada y sin ninguna llamada al modelo.** Lo único visto de la EPC 2023 es el inventario (qué preguntas existen, cuántas respuestas tienen y cuántas personas por localidad), no sus valores
 Decisión que la origina: D17, piezas 2 y 5
 Población: `POBLACION_EPC2023_SPECIFICATION.md`
 
@@ -176,6 +176,34 @@ etiquetas antes de leer lo demás.
 - **La reformulación sugerida (D17, pieza 3) no se prueba aquí.**
 
 ---
+
+## 8.1 Verificación antes de la corrida real (30/09/2026)
+
+`src/experiments/puente.py` y `tests/test_puente.py`, 11 pruebas, con encuestados
+**inventados** y un modelo simulado; ninguna calcula nada sobre las respuestas reales ni
+llama a la API.
+
+| Prueba | Resultado |
+|---|---|
+| Mundo donde la escondida es la suma de dos preguntas del catálogo, con el puente correcto | le gana al azar y a la demografía en ρ_ind y en r_loc |
+| Mundo donde la escondida es ruido | nada gana |
+| Puente con el sentido al revés | ρ_ind negativo |
+| Respuesta rota (DI-PU3) | cuenta como puente vacío: ρ_ind = 0, r_loc = 0, e_nivel = 1 |
+| Regla de decisión | lee A, B, C y las dos ramas del nivel |
+| Circuito completo con caché | la segunda vez no vuelve a llamar |
+
+**Dos precisiones de implementación, fijadas antes de ver ningún dato:**
+- **Qué extremo de una escala es el favorable** (para el tono general de §5) se decide
+  con listas de palabras sobre las etiquetas del primer y el último código (DI-PU4). Se
+  revisaron a mano las 69 direcciones que asigna, sobre las etiquetas, que son
+  metadatos: todas correctas. Al revisarlas se agregaron «desmejor» y «empeor» a las
+  desfavorables, porque «Desmejoró» contiene «mejor». Quedan **sin dirección** las que
+  dependen del contexto (Sí/No, Alta/Baja, «aumentó»): no entran al tono. De las 12
+  escondidas, solo la corrupción (`GG7`, «ha disminuido / ha aumentado») queda sin
+  dirección, así que su nivel ingenuo es el punto medio de la escala.
+- **El Spearman ponderado** es el Pearson ponderado de los rangos (DI-PU2), y el modelo es
+  `xiaomi/mimo-v2.6-pro`, el de los Experimentos 8 y 9 (DI-PU6). El texto que recibe el
+  modelo por pregunta tiene unos 16.500 caracteres.
 
 ## 9. Qué se construye después de este documento
 
