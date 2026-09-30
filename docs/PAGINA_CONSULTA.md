@@ -161,6 +161,27 @@ solo sus colores. Se adaptaron:
 directorio revisado de plugins, y trae scripts que habría que ejecutar. Se le explicó cómo
 instalarla él mismo.
 
+## 5.4 El mapa sin nada encima, y revisado con la skill ui-ux-pro-max (30/09/2026)
+
+Daniel instaló la skill `ui-ux-pro-max` (v2.13.0). Antes de usar su buscador se revisó que
+solo lee sus archivos locales. Tres pautas suyas se aplicaron:
+
+- **Nada tapa el contenido** («focus not obscured»): la ficha de la localidad y la leyenda
+  salen de encima del mapa y van debajo, en dos columnas (una en celular).
+- **Un estado sin datos explica y ofrece una acción** («empty states»): el aviso de una
+  pregunta nueva va arriba del mapa, en lenguaje llano, con un botón «Ver una pregunta con
+  mapa».
+- **Un mapa de colores lleva una tabla de regiones** («sortable region table», la
+  alternativa accesible del coropletas): debajo del mapa, las localidades de mayor a menor,
+  con su intervalo del 95 % y una línea para la ciudad. Tocar una fila la selecciona en el
+  mapa, y los filtros la atenúan igual que en el mapa.
+
+**Por qué los temas distintos de Seguridad no dibujaban:** en modo simulado, el asistente
+de prueba solo reconoce las 24 preguntas de la validación, y los ejemplos de «La ciudad» y
+«Medio ambiente» estaban redactados distinto, así que salían como preguntas nuevas. Los
+ejemplos ahora usan esa misma redacción. «Cambios en la ciudad» es siempre una pregunta
+nueva, no tiene mapa, y el botón lo dice («sin mapa»).
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; opina como Bogotá en 2023; unas 80 personas por

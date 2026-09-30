@@ -50,12 +50,15 @@ PLANTILLA = Path(__file__).with_name("pagina.html")
 GEOJSON = RAIZ / "data" / "external" / "geo" / "localidades_bogota.geojson"
 BASE = RAIZ / "data" / "processed" / "viz" / "base_bogota.json"
 PUERTO = 8765
+#: Los mismos textos de la validación (`reformular.PRUEBA`): así el modo simulado los
+#: reconoce igual que el modelo real. Los tres del catálogo tienen mapa; los dos de
+#: cambios en la ciudad son preguntas nuevas y no lo tienen (lectura B del puente).
 EJEMPLOS = [
     "¿La gente se siente segura caminando por su barrio?",
     "¿Estarían de acuerdo con cobrar por entrar en carro al centro?",
-    "¿Qué tan orgullosos se sienten los bogotanos de su ciudad?",
-    "¿Apoyarían que el metro funcione las 24 horas?",
-    "¿Cómo califica la gente la calidad del aire?",
+    "¿Qué tan orgullosos se sienten de Bogotá?",
+    "¿Les gustaría que el metro funcionara las 24 horas?",
+    "¿Qué piensan de la calidad del aire en Bogotá?",
 ]
 
 

@@ -159,7 +159,7 @@ input[type=range]{width:100%;accent-color:var(--menta)}
 .lienzo-cab{padding:16px 20px 0}
 .lienzo-cab h3{font-size:20px;letter-spacing:-.4px;font-weight:400}
 .lienzo-cab p{margin:4px 0 0;font-size:14px;color:var(--texto-2);letter-spacing:.14px}
-#mapa{width:100%;height:min(70vh,660px);display:block;letter-spacing:0}   /* en grados, el tracking del cuerpo amontona las letras */
+#mapa{width:100%;height:min(62vh,580px);display:block;letter-spacing:0}   /* en grados, el tracking del cuerpo amontona las letras */
 #mapa .loc{stroke:rgba(227,255,239,.22);stroke-width:.0007;cursor:pointer;transition:fill .6s ease;outline:none}
 /* El foco del teclado no puede usar `outline`: en un SVG en grados, el contorno se
    escala miles de veces y tapa todo el mapa (el «amarillo» del 30/09). */
@@ -170,16 +170,31 @@ input[type=range]{width:100%;accent-color:var(--menta)}
 #mapa .via{fill:none;stroke:rgba(255,255,255,.14);stroke-width:.0009;pointer-events:none}
 #mapa .etq{letter-spacing:0;font:500 .0064px var(--sans);fill:rgba(255,255,255,.82);text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:rgba(0,10,6,.75);stroke-width:.0012px}
 #mapa.apagado .loc{fill:#0d1f18!important}
-.leyenda{position:absolute;left:16px;bottom:16px;background:var(--elevado);border:1px solid var(--linea);border-radius:var(--r-input);padding:12px 14px;font-size:12px;max-width:250px;letter-spacing:.12px}
+.leyenda{background:var(--elevado);border:1px solid var(--linea);border-radius:var(--r-input);padding:12px 14px;font-size:12px;letter-spacing:.12px}
 .leyenda b{font-weight:500;color:var(--blanco)}
 .leyenda .rampa{height:8px;border-radius:100px;margin:8px 0 4px}
 .leyenda .ext{display:flex;justify-content:space-between;color:var(--texto-2);gap:8px}
-.ficha{position:absolute;right:16px;top:72px;width:236px;background:var(--elevado);border:1px solid var(--linea);border-radius:var(--r-input);padding:14px;font-size:14px}
+.ficha{background:var(--elevado);border:1px solid var(--linea);border-radius:var(--r-input);padding:14px;font-size:14px}
 .ficha h4{font-size:20px;letter-spacing:-.4px;margin-bottom:8px;font-weight:400}
 .ficha dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:6px 10px}
 .ficha dt{color:var(--texto-2);font-size:12px;letter-spacing:.12px}
 .ficha dd{margin:0;text-align:right;font:400 12px var(--mono)}
-.velo{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(340px,80%);background:var(--elevado);border:1px solid var(--linea-2);border-radius:var(--r-card);padding:20px;font-size:14px;color:var(--texto-2);text-align:center;letter-spacing:.14px}
+.velo{margin:12px 20px 0;background:var(--elevado);border:1px solid var(--linea-2);border-left:2px solid var(--menta-palida);border-radius:var(--r-input);padding:14px 16px;font-size:14px;color:var(--texto-2);letter-spacing:.14px}
+.velo .acciones{margin-top:10px}
+/* debajo del mapa, nunca encima (30/09: la ficha y la leyenda tapaban localidades) */
+.lienzo-pie{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:0 16px 16px;align-items:start}
+.ranking{padding:0 16px 16px}
+.ranking h4{font:500 12px/1.48 var(--sans);letter-spacing:.12px;color:var(--texto-3);text-transform:uppercase;margin:4px 0 8px}
+.fila-r{display:grid;grid-template-columns:9.5em 1fr 3.2em;align-items:center;gap:8px;font-size:13px;padding:3px 4px;border-radius:4px;color:var(--texto-2);cursor:pointer;background:transparent;border:0;width:100%;text-align:left}
+.fila-r:hover,.fila-r.sel{background:rgba(255,255,255,.05);color:var(--blanco)}
+.fila-r.atenuada{opacity:.3}
+.fila-r .v{font:400 12px var(--mono);color:var(--blanco);text-align:right}
+.intervalo{position:relative;height:14px}
+.intervalo i{position:absolute;top:6px;height:2px;background:var(--linea-2);border-radius:2px}
+.intervalo b{position:absolute;top:3px;width:8px;height:8px;margin-left:-4px;border-radius:50%}
+.intervalo em{position:absolute;top:0;bottom:0;width:1px;background:var(--humo)}
+.sin-mapa{display:block;font:400 11px var(--mono);color:var(--texto-3);letter-spacing:.1px}
+.riel button[aria-pressed="true"] .sin-mapa{color:var(--canvas);opacity:.7}
 @keyframes cambio{0%{box-shadow:0 0 0 0 rgba(122,255,180,.55);border-color:var(--menta)}100%{box-shadow:0 0 0 14px rgba(122,255,180,0);border-color:var(--linea)}}
 .lienzo.cambio{animation:cambio 1.2s ease-out}
 .velo b{display:block;color:var(--blanco);font-weight:500;font-size:16px;margin-bottom:6px}
@@ -268,8 +283,7 @@ footer .marca{margin-bottom:16px}
   .portada{padding-top:64px}
   .cifras,.rejilla-4{grid-template-columns:1fr}
   .mesa{padding:16px}
-  .ficha{position:static;width:auto;margin:0 16px 16px}
-  .leyenda{position:static;max-width:none;margin:0 16px 12px}
+  .lienzo-pie{grid-template-columns:1fr}
   #mapa{height:420px}
   .barra-g{grid-template-columns:8.5em 1fr 3.2em}
 }
@@ -340,7 +354,7 @@ footer .marca{margin-bottom:16px}
         <button data-tema="0" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Seguridad</button>
         <button data-tema="2" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>La ciudad</button>
         <button data-tema="4" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Medio ambiente</button>
-        <button data-tema="1" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M8 21l1.5-4M16 21l-1.5-4"/></svg>Cambios en la ciudad</button>
+        <button data-tema="1" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M8 21l1.5-4M16 21l-1.5-4"/></svg><span>Cambios en la ciudad<small class="sin-mapa">sin mapa</small></span></button>
       </nav>
       <div class="panel">
         <div>
@@ -357,10 +371,10 @@ footer .marca{margin-bottom:16px}
       </div>
       <div class="lienzo" id="lienzo">
         <div class="lienzo-cab"><h3 id="mapaTitulo">Bogotá por localidades</h3><p id="mapaSub"></p></div>
+        <div class="velo oculto" id="velo" role="status"></div>
         <svg id="mapa" role="img" aria-label="Mapa de las localidades urbanas de Bogotá"></svg>
-        <div class="ficha" id="ficha"></div>
-        <div class="leyenda" id="leyenda"></div>
-        <div class="velo oculto" id="velo"></div>
+        <div class="lienzo-pie"><div class="leyenda" id="leyenda"></div><div class="ficha" id="ficha" aria-live="polite"></div></div>
+        <div class="ranking oculto" id="ranking"></div>
       </div>
     </div>
   </div></div>
@@ -509,7 +523,15 @@ function pintar(){
   });
   leyenda(); seleccionar(estado.sel, true);
   $('#velo').classList.toggle('oculto', estado.modo !== 'nueva');
-  if (estado.modo === 'nueva') $('#velo').innerHTML = `<b>Esta suposición no se dibuja por localidad</b>${esc(estado.resp.sin_mapa)}`;
+  if (estado.modo === 'nueva') {
+    /* estado sin mapa: qué pasa, por qué, y qué se puede hacer (guía de la skill ui-ux-pro-max) */
+    $('#velo').innerHTML = `<b style="color:var(--blanco);font-weight:500">Esta pregunta no se colorea por localidad.</b>
+      No está en la encuesta, así que la población la supone a partir de preguntas parecidas. Esa suposición sirve para
+      comparar grupos de personas (en la respuesta), pero cuando la probamos no distinguió bien unas localidades de otras.
+      <div class="acciones"><button class="btn btn-fantasma" data-ej="0">Ver una pregunta con mapa</button></div>`;
+    $('#velo').querySelector('button').addEventListener('click', e => preguntar(D.ejemplos[+e.target.dataset.ej]));
+  }
+  ranking(visibles);
 }
 
 function leyenda(){
@@ -526,8 +548,26 @@ function leyenda(){
   }
 }
 
+/* Tabla de localidades de mayor a menor, con su margen: la alternativa accesible al mapa
+   de colores (guía de la skill: «sortable region table»). */
+function ranking(visibles){
+  const el = $('#ranking');
+  if (estado.modo !== 'catalogo') { el.classList.add('oculto'); return; }
+  const r = estado.resp, n = r.escala.length, pos = v => 100*(v-1)/(n-1);
+  const filas = Object.entries(r.localidades).sort((a,b) => b[1].media - a[1].media);
+  el.classList.remove('oculto');
+  el.innerHTML = `<h4>Localidades, de mayor a menor promedio · la línea es la ciudad</h4>` + filas.map(([c,v]) => `
+    <button class="fila-r${visibles && !visibles.includes(c) ? ' atenuada' : ''}${+c === +estado.sel ? ' sel' : ''}" data-c="${c}">
+      <span>${esc(G[c].nombre)}</span>
+      <span class="intervalo" aria-hidden="true"><em style="left:${pos(r.ciudad.media)}%"></em>
+        <i style="left:${pos(v.margen[0])}%;width:${pos(v.margen[1])-pos(v.margen[0])}%"></i>
+        <b style="left:${pos(v.media)}%;background:${color((v.media-1)/(n-1))}"></b></span>
+      <span class="v">${f2(v.media)}</span></button>`).join('');
+  el.querySelectorAll('.fila-r').forEach(b => b.addEventListener('click', () => seleccionar(+b.dataset.c)));
+}
+
 function seleccionar(cod, suave){
-  if (!suave) estado.sel = cod;
+  if (!suave) { estado.sel = cod; document.querySelectorAll('.fila-r').forEach(b => b.classList.toggle('sel', +b.dataset.c === +cod)); }
   Object.entries(rutas).forEach(([c,p]) => p.classList.toggle('sel', +c === +estado.sel));
   const g = G[cod]; if (!g) return;
   let filas = `<dt>Adultos</dt><dd>${fmt(g.adultos)}</dd>
