@@ -129,7 +129,7 @@ def tramo_edad(edad) -> pd.Series:
 def cargar_donante(raiz=None) -> pd.DataFrame:
     """EPC 2023 completa, con las columnas de emparejamiento armonizadas."""
     d = pd.read_stata(eb.archivo_del_anio(ANIO, raiz), convert_categoricals=False)
-    d = d.reset_index(drop=True)
+    d = d.reset_index(drop=True).copy()            # el .dta llega fragmentado: sin esto, pandas avisa en cada columna
     d["donante_id"] = np.arange(len(d))
     d["cod_loc"] = pd.to_numeric(d.CS0A, errors="coerce").astype("Int64")
     d["sexo"] = pd.to_numeric(d.CS1, errors="coerce").map({1: "M", 2: "F"})

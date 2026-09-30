@@ -442,7 +442,13 @@ def main(argv=None, entrada=input) -> int:
         if not e9.confirmar_gasto(pend, entrada, e9.gasto_registrado(cache)):
             print("No se gastó nada.")
             return 1
-    respuestas, crudas = recolectar(fichas_esc, fichas_puente, llamar, cache, modelo)
+    try:
+        respuestas, crudas = recolectar(fichas_esc, fichas_puente, llamar, cache, modelo)
+    except e9.Experimento9Error as e:
+        g = e9.gasto_registrado(cache)
+        print(f"\nERROR: {e}\nLas {g['llamadas']} llamadas que sí respondieron quedaron en la caché "
+              f"(USD {g['costo_usd']:.3f}); al volver a correr solo se hacen las que faltan.")
+        return 1
     a = analizar(datos, fichas_esc, fichas_puente, respuestas, crudos_puente)
     v = evaluar(a)
     salida.mkdir(parents=True, exist_ok=True)

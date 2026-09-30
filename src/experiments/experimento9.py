@@ -884,6 +884,10 @@ def cliente_real() -> Llamar:
                           {"role": "user", "content": usuario}],
              "usage": {"include": True}},                  # DI-E9: costo por llamada
             {"authorization": f"Bearer {clave}"})
+        if not r.get("choices"):
+            # OpenRouter puede contestar 200 con un error en el cuerpo (proveedor caído,
+            # límite, contexto). Se detiene con el mensaje, sin cachear nada (30/09/2026).
+            raise Experimento9Error(f"OpenRouter no devolvió respuesta: {json.dumps(r.get('error', r), ensure_ascii=False)[:500]}")
         uso = r.get("usage") or {}
         detalle = uso.get("completion_tokens_details") or {}
         return {"texto": r["choices"][0]["message"].get("content") or "",
