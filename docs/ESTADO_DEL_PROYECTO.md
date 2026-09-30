@@ -157,8 +157,13 @@ pre-registrada con preguntas de respuesta conocida.
 `src/population/inventario_epc.py`). 272 preguntas de respuesta única; 26 en las diez
 olas (el núcleo de opinión urbana) y 60-114 preguntas generales por ola, con 67-81
 personas por localidad. 93 casos que el diccionario da y el archivo no tiene.
-**Siguiente:** elegir la ola base de la población (2023 o 2024, las más ricas) y
-especificar la población nueva y la validación.
+**Ola base: 2023** (Daniel, 30/09): 114 preguntas generales, 80 personas por localidad.
+**Especificado el 30/09, sin código:** `POBLACION_EPC2023_SPECIFICATION.md` (20.000
+agentes, localidad como bloque exacto, cada agente guarda el identificador de su
+donante, margen de la encuesta por bootstrap de conglomerados) y el pre-registro
+`PUENTE_SPECIFICATION.md` (12 preguntas escondidas; el puente tiene que ganarle a la
+demografía y al azar al ordenar personas y localidades; el nivel se prueba aparte y,
+aun si pasa, queda editable). **Siguiente:** construir y verificar la población.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
