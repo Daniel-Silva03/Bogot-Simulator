@@ -1,6 +1,6 @@
 # VISUALIZATION SPECIFICATION — BOGOTÁ SOCIAL SIMULATOR
 
-**Versión:** 0.19
+**Versión:** 0.20
 **Fecha:** 29 de septiembre de 2026
 **Estado:** Hito 1 completo. **Hito 2 completo** (24/09/2026): la línea de tiempo y el mapa por año, conectados; cuatro capas, todas responden al año, y una de ellas —Crecimiento— es la primera que **sí** puede afirmar geografía. Construirlo destapó DI-V45 — el error estándar analítico subestima el ruido territorial y el único año que parecía tener señal no la tiene. **Corrección del 25/09 (DI-V52):** la primera mitad de DI-V45 se sostiene; «no hay señal» no, porque la prueba que la sostenía no podía detectar señal. La capa de opinión sigue sin poder leerse por territorio, pero por otra razón: el donante no trae localidad. Hitos 3 a 5 especificados, sin construir. **29/09 — capa de Voto (DI-V53 a DI-V56):** la primera vuelta presidencial de 2014, 2018 y 2022 por localidad, un conteo completo que sí puede afirmar geografía, y «lo que el estrato no explica» (`GEOGRAFIA_ELECTORAL_RESULTS.md`).
 **Documentos relacionados:** PROJECT_CONTEXT.md §31 y §51, ARCHITECTURE.md, POPULATION_SPECIFICATION.md, claude/ANALISIS_DISENO_MUESTRAL.md
@@ -790,6 +790,18 @@ El detalle está en el docstring de `src/viz/preparar_voto.py`. Resumen:
   (percentiles 10 a 45), que es lo que ya decía DI-V52. El caso de 2021, que DI-V45
   miró con atención por su 0,341, era una semilla alta: con la población nueva vale
   0,221.
+
+- **DI-V59** — **La capa de Voto enseña los dos polos** (30/09/2026). Se agregan la
+  Lista de la Decencia y el Centro Democrático del Senado 2018, con su voto y su
+  residuo tal como quedaron en `EJE_PARTIDOS_RESULTS.md`, y el aviso de la vista de
+  residuos deja de hablar de «un eje izquierda–derecha»: dice que el resto no es de un
+  candidato (lectura A, pre-registrada) y que son **dos polos con geografía propia**
+  (§4 de ese informe, descriptivo, y así lo declara la página). Cada opción dice en qué
+  polo está y cuánto se parece a su partido; Fajardo, Santos y Hernández no están en
+  ninguno, y la página lo dice con sus cifras. La pertenencia a un polo vive en el
+  paquete, no en la plantilla, y una prueba exige que cada opción de un polo se parezca
+  a su partido con r ≥ 0,69. Los botones se agrupan por elección («Senado 2018» es un
+  grupo más) y los textos dicen la elección, no solo el año.
 
 - **DI-V58** — **El DEFF de la página pasa de 1,86 a 2,03** (29/09/2026, DI-D7 en
   `diseno.py`). El conglomerado de la EPC es localidad × manzana, no la manzana sola,

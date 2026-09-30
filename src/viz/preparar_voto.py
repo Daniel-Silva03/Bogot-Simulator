@@ -39,6 +39,16 @@ DI-V55. **Los residuos salen del resultado pre-registrado sin recalcularse**
 DI-V56. **Sumapaz tiene voto, pero no residuo.** Quedó fuera del ajuste
     (§3.3 del pre-registro): en la vista de residuos se pinta como «sin dato» y la
     ficha dice por qué, en vez de extrapolarle una cifra.
+
+DI-V59. **Los dos polos (30/09/2026).** `EJE_PARTIDOS_RESULTS.md` encontró que lo que
+    el estrato no explica aparece en el voto al Senado 2018 (lectura A, pre-registrada)
+    y que son dos polos con geografía propia, no un eje simétrico (§4, descriptivo, no
+    pre-registrado). La capa agrega los dos partidos que lo muestran —Lista de la
+    Decencia y Centro Democrático, Senado 2018— con su voto y su residuo tal como
+    quedaron en ese resultado, y el paquete lleva, para cada opción, cuánto se parece
+    su residuo al de cada partido. La pertenencia a un polo se fija como en el §4 del
+    informe y una prueba exige que las correlaciones la sostengan (≥ 0,69); si un
+    análisis futuro la cambia, la prueba falla antes que la página.
 """
 
 from __future__ import annotations
@@ -75,6 +85,82 @@ def residuos_con_participacion(prop: pd.DataFrame, comp: pd.DataFrame,
     X = np.column_stack([comp.loc[locs, "x1"], participacion.loc[locs]])
     return {f"{a}_{c}": dict(zip(locs, ge.residuos(prop.loc[locs, (a, c)].to_numpy(), X)))
             for a, c in ge.RESULTADOS}
+
+
+from src.experiments import eje_partidos as ep          # noqa: E402
+
+RESULTADO_PARTIDOS = RAIZ / "data" / "processed" / "eje_partidos" / "resultado.json"
+PARTIDOS = {"senado2018_decencia": (ep.DECENCIA, "Lista de la Decencia", "Decencia"),
+            "senado2018_cd": (ep.CENTRO_DEMOCRATICO, "Centro Democrático", "C. Democrático")}
+#: DI-V59 — la pertenencia a cada polo, tal como la describe EJE_PARTIDOS_RESULTS §4.
+POLOS = {"izquierda": ["2014_clara_lopez", "2018_petro", "2022_petro", "senado2018_decencia"],
+         "derecha": ["2014_zuluaga", "2018_duque", "2022_gutierrez", "senado2018_cd"]}
+UMBRAL_POLO = 0.69
+
+
+def agregar_polos(datos: dict) -> dict:
+    """DI-V59: agrega los dos partidos del Senado 2018 y la descripción de los dos polos."""
+    votos = pd.read_csv(ELECTORAL / "congreso_2018_localidad.csv")
+    zonas = pd.read_csv(ELECTORAL / "congreso_2018_zonas.csv")
+    zp = pd.read_csv(ELECTORAL / "presidente_1v_zonas.csv")
+    pot = pd.read_csv(ELECTORAL / "presidente_1v_potencial_2018.csv")
+    rp = json.loads(RESULTADO_PARTIDOS.read_text(encoding="utf-8"))
+    S = rp["por_corporacion"]["senado_nacional"]
+    prop = ep.proporciones_partido(votos, zonas, "senado", "nacional")
+    logging.disable(logging.WARNING)
+    comp = ge.composicion()
+    logging.disable(logging.NOTSET)
+    z18 = zp[(zp.anio == 2018) & zp.cod_loc.notna()].merge(pot[["zona", "potencial"]], on="zona")
+    part = pd.Series((z18.votos_total / z18.potencial).to_numpy(), index=z18.cod_loc.astype(int))
+    locs = sorted(set(prop.index) & set(comp.index) - {ge.SUMAPAZ})
+    X = np.column_stack([comp.loc[locs, "x1"], part.loc[locs]])
+
+    zsen = zonas[(zonas.corporacion == "senado") & (zonas.circunscripcion == "nacional")]
+    vsen = votos[(votos.corporacion == "senado") & (votos.circunscripcion == "nacional") & (votos.tipo == "partido")]
+    for clave, (partido, nombre, boton) in PARTIDOS.items():
+        rp_part = dict(zip(locs, ge.residuos(prop.loc[locs, partido].to_numpy(), X)))
+        for cod, l in datos["localidades"].items():
+            c = int(cod)
+            l["votos"][clave] = _pp(prop.loc[c, partido]) if c in prop.index else None
+            l["residuo"][clave] = _pp(S[partido]["residuos"].get(str(c)))
+            l["residuo_participacion"][clave] = _pp(rp_part.get(c))
+        datos["candidatos"].append({
+            "clave": clave, "anio": 2018, "id": clave, "nombre": nombre, "tipo": "partido",
+            "bogota": round(float(vsen[vsen.partido == partido].votos.sum() / zsen.votos_partidos.sum()), 4),
+            "grupo": "Senado 2018", "eleccion": "Senado 2018", "fuera": "senado_2018", "boton": boton})
+        datos["analisis"]["r2_loo"][clave] = S[partido]["r2_loo"]
+
+    for c in datos["candidatos"]:
+        if "tipo" not in c:
+            c.update({"tipo": "candidato", "grupo": f"{c['anio']}", "eleccion": f"primera vuelta {c['anio']}",
+                      "fuera": str(c["anio"]), "boton": c["nombre"].split(" ")[-1]})
+
+    esp = zsen[zsen.cod_loc.isna()].votos_total.sum()
+    datos["votos_sin_localidad"]["senado_2018"] = {"votos": int(esp),
+                                                   "fraccion": round(float(esp / zsen.votos_total.sum()), 4)}
+    L = datos["localidades"]
+    datos["dominio_voto"] = round(max(v for l in L.values() for v in l["votos"].values() if v is not None), 4)
+    datos["dominio_residuo"] = round(max(abs(v) for l in L.values() for v in l["residuo"].values() if v is not None), 4)
+    datos["dominio_residuo_participacion"] = round(max(
+        abs(v) for l in L.values() for v in l["residuo_participacion"].values() if v is not None), 4)
+
+    # Cuánto se parece el residuo de cada opción al de cada partido (19 localidades).
+    cods = [f"{c:02d}" for c in locs]
+    vec = lambda k: np.array([L[c]["residuo"][k] for c in cods], float)          # noqa: E731
+    dec, cd = vec("senado2018_decencia"), vec("senado2018_cd")
+    datos["polos"] = {
+        **POLOS, "pre_registrado": False, "fuente": "docs/EJE_PARTIDOS_RESULTS.md §4",
+        "correlaciones": {c["clave"]: {"con_decencia": round(float(np.corrcoef(vec(c["clave"]), dec)[0, 1]), 2),
+                                       "con_cd": round(float(np.corrcoef(vec(c["clave"]), cd)[0, 1]), 2)}
+                          for c in datos["candidatos"]},
+        "entre_polos": round(float(np.corrcoef(dec, cd)[0, 1]), 2),
+    }
+    datos["analisis"]["eje_partidos"] = {"regla": rp["regla"],
+                                         "r_decencia": S[ep.DECENCIA]["r_eje"],
+                                         "r_cd": S[ep.CENTRO_DEMOCRATICO]["r_eje"],
+                                         "documento": "docs/EJE_PARTIDOS_RESULTS.md"}
+    datos["grupos"] = ["2014", "2018", "2022", "Senado 2018"]
+    return datos
 
 
 def construir() -> dict:
@@ -149,7 +235,7 @@ def construir() -> dict:
 
 
 def main() -> None:
-    datos = construir()
+    datos = agregar_polos(construir())
     SALIDA.parent.mkdir(parents=True, exist_ok=True)
     SALIDA.write_text(json.dumps(datos, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"{SALIDA.relative_to(RAIZ).as_posix()}  {SALIDA.stat().st_size / 1024:.1f} KB")

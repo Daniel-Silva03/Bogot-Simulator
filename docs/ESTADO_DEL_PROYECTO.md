@@ -179,6 +179,8 @@ precisa (descriptivo, no pre-registrado): son **dos polos con geografía propia*
 eje simétrico. El del Centro Democrático es el de la derecha presidencial (0,81–0,86 con
 Zuluaga, Duque y Gutiérrez); el de la Lista, el de la izquierda. La Alianza Verde no
 sigue ninguno; el Polo y el Liberal siguen la inscripción.
+**En el tablero desde el 30/09 (DI-V59):** la capa de Voto trae los dos partidos del
+Senado 2018 y el aviso de residuos habla de dos polos, declarado como descriptivo.
 **Pruebas del tablero arregladas (29/09)**, con dos defectos reales detrás:
 `cargar_bcv` descartaba la manzana, así que con el microdato en disco la serie de la
 EPC caía al DEFF prestado en todas las olas sin avisar; y `preparar_mapa` solo leía

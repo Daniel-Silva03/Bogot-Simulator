@@ -476,7 +476,7 @@ footer b{font-weight:500; color:var(--ink-2)}
 <footer>
   <p><b>Geometría:</b> Unidad Administrativa Especial de Catastro Distrital, capa <code>Localidad</code>, simplificada a ~70 m para dibujo.</p>
   <p><b>Población:</b> 1.000 agentes sintéticos, versión <code>v0.5-dim2</code> (reproducible en cualquier máquina desde DI-M2); marginal territorial de población de 18 años o más.</p>
-  <p><b>Voto:</b> resultados de la Registraduría Nacional, primera vuelta presidencial de 2014, 2018 y 2022, mesa a mesa, sumados por zona electoral (zonas 1–20 = localidades, verificado). Proporciones sobre los votos por candidato. «Lo que el estrato no explica» es el residuo del análisis pre-registrado en <code>docs/GEOGRAFIA_ELECTORAL_SPECIFICATION.md</code>, con el estrato medio de Multipropósito 2021.</p>
+  <p><b>Voto:</b> resultados de la Registraduría Nacional, primera vuelta presidencial de 2014, 2018 y 2022, mesa a mesa, sumados por zona electoral (zonas 1–20 = localidades, verificado). Proporciones sobre los votos por candidato. «Lo que el estrato no explica» es el residuo del análisis pre-registrado en <code>docs/GEOGRAFIA_ELECTORAL_SPECIFICATION.md</code>, con el estrato medio de Multipropósito 2021. Senado 2018: Lista de la Decencia y Centro Democrático, proporción sobre votos por partido y residuo de <code>docs/EJE_PARTIDOS_SPECIFICATION.md</code>. La lectura de dos polos es descriptiva (<code>docs/EJE_PARTIDOS_RESULTS.md</code> §4).</p>
   <p><b>Advertencia de método:</b> la posición de cada punto dentro de su localidad es aleatoria. El modelo no tiene geografía por debajo de la localidad; los puntos no son domicilios.</p>
   <p><b>Navegación:</b> se arrastra para mover y se acerca con Ctrl + rueda, con el pellizco del trackpad, con doble clic o con los botones. Al acercar aparecen las vías secundarias y los parques pequeños. La barra de escala se recalcula sola; la geometría está simplificada a resolución de pantalla, así que sirve para ubicarse, no para medir.</p>
   <p><b>Capa base urbana:</b> vías arteriales y áreas verdes de OpenStreetMap (© colaboradores de OpenStreetMap, <a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>), extracto del 21 de septiembre de 2026, simplificado a ~22 m para dibujo. Es orientación visual: <b>ninguna cifra de esta página se calcula con ella</b>. El recorte es regional, no político, así que dentro del encuadre se ven vías y parques de municipios vecinos; lo único que delimita el Distrito son los polígonos de localidad.</p>
@@ -590,7 +590,7 @@ const RAMPA_VOTO = [[175,158,205],[143,117,186],[112, 79,163],[ 81, 46,133],[ 52
 /* Lo que el estrato no explica: divergente con el gris exactamente en el 0.
    Violeta = el candidato sacó MÁS de lo que predice el estrato de la
    localidad (el mismo tono que «más votos» en la vista de voto); café = menos.
-   Dominio simétrico y fijo para los nueve candidatos, como DI-V51. */
+   Dominio simétrico y fijo para todas las opciones, como DI-V51. */
 const RAMPA_RESID = [[128, 70, 15],[196,150,100],[232,233,230],[143,117,186],[ 81, 46,133]];
 
 /* Paquete de voto (DI-V53). Si la página se construyó sin él, la capa no existe. */
@@ -610,6 +610,12 @@ const votoDe = cod => {
 };
 const domResid = () => votoModo==='residuo_part' ? V.dominio_residuo_participacion : V.dominio_residuo;
 const pp = v => (v>=0?'+':'−') + f1(Math.abs(100*v)) + ' pp';
+/* DI-V59: en qué polo está una opción, según el paquete (EJE_PARTIDOS_RESULTS §4). */
+const poloDe = k => !V ? null : V.polos.izquierda.includes(k) ? 'izquierda'
+                  : V.polos.derecha.includes(k) ? 'derecha' : null;
+const etiquetaPolo = k => { const x = candDe(k); return x.tipo==='partido' ? x.nombre : `${x.boton} ${x.anio}`; };
+const nombrePolo = p => `Su resto territorial pertenece al polo de <b>${p}</b>, que tiene geografía propia
+  (lectura descriptiva, no pre-registrada).`;
 const pc = v => f1(100*v) + ' %';
 const interp = (ramp,t) => {
   t = Math.max(0,Math.min(1,t));
@@ -1091,10 +1097,10 @@ function leyendaCrecimiento(el){
    su botón lo dice (DI-V55). */
 function leyendaVoto(el){
   const c = candDe(votoSel);
-  const botonesCand = V.elecciones.map(a =>
-    `<span style="display:inline-flex;align-items:center;gap:6px"><span class="rampa-lab">${a}</span><span class="grupo" role="group" aria-label="Primera vuelta ${a}">${
-      V.candidatos.filter(x=>x.anio===a).map(x =>
-        `<button data-cand="${x.clave}" aria-pressed="${x.clave===votoSel}">${x.nombre.split(' ').slice(-1)[0]}</button>`
+  const botonesCand = V.grupos.map(g =>
+    `<span style="display:inline-flex;align-items:center;gap:6px"><span class="rampa-lab">${g}</span><span class="grupo" role="group" aria-label="${g}">${
+      V.candidatos.filter(x=>x.grupo===g).map(x =>
+        `<button data-cand="${x.clave}" aria-pressed="${x.clave===votoSel}">${x.boton}</button>`
       ).join('')}</span></span>`).join('');
   const botonesModo = `<span class="grupo" role="group" aria-label="Qué se mira">
       <button data-modo="voto" aria-pressed="${votoModo==='voto'}">Voto</button>
@@ -1107,17 +1113,17 @@ function leyendaVoto(el){
     rampa = `<span class="rampa-lab">0 %</span>
       <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
       <span class="rampa-lab">${pc(V.dominio_voto)}</span>
-      <span>de los votos por candidato para <b>${c.nombre}</b>, primera vuelta ${c.anio} ·
-        escala fija para los nueve candidatos</span>`;
+      <span>de los votos por ${c.tipo==='partido' ? 'partido' : 'candidato'} para <b>${c.nombre}</b>, ${c.eleccion} ·
+        escala fija para todas las opciones</span>`;
   }else{
     const stops = Array.from({length:11},(_,i)=>interp(RAMPA_RESID,i/10)).join(',');
     rampa = `<span class="rampa-lab">${pp(-domResid())}</span>
-      <span class="rampa-eje" title="Gris = lo que el estrato predice. Escala simétrica y fija para los nueve candidatos.">
+      <span class="rampa-eje" title="Gris = lo que el estrato predice. Escala simétrica y fija para todas las opciones.">
         <span class="rampa" style="background:linear-gradient(90deg,${stops})"></span>
         <span class="marca" style="left:50%"><i></i><span>0</span></span>
       </span>
       <span class="rampa-lab">${pp(domResid())}</span>
-      <span><b>${c.nombre}</b> ${c.anio}: violeta, más votos de los que predice el estrato de la
+      <span><b>${c.nombre}</b>, ${c.eleccion}: violeta, más votos de los que predice el estrato de la
         localidad; café, menos</span>`;
   }
   el.innerHTML = `<span style="flex-basis:100%;display:flex;flex-wrap:wrap;gap:6px 14px">${botonesCand}</span>
@@ -1136,12 +1142,14 @@ function leyendaVoto(el){
 function fichaVoto(l){
   const d = V.localidades[l.codigo], c = candDe(votoSel);
   const r = d.residuo[votoSel], rp = d.residuo_participacion[votoSel];
-  return `<h3 style="margin:14px 0 4px">Voto presidencial · primera vuelta ${c.anio}</h3>
+  const polo = poloDe(votoSel);
+  return `<h3 style="margin:14px 0 4px">Voto · ${c.eleccion}</h3>
     <dl class="filas">
       <div class="fila"><dt>${c.nombre}</dt><dd>${pc(d.votos[votoSel])} <small style="color:var(--ink-3)">(Bogotá ${pc(c.bogota)})</small></dd></div>
       <div class="fila"><dt>Lo que el estrato no explica</dt><dd>${r==null
         ? '<small>sin dato: Sumapaz quedó fuera del ajuste</small>' : pp(r)}</dd></div>
       ${rp!=null?`<div class="fila"><dt>… con la participación <small style="color:var(--ink-3)">(exploratorio)</small></dt><dd>${pp(rp)}</dd></div>`:''}
+      ${polo ? `<div class="fila"><dt>Polo <small style="color:var(--ink-3)">(descriptivo)</small></dt><dd>${polo}</dd></div>` : ''}
       <div class="fila"><dt>Estrato medio (Multipropósito 2021)</dt><dd>${f2(d.estrato_medio)}</dd></div>
       ${d.inscritos_sobre_adultos!=null?`<div class="fila"><dt>Inscritos por cada adulto que vive aquí (2018)</dt><dd>${f2(d.inscritos_sobre_adultos)}</dd></div>`:''}
       ${d.participacion_2018!=null?`<div class="fila"><dt>Participación 2018</dt><dd>${pc(d.participacion_2018)}</dd></div>`:''}
@@ -1219,7 +1227,7 @@ function inspector(){
         <div class="fila"><dt>${E && E.concepto ? E.concepto : 'Opinión'} (media) en ${anioSel}</dt><dd>${f2(C().opinion_media)} / 5</dd></div>
         <div class="fila"><dt>Desviación dentro de cada localidad</dt><dd>${f2(C().sd_dentro)}</dd></div>
         <div class="fila"><dt>Desviación entre localidades</dt><dd>${f2(C().sd_entre)}</dd></div>
-        ${capa==='voto' && V ? `<div class="fila"><dt>${candDe(votoSel).nombre}, primera vuelta ${candDe(votoSel).anio}</dt><dd>${pc(candDe(votoSel).bogota)}</dd></div>` : ''}
+        ${capa==='voto' && V ? `<div class="fila"><dt>${candDe(votoSel).nombre}, ${candDe(votoSel).eleccion}</dt><dd>${pc(candDe(votoSel).bogota)}</dd></div>` : ''}
       </dl>
       <p style="margin:0;color:var(--ink-2);font-size:13.5px">
         Haz clic en una localidad para ver su composición. La dispersión <b>dentro</b> de una localidad es
@@ -1637,23 +1645,25 @@ function avisoVoto(){
     .map(([cod,d]) => ({n:conNombre(cod), v:d.votos[votoSel], ins:d.inscritos_sobre_adultos}));
   const ord = [...filas].sort((x,y)=>x.v-y.v), bajo = ord[0], alto = ord[ord.length-1];
   const ins = filas.filter(f=>f.ins!=null).sort((x,y)=>x.ins-y.ins);
-  const fuera = V.votos_sin_localidad[String(c.anio)];
+  const fuera = V.votos_sin_localidad[c.fuera];
   const salvedades = `
     <p><b>Dos salvedades que viajan con el color.</b> El voto se cuenta donde la persona está
        <i>inscrita</i>, no donde vive: en ${ins[ins.length-1].n} hay ${f2(ins[ins.length-1].ins)} inscritos por
        cada adulto que vive allí, y en ${ins[0].n}, ${f2(ins[0].ins)}. Y el ${pc(fuera.fraccion)} de los votos de
-       ${c.anio} (${fmt(fuera.votos)}) se depositó en el puesto censo de Corferias y en las cárceles, que no son
+       ${c.eleccion} (${fmt(fuera.votos)}) se depositó en el puesto censo de Corferias y en las cárceles, que no son
        de ninguna localidad y no se pintan.</p>`;
+  const polo = poloDe(votoSel), P = V.polos, corr = P.correlaciones[votoSel];
   if(votoModo==='voto'){
     el.innerHTML = `
       <h3>Esta capa también puede afirmar geografía</h3>
-      <p>Son votos contados, no una muestra: en la primera vuelta de ${c.anio}, <b>${c.nombre}</b> sacó
+      <p>Son votos contados, no una muestra: en ${c.eleccion}, <b>${c.nombre}</b> sacó
          desde ${pc(bajo.v)} en ${bajo.n} hasta ${pc(alto.v)} en ${alto.n} (Bogotá: ${pc(c.bogota)}). No hay
          error de muestreo que descontar, así que esa diferencia es real y se puede leer del color, como en la
          capa de <b>Crecimiento</b> y al revés que en la de <b>Opinión</b>.</p>
       ${salvedades}
       <p>Y no es opinión: votar por un candidato no es la confianza institucional que muestra la capa de
-         Opinión. El voto entra aquí como la referencia territorial que al resto del tablero le falta.</p>`;
+         Opinión. El voto entra aquí como la referencia territorial que al resto del tablero le falta.</p>
+      ${polo ? `<p>${nombrePolo(polo)} Mira la vista <b>Lo que el estrato no explica</b> para verlo.</p>` : ''}`;
     return;
   }
   const r2 = A.r2_loo[votoSel];
@@ -1661,15 +1671,28 @@ function avisoVoto(){
   el.innerHTML = `
     <h3>${exploratorio ? 'Lo que el estrato y la participación no explican — vista exploratoria' : 'Lo que el estrato no explica'}</h3>
     <p>El estrato medio de cada localidad explica, fuera de muestra, ${r2 > 0
-        ? `el ${f1(100*r2)} % de la diferencia entre localidades en el voto por <b>${c.nombre}</b> en ${c.anio}`
-        : `<b>nada</b> de la diferencia entre localidades en el voto por <b>${c.nombre}</b> en ${c.anio}
+        ? `el ${f1(100*r2)} % de la diferencia entre localidades en el voto por <b>${c.nombre}</b> en ${c.eleccion}`
+        : `<b>nada</b> de la diferencia entre localidades en el voto por <b>${c.nombre}</b> en ${c.eleccion}
            (R² fuera de muestra negativo): su voto casi no varía entre localidades, así que aquí el color es
            prácticamente toda su geografía`}.
        El color es lo que queda: violeta donde sacó más de lo que predice el estrato, café donde sacó menos.</p>
-    <p><b>Lo que queda no es ruido.</b> Entre ${A.persistencia_entre.map(k=>`${candDe(k).nombre} ${candDe(k).anio}`).join(' y ')} ese resto se
-       repite con r = ${f2(A.persistencia_r)}, y sigue un eje izquierda–derecha que ya estaba en 2014: el mapa
-       por composición se equivoca siempre en los mismos lugares. No lo explica el desajuste entre inscripción
-       y residencia (r = ${f2(Math.max(...Object.values(A.inscripcion_r).map(Math.abs)))}).</p>
+    <p><b>Lo que queda no es ruido ni es de un candidato.</b> Entre ${A.persistencia_entre.map(k=>`${candDe(k).nombre} ${candDe(k).anio}`).join(' y ')}
+       ese resto se repite con r = ${f2(A.persistencia_r)}, y aparece también en el voto al Senado 2018: en la Lista de
+       la Decencia sigue al de Petro (r = ${f2(A.eje_partidos.r_decencia)}) y en el Centro Democrático va en contra
+       (r = ${f2(A.eje_partidos.r_cd)}). El mapa por composición se equivoca siempre en los mismos lugares, y no lo
+       explica el desajuste entre inscripción y residencia (r = ${f2(Math.max(...Object.values(A.inscripcion_r).map(Math.abs)))}).</p>
+    <p><b>Son dos polos, no un eje.</b> ${polo && c.tipo==='partido'
+        ? `${c.nombre} es el partido que marca el polo de <b>${polo}</b> en el Senado 2018; con el otro polo
+           se relaciona con r = ${f2(P.entre_polos)}.`
+        : polo
+        ? `${c.nombre} está en el polo de <b>${polo}</b>: su resto se parece al de${polo==='izquierda'
+            ? ` la Lista de la Decencia (r = ${f2(corr.con_decencia)})` : `l Centro Democrático (r = ${f2(corr.con_cd)})`}.`
+        : `${c.nombre} no está en ninguno: su resto se parece poco a los dos (r = ${f2(corr.con_decencia)} con la Lista
+           de la Decencia, ${f2(corr.con_cd)} con el Centro Democrático).`}
+       La izquierda (${P.izquierda.map(etiquetaPolo).join(', ')}) y la derecha (${P.derecha.map(etiquetaPolo).join(', ')})
+       tienen cada una su geografía. Van en sentidos opuestos (r = ${f2(P.entre_polos)} entre los dos partidos), pero no
+       son espejo: el café de un candidato de izquierda no es el violeta de uno de derecha.
+       <i>Lectura descriptiva, no pre-registrada</i> (<code>${P.fuente}</code>).</p>
     ${exploratorio
       ? `<p><b>No pre-registrado.</b> Esta vista añade la participación al modelo, un control que se decidió
          después de ver los resultados. Cambia el residuo de algunas localidades, pero no el patrón: por eso
