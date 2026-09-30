@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bogotá Sintética</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#e7ebe4; --surface:#f7f9f6; --surface-2:#eef2ec; --card:#ffffff;
+  --ink:#16211c; --ink-2:#48564f; --ink-3:#6b776f;
+  --line:#c8d0c8; --line-soft:#dde3dc;
+  --teja:#b2452c; --teja-soft:#f3ddd5; --paramo:#2f6b5e; --paramo-soft:#d6e8e2; --cielo:#5a7d93;
+  --verde-mapa:#b9cfae; --via:#ffffff; --loc:#e9ede5; --loc-borde:#9aa79d;
+  --shadow:0 1px 2px rgba(22,33,28,.06), 0 12px 32px -16px rgba(22,33,28,.25);
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0d1512; --surface:#131d18; --surface-2:#1a2620; --card:#18231e;
+    --ink:#e7ece8; --ink-2:#a7b5ac; --ink-3:#7c8a81;
+    --line:#2b3a33; --line-soft:#223029;
+    --teja:#e07a5c; --teja-soft:#3a2219; --paramo:#63b09c; --paramo-soft:#1c342d; --cielo:#8fb2c7;
+    --verde-mapa:#2d4131; --via:#2f3d36; --loc:#1d2a24; --loc-borde:#4b5c53;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0d1512; --surface:#131d18; --surface-2:#1a2620; --card:#18231e;
+  --ink:#e7ece8; --ink-2:#a7b5ac; --ink-3:#7c8a81;
+  --line:#2b3a33; --line-soft:#223029;
+  --teja:#e07a5c; --teja-soft:#3a2219; --paramo:#63b09c; --paramo-soft:#1c342d; --cielo:#8fb2c7;
+  --verde-mapa:#2d4131; --via:#2f3d36; --loc:#1d2a24; --loc-borde:#4b5c53;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.55 Archivo,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:500;letter-spacing:-.01em;margin:0}
+a{color:var(--paramo)}
+button{font:inherit;cursor:pointer}
+.envoltura{max-width:1240px;margin:0 auto;padding:0 20px}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+/* barra superior */
+.barra{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line-soft)}
+.barra .envoltura{display:flex;align-items:center;gap:14px;height:60px}
+.marca{display:flex;align-items:center;gap:10px;font-family:Fraunces,serif;font-size:1.2rem;font-weight:600;text-decoration:none;color:var(--ink)}
+.marca svg{width:30px;height:30px}
+.barra nav{margin-left:auto;display:flex;gap:4px}
+.barra nav a{color:var(--ink-2);text-decoration:none;padding:8px 12px;border-radius:999px;font-size:.92rem}
+.barra nav a:hover{background:var(--surface-2);color:var(--ink)}
+.sello{font-size:.78rem;padding:5px 10px;border-radius:999px;background:var(--teja-soft);color:var(--teja);font-weight:600;white-space:nowrap}
+
+/* portada */
+.portada{padding:64px 0 40px;position:relative;overflow:hidden}
+.portada .envoltura{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.kicker{font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--paramo);font-weight:600}
+.portada h1{font-size:clamp(2.3rem,5vw,3.8rem);line-height:1.05;margin:14px 0 18px}
+.portada h1 em{font-style:italic;color:var(--teja)}
+.lead{font-size:1.12rem;color:var(--ink-2);max-width:36em}
+.cifras{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0}
+.cifra{background:var(--card);border:1px solid var(--line-soft);border-radius:14px;padding:14px 18px;min-width:150px;box-shadow:var(--shadow)}
+.cifra b{display:block;font-family:Fraunces,serif;font-size:1.9rem;font-weight:600;line-height:1.1}
+.cifra span{font-size:.85rem;color:var(--ink-2)}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--paramo);color:#fff;border:0;border-radius:999px;padding:14px 24px;font-weight:600;text-decoration:none;box-shadow:var(--shadow)}
+.cta:hover{filter:brightness(1.08)}
+.ilustra{position:relative}
+.ilustra svg{width:100%;height:auto;display:block}
+.aviso-portada{margin-top:18px;font-size:.9rem;color:var(--ink-2);display:flex;gap:10px;align-items:flex-start;max-width:36em}
+.aviso-portada svg{flex:none;width:20px;height:20px;color:var(--teja);margin-top:2px}
+
+/* pasos */
+section{padding:56px 0}
+.titulo-seccion{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;flex-wrap:wrap}
+.titulo-seccion h2{font-size:clamp(1.7rem,3vw,2.3rem)}
+.titulo-seccion p{margin:0;color:var(--ink-2)}
+.pasos{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:paso}
+.paso{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);position:relative}
+.paso .icono{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--paramo-soft);color:var(--paramo);margin-bottom:14px}
+.paso:nth-child(2) .icono{background:var(--teja-soft);color:var(--teja)}
+.paso:nth-child(4) .icono{background:var(--teja-soft);color:var(--teja)}
+.paso .icono svg{width:28px;height:28px}
+.paso h3{font-size:1.15rem;margin-bottom:6px}
+.paso p{margin:0;color:var(--ink-2);font-size:.95rem}
+.paso .num{position:absolute;top:18px;right:20px;font-family:Fraunces,serif;font-size:2rem;color:var(--line);font-weight:600}
+.tipos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+.tipo{border-radius:var(--r);padding:18px 20px;border:1px dashed var(--line)}
+.tipo b{display:block;margin-bottom:4px}
+.tipo p{margin:0;font-size:.92rem;color:var(--ink-2)}
+.tipo .ej{font-style:italic;color:var(--ink);font-size:.9rem;margin-top:6px}
+
+/* espacio de trabajo */
+.trabajo{background:var(--surface);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.mesa{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:24px;align-items:start}
+.panel{display:flex;flex-direction:column;gap:16px}
+.caja{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.caja h3{font-size:1.2rem;margin-bottom:10px}
+textarea{width:100%;min-height:96px;resize:vertical;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;background:var(--surface);color:var(--ink)}
+textarea:focus{outline:none;border-color:var(--paramo);box-shadow:0 0 0 3px var(--paramo-soft)}
+.fila-boton{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px}
+.btn{border:0;border-radius:999px;padding:11px 20px;font-weight:600;background:var(--paramo);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.sec{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.teja{background:var(--teja)}
+.contador{font-size:.8rem;color:var(--ink-3)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:6px 12px;font-size:.85rem;text-align:left}
+.chip:hover{border-color:var(--paramo);color:var(--ink)}
+.etq-min{font-size:.78rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.insignia{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em}
+.i-cat{background:var(--paramo-soft);color:var(--paramo)}
+.i-nueva{background:var(--teja-soft);color:var(--teja)}
+.i-fuera{background:var(--surface-2);color:var(--ink-2)}
+.propuesta{font-family:Fraunces,serif;font-size:1.2rem;line-height:1.35;margin:12px 0}
+.escala-lista{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.escala-lista span{font-size:.78rem;background:var(--surface-2);border-radius:8px;padding:3px 8px;color:var(--ink-2)}
+.razon{font-size:.9rem;color:var(--ink-2);margin:0 0 14px}
+.acciones{display:flex;gap:8px;flex-wrap:wrap}
+.cargando{display:flex;align-items:center;gap:10px;color:var(--ink-2);font-size:.95rem}
+.cargando i{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--paramo);animation:giro .8s linear infinite}
+@keyframes giro{to{transform:rotate(360deg)}}
+.oculto{display:none!important}
+
+/* resultado */
+.banda-suposicion{display:flex;gap:10px;align-items:flex-start;background:var(--teja-soft);color:var(--ink);border-radius:12px;padding:10px 14px;font-size:.86rem;margin-bottom:14px}
+.banda-suposicion svg{flex:none;width:18px;height:18px;color:var(--teja);margin-top:2px}
+.grande{display:flex;align-items:baseline;gap:12px;margin:6px 0 4px}
+.grande b{font-family:Fraunces,serif;font-size:3.4rem;line-height:1;font-weight:600;color:var(--paramo)}
+.grande span{color:var(--ink-2);font-size:.95rem;max-width:16em}
+.dist{display:flex;height:34px;border-radius:10px;overflow:hidden;margin:14px 0 6px}
+.dist div{height:100%;transition:flex .5s}
+.dist-leyenda{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-size:.72rem;color:var(--ink-2)}
+.dist-leyenda div{display:flex;flex-direction:column;gap:2px}
+.dist-leyenda b{font-size:.85rem;color:var(--ink)}
+.grupos{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
+.grupo h4{margin:0 0 6px;font-size:.82rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.barra-g{display:grid;grid-template-columns:11em 1fr 3.4em;align-items:center;gap:6px;font-size:.8rem;margin:4px 0}
+.barra-g .pista{height:10px;background:var(--surface-2);border-radius:6px;position:relative;overflow:hidden}
+.barra-g .pista i{position:absolute;top:0;bottom:0;border-radius:6px}
+.barra-g .v{text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pista.div::before{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--ink-3)}
+.medidor{margin:10px 0 4px}
+.medidor input{width:100%;accent-color:var(--teja)}
+.medidor-etq{display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink-3)}
+.nivel-texto{font-family:Fraunces,serif;font-size:1.5rem;margin:6px 0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.nivel-texto small{font:500 .85rem 'IBM Plex Mono',monospace;color:var(--ink-3)}
+.puente-lista{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:6px}
+.puente-lista li{display:flex;gap:8px;align-items:flex-start;font-size:.86rem;color:var(--ink-2)}
+.puente-lista .sg{flex:none;width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-weight:700;font-size:.8rem}
+.sg.mas{background:var(--paramo-soft);color:var(--paramo)}
+.sg.menos{background:var(--teja-soft);color:var(--teja)}
+.nota{font-size:.82rem;color:var(--ink-3);margin-top:12px}
+
+/* mapa */
+.lienzo{position:sticky;top:76px;background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.lienzo-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 18px 0}
+.lienzo-cab h3{font-size:1.15rem}
+.lienzo-cab p{margin:2px 0 0;font-size:.85rem;color:var(--ink-2)}
+#mapa{width:100%;height:min(72vh,680px);display:block;touch-action:none}
+#mapa .loc{fill:var(--loc);stroke:var(--loc-borde);stroke-width:.0009;cursor:pointer;transition:fill .5s}
+#mapa .loc:hover,#mapa .loc.sel{stroke:var(--ink);stroke-width:.0022}
+#mapa .verde{fill:var(--verde-mapa);opacity:.55;pointer-events:none}
+#mapa .via{fill:none;stroke:var(--via);stroke-width:.0011;opacity:.8;pointer-events:none}
+#mapa .etq{font:600 .0068px Archivo,sans-serif;fill:var(--ink);text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--card);stroke-width:.0014px}
+.leyenda{position:absolute;left:16px;bottom:16px;background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--line-soft);border-radius:12px;padding:10px 12px;font-size:.78rem;max-width:260px}
+.leyenda .rampa{height:10px;border-radius:5px;margin:6px 0 3px}
+.leyenda .ext{display:flex;justify-content:space-between;color:var(--ink-2);gap:8px}
+.ficha{position:absolute;right:16px;top:70px;width:230px;background:var(--card);border:1px solid var(--line-soft);border-radius:14px;padding:14px;box-shadow:var(--shadow);font-size:.86rem}
+.ficha h4{margin:0 0 6px;font-family:Fraunces,serif;font-size:1.15rem;font-weight:500}
+.ficha dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:4px 10px}
+.ficha dt{color:var(--ink-2)} .ficha dd{margin:0;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.velo{position:absolute;inset:auto 16px 16px auto;max-width:300px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.84rem;color:var(--ink-2);box-shadow:var(--shadow)}
+
+/* detrás */
+.tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tarjeta{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.tarjeta h3{font-size:1.15rem;margin-bottom:8px}
+.tarjeta p,.tarjeta li{color:var(--ink-2);font-size:.93rem}
+.tarjeta ul{padding-left:18px;margin:8px 0 0}
+footer{padding:30px 0 50px;color:var(--ink-3);font-size:.84rem;border-top:1px solid var(--line-soft)}
+
+@media (max-width:980px){
+  .portada .envoltura,.mesa{grid-template-columns:1fr}
+  .pasos{grid-template-columns:1fr 1fr}
+  .tipos,.tarjetas{grid-template-columns:1fr}
+  .lienzo{position:relative;top:0}
+  .ilustra{max-width:420px;margin:0 auto}
+}
+@media (max-width:560px){
+  .envoltura{padding:0 16px}
+  .pasos,.grupos{grid-template-columns:1fr}
+  .barra nav{display:none}
+  .marca{font-size:1.02rem;white-space:nowrap} .marca svg{width:26px;height:26px}
+  .barra .envoltura{justify-content:space-between} .sello{font-size:.7rem;padding:4px 8px}
+  .ficha{position:static;width:auto;margin:0 16px 16px}
+  .leyenda,.velo{position:static;max-width:none;margin:0 16px 12px}
+  #mapa{height:420px}
+  .cifra{min-width:0;flex:1 1 40%}
+}
+</style>
+</head>
+<body>
+<header class="barra">
+  <div class="envoltura">
+    <a class="marca" href="#inicio" aria-label="Bogotá Sintética, inicio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="var(--paramo)"/><g fill="#fff"><circle cx="11" cy="12" r="2.4"/><circle cx="21" cy="12" r="2.4"/><circle cx="16" cy="20" r="2.4"/><circle cx="9" cy="21" r="1.6" opacity=".7"/><circle cx="23" cy="21" r="1.6" opacity=".7"/></g></svg>
+      Bogotá Sintética
+    </a>
+    <nav aria-label="Secciones"><a href="#como">Cómo funciona</a><a href="#preguntar">Preguntar</a><a href="#detras">Qué hay detrás</a></nav>
+    <span class="sello">Todo es una suposición</span>
+  </div>
+</header>
+
+<main id="inicio">
+<section class="portada">
+  <div class="envoltura">
+    <div>
+      <div class="kicker">Laboratorio de opinión · Bogotá</div>
+      <h1>¿Qué opinaría Bogotá <em>si</em>…?</h1>
+      <p class="lead">Una población sintética de la ciudad, hecha con personas reales que respondieron la Encuesta de Percepción Ciudadana. Hazle una pregunta de opinión o sobre un cambio en la ciudad, y mira cómo respondería, en total, por grupos y por localidad.</p>
+      <div class="cifras">
+        <div class="cifra"><b>20.000</b><span>personas sintéticas</span></div>
+        <div class="cifra"><b>1.501</b><span>bogotanos reales encuestados en 2023</span></div>
+        <div class="cifra"><b>19</b><span>localidades con datos</span></div>
+      </div>
+      <a class="cta" href="#preguntar">Hacer una pregunta
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <p class="aviso-portada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 16.5v.5"/></svg>
+        <span>No es una encuesta nueva ni una predicción. Es un experimento: muestra lo que <b>supondría</b> una población parecida a la de Bogotá, a partir de lo que la gente ya respondió.</span></p>
+    </div>
+    <div class="ilustra" aria-hidden="true">
+      <svg viewBox="0 0 400 360">
+        <defs><radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="var(--paramo-soft)"/><stop offset="1" stop-color="var(--ground)" stop-opacity="0"/></radialGradient></defs>
+        <circle cx="200" cy="180" r="175" fill="url(#halo)"/>
+        <g id="ilustraPuntos"></g>
+        <g font-family="Archivo" font-size="12" fill="var(--ink-2)">
+          <rect x="228" y="44" rx="12" width="150" height="46" fill="var(--card)" stroke="var(--line-soft)"/>
+          <text x="244" y="64" font-weight="600" fill="var(--ink)">¿Metro 24 horas?</text>
+          <text x="244" y="80">de acuerdo · en desacuerdo</text>
+          <rect x="20" y="268" rx="12" width="168" height="46" fill="var(--card)" stroke="var(--line-soft)"/>
+          <text x="36" y="288" font-weight="600" fill="var(--ink)">¿Seguro en tu barrio?</text>
+          <text x="36" y="304">muy seguro · nada seguro</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="como">
+  <div class="envoltura">
+    <div class="titulo-seccion"><h2>Cómo funciona</h2><p>Cuatro pasos, de tu pregunta al mapa.</p></div>
+    <div class="pasos">
+      <article class="paso"><span class="num">1</span><div class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></div>
+        <h3>Escribe tu pregunta</h3><p>Con tus palabras. Sobre lo que opina la gente de Bogotá, o si estaría de acuerdo con un cambio en la ciudad.</p></article>
+      <article class="paso"><span class="num">2</span><div class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></div>
+        <h3>Te sugerimos cómo decirla</h3><p>Un asistente la reescribe como pregunta de encuesta, neutral y con escala. Tú decides si la usas, la editas o no.</p></article>
+      <article class="paso"><span class="num">3</span><div class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="8" r="2.5"/><circle cx="17" cy="8" r="2.5"/><circle cx="12" cy="16" r="2.5"/><path d="M9 9.5l2 4M15 9.5l-2 4"/></svg></div>
+        <h3>La población responde</h3><p>20.000 personas sintéticas, cada una con las respuestas reales de un bogotano encuestado en su misma localidad.</p></article>
+      <article class="paso"><span class="num">4</span><div class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></div>
+        <h3>Léelo como una suposición</h3><p>Verás la respuesta de la ciudad, las diferencias entre grupos y, cuando hay datos para eso, el mapa por localidad.</p></article>
+    </div>
+    <div class="tipos">
+      <div class="tipo"><span class="insignia i-cat">Ya medida</span><b style="margin-top:8px">Preguntas que la encuesta hizo</b><p>Se responden con lo que la gente contestó, reponderado por la población. Tienen mapa, con su margen de error.</p><p class="ej">«¿Se siente seguro en su barrio?»</p></div>
+      <div class="tipo"><span class="insignia i-nueva">Nueva</span><b style="margin-top:8px">Preguntas sobre un cambio</b><p>Se responden con un «puente»: preguntas medidas que se relacionan. Muestran diferencias entre grupos, sin mapa.</p><p class="ej">«¿Apoyaría cobrar por entrar en carro al centro?»</p></div>
+      <div class="tipo"><span class="insignia i-fuera">Fuera de alcance</span><b style="margin-top:8px">Lo que no se puede suponer</b><p>Cifras, intención de voto, lo que piensa alguien en particular. Te decimos por qué y te sugerimos algo cercano.</p><p class="ej">«¿Por quién van a votar?»</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="trabajo" id="preguntar">
+  <div class="envoltura">
+    <div class="titulo-seccion"><h2>Pregúntale a Bogotá</h2><p id="modoTexto">Cada pregunta es independiente: la población no aprende ni recuerda.</p></div>
+    <div class="mesa">
+      <div class="panel">
+        <div class="caja">
+          <label for="pregunta" class="etq-min">Tu pregunta</label>
+          <textarea id="pregunta" maxlength="500" placeholder="Por ejemplo: ¿La gente estaría de acuerdo con que el metro funcione las 24 horas?"></textarea>
+          <div class="fila-boton"><span class="contador" id="contador">0 / 500</span><button class="btn" id="enviar">Preguntar</button></div>
+          <div class="chips" id="ejemplos" aria-label="Ejemplos"></div>
+        </div>
+        <div class="caja oculto" id="sugerencia" aria-live="polite"></div>
+        <div class="caja oculto" id="resultado" aria-live="polite"></div>
+      </div>
+      <div class="lienzo" id="lienzo">
+        <div class="lienzo-cab"><div><h3 id="mapaTitulo">Bogotá por localidades</h3><p id="mapaSub">Toca una localidad para ver su información general.</p></div></div>
+        <svg id="mapa" role="img" aria-label="Mapa de las localidades urbanas de Bogotá"></svg>
+        <div class="ficha" id="ficha"></div>
+        <div class="leyenda" id="leyenda"></div>
+        <div class="velo oculto" id="velo"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="detras">
+  <div class="envoltura">
+    <div class="titulo-seccion"><h2>Qué hay detrás</h2><p>Lo que sostiene cada respuesta, y lo que no puede decir.</p></div>
+    <div class="tarjetas">
+      <article class="tarjeta"><h3>La población</h3><p>Cada una de las 20.000 personas sintéticas hereda a un bogotano real de la Encuesta de Percepción Ciudadana 2023 (Bogotá Cómo Vamos), de su misma localidad y parecido en sexo, edad, estrato y educación. Las proporciones de la ciudad salen de la Encuesta Multipropósito 2021 del DANE.</p></article>
+      <article class="tarjeta"><h3>El puente</h3><p>Para una pregunta nueva, un modelo de lenguaje elige qué preguntas medidas se relacionan y en qué sentido; cada persona responde con sus propias respuestas reales. Se probó con doce preguntas cuya respuesta se conocía: ordena bien a las personas, pero no a las localidades. El modelo nunca contesta por nadie.</p></article>
+      <article class="tarjeta"><h3>Los límites</h3><ul>
+        <li>No predice ni reemplaza una encuesta.</li>
+        <li>Opina como Bogotá en 2023.</li>
+        <li>Unas 80 personas por localidad: el mapa tiene márgenes anchos.</li>
+        <li>Sumapaz no tiene encuestados.</li>
+        <li>El nivel de una pregunta nueva lo propone el modelo: puedes cambiarlo.</li></ul></article>
+    </div>
+  </div>
+</section>
+</main>
+<footer><div class="envoltura">Bogotá Sintética · Centro Nacional de Consultoría. Datos: Encuesta de Percepción Ciudadana 2023 (Bogotá Cómo Vamos), Encuesta Multipropósito 2021 y proyecciones de población (DANE-SDP), geometría de localidades (Catastro Distrital), mapa base © colaboradores de OpenStreetMap (ODbL). Todo lo que muestra esta página es una suposición de una población sintética, no una medición.</div></footer>
+
+<script id="datos" type="application/json">/*__DATOS__*/</script>
+<script id="base" type="application/json">/*__BASE__*/</script>
+<script>
+const D = JSON.parse(document.getElementById('datos').textContent);
+const B = JSON.parse(document.getElementById('base').textContent);
+const $ = s => document.querySelector(s);
+const fmt = n => n.toLocaleString('es-CO');
+const pct = v => Math.round(100*v) + ' %';
+const f1 = v => v.toLocaleString('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1});
+const f2 = v => v.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const NS = 'http://www.w3.org/2000/svg';
+const icoAviso = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 16.5v.5"/></svg>';
+
+if (D.simulado) $('#modoTexto').textContent = 'Modo simulado: las respuestas del asistente son de prueba, sin gasto. Cada pregunta es independiente.';
+
+/* ---------- ilustración de la portada: puntos que son personas ---------- */
+(() => {
+  const g = $('#ilustraPuntos'); let s = 7;
+  const r = () => (s = (s*16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 150; i++) {
+    const a = r()*Math.PI*2, d = Math.sqrt(r())*135;
+    const c = document.createElementNS(NS,'circle');
+    c.setAttribute('cx', 200 + Math.cos(a)*d); c.setAttribute('cy', 180 + Math.sin(a)*d*.92);
+    c.setAttribute('r', 3 + r()*3.5);
+    const t = r(); c.setAttribute('fill', t < .45 ? 'var(--paramo)' : t < .8 ? 'var(--teja)' : 'var(--line)');
+    c.setAttribute('opacity', .55 + r()*.4);
+    g.append(c);
+  }
+})();
+
+/* ---------- mapa ---------- */
+const svg = $('#mapa');
+const lat0 = 4.63, k = Math.cos(lat0*Math.PI/180);
+const px = lon => lon*k, py = lat => -lat;
+const URB = D.localidades.filter(l => l.codigo !== 20);
+const partes = g => g.type === 'Polygon' ? [g.coordinates] : g.coordinates;
+let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+URB.forEach(l => partes(l.geometry).forEach(p => p.forEach(r => r.forEach(([lo,la]) => {
+  x0=Math.min(x0,px(lo)); x1=Math.max(x1,px(lo)); y0=Math.min(y0,py(la)); y1=Math.max(y1,py(la)); }))));
+const m = .01; svg.setAttribute('viewBox', `${x0-m} ${y0-m} ${x1-x0+2*m} ${y1-y0+2*m}`);
+svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+const dPath = g => { let d=''; partes(g).forEach(p => p.forEach(r => { r.forEach(([lo,la],i) => d += (i?'L':'M') + px(lo).toFixed(5) + ' ' + py(la).toFixed(5)); d += 'Z'; })); return d; };
+const gLoc = document.createElementNS(NS,'g'), gBase = document.createElementNS(NS,'g'), gEtq = document.createElementNS(NS,'g');
+svg.append(gLoc, gBase, gEtq);
+const ESC = B.meta.escala;
+const decodificar = pl => { const o=[]; let x=0,y=0; for(let i=0;i<pl.length;i+=2){ x+=pl[i]; y+=pl[i+1]; o.push([x/ESC,y/ESC]); } return o; };
+const trazo = (pts, cerrar) => pts.map((p,i) => (i?'L':'M') + px(p[0]).toFixed(5) + ' ' + py(p[1]).toFixed(5)).join('') + (cerrar ? 'Z' : '');
+const capa = (lineas, clase, cerrar) => (lineas || []).forEach(pl => { const p = document.createElementNS(NS,'path'); p.setAttribute('d', trazo(decodificar(pl), cerrar)); p.setAttribute('class', clase); gBase.append(p); });
+capa(B.verde.g, 'verde', true); capa(B.vias.trunk, 'via', false);
+
+const rutas = {};
+URB.forEach(l => {
+  const p = document.createElementNS(NS,'path');
+  p.setAttribute('d', dPath(l.geometry)); p.setAttribute('class','loc');
+  p.setAttribute('tabindex','0'); p.setAttribute('role','button'); p.setAttribute('aria-label', l.nombre);
+  p.addEventListener('click', () => seleccionar(l.codigo));
+  p.addEventListener('mouseenter', () => seleccionar(l.codigo, true));
+  p.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); seleccionar(l.codigo); } });
+  gLoc.append(p); rutas[l.codigo] = p;
+  const t = document.createElementNS(NS,'text'); t.setAttribute('class','etq');
+  t.setAttribute('x', px(l.centroide[0]).toFixed(4)); t.setAttribute('y', py(l.centroide[1]).toFixed(4));
+  t.textContent = l.nombre.replace('Rafael Uribe Uribe','R. Uribe Uribe').replace('Antonio Nariño','A. Nariño');
+  gEtq.append(t);
+});
+
+/* colores: rampa de un solo tono para lo general; divergente teja → gris → páramo para respuestas */
+const mez = (a,b,t) => a.map((v,i) => Math.round(v+(b[i]-v)*t));
+const rgb = c => `rgb(${c})`;
+const oscuro = () => matchMedia('(prefers-color-scheme: dark)').matches && document.documentElement.dataset.theme !== 'light';
+const RAMPA_G = () => oscuro() ? [[40,62,54],[99,176,156]] : [[214,232,226],[47,107,94]];
+const DIV = () => oscuro() ? [[224,122,92],[70,82,76],[99,176,156]] : [[178,69,44],[226,226,218],[47,107,94]];
+const colorG = t => rgb(mez(...RAMPA_G(), t));
+const colorD = t => { const [a,b,c] = DIV(); return rgb(t < .5 ? mez(a,b,t*2) : mez(b,c,(t-.5)*2)); };
+
+let estado = { modo:'general', resp:null, sel:null };
+const G = D.general;
+const maxAdultos = Math.max(...URB.map(l => G[l.codigo].adultos));
+
+function pintar(){
+  URB.forEach(l => {
+    const p = rutas[l.codigo];
+    if (estado.modo === 'catalogo') {
+      const v = estado.resp.localidades[l.codigo];
+      const n = estado.resp.escala.length;
+      p.style.fill = v ? colorD((v.media-1)/(n-1)) : 'var(--loc)';
+    } else if (estado.modo === 'nueva') {
+      p.style.fill = 'var(--loc)';
+    } else {
+      p.style.fill = colorG(Math.sqrt(G[l.codigo].adultos / maxAdultos));
+    }
+  });
+  leyenda(); seleccionar(estado.sel ?? 11, true);
+}
+
+function leyenda(){
+  const el = $('#leyenda');
+  el.classList.toggle('oculto', estado.modo === 'nueva');
+  if (estado.modo === 'catalogo') {
+    const e = estado.resp.escala; const [a,b,c] = DIV();
+    el.innerHTML = `<b>Promedio de la localidad</b>
+      <div class="rampa" style="background:linear-gradient(90deg,${rgb(a)},${rgb(b)},${rgb(c)})"></div>
+      <div class="ext"><span>${esc(e[0])}</span><span>${esc(e[e.length-1])}</span></div>
+      <div class="nota" style="margin-top:6px">La escala es la de la pregunta completa, no la del mínimo al máximo observado. Cada localidad tiene un margen de error ancho: míralo en su ficha.</div>`;
+  } else if (estado.modo === 'nueva') {
+    el.innerHTML = '';                              /* el aviso del mapa (#velo) ya lo dice */
+  } else {
+    const [a,b] = RAMPA_G();
+    el.innerHTML = `<b>Personas de 18 años o más</b>
+      <div class="rampa" style="background:linear-gradient(90deg,${rgb(a)},${rgb(b)})"></div>
+      <div class="ext"><span>menos</span><span>${fmt(maxAdultos)}</span></div>`;
+  }
+}
+
+function seleccionar(cod, suave){
+  if (!suave) estado.sel = cod;
+  Object.entries(rutas).forEach(([c,p]) => p.classList.toggle('sel', +c === +cod));
+  const g = G[cod]; if (!g) return;
+  let filas = `<dt>Adultos</dt><dd>${fmt(g.adultos)}</dd>
+    <dt>Estrato medio</dt><dd>${g.estrato_medio ? f1(g.estrato_medio) : '—'}</dd>
+    <dt>Encuestados (EPC 2023)</dt><dd>${fmt(g.encuestados)}</dd>`;
+  let extra = '';
+  if (estado.modo === 'catalogo') {
+    const v = estado.resp.localidades[cod];
+    if (v) {
+      filas = `<dt>Promedio</dt><dd>${f2(v.media)}</dd>
+        <dt>Margen (95 %)</dt><dd>${f2(v.margen[0])} – ${f2(v.margen[1])}</dd>
+        <dt>${esc(estado.resp.ciudad.etiqueta_alto)}</dt><dd>${pct(v.alto)}</dd>` + filas;
+      extra = `<div class="nota">Promedio en una escala de 1 a ${estado.resp.escala.length}. Ciudad: ${f2(estado.resp.ciudad.media)}.</div>`;
+    }
+  }
+  $('#ficha').innerHTML = `<h4>${esc(g.nombre)}</h4><dl>${filas}</dl>${extra}`;
+}
+
+/* ---------- consulta ---------- */
+const campo = $('#pregunta');
+campo.addEventListener('input', () => $('#contador').textContent = `${campo.value.length} / 500`);
+campo.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) preguntar(); });
+$('#enviar').addEventListener('click', () => preguntar());
+D.ejemplos.forEach(t => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = t;
+  b.addEventListener('click', () => { campo.value = t; campo.dispatchEvent(new Event('input')); preguntar(); }); $('#ejemplos').append(b); });
+
+async function api(ruta, cuerpo){
+  const r = await fetch(ruta, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(cuerpo)});
+  const d = await r.json().catch(() => ({error:'Respuesta ilegible del servidor.'}));
+  if (!r.ok || d.error) throw new Error(d.error || 'Error del servidor');
+  return d;
+}
+const cargando = (el, texto) => { el.classList.remove('oculto'); el.innerHTML = `<div class="cargando"><i></i>${texto}</div>`; };
+const error = (el, texto) => { el.classList.remove('oculto'); el.innerHTML = `<p class="razon" style="margin:0">⚠ ${esc(texto)}</p>`; };
+
+async function preguntar(texto){
+  const q = (texto ?? campo.value).trim(); if (!q) { campo.focus(); return; }
+  if (texto) { campo.value = texto; campo.dispatchEvent(new Event('input')); }
+  $('#enviar').disabled = true; $('#resultado').classList.add('oculto');
+  estado = { ...estado, modo:'general', resp:null }; pintar(); $('#velo').classList.add('oculto');
+  titulosMapa();
+  const s = $('#sugerencia'); cargando(s, 'Buscando cómo decir tu pregunta…');
+  try { mostrarSugerencia(await api('/api/reformular', {pregunta:q}), q); }
+  catch (e) { error(s, e.message); }
+  finally { $('#enviar').disabled = false; }
+}
+
+function mostrarSugerencia(r, original){
+  const s = $('#sugerencia');
+  if (r.alcance === 'invalida') { s.innerHTML = `<p class="razon" style="margin:0">${esc(r.mensaje)}</p>`; return; }
+  const insignia = {catalogo:['i-cat','Ya medida en la encuesta'], nueva:['i-nueva','Pregunta nueva'], fuera:['i-fuera','Fuera de alcance']}[r.alcance];
+  let cuerpo = '', acciones = '';
+  if (r.alcance === 'catalogo') {
+    cuerpo = `<p class="propuesta">${esc(r.pregunta_catalogo)}</p><div class="escala-lista">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>`;
+    acciones = `<button class="btn" id="usar">Ver cómo respondió</button>`;
+  } else if (r.alcance === 'nueva') {
+    cuerpo = `<label class="etq-min" for="editada">Así la preguntaría una encuesta (puedes editarla)</label>
+      <textarea id="editada" style="min-height:80px;margin-top:6px">${esc(r.reformulada)}</textarea>
+      <div class="escala-lista">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>`;
+    acciones = `<button class="btn teja" id="usar">Suponer la respuesta</button>`;
+  } else {
+    cuerpo = r.reformulada ? `<p class="razon">Algo cercano que sí se puede suponer:</p><p class="propuesta">${esc(r.reformulada)}</p>` : '';
+    acciones = r.reformulada ? `<button class="btn sec" id="usar">Probar con esta</button>` : '';
+  }
+  s.innerHTML = `<span class="insignia ${insignia[0]}">${insignia[1]}</span>${cuerpo}<p class="razon">${esc(r.razon || '')}</p><div class="acciones">${acciones}</div>`;
+  const b = $('#usar'); if (!b) return;
+  b.addEventListener('click', () => {
+    if (r.alcance === 'catalogo') responder({codigo:r.codigo});
+    else if (r.alcance === 'nueva') responder({pregunta:$('#editada').value.trim(), escala:r.escala});
+    else preguntar(r.reformulada);                  /* DI-CO4: la alternativa vuelve a reformularse */
+  });
+}
+
+async function responder(cuerpo){
+  const el = $('#resultado'); cargando(el, cuerpo.codigo ? 'Consultando a la población…' : 'Construyendo el puente y consultando a la población…');
+  try { const r = await api('/api/responder', cuerpo); if (r.tipo === 'invalida') return error(el, r.mensaje); mostrar(r); }
+  catch (e) { error(el, e.message); }
+}
+
+const banda = r => `<div class="banda-suposicion">${icoAviso}<span>${esc(r.aviso)}</span></div>`;
+
+function mostrar(r){
+  const el = $('#resultado'); el.classList.remove('oculto');
+  estado = { ...estado, modo:r.tipo, resp:r };
+  if (r.tipo === 'catalogo') {
+    const n = r.escala.length; const cols = r.escala.map((_,i) => colorD(i/(n-1)));
+    el.innerHTML = `<span class="insignia i-cat">Dato medido · EPC 2023</span>
+      <h3 style="margin-top:10px">${esc(r.pregunta)}</h3>${banda(r)}
+      <div class="grande"><b>${pct(r.ciudad.alto)}</b><span>respondería «${esc(r.ciudad.etiqueta_alto.toLowerCase())}»</span></div>
+      <div class="dist" role="img" aria-label="Distribución de respuestas">${r.ciudad.distribucion.map((d,i)=>`<div style="flex:${d};background:${cols[i]}" title="${esc(r.escala[i])}: ${pct(d)}"></div>`).join('')}</div>
+      <div class="dist-leyenda">${r.escala.map((e,i)=>`<div><b>${pct(r.ciudad.distribucion[i])}</b>${esc(e)}</div>`).join('')}</div>
+      <div class="grupos">${Object.entries(r.grupos).map(([g,fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f => `
+        <div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista"><i style="left:0;width:${100*f.alto}%;background:var(--paramo)"></i></span><span class="v">${pct(f.alto)}</span></div>`).join('')}</div>`).join('')}</div>
+      <p class="nota">Barras: porcentaje que respondería «${esc(r.ciudad.etiqueta_alto.toLowerCase())}» en cada grupo. Mira el mapa: cada localidad tiene su promedio y su margen de error. ${esc(r.fuente)}</p>`;
+  } else {
+    const nivelTxt = v => { const i = Math.min(4, Math.max(0, Math.round(v)-1)); return r.escala[i]; };
+    /* las barras se escalan al índice más grande de esta respuesta (mínimo 0,25 DE), para que se vean */
+    const tope = Math.max(.25, ...Object.values(r.grupos).flat().map(f => Math.abs(f.indice)));
+    el.innerHTML = `<span class="insignia i-nueva">Suposición con puente</span>
+      <h3 style="margin-top:10px">${esc(r.pregunta)}</h3>${banda(r)}
+      <div class="etq-min">Nivel de la ciudad (propuesto, editable)</div>
+      <div class="nivel-texto" id="nivelTxt">${esc(nivelTxt(r.nivel_propuesto))} <small>${f1(r.nivel_propuesto)} de 5</small></div>
+      <div class="medidor"><input type="range" id="nivel" min="1" max="5" step="0.1" value="${r.nivel_propuesto}" aria-label="Nivel supuesto de la ciudad">
+        <div class="medidor-etq"><span>${esc(r.escala[0])}</span><span>${esc(r.escala[4])}</span></div></div>
+      <p class="nota" style="margin-top:4px">El modelo propuso ${f1(r.nivel_propuesto)}. Si crees que es otro, muévelo: es un supuesto, no un dato.</p>
+      <div class="grupos">${Object.entries(r.grupos).map(([g,fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f => {
+        const w = 50*Math.abs(f.indice)/tope, izq = f.indice < 0 ? 50-w : 50;
+        return `<div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista div"><i style="left:${izq}%;width:${w}%;background:${f.indice<0?'var(--teja)':'var(--paramo)'}"></i></span><span class="v">${f.indice>0?'+':''}${f2(f.indice)}</span></div>`; }).join('')}</div>`).join('')}</div>
+      <p class="nota">Barras: qué tan más (verde) o menos (teja) de acuerdo que el promedio de la ciudad estaría cada grupo, en desviaciones estándar; la línea del centro es el promedio. El puente ordena, no dice cuántos.</p>
+      <div class="etq-min" style="margin-top:14px">En qué se apoya la suposición</div>
+      <ul class="puente-lista">${r.puente.map(p => `<li><span class="sg ${p.sentido==='+'?'mas':'menos'}">${p.sentido==='+'?'+':'−'}</span><span>${esc(p.pregunta)}</span></li>`).join('')}</ul>
+      <p class="nota">${esc(r.justificacion || '')}</p>`;
+    $('#nivel').addEventListener('input', e => { const v = +e.target.value; $('#nivelTxt').innerHTML = `${esc(nivelTxt(v))} <small>${f1(v)} de 5</small>`; });
+    $('#velo').textContent = r.sin_mapa; $('#velo').classList.remove('oculto');
+  }
+  if (r.tipo === 'catalogo') $('#velo').classList.add('oculto');
+  titulosMapa(); pintar();
+  if (innerWidth < 980) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function titulosMapa(){
+  if (estado.modo === 'catalogo') { $('#mapaTitulo').textContent = 'Cómo respondería cada localidad'; $('#mapaSub').textContent = estado.resp.pregunta; }
+  else if (estado.modo === 'nueva') { $('#mapaTitulo').textContent = 'Bogotá por localidades'; $('#mapaSub').textContent = 'Esta suposición no se dibuja por localidad.'; }
+  else { $('#mapaTitulo').textContent = 'Bogotá por localidades'; $('#mapaSub').textContent = 'Toca una localidad para ver su información general. Sumapaz, rural y sin encuestados, queda fuera del mapa.'; }
+}
+
+titulosMapa(); pintar();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', pintar);
+</script>
+</body>
+</html>

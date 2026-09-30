@@ -70,7 +70,8 @@ resultó falso no se borra:** se anota la corrección al lado (§45).
 | `src/opinion/` | modelos de opinión; `forzamiento_categorico.py` es el **ladeo categórico**, el forzamiento que usa todo |
 | `src/scenarios/` | motor de escenarios (YAML → informe HTML); ejemplos en `config/escenarios/` |
 | `src/experiments/` | experimentos 3 a 8 y A08 (`a08_paso0.py`, `a08_paso0b.py`); `donante_llm.py` llama a OpenRouter con caché |
-| `src/viz/` | tablero: preparadores y `plantilla_mapa.html` → `data/processed/viz/mapa_bogota.html` |
+| `src/consulta/` | **la página actual (D17):** `servidor.py` (local, `127.0.0.1:8765`), `motor.py` (une reformulación, catálogo y puente), `pagina.html`, `reformular.py` |
+| `src/viz/` | tablero anterior (se conserva): preparadores y `plantilla_mapa.html` → `data/processed/viz/mapa_bogota.html` |
 | `src/utils/` | `diseno.py` (medias y DEFF con diseño muestral), `revisar_datos.py` |
 | `config/experimento9/` | los 12 dossiers del Experimento 9 y el script que los genera |
 | `src/experiments/experimento9.py` | Experimento 9: LLM como proponente de escenarios (cerrado) |
@@ -93,6 +94,8 @@ dice. Decisión completa en `docs/PROJECT_CONTEXT.md` §39, D17.
 - **Cada consulta es independiente**: no modifica la población ni deja rastro.
 - **Validación pre-registrada** con preguntas que la EPC midió y la población no vio.
 - Inventario de preguntas de la EPC: `docs/DATA_INVENTORY.md` §13.8.
+- **La página:** `docs/PAGINA_CONSULTA.md`. Se abre con `python src/consulta/servidor.py`
+  (`--simulado` para mirarla sin gasto). La clave nunca va al navegador.
 
 **En espera:** la prueba de la segunda vuelta de 2026 está pre-registrada y con código
 (`docs/SEGUNDA_VUELTA_2026_SPECIFICATION.md`), pero la Registraduría no publicó la

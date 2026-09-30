@@ -185,9 +185,15 @@ alcance) y con código (`src/consulta/reformular.py`, 7 pruebas con modelo simul
 cuatro condiciones se cumplen y entra a la página. Las diez reformulaciones de preguntas nuevas
 salen neutrales; las alternativas que sugiere para lo que está fuera de alcance no siempre
 (dos tendenciosas), así que en la página una alternativa vuelve a pasar por la reformulación
-antes de responderse. **Siguiente:** unir población, puente y reformulación en una consulta
-de punta a punta y llevarla a la página. Pendiente para después: juntar olas de la EPC para
-el mapa.
+antes de responderse. **Consulta de punta a punta y página nueva (30/09)** (`PAGINA_CONSULTA.md`, `src/consulta/`):
+un servidor local (`python src/consulta/servidor.py`, en `127.0.0.1:8765`) une las tres
+piezas y sirve una página rehecha por completo, a pedido de Daniel: portada con qué es y
+cómo usarlo, espacio para preguntar con sugerencia editable, resultado y mapa grande con
+información general por localidad. **Sin los botones de capas del tablero.** Una pregunta
+del catálogo tiene mapa con margen; una nueva, grupos y nivel editable, sin mapa; una fuera
+de alcance, su razón y una alternativa que se vuelve a reformular. 8 pruebas; revisada en
+el navegador en modo simulado. **Siguiente:** abrirla con el modelo real y probarla con
+preguntas de verdad. Pendiente para después: juntar olas de la EPC para el mapa.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
