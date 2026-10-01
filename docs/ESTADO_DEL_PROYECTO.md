@@ -231,7 +231,12 @@ como **base débil**. **Llevado a la página el 1/10** (`PAGINA_CONSULTA.md` §5
 (`DATA_INVENTORY.md` §15). Una encuesta de Bogotá de agosto de 2023 trae dos preguntas que la EPC no
 hizo (metro elevado, Corredor Verde) con resultados por grupo y localidad. **Pre-registrado el 1/10:**
 `PREGUNTAS_REALES_NUEVAS_SPECIFICATION.md` (P1: el puente acierta ≥ 70 % de las 24 diferencias
-claras entre grupos y le gana al azar). **Siguiente:** código y corrida (6 llamadas).
+claras entre grupos y le gana al azar). **Corrido el 1/10** (6 llamadas, USD 0,014;
+`PREGUNTAS_REALES_NUEVAS_RESULTS.md`): **P1 falla, 8 de 24**, menos que el azar; en el Corredor
+Verde el puente invirtió el orden (2 de 13): eligió preguntas del mismo tema (árboles, zonas verdes)
+que no predicen quién lo apoyaba. Por la regla, la página debe dejar de mostrar de entrada las
+barras por grupo en preguntas nuevas. **Pendiente con Daniel:** aplicar ese cambio, y la pregunta
+de proyecto de si la página debe seguir respondiendo preguntas nuevas.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

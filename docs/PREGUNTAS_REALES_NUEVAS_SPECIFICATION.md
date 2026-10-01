@@ -5,7 +5,8 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 1 de octubre de 2026
-Estado: **sin código; no se le ha hecho ninguna de las dos preguntas al simulador, ni simulado ni real**
+Estado: ~~sin código; no se le ha hecho ninguna de las dos preguntas al simulador~~ **corrida el 1/10**
+(`PREGUNTAS_REALES_NUEVAS_RESULTS.md`): P1 no se cumple (8 de 24); en el Corredor Verde, el orden al revés.
 Origen: `DATA_INVENTORY.md` §15 (biblioteca pública del CNC) y `PUENTE_SIN_BASE_SPECIFICATION.md` §7
 («no mide si la suposición acierta: para una pregunta de verdad nueva no hay dato real»)
 

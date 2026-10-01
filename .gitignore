@@ -117,6 +117,8 @@ data/**
 !data/processed/puente_localidades/resultado.json
 !data/processed/puente_sin_base/
 !data/processed/puente_sin_base/resultado.json
+!data/processed/preguntas_reales/
+!data/processed/preguntas_reales/resultado.json
 !data/processed/reformulacion/
 !data/processed/reformulacion/resultado.json
 
