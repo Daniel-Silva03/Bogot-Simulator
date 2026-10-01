@@ -64,6 +64,14 @@ DI-CO9. **La respuesta dice a cuántas personas sintéticas consultó**: las que
 DI-CO10. **Las etiquetas se muestran sin el número del código** («4. Alta» → «Alta»).
     Algunas etiquetas de la EPC lo traen; en la página se leía «4. alta o 5. muy
     alta». Solo cambia lo que se muestra: el catálogo y lo que ve el modelo no cambian.
+
+DI-CO11. **Si el puente usa preguntas que no se hicieron todos los años, la respuesta lo
+    dice** (Daniel, 30/09: «déjalo así y dilo en la respuesta»). Hecho: en la prueba
+    con el modelo real, el puente del metro usó dos preguntas que solo existen en
+    2023; para los encuestados de 2022 y 2024 valen 0 (DI-CO7). No se restringe al
+    modelo (eso cambiaría su prompt y habría que validarlo otra vez). Cada pregunta
+    del puente lleva sus años, y la respuesta trae qué fracción del peso del puente
+    queda en cada año y un texto que lo explica.
 """
 
 from __future__ import annotations
@@ -120,6 +128,24 @@ def _grupos(ag: pd.DataFrame) -> dict[str, pd.Series]:
 def _etq(texto: str) -> str:
     """DI-CO10."""
     return re.sub(r"^\s*\d+\s*[.)-]\s*", "", str(texto)).strip()
+
+
+def cobertura_puente(puente: list[dict], anios: list[int]) -> tuple[dict, Optional[str]]:
+    """DI-CO11: (fracción del peso del puente que existe en cada año, texto o None)."""
+    total = sum(p["peso"] for p in puente)
+    frac = {a: sum(p["peso"] for p in puente if a in p["anios"]) / total for a in anios}
+    parciales = [p for p in puente if set(anios) - set(p["anios"])]
+    if not parciales:
+        return {str(a): 1.0 for a in anios}, None
+    cortos = [a for a in anios if frac[a] < 1]
+    completos = [a for a in anios if frac[a] == 1]
+    n, k = len(puente), len(parciales)
+    texto = (f"{k} de las {n} preguntas en que se apoya no se hicieron todos los años. Para quien respondió "
+             f"la encuesta en un año sin esa pregunta, cuenta como neutra: "
+             + ", ".join(f"en {a} queda el {round(100 * frac[a])} % del peso" for a in cortos) + ". ")
+    if completos:
+        texto += f"Las diferencias entre grupos se apoyan más en quienes respondieron en {_texto_anios(completos)}."
+    return {str(a): round(frac[a], 3) for a in anios}, texto
 
 
 def cargar_donantes() -> pd.DataFrame:
@@ -280,11 +306,13 @@ class Motor:
             e = etq.to_numpy()
             grupos[gname] = [{"grupo": o, "indice": round(_wmean(z[e == o], self.peso[e == o]), 3)}
                              for o in GRUPOS[gname]["orden"] if (e == o).any()]
-        puente = [{**p, "pregunta": self.catalogo[p["codigo"]]["pregunta"].strip()} for p in r["preguntas"]]
+        puente = [{**p, "pregunta": self.catalogo[p["codigo"]]["pregunta"].strip(),
+                   "anios": sorted(self.anios.get(p["codigo"], [2023]))} for p in r["preguntas"]]
+        peso_anio, aviso_anios = cobertura_puente(puente, sorted(set(int(a) for a in self.anio_agente)))   # DI-CO11
         return {"tipo": "nueva", "suposicion": True, "aviso": AVISO, "pregunta": pregunta.strip(), "escala": escala,
                 "consultados": len(self.agentes),                                   # DI-CO9
                 "nivel_propuesto": round(r["nivel"], 2), "grupos": grupos, "puente": puente,
-                "justificacion": r["justificacion"],
+                "justificacion": r["justificacion"], "peso_por_anio": peso_anio, "aviso_anios": aviso_anios,
                 "sin_mapa": ("Para preguntas nuevas el simulador no dibuja localidades: en las pruebas con preguntas "
                              "conocidas ordenó bien a las personas, pero no a las localidades "
                              "(PUENTE_RESULTS.md, PUENTE_LOCALIDADES_RESULTS.md)."),

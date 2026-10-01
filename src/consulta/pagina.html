@@ -706,7 +706,8 @@ function mostrar(r){
         return `<div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista div"><i style="left:${izq}%;width:${w}%;background:${f.indice<0?'var(--humo)':'var(--menta-palida)'}"></i></span><span class="v">${f.indice>0?'+':''}${f2(f.indice)}</span></div>`; }).join('')}</div>`).join('')}</div>
       <p class="nota">Barras: qué tan más (claro) o menos (gris) de acuerdo que el promedio de la ciudad estaría cada grupo, en desviaciones estándar; la línea del centro es el promedio. El puente ordena, no dice cuántos.</p>
       <div class="etq-min" style="margin-top:16px">En qué se apoya la suposición</div>
-      <ul class="puente-lista">${r.puente.map(p => `<li><span class="sg ${p.sentido==='+'?'mas':'menos'}">${p.sentido==='+'?'+':'−'}</span><span>${esc(p.pregunta)}</span></li>`).join('')}</ul>
+      <ul class="puente-lista">${r.puente.map(p => `<li><span class="sg ${p.sentido==='+'?'mas':'menos'}">${p.sentido==='+'?'+':'−'}</span><span>${esc(p.pregunta)}${p.anios && p.anios.length < 3 ? ` <small class="sin-mapa" style="display:inline">· solo ${esc(p.anios.join(' y '))}</small>` : ''}</span></li>`).join('')}</ul>
+      ${r.aviso_anios ? `<p class="nota"><b style="color:var(--blanco);font-weight:500">Años de la encuesta.</b> ${esc(r.aviso_anios)}</p>` : ''}
       <p class="nota">${esc(r.justificacion || '')}</p>`;
     $('#nivel').addEventListener('input', e => { const v = +e.target.value; $('#nivelTxt').innerHTML = `${esc(nivelTxt(v))} <small>${f1(v)} de 5</small>`; });
     el.insertAdjacentHTML('afterbegin', `<div class="asistente"><span class="avatar" aria-hidden="true"></span><span><b>Bogotá Sintética</b> · Construí un puente con

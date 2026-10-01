@@ -216,13 +216,18 @@ localidad». ~~Sigue sin probarse con el modelo real.~~
 
 **Detalles vistos** *(1 y 2 arreglados el 30/09, DI-CO9 y DI-CO10: la frase dice cuántos
 respondieron —19.000 en una pregunta de tres años, 6.492 en `VS18`, «las que heredan a alguien
-encuestado en 2023»— y las etiquetas salen sin número; el 3 queda para decidir)*:
+encuestado en 2023»— y las etiquetas salen sin número; el 3, por decisión de Daniel, se deja y
+se dice en la respuesta, DI-CO11)*:
 1. La frase «Consulté a 20.000 personas sintéticas» sale igual en una pregunta que solo tiene
    2023, donde responden solo los agentes con donante de 2023 (~un tercio).
 2. Algunas etiquetas traen el número del código («4. alta o 5. muy alta»).
 3. El puente del metro eligió dos preguntas que solo existen en 2023 (optimismo con el metro y la
    evaluación del gobierno en movilidad): para los donantes de 2022 y 2024 valen 0 (DI-CO7), así
    que las diferencias entre grupos salen sobre todo de los de 2023.
+   *Corrección (30/09, al implementar DI-CO11): solo la evaluación del gobierno en movilidad
+   (`GP1N_11`) es de 2023; el optimismo con el metro (`MV150`) está en 2023 y 2024. El puente
+   conserva el 38 % de su peso en 2022 y el 75 % en 2024, y ahora la respuesta lo dice: marca
+   cada pregunta con sus años («solo 2023») y explica qué queda en cada año.*
 
 ## 6. Límites que la página dice
 

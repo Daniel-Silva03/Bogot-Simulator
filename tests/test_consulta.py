@@ -129,6 +129,17 @@ def test_dice_a_cuantos_consulto_y_sin_numeros_en_las_etiquetas():
     assert mo._etq("4. Alta") == "Alta" and mo._etq("Muy alta") == "Muy alta" and mo._etq("0. Sin estrato") == "Sin estrato"
 
 
+def test_el_puente_dice_si_usa_preguntas_que_no_estan_todos_los_anios():
+    """DI-CO11."""
+    p = [{"codigo": "A", "peso": 2, "anios": [2022, 2023, 2024]}, {"codigo": "B", "peso": 2, "anios": [2023]}]
+    frac, texto = mo.cobertura_puente(p, [2022, 2023, 2024])
+    assert frac == {"2022": 0.5, "2023": 1.0, "2024": 0.5}
+    assert "1 de las 2" in texto and "en 2022 queda el 50 %" in texto and "respondieron en 2023" in texto
+    assert mo.cobertura_puente(p[:1], [2022, 2023, 2024])[1] is None
+    r = M.responder_nueva("¿x?", ["a", "b", "c", "d", "e"])
+    assert all("anios" in q for q in r["puente"]) and set(r["peso_por_anio"]) == {"2022", "2023", "2024"}
+
+
 def test_sin_grupo_de_educacion():
     """DI-CO5: la población 2022-2024 no empareja por educación."""
     assert "educacion" not in mo.GRUPOS and "educacion" not in M.responder_catalogo("VS8")["grupos"]
