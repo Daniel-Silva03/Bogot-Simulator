@@ -119,6 +119,9 @@ data/**
 !data/processed/puente_sin_base/resultado.json
 !data/processed/preguntas_reales/
 !data/processed/preguntas_reales/resultado.json
+!data/processed/banco/
+!data/processed/banco/candidatas.csv
+!data/processed/banco/clasificadas.csv
 !data/processed/reformulacion/
 !data/processed/reformulacion/resultado.json
 

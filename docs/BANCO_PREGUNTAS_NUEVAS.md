@@ -75,3 +75,15 @@ sigue en pie: el modelo nunca responde por las personas.
 3. Armar la lista definitiva con su clasificación (con la API, revisada por Daniel) y **sortear
    práctica y guardado con una semilla fija**, antes de hacerle ninguna al simulador. El sorteo se sube
    antes de seguir.
+
+---
+
+## 7. Avance (1/10)
+
+- **Diccionario de la ECP 2023 descargado** con permiso de Daniel: `DANE-DIMPE-ECP-2023.xml` (982 KB,
+  `microdatos.dane.gov.co/index.php/metadata/export/822/ddi`), en `data/raw/ecp/2023/` (no se sube).
+  Confirma que la ECP trae estrato (`P4031S1A1`), sexo (`P220`) y edad (`P5785`).
+- **`src/experiments/banco.py`** arma las candidatas solo con metadatos (DI-BA1 a DI-BA4):
+  **336** (282 ECP, 29 EPC armonizada, 21 EPC de coyuntura, 4 de la biblioteca del CNC); **307
+  independientes** de la población; 16 con el texto cortado. En `data/processed/banco/candidatas.csv`.
+- La clasificación con la API (paso 2) está probada con un modelo simulado. Falta correrla.
