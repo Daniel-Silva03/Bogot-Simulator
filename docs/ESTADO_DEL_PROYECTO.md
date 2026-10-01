@@ -215,7 +215,13 @@ emparejamiento exacto. Al construirla apareció que el `PONDERA` de 2022 no corr
 sobremuestreo de las localidades pequeñas; se reescala por ola × localidad (DI-PO5).
 **Conectada a la página el 30/09** (`PAGINA_CONSULTA.md` §5.5): cada pregunta del catálogo
 responde con los donantes de sus años y lo dice; sin grupo de educación; el puente estandariza
-por año. **Siguiente:** abrir la página con el modelo real (pocas llamadas, con permiso).
+por año. ~~**Siguiente:** abrir la página con el modelo real (pocas llamadas, con permiso).~~
+Probada con el modelo real el 30/09 (4 preguntas, USD 0,010; `PAGINA_CONSULTA.md` §5.5) y
+arreglados sus detalles (DI-CO9 a DI-CO11). **Pre-registrado el 1/10:**
+`PUENTE_SIN_BASE_SPECIFICATION.md`, que deja al puente decir «no hay con qué» cuando una pregunta
+nueva no se parece a nada de la encuesta, y lo prueba con 30 preguntas (10 con pariente directo,
+10 solo del tema general, 10 sin pariente) más la regresión de las 12 escondidas; 126 llamadas.
+**Siguiente:** que Daniel revise las 30 preguntas y sus clases; luego código y corrida.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
