@@ -130,3 +130,16 @@ solo bases y códigos.
 
 **Quedan 96 preguntas de práctica (32 de Bogotá), con 699 diferencias claras entre grupos** (mediana de
 7 por pregunta; 5 sin ninguna). 32 traen localidad.
+
+## 10. La práctica del puente (1/10)
+
+`src/experiments/practica_puente.py` (DI-PP1 a DI-PP5). No es un pre-registro: compara versiones
+del puente sobre las **91 preguntas de práctica** con al menos una diferencia clara (699 pares; 31 de
+Bogotá con 226 pares, 60 generales con 473). Medida: fracción de diferencias claras bien ordenadas.
+
+- **Versiones:** «actual» (el prompt de la página) y «afectados» (el mismo más un párrafo que pide
+  pensar en a quién afecta, quién lo propone y qué valores lo sostienen; la lección del Corredor
+  Verde).
+- **Referencias sin API, ya calculadas:** el azar ordena bien el 50 % (p95: 55 %) y el **tono general
+  el 62 %** (66 % en Bogotá). El tono supone que los grupos que en la encuesta suelen responder de forma
+  favorable también lo harán aquí. **Es la vara:** un puente que no la supere no aporta.
