@@ -96,6 +96,11 @@ section{padding:80px 0}
 .tipos .tarjeta{background:transparent}
 .ins-cat{background:var(--menta-palida);color:var(--canvas)}
 .ins-nueva{border:1px solid var(--blanco);color:var(--blanco)}
+/* DI-CO12: fuerza del puente; la débil se nota más, no menos */
+.fuerza{border:1px solid var(--linea-2);color:var(--texto-2)}
+.fuerza.f-fuerte{border-color:var(--menta-palida);color:var(--menta-palida)}
+.fuerza.f-debil{border:1px dashed var(--humo);color:var(--blanco)}
+.fuerza-nota.f-debil{border-left:2px dashed var(--humo);padding-left:10px;color:var(--blanco)}
 .ins-fuera{border:1px solid var(--humo);color:var(--humo)}
 
 /* ---------- espacio de trabajo (la «vitrina», sobre el bloom) ---------- */
@@ -694,8 +699,9 @@ function mostrar(r){
   } else {
     const nivelTxt = v => r.escala[Math.min(4, Math.max(0, Math.round(v)-1))];
     const tope = Math.max(.25, ...Object.values(r.grupos).flat().map(f => Math.abs(f.indice)));
-    el.innerHTML = `<span class="insignia ins-nueva">Suposición con puente</span>
+    el.innerHTML = `<span class="insignia ins-nueva">Suposición con puente</span> <span class="insignia fuerza f-${r.fuerza}">Base ${r.fuerza === 'debil' ? 'débil' : r.fuerza}</span>
       <h3>${esc(r.pregunta)}</h3>${banda(r)}
+      <p class="nota fuerza-nota f-${r.fuerza}">${esc(r.fuerza_texto)}</p>
       <div class="etq-min">Nivel de la ciudad · propuesto, editable</div>
       <div class="nivel-texto" id="nivelTxt">${esc(nivelTxt(r.nivel_propuesto))} <small>${f1(r.nivel_propuesto)} de 5</small></div>
       <input type="range" id="nivel" min="1" max="5" step="0.1" value="${r.nivel_propuesto}" aria-label="Nivel supuesto de la ciudad">
@@ -711,7 +717,7 @@ function mostrar(r){
       <p class="nota">${esc(r.justificacion || '')}</p>`;
     $('#nivel').addEventListener('input', e => { const v = +e.target.value; $('#nivelTxt').innerHTML = `${esc(nivelTxt(v))} <small>${f1(v)} de 5</small>`; });
     el.insertAdjacentHTML('afterbegin', `<div class="asistente"><span class="avatar" aria-hidden="true"></span><span><b>Bogotá Sintética</b> · Construí un puente con
-      <span class="num">${r.puente.length}</span> preguntas medidas y consulté a <span class="num">${fmt(r.consultados)}</span> personas sintéticas. Esto no se dibuja por localidad.</span></div>`);
+      <span class="num">${r.puente.length}</span> preguntas medidas (base ${r.fuerza === 'debil' ? 'débil' : r.fuerza}) y consulté a <span class="num">${fmt(r.consultados)}</span> personas sintéticas. Esto no se dibuja por localidad.</span></div>`);
   }
   el.querySelectorAll('.filtro').forEach(b => b.addEventListener('click', () => {
     el.querySelectorAll('.filtro').forEach(x => x.setAttribute('aria-pressed', x === b));

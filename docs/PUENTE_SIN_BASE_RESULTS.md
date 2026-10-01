@@ -62,8 +62,14 @@ cumple → **la página muestra la fuerza del puente.**
 
 La fuerza solo existe en el prompt v2, y el prompt v2 a veces responde «sin base», sin puente. La
 regla dice que la página no use ese veredicto, pero no dice qué hacer cuando llega, porque entonces
-no hay con qué calcular los grupos. **Queda para que Daniel decida** (ver el informe de la sesión);
-lo que decida se anota aquí con fecha.
+no hay con qué calcular los grupos. ~~**Queda para que Daniel decida** (ver el informe de la sesión);
+lo que decida se anota aquí con fecha.~~
+
+**Decisión de Daniel (1/10): opción 1.** Cuando el prompt v2 responde «sin base» (o una respuesta
+rota), la página vuelve a pedir el puente con el prompt de siempre y lo muestra como **base débil**.
+No contradice la regla escrita: el veredicto «sin base» no se le muestra a nadie. La otra opción,
+mostrar «no hay con qué», habría sido una enmienda después de ver los datos. Implementado en
+`motor.py` (DI-CO12).
 
 ## 6. Límites
 

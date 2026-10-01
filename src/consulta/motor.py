@@ -72,6 +72,14 @@ DI-CO11. **Si el puente usa preguntas que no se hicieron todos los años, la res
     modelo (eso cambiaría su prompt y habría que validarlo otra vez). Cada pregunta
     del puente lleva sus años, y la respuesta trae qué fracción del peso del puente
     queda en cada año y un texto que lo explica.
+
+DI-CO12. **El puente de la página usa el prompt v2 y muestra su fuerza**
+    (`PUENTE_SIN_BASE_RESULTS.md`: P3 se cumple; P1 no, así que no se usa «sin base»).
+    Si el v2 responde «sin base» o una respuesta rota, se pide el puente otra vez con el
+    prompt de siempre (`puente.SISTEMA`) y se muestra como **base débil** (opción 1 que
+    eligió Daniel el 1/10; no contradice la regla escrita). Es una llamada más, solo en
+    esos casos. Si tampoco hay puente con el prompt de siempre, la pregunta no se responde,
+    como antes.
 """
 
 from __future__ import annotations
@@ -106,6 +114,15 @@ GRUPOS = {
 }
 AVISO = ("Esto es una suposición, no una medición: muestra cómo respondería una población sintética "
          "construida con la Encuesta de Percepción Ciudadana 2022, 2023 y 2024 de Bogotá Cómo Vamos.")
+
+
+#: DI-CO12: qué le dice la página a quien lee, según la fuerza del puente.
+FUERZA_TEXTO = {
+    "fuerte": "La encuesta midió el mismo tema que la pregunta: la suposición tiene una base fuerte.",
+    "media": "La encuesta midió algo muy cercano a la pregunta: la suposición tiene una base media.",
+    "debil": ("La encuesta no midió este tema; solo algo del área general. La suposición tiene una base "
+              "débil: tómala con mucha cautela."),
+}
 
 
 class ConsultaError(RuntimeError):
@@ -293,9 +310,16 @@ class Motor:
             raise ConsultaError("Una pregunta nueva necesita su texto y cinco etiquetas.")
         f_esc = {"variable": "NUEVA", "codigo": "NUEVA", "pregunta": pregunta.strip(), "escala": [1, 2, 3, 4, 5],
                  "etiquetas": {str(i + 1): e for i, e in enumerate(escala)}}
-        texto, _ = e9.pedir(self.llamar, self.cache, self.modelo, pu.TEMPERATURA, pu.SISTEMA,
-                            pu.prompt(f_esc, self.catalogo), 0)
-        r = pu.parsear(texto, f_esc, self.catalogo)                              # DI-CO3
+        from src.experiments import puente_sin_base as sb
+        u = pu.prompt(f_esc, self.catalogo)
+        texto, _ = e9.pedir(self.llamar, self.cache, self.modelo, pu.TEMPERATURA, sb.SISTEMA_V2, u, 0)
+        r = sb.parsear_v2(texto, f_esc, self.catalogo)                          # DI-CO12
+        reintento = r is None or r["sin_base"]
+        if reintento:
+            texto, _ = e9.pedir(self.llamar, self.cache, self.modelo, pu.TEMPERATURA, pu.SISTEMA, u, 0)
+            r = pu.parsear(texto, f_esc, self.catalogo)                          # DI-CO3
+            if r is not None:
+                r = {**r, "fuerza": "debil"}
         if r is None:
             return {"tipo": "invalida", "mensaje": "No pude construir el puente para esta pregunta. Prueba a reformularla."}
         s = self.datos_puente.puntaje(r["preguntas"])[self.idx]
@@ -313,6 +337,7 @@ class Motor:
                 "consultados": len(self.agentes),                                   # DI-CO9
                 "nivel_propuesto": round(r["nivel"], 2), "grupos": grupos, "puente": puente,
                 "justificacion": r["justificacion"], "peso_por_anio": peso_anio, "aviso_anios": aviso_anios,
+                "fuerza": r["fuerza"], "fuerza_texto": FUERZA_TEXTO[r["fuerza"]], "reintento": reintento,
                 "sin_mapa": ("Para preguntas nuevas el simulador no dibuja localidades: en las pruebas con preguntas "
                              "conocidas ordenó bien a las personas, pero no a las localidades "
                              "(PUENTE_RESULTS.md, PUENTE_LOCALIDADES_RESULTS.md)."),
@@ -352,5 +377,5 @@ def cliente(simulado: bool = False):
             return ref(modelo, sistema, usuario, temp)
         return json.dumps({"preguntas": [{"codigo": cods[0], "sentido": "+", "peso": 2},
                                          {"codigo": cods[1], "sentido": "-", "peso": 1}],
-                           "nivel": 3.2, "justificacion": "simulado"})
+                           "fuerza": "media", "sin_base": False, "nivel": 3.2, "justificacion": "simulado"})
     return llamar, e9.MODELO_SIMULADO

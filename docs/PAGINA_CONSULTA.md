@@ -229,6 +229,21 @@ se dice en la respuesta, DI-CO11)*:
    conserva el 38 % de su peso en 2022 y el 75 % en 2024, y ahora la respuesta lo dice: marca
    cada pregunta con sus años («solo 2023») y explica qué queda en cada año.*
 
+## 5.6 La fuerza del puente (1/10/2026)
+
+`PUENTE_SIN_BASE_RESULTS.md`: el puente ahora usa el prompt v2 y la respuesta a una pregunta nueva
+dice qué tan sólida es su base (DI-CO12):
+
+- Una insignia «Base fuerte», «Base media» o «Base débil» junto a «Suposición con puente», y una
+  frase debajo del aviso. La débil se marca con borde punteado y texto en blanco, dentro de la
+  paleta de `DESIGN.md`: se nota más, no menos.
+- Si el v2 dice «sin base», se pide el puente de siempre y se muestra como débil (opción 1 de
+  Daniel). Una llamada más solo en esos casos.
+
+Verificado: 15 pruebas de `tests/test_consulta.py` (2 nuevas: la fuerza llega a la respuesta; con
+«sin base» se reintenta con el prompt de siempre y sale débil) y la página en modo simulado, con
+«media» y «débil». Sin probar con el modelo real.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

@@ -83,6 +83,31 @@ def test_una_pregunta_nueva_no_trae_mapa_y_sus_grupos_promedian_cero():
     assert len(ag) == 19_000
 
 
+def test_la_respuesta_nueva_trae_la_fuerza_del_puente():
+    """DI-CO12: con el simulado, el v2 responde «media» a la primera."""
+    r = M.responder_nueva("¿Qué tan de acuerdo está con Y?", ["a", "b", "c", "d", "e"])
+    assert r["fuerza"] == "media" and not r["reintento"] and "base media" in r["fuerza_texto"]
+
+
+def test_si_el_v2_dice_sin_base_se_reintenta_y_sale_debil():
+    """DI-CO12, opción 1 de Daniel: no se usa «sin base»; puente de siempre, base débil."""
+    from src.experiments import puente as pu
+    from src.experiments import puente_sin_base as sb
+    cods = list(M.catalogo)
+    vistos = []
+
+    def llamar(modelo, sistema, usuario, temp):
+        vistos.append(sistema)
+        if sistema == sb.SISTEMA_V2:
+            return json.dumps({"preguntas": [], "sin_base": True, "nivel": None, "justificacion": "no hay"})
+        return json.dumps({"preguntas": [{"codigo": cods[0], "sentido": "+", "peso": 2}], "nivel": 3, "justificacion": "x"})
+    m = mo.Motor(llamar, "prueba", donante=M.donante, agentes=M.agentes, catalogo=M.catalogo,
+                 cache=e9.Cache(Path(_tmp.name) / "sinbase.json"))
+    r = m.responder_nueva("¿Qué tan de acuerdo está con Z?", ["a", "b", "c", "d", "e"])
+    assert vistos == [sb.SISTEMA_V2, pu.SISTEMA]
+    assert r["tipo"] == "nueva" and r["fuerza"] == "debil" and r["reintento"] and "débil" in r["fuerza_texto"]
+
+
 def test_un_puente_roto_se_dice_y_no_se_responde():
     roto = mo.Motor(lambda *a: "esto no es json", "roto", donante=M.donante, agentes=M.agentes,
                     catalogo=M.catalogo, cache=e9.Cache(Path(_tmp.name) / "roto.json"))

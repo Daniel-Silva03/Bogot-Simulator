@@ -225,8 +225,8 @@ Clases revisadas por Daniel sin cambios. **Corrido el 1/10** (126 llamadas, USD 
 `PUENTE_SIN_BASE_RESULTS.md`): el modelo nunca dijo «sin base» donde había base, pero solo en 5 de
 las 10 sin pariente (P1 falla): **la página no usará sin_base**. La fuerza sí separa los casos (P3):
 **la página mostrará «base fuerte / media / débil»**. Nada de lo validado se rompió (12 de 12).
-**Pendiente:** que Daniel decida qué hace la página cuando el prompt v2 responde «sin base» (§5 de
-los resultados); luego llevarlo a la página.
+Daniel eligió la opción 1: si el v2 dice «sin base», se pide el puente de siempre y se muestra
+como **base débil**. **Llevado a la página el 1/10** (`PAGINA_CONSULTA.md` §5.6, DI-CO12).
 **Idea anotada, sin empezar:** la biblioteca pública del CNC como fuente de preguntas nuevas con
 respuesta conocida (informes de opinión, no electorales; requiere permiso para descargar).
 
