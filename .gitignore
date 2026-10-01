@@ -123,6 +123,7 @@ data/**
 !data/processed/banco/candidatas.csv
 !data/processed/banco/clasificadas.csv
 !data/processed/banco/sorteo.csv
+!data/processed/banco/reales_practica.json
 !data/processed/reformulacion/
 !data/processed/reformulacion/resultado.json
 

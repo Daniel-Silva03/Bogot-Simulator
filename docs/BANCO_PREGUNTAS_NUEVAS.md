@@ -113,3 +113,20 @@ peso estará en el total y en el ámbito general.
 
 **El guardado no se le pregunta al simulador hasta la prueba final pre-registrada.** Los experimentos
 de práctica leen el banco solo con `banco.practica()`, que nunca devuelve una pregunta guardada.
+
+## 9. Resultados reales de la práctica (1/10)
+
+`src/experiments/banco_reales.py` → `data/processed/banco/reales_practica.json` (solo cifras
+agregadas). Para cada pregunta de práctica: porcentaje ponderado «de acuerdo» en la ciudad y por sexo,
+edad (18-25, 26-35, 36-45, 46-55, 56+, los tramos de la población), estrato (1, 2, 3, 4, 5-6) y, en la
+EPC, localidad; las bases y los pares de grupos con diferencia clara. **El guardado no se calcula.**
+
+**Regla de estructura (DI-BR5), puesta al ver la primera corrida:** fuera las preguntas con menos de
+300 respuestas válidas o con un solo código válido en los datos. Sacó 18: la serie de vecinos
+(`P2041`, casillas en las que solo queda quien marcó), «quién debe cuidarlo en la vejez» (`VE3_*`,
+respuesta múltiple), la confianza en la Asamblea y la Gobernación (vacías en Bogotá) y una de
+participación con base de 176. Es de estructura, no de resultado: se aplicará igual al guardado mirando
+solo bases y códigos.
+
+**Quedan 96 preguntas de práctica (32 de Bogotá), con 699 diferencias claras entre grupos** (mediana de
+7 por pregunta; 5 sin ninguna). 32 traen localidad.

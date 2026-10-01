@@ -243,8 +243,9 @@ práctica y guardado; mejoras al puente en el de práctica; prueba final pre-reg
 otros años, preguntas sueltas de la EPC, Cultura Política del DANE, biblioteca del CNC).
 Diccionario de la ECP descargado; 336 candidatas clasificadas con la API (USD 0,09): **171 útiles**.
 **Sorteo hecho el 1/10** (semilla 20261001, `BANCO_PREGUNTAS_NUEVAS.md` §8): 114 de práctica y 51
-guardadas (solo 5 de Bogotá). **Siguiente:** la práctica: calcular los resultados reales por grupo de
-las preguntas de práctica y probar mejoras al puente con la API.
+guardadas (solo 5 de Bogotá). Resultados reales de la práctica calculados (1/10, `BANCO_PREGUNTAS_NUEVAS.md` §9): **96 preguntas,
+699 diferencias claras**, tras una regla de estructura que sacó 18. **Siguiente:** probar versiones del
+puente sobre la práctica con la API (unos USD 1 por versión), contra el azar y contra estrato, edad y sexo.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
