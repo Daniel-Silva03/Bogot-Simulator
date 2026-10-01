@@ -221,7 +221,14 @@ arreglados sus detalles (DI-CO9 a DI-CO11). **Pre-registrado el 1/10:**
 `PUENTE_SIN_BASE_SPECIFICATION.md`, que deja al puente decir «no hay con qué» cuando una pregunta
 nueva no se parece a nada de la encuesta, y lo prueba con 30 preguntas (10 con pariente directo,
 10 solo del tema general, 10 sin pariente) más la regresión de las 12 escondidas; 126 llamadas.
-**Siguiente:** que Daniel revise las 30 preguntas y sus clases; luego código y corrida.
+Clases revisadas por Daniel sin cambios. **Corrido el 1/10** (126 llamadas, USD 0,27;
+`PUENTE_SIN_BASE_RESULTS.md`): el modelo nunca dijo «sin base» donde había base, pero solo en 5 de
+las 10 sin pariente (P1 falla): **la página no usará sin_base**. La fuerza sí separa los casos (P3):
+**la página mostrará «base fuerte / media / débil»**. Nada de lo validado se rompió (12 de 12).
+**Pendiente:** que Daniel decida qué hace la página cuando el prompt v2 responde «sin base» (§5 de
+los resultados); luego llevarlo a la página.
+**Idea anotada, sin empezar:** la biblioteca pública del CNC como fuente de preguntas nuevas con
+respuesta conocida (informes de opinión, no electorales; requiere permiso para descargar).
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

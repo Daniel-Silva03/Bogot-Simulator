@@ -1,0 +1,2383 @@
+{
+  "preguntas": {
+    "A1": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que se construyan más ciclorrutas en Bogotá?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "fuerte",
+        "media",
+        "fuerte"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "MV13_10",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MV4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_1",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MV13_10",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MV4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MV13_10",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "MV13_10 mide satisfacción con los bicicarriles, esencialmente el mismo objeto (infraestructura ciclista) que la pregunta nueva, y MV4 y GP1N_11 capturan la valoración de la movilidad; quienes están satisfechos con la ciclorruta existente y con su transporte tienden a apoyar expandirla. En Bogotá, con fuerte cultura ciclista, se espera un nivel alto de acuerdo (alrededor de 4.0 en escala 1-5).",
+        "MV13_10 mide la satisfacción con los bicicarriles (el mismo objeto de la pregunta nueva), de modo que quienes valoran esa infraestructura tienden a apoyar ampliarla; MV4 y GP1N_11 aportan como complemento la valoración general de la movilidad. La media esperada es alta (≈4.0) porque en Bogotá el apoyo a la expansión de la ciclorruta suele superar la satisfacción con el servicio actual.",
+        "MV13_10 mide satisfacción con los bicicarriles, la misma infraestructura que las ciclorrutas, por lo que quienes valoran esa red apoyan ampliarla; GP1N_11 y MV4 capturan la valoración general de movilidad, y MA3_1/GP1N_13 la preocupación ambiental que impulsa el transporte ciclista. En Bogotá el apoyo a ampliar la red ciclista suele ser alto, por eso se espera una media cercana a 3.9."
+      ]
+    },
+    "A2": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que se instalen más luminarias en calles y parques?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "fuerte",
+        "fuerte",
+        "fuerte"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "EP1B_8",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_3",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS8",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_12",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "EP1B_8",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_3",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS8",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "EP1B_8",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_3",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS8",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_12",
+            "sentido": "-",
+            "peso": 2
+          }
+        ]
+      ],
+      "justificaciones": [
+        "EP1B_8 mide satisfacción con las luminarias públicas (el mismo servicio), de modo que quien está insatisfecho con el alumbrado actual tenderá a estar más de acuerdo con instalar más; la insatisfacción con parques (EP1B_3) y la inseguridad percibida (VS8) refuerzan esa demanda, y la evaluación negativa del espacio público (GP1N_12) la acompaña. Como instalar más luminarias es una política muy popular, la media esperada es alta (≈4.3).",
+        "EP1B_8 mide satisfacción con las luminarias públicas (el mismo objeto de la pregunta nueva): quien está insatisfecho con el alumbrado actual apoyará más luminarias, y la insatisfacción con parques (EP1B_3) e inseguridad barrial (VS8) refuerzan ese ordenamiento. Como ampliar el alumbrado es una medida popular y de beneficio casi universal, se espera un nivel alto de acuerdo (~4.3).",
+        "EP1B_8 mide exactamente el mismo objeto (luminarias/alumbrado público): quien está insatisfecho con las actuales apoya más ampliarlas (relación inversa); EP1B_3, VS8 y GP1N_12 complementan midiendo déficits de espacio público y percepción de inseguridad que también impulsan la demanda de más alumbrado. Como la medida es una mejora ampliamente popular y no controversial, se espera un alto nivel de acuerdo (aprox. 4.2 en escala 1-5)."
+      ]
+    },
+    "A3": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que se aumente el número de policías que patrullan los barrios?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "media",
+        "media",
+        "media"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "VS8",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS10",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS15",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS18",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "VS8",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS10",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS15",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "-",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS8",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "VS10",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS15",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "-",
+            "peso": 2
+          }
+        ]
+      ],
+      "justificaciones": [
+        "Las preguntas de seguridad percibida en el barrio y en Bogotá, victimización, impunidad percibida y evaluación del gobierno en seguridad ciudadana permiten ordenar razonablemente a las personas según su apoyo a más patrullaje policial (quienes se sienten menos seguros o fueron víctimas tienden a apoyar más presencia policial). Sin embargo, la pregunta nueva mide una política concreta mientras el catálogo mide percepciones y evaluaciones, por lo que el puente es de fuerza media.",
+        "Quienes se sienten más inseguros en su barrio o en Bogotá, han sido víctimas de delito o perciben que la seguridad empeoró son los más propensos a apoyar aumentar el patrullaje policial, por lo que esas preguntas ordenan razonablemente la respuesta; sin embargo, el catálogo mide percepción de seguridad y evaluación de gobierno, no la política concreta de más policías, de ahí que el puente sea de fuerza media.",
+        "La percepción de inseguridad en el barrio y en la ciudad, haber sido víctima de delito y la evaluación de la gestión en seguridad son predictores directos de la demanda por más policías: quien se siente más inseguro o victimizado apoyará más el aumento de patrullaje. Es un puente de fuerza media porque el catálogo mide percepción y evaluación de la seguridad, mientras que la pregunta nueva mide una preferencia de política concreta sobre el sector."
+      ]
+    },
+    "A4": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que se siembren más árboles en las calles de la ciudad?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "media",
+        "fuerte",
+        "fuerte"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "MA3_4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_6",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_6",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_12",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_6",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "MA3_4 mide satisfacción con la cantidad de árboles (el mismo objeto): quienes están más insatisfechos son los más propensos a estar totalmente de acuerdo con sembrar más; EP1B_6 (zonas verdes) y MA3_1 (calidad del aire) refuerzan el ordenamiento desde la demanda de espacio verde y mejor ambiental. Como plantar árboles es una propuesta de bajo costo y casi consensual, se espera una media alta (≈4.4) aunque la correlación sea moderada.",
+        "MA3_4 mide exactamente el objeto de la pregunta nueva (la cantidad de árboles en la ciudad): quien está insatisfecho con ella apoyará más la siembra de árboles, y las preguntas de zonas verdes, aire y medio ambiente refuerzan esa ordenación. Como plantar árboles es una medida muy popular, se espera un nivel alto de acuerdo (~4.4).",
+        "MA3_4 mide exactamente el objeto (la cantidad de árboles en la ciudad), por lo que quienes están muy insatisfechos con ella serán los más de acuerdo con sembrar más árboles; EP1B_6 (zonas verdes) y MA3_1 (calidad del aire) refuerzan la misma lógica de demanda ambiental. Se espera un alto nivel de acuerdo porque la arborización es una política ampliamente apoyada."
+      ]
+    },
+    "A5": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que se instalen más baños públicos en la ciudad?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "fuerte",
+        "fuerte",
+        "fuerte"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "EP1B_4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_12",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "EP1B_4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_12",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "EP1B_5",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "EP1B_4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_12",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "EP1B_3",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "EP1B_4 mide exactamente el mismo objeto (baños públicos), de modo que quienes están más insatisfechos con los existentes deberían estar más de acuerdo con instalar más; EP1B_5 (canecas) y GP1N_12 (espacio público) capturan la valoración del espacio público y sus dotaciones, de forma complementaria. Como la satisfacción con los baños públicos suele ser muy baja en Bogotá, se espera un alto nivel de acuerdo (alrededor de 4.3).",
+        "EP1B_4 mide exactamente el mismo objeto (satisfacción con los baños públicos): quien está insatisfecho con los baños existentes es quien más apoyará instalar más, de ahí el sentido negativo; GP1N_12 y EP1B_5 refuerzan la señal de insatisfacción con el espacio público y su mobiliario. Dado que en Bogotá la insatisfacción con los baños públicos es alta, se espera un acuerdo amplio con la medida (media cercana a 4.1).",
+        "EP1B_4 mide exactamente la satisfacción con los baños públicos: quien está insatisfecho con ellos será quien más apoye instalar más (sentido negativo), y la insatisfacción con otros elementos del espacio público (canecas, parques) y el deterioro percibido del espacio público refuerzan ese ordenamiento. La media esperada es alta porque los baños públicos son un servicio percibido como escaso y su ampliación tiene apoyo transversal."
+      ]
+    },
+    "A6": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que se pongan más canecas de basura en el espacio público?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "fuerte",
+        "media",
+        "media"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "EP1B_5",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "SP4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_12",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "EP1B_5",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "SP4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_1",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "EP1B_5",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "SP4",
+            "sentido": "-",
+            "peso": 2
+          }
+        ]
+      ],
+      "justificaciones": [
+        "EP1B_5 mide exactamente el mismo objeto (las canecas en el espacio público) y MA3_6 las basuras en la calle, de modo que quienes están más insatisfechos con esos elementos son los más propensos a apoyar poner más canecas; el apoyo general a esta medida tiende a ser alto.",
+        "EP1B_5 mide satisfacción con las canecas existentes (mismo objeto) y MA3_6 con la basura en calles: quienes están insatisfechos con ambos aspectos tienen mayor probabilidad de apoyar más canecas, al igual que los insatisfechos con el servicio de aseo (SP4). Es una política popular y de bajo costo, por lo que la media esperada es alta (~4.1), aunque no es un puente perfecto porque la satisfacción actual no captura directamente la preferencia por ampliar la cobertura.",
+        "EP1B_5 mide la satisfacción con las canecas del espacio público y MA3_6/SP4 capturan el problema de basuras y aseo que motivaría pedir más canecas: quien está insatisfecho (códigos bajos) debería estar más de acuerdo con aumentarlas. La fuerza es media porque el catálogo mide satisfacción con el objeto (canecas/basuras) mientras la pregunta nueva mide apoyo a una medida concreta de política, que además es muy popular, de ahí un nivel alto esperado (4.2)."
+      ]
+    },
+    "A7": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que se aumente la frecuencia de recolección de basuras en los barrios?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "fuerte",
+        "fuerte",
+        "fuerte"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "SP4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_10",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "SP4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "EP1B_5",
+            "sentido": "-",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "SP4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_6",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "EP1B_5",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "SP4 mide exactamente la satisfacción con el servicio de aseo y recolección de basuras: quien está insatisfecho con la frecuencia actual apoyará aumentarla, mientras que los satisfechos verán menos necesidad de cambio. MA3_6 (basuras en calles) y EP1B_5 (canecas) refuerzan ese ordenamiento desde la dimensión de higiene urbana, y la aprobación de una mejora de servicio es una política popular que empuja la media esperada hacia 4,2.",
+        "SP4 mide exactamente la satisfacción con el servicio de aseo y recolección de basuras, de modo que quienes están más insatisfechos (códigos bajos) serían quienes más se oponen al estado actual y más apoyarían aumentar la frecuencia (códigos altos de la nueva pregunta, por eso el signo negativo); MA3_6 (basuras en las calles) y EP1B_5 (canecas) refuerzan esa misma lógica de molestia con la gestión de residuos. Como aumentar la frecuencia es una mejora casi sin costo para el ciudadano, se espera un alto nivel de acuerdo, cercano a 4.2.",
+        "SP4 mide directamente la satisfacción con el servicio de aseo y recolección de basuras: quien está insatisfecho con ese servicio será más favorable a aumentar su frecuencia, con apoyo de la molestia por basuras en las calles (MA3_6) y las canecas (EP1B_5). Como se trata de una mejora de un servicio público con apoyo casi unánime, la media esperada es alta, cercana a 4.2."
+      ]
+    },
+    "A8": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que se controle con más rigor el ruido de bares y vecinos?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "media",
+        "fuerte",
+        "media"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "MA3_3",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "RC5_16",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_3",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "RC5_16",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC4_12",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_3",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "RC5_16",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC4_12",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_8",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "MA3_3 mide directamente la molestia con el ruido de la ciudad (quien está insatisfecho con el ruido apoyará más control) y RC5_16 capta la percepción de que la música a alto volumen no es sancionada, lo que empuja a pedir más rigor; RC3_3 y GP1N_8 aportan señales de descontento con la convivencia. Se espera un nivel alto de acuerdo (aprox. 4.0), pues el ruido urbano suele generar amplio respaldo a medidas de control.",
+        "MA3_3 mide exactamente el mismo objeto (el ruido de la ciudad): quien está insatisfecho con el nivel de ruido es quien más apoyará un control más riguroso, y RC5_16 capta la exigencia de sanción por música a alto volumen, mientras que RC4_12 y GP1N_8 aportan el componente de convivencia vecinal. Se espera un alto acuerdo con el control (media ~4.2), típico de medidas restrictivas sobre molestias urbanas.",
+        "MA3_3 mide directamente la molestia por el ruido urbano: quien está más insatisfecho con el nivel de ruido estará más de acuerdo con un control más riguroso, mientras que quien percibe que ya se castiga la música a alto volumen (RC5_16) o que los vecinos se respetan (RC4_12) verá menos necesidad de mayor rigor. Como se trata de una medida de política concreta sobre un problema evaluado (no del mismo servicio), el puente es de fuerza media, y la aprobación esperada es alta (alrededor de 4,1)."
+      ]
+    },
+    "A9": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que se cambien los buses por eléctricos para mejorar la calidad del aire?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "media",
+        "media",
+        "media"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV4",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_3",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "MA3_1 capta directamente el problema (calidad del aire) que la medida busca resolver, y MV150 mide apertura a la modernización del transporte; juntas ordenan bien a los ciudadanos, aunque la pregunta nueva es una medida concreta que el catálogo no mide de forma idéntica.",
+        "La satisfacción con la calidad del aire (MA3_1) y la evaluación del gobierno en medio ambiente (GP1N_13) ordenan bien: quien percibe peor aire o deterioro ambiental apoya más la medida; el optimismo sobre infraestructura de transporte (MV150) y la satisfacción con el modo de transporte (MV4) capturan receptividad a cambios de movilidad. Es una cercanía temática (percepción ambiental/transporte frente a una política concreta de buses eléctricos), no el mismo objeto, y como propuesta con beneficio ambiental claro es plausible esperar un nivel de acuerdo alto, en torno a 4.0.",
+        "La insatisfacción con la calidad del aire (MA3_1) y con el ruido (MA3_3) son los mejores predictores: quien percibe el problema ambiental estará más de acuerdo con electrificar los buses; el optimismo sobre infraestructura de transporte (MV150) y la valoración del medio ambiente capturan disposición general hacia políticas de movilidad limpia. La fuerza es media porque el catálogo mide percepciones ambientales y de transporte, pero no esta política concreta."
+      ]
+    },
+    "A10": {
+      "clase": "A",
+      "texto": "¿Qué tan de acuerdo está con que haya más agentes de tránsito en las vías principales?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 1,
+      "fuerzas": [
+        "media",
+        "debil",
+        "fuerte"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "MV13_3",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MV13_5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV4",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        null,
+        [
+          {
+            "codigo": "MV13_3",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "MV13_5",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_8",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS10",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "MV13_3 mide satisfacción con los propios agentes de tránsito y MV13_5/RC3_2 capturan la percepción de control y cumplimiento de normas: quien está insatisfecho con la presencia/actuación de los agentes o percibe poco respeto a las normas tenderá a apoyar más agentes en las vías. La base es cercana pero no idéntica, pues la pregunta nueva mide una preferencia política (ampliar la dotación) y no una evaluación del servicio actual.",
+        null,
+        "MV13_3 mide exactamente el mismo objeto (los agentes de tránsito): quien los valora tiende a apoyar ampliar su presencia, mientras que quien percibe fallas en el control de normas (MV13_5, RC3_2, MV13_8) e inseguridad (VS10) también demanda más agentes, generando un fuerte respaldo esperado, cercano a 3.9 en escala de 1 a 5."
+      ]
+    },
+    "B1": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que todos los colegios públicos tengan jornada única?",
+      "sin_base": false,
+      "llamadas_sin_base": 1,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "sin_base"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "GP1N_3",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GG3",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_3",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GG3",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        []
+      ],
+      "justificaciones": [
+        "El catálogo no mide opiniones sobre política educativa específica, pero la evaluación de la gestión en educación (GP1N_3), la gestión del alcalde (GG3) y la percepción de rumbo de la ciudad (AG1) aproximan el apoyo a una política pública emblemática como la jornada única, que además goza de respaldo mayoritario en Bogotá (se espera un nivel cercano a 3.9).",
+        "El catálogo no mide opiniones sobre jornada escolar ni calidad de la educación pública, pero la evaluación del gobierno en educación (GP1N_3) y en igualdad de oportunidades (GP1N_2), junto con la valoración de la gestión del alcalde, permiten un ordenamiento aproximado: quienes ven avances en estos ámbitos tenderían a apoyar la jornada única. El puente es débil porque se comparte solo el tema general del sector, no la política concreta.",
+        "El catálogo solo contiene evaluaciones de desempeño gubernamental, satisfacción con servicios y percepciones ciudadanas; no mide preferencias sobre políticas educativas específicas ni valores respecto a la jornada escolar. La pregunta nueva es una opinión normativa sobre una medida concreta que no se puede ordenar razonablemente a partir de las variables del catálogo."
+      ]
+    },
+    "B2": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que se prohíba la venta y el uso de pólvora en diciembre?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "MA3_3",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "VS10",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_3",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS10",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_3",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_3",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC3_0",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "La insatisfacción con el ruido y la calidad del aire, la percepción de incumplimiento de normas ambientales y la sensación de inseguridad permiten ordenar aproximadamente a las personas: quienes perciben más molestias ambientales y riesgo tenderían a apoyar más la prohibición (por eso el sentido negativo). Sin embargo, el catalogo no mide directamente actitudes hacia la pólvora, la tradición navideña ni la tolerancia al ruido festivo, por lo que el puente es débil.",
+        "El catálogo no mide tradiciones ni actitudes hacia la regulación, pero sí molestias con el ruido y la calidad del aire y la percepción de inseguridad, que son las razones típicas para apoyar la prohibición: quien más se siente afectado por ruido/inseguridad tendería a estar más de acuerdo. El puente es débil porque se comparte solo el tema general (calidad ambiental y seguridad), no el objeto concreto de la pólvora.",
+        "El catálogo no pregunta sobre tradiciones ni sobre pólvora, pero quienes están insatisfechos con el ruido y la calidad del aire (MA3_3, MA3_1) o perciben mal comportamiento ambiental y falta de respeto por la vida (RC3_3, RC3_0) tenderían a apoyar más la prohibición; el apoyo a prohibir venta y uso de pólvora suele ser mayoritario, de ahí un nivel cercano a 3.9."
+      ]
+    },
+    "B3": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que cada localidad tenga un hospital público abierto las 24 horas?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "GP1N_4",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "SA22A",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GG3",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "SA22A",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "GP1N_4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "SA22A",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MICE2",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El catálogo no mide directamente el apoyo a políticas de salud ni la satisfacción con el servicio de salud; solo la evaluación general del gobierno en salud (GP1N_4), el estado de salud propio (SA22A), la autopercepción de pobreza (CO4) y la gestión del alcalde (GG3) permiten ordenar débilmente a las personas por su propensión a apoyar la ampliación de hospitales públicos 24 horas, una propuesta de alta popularidad transversal (nivel esperado alto, ~4.3).",
+        "El catálogo no mide directamente actitudes hacia políticas de infraestructura hospitalaria, pero GP1N_4 (evaluación del gobierno en salud), SA22A (estado de salud) y CO4 (pobreza) permiten ordenar parcialmente: quienes perciben peor salud o situación económica tienden a apoyar más la ampliación de servicios públicos de salud. La fuerza es débil porque se trata de una preferencia política concreta frente a evaluaciones generales del sector salud.",
+        "El catálogo no mide actitudes hacia hospitales ni política de cobertura en salud; las preguntas elegidas (evaluación del gobierno en salud, estado de salud propio, pobreza y respuesta del gobierno a necesidades) solo comparten el tema general de salud y demanda de servicios públicos, por lo que sirven como indicadores muy indirectos de la necesidad percibida y del respaldo a la provisión pública, sin capturar la preferencia concreta por hospitales 24 horas."
+      ]
+    },
+    "B4": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que el Distrito subsidie el arriendo de los jóvenes?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_9",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "VS7",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_1",
+            "sentido": "-",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "VS7",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_2",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "La vulnerabilidad económica (CO4, CO2) y las evaluaciones de pobreza y vivienda (GP1N_1, GP1N_9) permiten ordenar parcialmente el apoyo a un subsidio de arriendo, pero el catálogo no mide directamente actitudes hacia subsidios específicos ni políticas juveniles, por lo que el puente es débil.",
+        "El catálogo no mide actitudes hacia subsidios ni preferencias de política, solo se puede inferir que quienes reportan mayor dificultad económica, inseguridad alimentaria o insatisfacción con la vivienda apoyarían más el subsidio al arriendo juvenil; el resto de la variación depende de valores e ideología no observados.",
+        "La pregunta es una preferencia de política pública (subsidio al arriendo para jóvenes), tema no medido directamente en el catálogo; sin embargo, la insatisfacción con la vivienda (VS7), la autoidentificación como pobre (CO4), el deterioro económico del hogar (CO2) y la percepción sobre equidad (GP1N_2) permiten ordenar parcialmente a las personas por necesidad y afinidad con políticas redistributivas."
+      ]
+    },
+    "B5": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que el Distrito dé una renta básica a los hogares pobres?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_1",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GG3",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_1",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_1",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "GG3",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El catálogo no mide ideología ni actitudes hacia la redistribución, pero sí identifica a los hogares pobres y con inseguridad alimentaria (CO4, AL1, CO2), que son los más beneficiados por la medida y por tanto más propensos a apoyarla; GP1N_1 aporta solo un vínculo general con políticas de pobreza. El apoyo declarado a transferencias focalizadas suele ser alto, de ahí un nivel esperado cercano a 3.9.",
+        "El catálogo no mide valores o preferencias sobre redistribución, pero la autopercepción de pobreza, el deterioro económico del hogar y el hambre ordenan razonablemente el apoyo a una renta básica (quienes peor están, más de acuerdo), y la aprobación del alcalde y de su gestión en pobreza aportan algo de respaldo a la política pública del Distrito. La fuerza es débil porque se trata de una actitud hacia una medida concreta, no de la evaluación de un servicio ya recibido.",
+        "La pregunta nueva mide una preferencia de política redistributiva, no un servicio concreto, pero el catálogo identifica razonablemente a los más pobres y vulnerables (autopercepción de pobreza, inseguridad alimentaria, deterioro económico), quienes tienden a apoyar más una renta básica, con apoyo general alto en Bogotá."
+      ]
+    },
+    "B6": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que se formalice a los vendedores ambulantes con puestos fijos?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_3",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_7",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_3",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_7",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "CO1_3",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "RC3_1",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El catálogo no mide directamente opiniones sobre informalidad o vendedores ambulantes, pero la vulnerabilidad económica (pobreza declarada, deterioro del ingreso del hogar) y la percepción de escasez de oportunidades para emprender permiten ordenar parcialmente el apoyo a formalizar a los vendedores, ya que quienes están en peor situación tienden a respaldar más esta medida. El puente es débil porque la pregunta combina valores sobre orden público, espacio público y economía popular que el catálogo no capta.",
+        "El catálogo no mide directamente la informalidad ni la formalización del comercio callejero, pero la vulnerabilidad económica del hogar (CO4, CO2), la percepción de facilidad para emprender (CO1_3) y la evaluación del gobierno en empleo (GP1N_7) permiten ordenar aproximadamente la simpatía hacia formalizar a los vendedores ambulantes: quienes están en peor situación económica tienden a apoyar más la medida. Es un puente débil porque se comparte solo el tema general de economía y empleo, no el objeto concreto de la política.",
+        "El catálogo no mide opiniones sobre comercio informal ni vendedores ambulantes, pero la vulnerabilidad económica (CO4, CO2), la percepción de oportunidad para emprender (CO1_3) y la valoración del comportamiento en espacios públicos (RC3_1) permiten ordenar débilmente la simpatía hacia formalizar a los vendedores; se espera un nivel alto de acuerdo (≈3.9), pues estas políticas suelen tener apoyo amplio en Bogotá."
+      ]
+    },
+    "B7": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que el Distrito cree empleos temporales para jóvenes?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "media",
+        "debil",
+        "media"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "CO1_1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GG3",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "CO1_1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_7",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 2
+          }
+        ],
+        [
+          {
+            "codigo": "CO1_1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_7",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "+",
+            "peso": 2
+          }
+        ]
+      ],
+      "justificaciones": [
+        "La percepción de escasez de trabajo (CO1_1), el deterioro económico del hogar (CO2), la condición de pobreza (CO4) y una buena evaluación del alcalde (GG3) ordenan razonablemente el apoyo: quien ve difícil conseguir empleo, está peor económicamente o confía en el gobierno local será más favorable a un programa distrital de empleo juvenil. Es un puente de fuerza media porque el catálogo mide la situación y las actitudes hacia el empleo, pero no esta política concreta; además, este tipo de programas sociales suele tener apoyo amplio, de ahí una media alta esperada (~4.2).",
+        "Quienes perciben que es difícil encontrar trabajo, ven empeorar la situación de empleo o la equidad, o han tenido deterioro económico en el hogar, tenderán a apoyar más la creación de empleos temporales para jóvenes, y los optimistas sobre proyectos distritales como el metro también; sin embargo, el catálogo mide percepciones y evaluaciones del sector empleo, no el apoyo a una política concreta, por lo que el puente es débil.",
+        "El catálogo no mide directamente el apoyo a programas de empleo juvenil, pero sí la percepción de dificultad para encontrar trabajo (CO1_1), la evaluación del gobierno en empleo (GP1N_7), la condición de pobreza del hogar (CO4) y la valoración del rumbo de la ciudad (AG1), que permiten ordenar a quienes ven más necesidad de intervención estatal y apoyan más la medida. La propuesta de empleo temporal para jóvenes es una política social popular, por lo que la media esperada es alta (alrededor de 4,1 en escala 1-5)."
+      ]
+    },
+    "B8": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que se cobre un impuesto a las viviendas desocupadas?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO1_3",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "VS7",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_9",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "RC5_6",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_9",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El catálogo no mide actitudes hacia impuestos ni preferencias de política pública, pero la posición económica del hogar (CO4, CO2), la orientación pro-mercado (CO1_3) y la confianza en el uso de recursos públicos (CV5) permiten ordenar débilmente a las personas: quienes son más pobres o con peor situación económica tienden a apoyar más un impuesto a viviendas desocupadas como medida redistributiva, mientras quienes ven fácil emprender se muestran más reacios a nuevos impuestos.",
+        "El catálogo no mide actitudes hacia impuestos específicos ni hacia la vivienda desocupada, pero permite un ordenamiento aproximado: la insatisfacción con la vivienda propia y la evaluación negativa del sector vivienda se asocian con mayor apoyo a gravar viviendas vacías, mientras que la confianza en el uso de recursos públicos y la percepción de sanción por evasión tributaria se asocian con mayor aceptación de un nuevo impuesto; la situación económica (pobreza) también diferencia a los encuestados. La fuerza es débil porque se comparte solo el tema general de vivienda, impuestos y gestión pública.",
+        "El catálogo no mide actitudes fiscales ni preferencias de política de vivienda; solo la condición económica del hogar (CO4, CO2) y la percepción de que la vivienda empeoró (GP1N_9) ordenan débilmente el apoyo redistributivo a un impuesto a viviendas desocupadas, que depende sobre todo de ideología, valores y de ser propietario. Se espera un nivel algo por encima del neutral (apoyo mayoritario pero no abrumador) en Bogotá."
+      ]
+    },
+    "B9": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que se cree un sistema público de cuidado para personas mayores?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "RC4_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_4",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "RC4_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_1",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "RC4_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CO2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "SA22A",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El catálogo no mide valores ni preferencias de política pública, pero sí permite un ordenamiento aproximado: quien percibe maltrato a los adultos mayores (RC4_1 bajo) o deterioro en pobreza/vulnerabilidad y salud (GP1N_1, GP1N_4 bajos), o se considera pobre (CO4=1), tenderá a apoyar más un sistema público de cuidado. Es un puente débil porque se comparte solo el tema general de protección social, y el nivel esperado es alto (~4.1) por el amplio respaldo típico a este tipo de política.",
+        "El catálogo no mide apoyo a políticas públicas ni valores sobre cuidado de adultos mayores, pero sí permite un ordenamiento aproximado: quien percibe poco respeto hacia los ancianos (RC4_1), se considera pobre (CO4) o empeoró económicamente (CO2) tenderá a apoyar más un sistema público de cuidado, y quien ve deterioro en pobreza y vulnerabilidad (GP1N_1) también. Es un puente débil porque se trata de una preferencia de política pública, con apoyo esperado alto (media ~4.1) por el consenso social en torno al cuidado de personas mayores.",
+        "El catálogo no mide preferencias sobre cuidado de personas mayores, pero permite un ordenamiento aproximado: quien percibe poco respeto hacia los adultos mayores (RC4_1), se considera pobre (CO4), empeoró económicamente (CO2) o tiene peor salud (SA22A) tenderá a estar más de acuerdo con un sistema público de cuidado. Es un puente débil porque comparte solo el tema general de protección social y adulto mayor, no la política concreta."
+      ]
+    },
+    "B10": {
+      "clase": "B",
+      "texto": "¿Qué tan de acuerdo está con que haya un día sin carro particular cada semana en toda la ciudad?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "media",
+        "media"
+      ],
+      "fuerte_o_media": true,
+      "debil_o_sin_base": false,
+      "puentes": [
+        [
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_10",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "MV150",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_10",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "MA3_1",
+            "sentido": "-",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_13",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV13_10",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_11",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "MV4",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El catálogo no mide apoyo a políticas de restricción vehicular, pero la satisfacción con la calidad del aire, con los bicicarriles y la actitud hacia el metro permiten ordenar aproximadamente a quienes ven con mejor o peor ojo una medida de movilidad sostenible; la correlación es indirecta (evaluaciones de servicios frente a una política concreta), por lo que el puente es débil y la media esperada ronda el punto neutral, ligeramente por debajo de 3 por la resistencia típica a una restricción semanal al carro particular.",
+        "La insatisfacción con la calidad del aire y con los tiempos de viaje, junto con la valoración de los bicicarriles y de la gestión en movilidad, permiten ordenar a las personas por su inclinación pro-movilidad sostenible, que es el principal determinante de apoyo a un día sin carro semanal; sin embargo, el catálogo mide experiencias y evaluaciones del sector, no preferencias sobre medidas restrictivas específicas, por lo que el puente es de fuerza media.",
+        "La medida apunta sobre todo a calidad del aire y movilidad, y el catálogo permite ordenar a las personas por su insatisfacción con el aire (MA3_1), su evaluación del medio ambiente (GP1N_13) y de la movilidad (GP1N_11) y su valoración de la infraestructura no motorizada (MV13_10): quien percibe más problemas ambientales y de tráfico y valora el uso de la bicicleta será más favorable. La fuerza es media porque se miden percepciones del sector y no la política concreta de restringir el carro particular, y el apoyo esperado ronda apenas por debajo del punto neutro (2.9 en escala 1-5)."
+      ]
+    },
+    "C1": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que vuelvan las corridas de toros a la Plaza de La Santamaría?",
+      "sin_base": true,
+      "llamadas_sin_base": 3,
+      "rotas": 0,
+      "fuerzas": [
+        "sin_base",
+        "sin_base",
+        "sin_base"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [],
+        [],
+        []
+      ],
+      "justificaciones": [
+        "La disposición hacia las corridas de toros depende de valores, identidad cultural y posturas sobre bienestar animal versus tradición, temas que el catálogo no mide. Las preguntas disponibles evalúan satisfacción con servicios, percepción de convivencia y gestión de gobierno, que no permiten ordenar a las personas frente a esta polémica específica.",
+        "La posición sobre el retorno de las corridas de toros depende de valores, sensibilidad hacia el bienestar animal y posturas sobre tradición vs. derechos animales, temas que el catálogo no mide en ningún momento. Las preguntas más cercanas (satisfacción con la oferta cultural CR2 o evaluación del gobierno en cultura GP1N_5) refieren a la cantidad o calidad de la oferta cultural, no a la aprobación de una práctica específica, por lo que no permiten ordenar razonablemente a las personas en esta pregunta.",
+        "La pregunta sobre corridas de toros mide una actitud de valores (bienestar animal versus tradición/cultura taurina) que el catálogo no aborda: ninguna pregunta indaga sobre tradiciones, animales, deportes espectáculo o preferencias culturales específicas. Las únicas preguntas cercanas (CR2 satisfacción con la oferta cultural, GP1N_5 gestión en cultura, AG2 orgullo por Bogotá) evalúan satisfacción con servicios o gestión general, no la disposición hacia una práctica cultural controvertida, por lo que no permiten ordenar razonablemente a los encuestados en esta pregunta."
+      ]
+    },
+    "C2": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que se cambie el himno de Bogotá?",
+      "sin_base": false,
+      "llamadas_sin_base": 1,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "sin_base"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "AG2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CV1",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "CR2",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "AG2",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "CV1",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "CR2",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        []
+      ],
+      "justificaciones": [
+        "El cambio del himno es una pregunta de valores e identidad simbólica que el catálogo no mide directamente; solo el orgullo por Bogotá (y de forma más tenue la satisfacción con la ciudad y su oferta cultural) puede ordenar a las personas, ya que quienes sienten mayor apego y aprecio por la ciudad serían más reacios a modificar sus símbolos. Por el sesgo de statu quo, se espera un nivel de desacuerdo relativamente alto (alrededor de 2.2 en la escala de 1 a 5).",
+        "El cambio del himno es una cuestión de gustos, valores y apego simbólico que el catálogo no mide directamente; solo el orgullo por Bogotá (AG2) y, en menor grado, la satisfacción con la ciudad y su oferta cultural (CV1, CR2) permiten ordenar débilmente a las personas: quienes sienten más apego a la ciudad tenderían a oponerse al cambio. Por tradición y apego a los símbolos, se espera una media por debajo del punto neutro (≈2.2).",
+        "La disposición a cambiar el himno de Bogotá es una cuestión simbólica y de valores (tradición, identidad, apego a los símbolos de la ciudad, apertura al cambio) que el catálogo no mide; ni el orgullo por Bogotá (AG2), ni la satisfacción con la oferta cultural (CR2), ni la evaluación de la gestión permiten ordenar fiablemente a las personas en esta pregunta, ya que alguien orgulloso o satisfecho puede estar indistintamente a favor o en contra de cambiar el himno."
+      ]
+    },
+    "C3": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que Bogotá tenga un día festivo propio por su cumpleaños?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "media",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "AG2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CR2",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "AG2",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CV1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AG1",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "AG2",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "CV1",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CR2",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El orgullo por Bogotá y la satisfacción con vivir en la ciudad son los mejores predictores de apoyo a un gesto simbólico de identidad local como un día festivo propio, pero el catálogo no mide directamente valores sobre tradiciones, celebraciones o políticas culturales simbólicas, por lo que el puente es débil y la media esperada (alta, cercana a 'De acuerdo') es incierta.",
+        "El orgullo por Bogotá (AG2) y la satisfacción con vivir en ella (CV1) son los constructos más cercanos al afecto cívico que impulsaría el apoyo a un día festivo propio; sin embargo, el catálogo no mide directamente actitudes hacia símbolos o efemérides ciudadanas, por lo que el puente es de fuerza media.",
+        "El orgullo por Bogotá y la satisfacción con vivir en la ciudad son los únicos indicadores del catálogo que se aproximan al apego simbólico que llevaría a apoyar un día festivo propio; sin embargo, la pregunta nueva mide una preferencia política/cultural concreta que el catálogo no aborda directamente, por lo que el puente es débil."
+      ]
+    },
+    "C4": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que se permita tener gallinas en las casas de la ciudad?",
+      "sin_base": false,
+      "llamadas_sin_base": 1,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "sin_base",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "RC5_30",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_16",
+            "sentido": "-",
+            "peso": 1
+          },
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 1
+          }
+        ],
+        [],
+        [
+          {
+            "codigo": "CO4",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "AL1",
+            "sentido": "-",
+            "peso": 2
+          },
+          {
+            "codigo": "RC5_30",
+            "sentido": "-",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El catálogo no mide agricultura urbana ni actitudes hacia animales domésticos, pero sí captura el apego a normas de convivencia y molestias vecinales (sanción por excrementos de mascotas, música alta), de modo que quien valora más el orden y el control de externalidades tendería a estar en desacuerdo con permitir gallinas; a la vez, los hogares pobres podrían apoyarlo por autoabastecimiento. El puente es débil y solo permite un ordenamiento grueso, con nivel esperado algo por encima del punto neutro.",
+        "La pregunta mide una preferencia de valores y estilo de vida (tolerancia hacia animales/urbanismo alimentario, ruido, higiene, autosuficiencia) que el catálogo no aborda: no hay items sobre mascotas, agricultura urbana, tenencia de animales o actitudes hacia normas de uso de la vivienda. Los únicos candidatos vagos (situación económica CO2/CO4, inseguridad alimentaria AL1, percepción de sanción por excrementos de mascota RC5_30) no permiten ordenar de forma fiable a las personas, pues la dirección de la relación con permitir gallinas es ambigua (puede moverse por necesidad de subsistencia o, al contrario, por preferencias de clase y estética urbana).",
+        "El apoyo a tener gallinas depende sobre todo de gustos y valores no medidos en el catálogo, pero la vulnerabilidad económica y la inseguridad alimentaria (CO4, AL1) ordenan parcialmente a quienes verían utilidad en ello, y RC5_30 capta la inclinación hacia normas estrictas sobre animales en la ciudad (mayor rigor → menor acuerdo). El puente es débil: ninguna pregunta mide urbanismo, tenencia de animales o agricultura urbana."
+      ]
+    },
+    "C5": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que suene reguetón en los eventos oficiales del Distrito?",
+      "sin_base": true,
+      "llamadas_sin_base": 3,
+      "rotas": 0,
+      "fuerzas": [
+        "sin_base",
+        "sin_base",
+        "sin_base"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [],
+        [],
+        []
+      ],
+      "justificaciones": [
+        "La pregunta mide una preferencia musical y una actitud hacia un género específico (reguetón) en eventos oficiales, que depende de gustos, valores culturales, generación e identidad; el catálogo no contiene ninguna pregunta sobre preferencias musicales, géneros ni actitudes hacia contenidos culturales concretos que permita ordenar razonablemente a los encuestados. Ni siquiera CR2 (satisfacción con la oferta cultural) ni GP1N_5 (evaluación del gobierno en cultura) capturan esta dimensión de gusto musical.",
+        "La pregunta mide gusto musical y actitudes hacia un género específico (reguetón) en eventos oficiales, lo cual depende de preferencias culturales, identidad, edad y valores personales que el catálogo no recoge. Ninguna de las preguntas sobre satisfacción con servicios, gestión gubernamental, convivencia o medio ambiente permite ordenar a las personas por su inclinación hacia un género musical concreto.",
+        "La pregunta depende del gusto musical, la identidad cultural/generacional y los valores personales sobre qué géneros deben sonar en eventos oficiales, aspectos que el catálogo no mide. Preguntas como la satisfacción con la oferta cultural (CR2), la evaluación de gobierno en cultura (GP1N_5) o la percepción sobre sanciones por música a alto volumen (RC5_16) refieren a otros objetos (oferta, gestión o ruido) y no permiten ordenar a las personas por su acuerdo con que suene reguetón."
+      ]
+    },
+    "C6": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que la ciudad vuelva a llamarse oficialmente «Santa Fe de Bogotá»?",
+      "sin_base": true,
+      "llamadas_sin_base": 3,
+      "rotas": 0,
+      "fuerzas": [
+        "sin_base",
+        "sin_base",
+        "sin_base"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [],
+        [],
+        []
+      ],
+      "justificaciones": [
+        "La disposición a renombrar la ciudad como «Santa Fe de Bogotá» depende de valores identitarios, históricos e ideológicos (tradición vs. modernidad, simbolismo del nombre) que el catálogo no mide en ningún punto. Ni el orgullo por Bogotá (AG2), la satisfacción con la vida en la ciudad (CV1) ni la evaluación del gobierno permiten ordenar fiablemente a las personas en esta pregunta, pues la relación podría ir en cualquier dirección según el vínculo emocional con la marca «Bogotá» frente al nombre histórico; forzar un puente sería especulativo.",
+        "La pregunta mide una preferencia simbólica y de identidad histórica (el nombre oficial de la ciudad), que depende de valores, tradición, ideología o sensibilidad cultural, temas que el catálogo no aborda. Ni el orgullo o satisfacción con Bogotá (AG2, CV1) ni las evaluaciones de servicios, seguridad o gestión permiten ordenar razonablemente a las personas respecto a un cambio de nombre, ya que la identificación con la ciudad puede llevar tanto a apoyar como a rechazar la denominación histórica.",
+        "La pregunta sobre volver al nombre «Santa Fe de Bogotá» es una preferencia simbólica, identitaria y de valores (tradición vs. modernidad) que el catálogo no mide: ni adhesión histórica, ni actitudes sobre símbolos, ni posturas políticas o culturales sobre la identidad capitalina. Ninguna pregunta sobre orgullo, satisfacción con servicios o evaluación de gobierno permite ordenar razonablemente a las personas en esta preferencia, ya que el vínculo sería especulativo y ambiguo en su dirección."
+      ]
+    },
+    "C7": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que se permita entrar con perros a los restaurantes?",
+      "sin_base": true,
+      "llamadas_sin_base": 3,
+      "rotas": 0,
+      "fuerzas": [
+        "sin_base",
+        "sin_base",
+        "sin_base"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [],
+        [],
+        []
+      ],
+      "justificaciones": [
+        "La pregunta mide una preferencia de estilo de vida y valores (tenencia de mascotas, higiene, alergias, tolerancia en espacios comerciales) que el catálogo no aborda: lo más cercano, RC5_30 sobre sanciones por no recoger excrementos de mascota, mide percepción de cumplimiento normativo y no actitud hacia la presencia de perros, por lo que no permite ordenar a las personas de forma monotónica.",
+        "Permitir perros en restaurantes es una actitud basada en valores, gustos y estilo de vida (afinidad con mascotas, tolerancia, hábitos de consumo) que el catálogo no mide; lo más cercano sería RC5_30 (sanción por no recoger excrementos de mascota), pero mide percepción de control normativo, no disposición a compartir espacios gastronómicos con animales, por lo que no permite ordenar razonablemente a las personas.",
+        "El catálogo no contiene ninguna pregunta sobre mascotas, animales, restaurantes, ocio ni actitudes hacia la convivencia con perros en espacios comerciales; la única mención a mascotas (RC5_30) mide la percepción de probabilidad de sanción por no recoger excrementos, que no permite ordenar a las personas por su apertura a perros en restaurantes (ni siquiera identifica si tienen perro). Permitir perros en restaurantes depende de valores, estilos de vida y sensibilidades (alergias, higiene, amor por los animales) que el catálogo no mide, por lo que cualquier predicción sería forzada."
+      ]
+    },
+    "C8": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que Bogotá adelante su hora oficial para aprovechar más la luz del día?",
+      "sin_base": true,
+      "llamadas_sin_base": 3,
+      "rotas": 0,
+      "fuerzas": [
+        "sin_base",
+        "sin_base",
+        "sin_base"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [],
+        [],
+        []
+      ],
+      "justificaciones": [
+        "La pregunta nueva mide una preferencia específica sobre una política concreta (adelantar la hora oficial para aprovechar la luz del día), que depende de rutinas personales, horarios de trabajo, valores y estilos de vida que el catálogo no capta. Ninguna de las preguntas del catálogo —sobre satisfacción con servicios, evaluación de gobierno, seguridad, movilidad o convivencia— permite ordenar razonablemente a las personas en esta dimensión.",
+        "La pregunta mide una preferencia concreta sobre un cambio de política (adelantar la hora oficial) que depende de gustos, hábitos de horario, valores y beneficios percibidos individualmente, temas que el catálogo no aborda en absoluto. Las evaluaciones generales de ciudad, gobierno o servicios públicos no permiten ordenar a las personas respecto a este ajuste horario, por lo que forzar un puente sería especulativo.",
+        "La pregunta mide una preferencia concreta sobre un cambio de hora oficial, que depende de hábitos, valores y estilos de vida (horarios de trabajo, actividades al aire libre, preferencia por luz natural) que el catálogo no capta. Ninguna de las preguntas disponibles —satisfacción con servicios, percepción de seguridad, evaluación de gobierno o movilidad— permite ordenar razonablemente a las personas en su acuerdo con esta medida específica."
+      ]
+    },
+    "C9": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que se construya un monumento a los deportistas olímpicos colombianos?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AG2",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "EP1B_2",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "AG2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_6",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "CR4",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "GP1N_6",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "EP1B_2",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "AG2",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "CV5",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El catálogo no mide símbolos, monumentos ni orgullo deportivo nacional, pero CR4, GP1N_6 y EP1B_2 captan el interés y la valoración del deporte, y AG2 el orgullo ciudadano, lo que permite un ordenamiento aproximado (quien valora más el deporte y la ciudad tenderá a apoyar el monumento). Como se trata de una propuesta simbólica de bajo costo y alto consenso, la media esperada se sitúa cerca de 'De acuerdo' (4.0).",
+        "El catálogo no pregunta sobre monumentos ni sobre apoyo a homenajes deportivos, pero CR4 y GP1N_6 capturan la valoración del deporte y AG2/CV5 el orgullo ciudadano y la aprobación de la inversión pública, que permiten ordenar aproximadamente a las personas. Como solo se comparte el tema general (deporte, orgullo cívico y gasto público), el puente es débil; aun así, es razonable esperar un nivel alto de acuerdo (cerca de 4.0), pues honrar a deportistas olímpicos suele generar consenso favorable.",
+        "El catálogo no mide apoyo a monumentos ni prioridades de gasto simbólico, pero las preguntas sobre oferta recreativa y deportiva, escenarios deportivos, evaluación del gobierno en recreación y deporte, orgullo ciudadano y satisfacción con la inversión pública permiten ordenar aproximadamente a las personas por su afinidad con el deporte y su disposición a respaldar inversión pública en ese ámbito. Como el apoyo a un monumento a deportistas olímpicos suele ser mayoritario (sesgo de deseabilidad y celebración del deporte nacional), se espera una media alta, cercana a 3.9."
+      ]
+    },
+    "C10": {
+      "clase": "C",
+      "texto": "¿Qué tan de acuerdo está con que la ciudad adopte un animal símbolo oficial, como el oso de anteojos?",
+      "sin_base": false,
+      "llamadas_sin_base": 0,
+      "rotas": 0,
+      "fuerzas": [
+        "debil",
+        "debil",
+        "debil"
+      ],
+      "fuerte_o_media": false,
+      "debil_o_sin_base": true,
+      "puentes": [
+        [
+          {
+            "codigo": "AG2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CV1",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "AG2",
+            "sentido": "+",
+            "peso": 2
+          },
+          {
+            "codigo": "CR2",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "GP1N_5",
+            "sentido": "+",
+            "peso": 1
+          }
+        ],
+        [
+          {
+            "codigo": "AG2",
+            "sentido": "+",
+            "peso": 3
+          },
+          {
+            "codigo": "GP1N_5",
+            "sentido": "+",
+            "peso": 1
+          },
+          {
+            "codigo": "CV1",
+            "sentido": "+",
+            "peso": 1
+          }
+        ]
+      ],
+      "justificaciones": [
+        "El acuerdo con un símbolo oficial depende de gustos y valores, pero el orgullo y la satisfacción con Bogotá ordenan débilmente a las personas hacia una mayor aceptación de símbolos de identidad ciudadana; ninguna pregunta del catálogo mide directamente este tema.",
+        "La adopción de un símbolo cívico se relaciona de forma tenue con el orgullo por Bogotá y con la valoración de la oferta y la gestión cultural, pues quienes se sienten más identificados con la ciudad tienden a apoyar gestos simbólicos; sin embargo, en gran medida depende de gustos y valores que el catálogo no mide.",
+        "La pregunta mide una preferencia simbólica/identitaria, pero el orgullo por Bogotá (AG2) permite ordenar aproximadamente a quienes apoyarían un símbolo cívico, apoyado débilmente por la valoración de la cultura (GP1N_5) y la satisfacción con la ciudad (CV1). El apoyo esperado es moderadamente favorable por ser una propuesta simbólica de bajo costo."
+      ]
+    }
+  },
+  "regresion": {
+    "veredictos": {
+      "CV1": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "media",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "AG2": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "media",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "VS8": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "media",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "VS10": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "fuerte",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "GG7": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "media",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "GG3": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "fuerte",
+          "fuerte",
+          "fuerte"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "MV4": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "media",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "SA4": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "debil",
+          "media",
+          "debil"
+        ],
+        "fuerte_o_media": false,
+        "debil_o_sin_base": true
+      },
+      "MA3_1": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "media",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "MA3_3": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "media",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "CR2": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "media",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      },
+      "CO2": {
+        "sin_base": false,
+        "llamadas_sin_base": 0,
+        "rotas": 0,
+        "fuerzas": [
+          "media",
+          "media",
+          "media"
+        ],
+        "fuerte_o_media": true,
+        "debil_o_sin_base": false
+      }
+    },
+    "p1_personas": {
+      "CV1": true,
+      "AG2": true,
+      "VS8": true,
+      "VS10": true,
+      "GG7": true,
+      "GG3": true,
+      "MV4": true,
+      "SA4": true,
+      "MA3_1": true,
+      "MA3_3": true,
+      "CR2": true,
+      "CO2": true
+    },
+    "rho_ind": {
+      "CV1": 0.4455935584301518,
+      "AG2": 0.38576425102460166,
+      "VS8": 0.3260715500399887,
+      "VS10": 0.4137583441585491,
+      "GG7": 0.2323549725335941,
+      "GG3": 0.6417531391308635,
+      "MV4": 0.2932571561388592,
+      "SA4": 0.4288901286314091,
+      "MA3_1": 0.5500680925158703,
+      "MA3_3": 0.4864823739691476,
+      "CR2": 0.49942940613163017,
+      "CO2": 0.486388068963873
+    }
+  },
+  "predicciones": {
+    "P1": {
+      "umbral": "sin_base en ≥ 7 de las 10 C",
+      "cuenta": 5,
+      "se_cumple": false
+    },
+    "P2": {
+      "umbral": "sin_base en ≤ 1 de las 10 A",
+      "cuenta": 0,
+      "se_cumple": true
+    },
+    "R1": {
+      "umbral": "sin_base en ≤ 1 de las 12 escondidas",
+      "cuenta": 0,
+      "se_cumple": true
+    },
+    "R2": {
+      "umbral": "ρ_ind > azar 95 y > demografía en ≥ 9 de 12",
+      "cuenta": 12,
+      "se_cumple": true
+    },
+    "P3": {
+      "umbral": "fuerte o media en ≥ 8 de las 10 A, y débil o sin_base en ≥ 6 de las 10 B",
+      "cuenta_A": 10,
+      "cuenta_B": 8,
+      "se_cumple": true
+    },
+    "P4": {
+      "umbral": "se reporta",
+      "B_sin_base": 0
+    }
+  },
+  "lectura": "sin_base_no_confiable",
+  "regla": "No se usa sin_base en la página: no es confiable.",
+  "mostrar_fuerza": true,
+  "modelo": "xiaomi/mimo-v2.6-pro",
+  "gasto": {
+    "llamadas": 126,
+    "llamadas_con_costo": 126,
+    "costo_usd": 0.2736894022499999,
+    "prompt_tokens": 905346,
+    "completion_tokens": 116033,
+    "reasoning_tokens": 87609,
+    "modelos_servidos": {
+      "xiaomi/mimo-v2.6-pro": 126
+    }
+  }
+}

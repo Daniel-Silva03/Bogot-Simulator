@@ -5,7 +5,9 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 1 de octubre de 2026
-Estado: **con código (`src/experiments/puente_sin_base.py`, 1/10); ninguna llamada real hecha con el prompt nuevo**
+Estado: ~~con código; ninguna llamada real hecha con el prompt nuevo~~ **corrida el 1/10**
+(`PUENTE_SIN_BASE_RESULTS.md`): P1 no se cumple (5 de 10); P2, R1, R2 y P3 sí. No se usa sin_base;
+la página muestra la fuerza.
 Origen: pregunta de Daniel del 1/10 («¿y si una pregunta nueva no está medida en ningún lado?») y
 `PUENTE_SPECIFICATION.md` §7 / `PUENTE_LOCALIDADES_SPECIFICATION.md` §7 («una pregunta realmente nueva
 puede estar más lejos del catálogo»)
