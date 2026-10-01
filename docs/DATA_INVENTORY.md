@@ -901,3 +901,49 @@ Lo usa `POLOS_2026_SPECIFICATION.md`.
 ---
 
 *Documento vivo — actualizar el estado de la tabla de la sección 2 cada vez que un dataset entre al repositorio, y §12.4 cada vez que cambie algo del régimen de los datos del CNC.*
+
+---
+
+## 15. Biblioteca pública del CNC *(1/10/2026)*
+
+**Qué es.** La Biblioteca Digital de la página del CNC
+(https://www.centronacionaldeconsultoria.com/biblioteca-cnc) publica informes de estudios, «con
+fines informativos y académicos». Son **informes en PDF con cifras agregadas**, no microdatos. La
+sugirió el jefe de Daniel como fuente para hacer más sólido el laboratorio.
+
+**Revisión (1/10).** Se leyeron las fichas de los 158 documentos (descripción y enlace), sin
+descargar. Quedaron fuera los electorales (intención de voto, imagen de candidatos), los que no son
+de opinión (ratings, minería, petróleo, empresas) y los de la pandemia. **Salud mental 2023 y
+sustancias psicoactivas en Bogotá 2022 no se tocaron:** son los estudios cuyos microdatos restringe
+R10 (§12); usar sus informes publicados queda para una decisión de Daniel.
+
+**Descargados con permiso de Daniel (1/10), fuera del repo**, en
+`C:\Users\User\Desktop\CNC_datos\biblioteca_publica\` (7,4 MB). Se leen con `pypdf`, instalado en el
+venv para esto.
+
+| Archivo | Qué es | Bogotá | Sirve para |
+|---|---|---|---|
+| `opinion_publica_bogota_2023-08-15.pdf` | Encuesta de opinión para Red+ y Caracol Radio, 15/08/2023, **4.275 personas en Bogotá**. Margen total 1,5 %; por localidad, 3,8 % a 9,4 % | **Toda la encuesta.** Cruces por sexo, edad (4 tramos), estrato (1 a 6) y **13 localidades + «Otra»**, que agrupa Usaquén, Chapinero, San Cristóbal, Teusaquillo, Antonio Nariño y La Candelaria | **Preguntas nuevas con respuesta conocida:** «¿Estás de acuerdo con mantener el metro elevado?» (65,7 % sí) y «¿…con el Corredor Verde por la carrera séptima?» (58,8 % sí). La EPC no las hizo. También preocupaciones de la localidad y victimización en 6 meses |
+| `opinion_publica_2023-08-29.pdf` | La misma serie, 26 a 28/08/2023, **4.575 personas en Bogotá**, 14 preguntas | Toda; cruces por sexo y edad, y por las 15 localidades más pobladas | Contraste externo: victimización en 12 meses (`VS15`), «¿Bogotá tendrá metro en 10 años?» (cerca de `MV150`), «¿Bogotá es una ciudad…?», confianza en los parques. El resto es conducta (uso de TransMilenio y bicicarriles, colarse, desempleo) |
+| `plataformas_digitales.pdf` | Percepción sobre plataformas digitales y sus trabajadores, mayo 2024, 1.076 personas | **Columna de Bogotá (448)** | Tema que la EPC no mide; solo ciudad, sin estrato ni localidad |
+| `ciudadania_y_democracia_2023.pdf` | Problemas, participación y asambleas ciudadanas, sept. 2023, nacional | Columna de Bogotá (522) | Contraste: problemas principales del país y de la ciudad |
+| `sistema_pensional_andi_2024.pdf` | Percepción del sistema pensional, abril 2024, 2.791 personas | Bogotá solo como región de la muestra | Poco: no separa Bogotá en los resultados |
+| `termometro_cambio_cnc_2026-01.pdf` | Termómetro de opinión, enero 2026, 2.202 personas; propósito electoral | 340 en Bogotá, como región | Poco: casi todo es electoral o nacional |
+
+**Hechos que pesan en cualquier uso:**
+- **Método distinto al de la EPC.** Las dos de Bogotá son **encuestas en línea, autoaplicadas en el
+  celular**, con invitación por SMS a usuarios de Claro, selección aleatoria del directorio de
+  líneas móviles y factores calibrados. La EPC es cara a cara en el hogar. Una diferencia de nivel
+  entre las dos no prueba que la población sintética esté mal.
+- **Los estratos altos son pocos** en la del 15/08: 97 personas en estrato 5 y 26 en el 6. Sus
+  porcentajes por estrato 5-6 son muy inestables.
+- **Un error del informe:** en la del 15/08, la gráfica por localidad del metro elevado (p. 14)
+  lleva el título de la de victimización. Los valores son otros (Suba 76,2 %, total 65,7 %), así que
+  es el metro con el título equivocado.
+- **Son de 2023**, el año central de la población 2022-2024.
+
+**Lo que habilita.** Por primera vez hay **preguntas de verdad nuevas**, sin pariente directo en el
+catálogo, con resultados reales de Bogotá por grupo y por localidad: el metro elevado y el Corredor
+Verde. Sirven para un pre-registro que mida lo que la validación del puente no pudo medir (si
+acierta el nivel y el orden de los grupos en una pregunta realmente nueva), con el aviso del método
+distinto.
