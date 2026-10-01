@@ -244,8 +244,11 @@ otros años, preguntas sueltas de la EPC, Cultura Política del DANE, biblioteca
 Diccionario de la ECP descargado; 336 candidatas clasificadas con la API (USD 0,09): **171 útiles**.
 **Sorteo hecho el 1/10** (semilla 20261001, `BANCO_PREGUNTAS_NUEVAS.md` §8): 114 de práctica y 51
 guardadas (solo 5 de Bogotá). Resultados reales de la práctica calculados (1/10, `BANCO_PREGUNTAS_NUEVAS.md` §9): **96 preguntas,
-699 diferencias claras**, tras una regla de estructura que sacó 18. **Siguiente:** probar versiones del
-puente sobre la práctica con la API (unos USD 1 por versión), contra el azar y contra estrato, edad y sexo.
+699 diferencias claras**, tras una regla de estructura que sacó 18. **Práctica corrida el 1/10** (USD 1,39;
+`BANCO_PREGUNTAS_NUEVAS.md` §10.1): las dos versiones del puente ordenan bien el 60-61 % de las
+diferencias entre grupos; el **tono general**, sin API, el 62 %. El puente no aporta sobre «quién suele
+responder favorable». **Pendiente con Daniel:** un último intento (ejemplos resueltos en el prompt,
+validación cruzada en la práctica) o adoptar el tono general como lo que la página muestra.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

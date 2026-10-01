@@ -143,3 +143,26 @@ Bogotá con 226 pares, 60 generales con 473). Medida: fracción de diferencias c
 - **Referencias sin API, ya calculadas:** el azar ordena bien el 50 % (p95: 55 %) y el **tono general
   el 62 %** (66 % en Bogotá). El tono supone que los grupos que en la encuesta suelen responder de forma
   favorable también lo harán aquí. **Es la vara:** un puente que no la supere no aporta.
+
+### 10.1 Resultados de la práctica (1/10)
+
+Corridas de Daniel; 580 llamadas en total, **USD 1,39** (las dos versiones). Fracción de las 699
+diferencias claras entre grupos que cada método ordena bien:
+
+| Método | Todas | Bogotá (226) | General (473) | r por localidad (31 preguntas de la EPC) |
+|---|---|---|---|---|
+| Azar (media / p95) | 0,50 / 0,55 | 0,50 / 0,58 | 0,51 / 0,56 | — |
+| **Tono general** (sin API) | **0,62** | **0,66** | 0,60 | — |
+| Puente «actual» | 0,61 | 0,62 | 0,62 | 0,20 |
+| Puente «afectados» | 0,60 | 0,62 | 0,60 | 0,19 |
+| Los 3 puentes juntos (cualquier versión) | 0,62 | | | |
+| Los 3 puentes juntos + tono | 0,63 | | | |
+
+**Lectura.** El puente le gana al azar, pero **no le gana al tono general**: en una pregunta nueva, el
+orden de los grupos que da es, en la práctica, el de «quién suele responder de forma favorable». Pedirle
+que piense en a quién afecta y quién propone no cambió nada (solo bajó los «sin base», de 32 a 5
+llamadas). Por pregunta, el puente supera al tono en 29, empata en 28 y pierde en 34.
+
+**Un análisis que no sirvió, anotado para no repetirlo:** «la mejor pregunta del catálogo para cada
+pregunta nueva, mirando el resultado» acierta el 100 %. No es un techo: con 102 preguntas y dos sentidos,
+siempre hay alguna que ordena bien unos 7 pares por azar. No dice si la información está en la población.
