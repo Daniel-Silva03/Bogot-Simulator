@@ -174,7 +174,12 @@ Daniel eligió el camino 1. **Versión «ejemplos»** (`src/experiments/practica
 - **El perfil de cada pregunta del catálogo** se le muestra al modelo, calculado con la población
   (en qué estratos, edades y sexo es más favorable). Sin él, un ejemplo no le enseña nada: el modelo
   elige por tema porque no sabe qué preguntas separan a qué grupos.
-- **Ejemplos resueltos de la práctica**: la pregunta, su perfil real y un puente que la ordena bien.
+- **Ejemplos resueltos de la práctica**: la pregunta, su perfil real ~~y un puente que la ordena bien~~.
+  *Cambio (1/10, antes de correr nada real):* el «puente que ordena bien» de cada ejemplo salía de elegir
+  las 2 preguntas del catálogo que más pares del ejemplo aciertan, y era ruido (para la confianza en el
+  Congreso: «respeto por los reinsertados +, respeto por la diversidad sexual −»): con pocos pares,
+  alguna pareja siempre acierta por azar. Enseñaría relaciones falsas. Los ejemplos quedan con la
+  pregunta y su perfil real.
 - **Validación cruzada por familia, 3 partes con semilla fija**: cada pregunta se evalúa con ejemplos
   sacados solo de las otras dos partes. Nunca ve su propio resultado ni el de sus hermanas.
 - 91 preguntas × 3 llamadas, como las otras versiones; unos USD 0,6-0,9.

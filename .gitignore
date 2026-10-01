@@ -127,6 +127,7 @@ data/**
 !data/processed/practica_puente/
 !data/processed/practica_puente/actual.json
 !data/processed/practica_puente/afectados.json
+!data/processed/practica_puente/ejemplos.json
 !data/processed/reformulacion/
 !data/processed/reformulacion/resultado.json
 
