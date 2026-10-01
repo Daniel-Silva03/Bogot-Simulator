@@ -166,3 +166,20 @@ llamadas). Por pregunta, el puente supera al tono en 29, empata en 28 y pierde e
 **Un análisis que no sirvió, anotado para no repetirlo:** «la mejor pregunta del catálogo para cada
 pregunta nueva, mirando el resultado» acierta el 100 %. No es un techo: con 102 preguntas y dos sentidos,
 siempre hay alguna que ordena bien unos 7 pares por azar. No dice si la información está en la población.
+
+### 10.2 Último intento: perfiles y ejemplos resueltos (regla escrita el 1/10, antes de correr)
+
+Daniel eligió el camino 1. **Versión «ejemplos»** (`src/experiments/practica_ejemplos.py`):
+
+- **El perfil de cada pregunta del catálogo** se le muestra al modelo, calculado con la población
+  (en qué estratos, edades y sexo es más favorable). Sin él, un ejemplo no le enseña nada: el modelo
+  elige por tema porque no sabe qué preguntas separan a qué grupos.
+- **Ejemplos resueltos de la práctica**: la pregunta, su perfil real y un puente que la ordena bien.
+- **Validación cruzada por familia, 3 partes con semilla fija**: cada pregunta se evalúa con ejemplos
+  sacados solo de las otras dos partes. Nunca ve su propio resultado ni el de sus hermanas.
+- 91 preguntas × 3 llamadas, como las otras versiones; unos USD 0,6-0,9.
+
+**Regla de salida, escrita antes de correr:** si la versión «ejemplos» no ordena bien **al menos el
+67 %** de las 699 diferencias claras (el tono general más 5 puntos), **se para**: la página adopta el
+camino 2 (mostrar el tono general por grupo como «así suelen responder estos grupos») y no se prueban
+más versiones del puente para el orden de los grupos. Si lo supera, va al banco guardado, pre-registrado.
