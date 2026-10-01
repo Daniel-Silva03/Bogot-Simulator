@@ -227,8 +227,11 @@ las 10 sin pariente (P1 falla): **la página no usará sin_base**. La fuerza sí
 **la página mostrará «base fuerte / media / débil»**. Nada de lo validado se rompió (12 de 12).
 Daniel eligió la opción 1: si el v2 dice «sin base», se pide el puente de siempre y se muestra
 como **base débil**. **Llevado a la página el 1/10** (`PAGINA_CONSULTA.md` §5.6, DI-CO12).
-**Idea anotada, sin empezar:** la biblioteca pública del CNC como fuente de preguntas nuevas con
-respuesta conocida (informes de opinión, no electorales; requiere permiso para descargar).
+**Biblioteca pública del CNC (1/10):** revisada y con seis informes descargados fuera del repo
+(`DATA_INVENTORY.md` §15). Una encuesta de Bogotá de agosto de 2023 trae dos preguntas que la EPC no
+hizo (metro elevado, Corredor Verde) con resultados por grupo y localidad. **Pre-registrado el 1/10:**
+`PREGUNTAS_REALES_NUEVAS_SPECIFICATION.md` (P1: el puente acierta ≥ 70 % de las 24 diferencias
+claras entre grupos y le gana al azar). **Siguiente:** código y corrida (6 llamadas).
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
