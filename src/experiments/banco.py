@@ -34,6 +34,18 @@ DI-BA3. **«Codigos_favorables»** son las categorías que significan estar de a
 DI-BA4. **Filtro mecánico antes del modelo:** sin texto de pregunta, sin categorías, o con
     más de 12 categorías (abiertas o numéricas) no entra. Variables administrativas y de
     identificación tampoco. El módulo de elecciones y partidos de la ECP no entra.
+
+DI-BA5. **El sorteo (aprobado por Daniel el 1/10, tres reglas):**
+    1. Fuera las 6 que quedaron sin sentido por el texto cortado (`EXCLUIDAS`).
+    2. Se marca el ámbito: «Bogotá» (EPC y biblioteca del CNC) o «general» (ECP del DANE:
+       sobre todo Colombia, la democracia y la vida personal). Los resultados se reportan
+       por separado.
+    3. Se sortea **por familia** (preguntas hermanas de una misma serie), con semilla fija y
+       por separado en cada ámbito: la mitad de las familias, redondeando hacia arriba, al
+       banco guardado. Lo no independiente (EPC 2022-2024) y lo ya visto (metro, Corredor)
+       va siempre a práctica. El guardado solo tiene preguntas independientes.
+    **El guardado no se le pregunta al simulador hasta la prueba final pre-registrada:**
+    `practica()` es la única puerta para los experimentos de práctica.
 """
 
 from __future__ import annotations
@@ -246,6 +258,46 @@ def clasificar(df: pd.DataFrame, llamar, cache: e9.Cache, modelo: str) -> pd.Dat
     return pd.DataFrame(filas)
 
 
+# --------------------------------------------------------------------------
+# Paso 3: sorteo (DI-BA5)
+
+SEMILLA_SORTEO = 20261001
+EXCLUIDAS = ("EPC2016_COY1", "EPC2017_PI1", "EPC2019_JCV4", "EPC2022_PC20_1", "EPC2022_PC20_2", "EPC2022_PC20_3")
+
+
+def familia(fila: dict) -> str:
+    """Preguntas hermanas: misma fuente y año, y la misma raíz de variable (P5263S1, P5263S2…)."""
+    v = fila.get("variable")
+    if not isinstance(v, str) or not v:
+        return fila["id"]
+    return fila["id"].split("_")[0] + "_" + re.sub(r"S\d+$|_\d+$", "", v)
+
+
+def sortear(clasificadas: pd.DataFrame, semilla: int = SEMILLA_SORTEO) -> pd.DataFrame:
+    import numpy as np
+    u = clasificadas[clasificadas.util & ~clasificadas.id.isin(EXCLUIDAS)].copy()
+    u["familia"] = [familia(f) for f in u.to_dict("records")]
+    u["ambito"] = np.where(u.fuente == "ECP DANE", "general", "Bogotá")
+    fam = u.groupby("familia").agg(ambito=("ambito", "first"), independiente=("independiente", "all"),
+                                   visto=("visto", "any"))
+    fam["conjunto"] = "practica"
+    fam["motivo"] = np.where(~fam.independiente, "no independiente", np.where(fam.visto, "ya visto", "sorteo"))
+    rng = np.random.default_rng(semilla)
+    for amb in ("Bogotá", "general"):
+        elegibles = sorted(fam[(fam.ambito == amb) & (fam.motivo == "sorteo")].index)
+        orden = list(rng.permutation(elegibles))
+        fam.loc[orden[: (len(orden) + 1) // 2], "conjunto"] = "guardado"
+    u = u.join(fam[["conjunto", "motivo"]], on="familia")
+    return u[["id", "familia", "conjunto", "motivo", "ambito", "fuente", "anio", "variable", "independiente",
+              "pregunta_pagina", "codigos_favorables", "categorias", "tema"]].sort_values(["conjunto", "ambito", "familia", "id"])
+
+
+def practica(ruta: Path = SALIDA / "sorteo.csv") -> pd.DataFrame:
+    """La única puerta al banco para la práctica: nunca devuelve una pregunta guardada."""
+    s = pd.read_csv(ruta)
+    return s[s.conjunto == "practica"].reset_index(drop=True)
+
+
 def modelo_simulado():
     def llamar(modelo, sistema, usuario, temp):
         cods = [int(x) for x in re.findall(r"(-?\d+)=", usuario.split("CATEGORÍAS:")[-1])]
@@ -259,8 +311,15 @@ def main(argv=None, entrada=input) -> int:
     ap = argparse.ArgumentParser(description="Banco de preguntas nuevas (docs/BANCO_PREGUNTAS_NUEVAS.md).")
     ap.add_argument("--candidatas", action="store_true", help="solo el paso 1, sin gasto")
     ap.add_argument("--simulado", action="store_true", help="paso 2 con un modelo simulado, sin gasto")
+    ap.add_argument("--sorteo", action="store_true", help="paso 3: práctica y guardado, sin gasto")
     args = ap.parse_args(argv)
     SALIDA.mkdir(parents=True, exist_ok=True)
+    if args.sorteo:
+        s = sortear(pd.read_csv(SALIDA / "clasificadas.csv"))
+        s.to_csv(SALIDA / "sorteo.csv", index=False, encoding="utf-8")
+        print(s.groupby(["conjunto", "ambito"]).agg(preguntas=("id", "size"), familias=("familia", "nunique")))
+        print(s.groupby(["conjunto", "motivo"]).size())
+        return 0
     df = candidatas()
     df.to_csv(SALIDA / "candidatas.csv", index=False, encoding="utf-8")
     print(f"{len(df)} candidatas: {df.fuente.value_counts().to_dict()}; independientes {int(df.independiente.sum())}; "

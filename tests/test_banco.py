@@ -96,6 +96,25 @@ def test_las_candidatas_reales_salen_y_metro_y_corredor_quedan_marcados_como_vis
     assert (df.anio != 2025).all()                                                           # DI-BA1
 
 
+def test_el_sorteo_cumple_las_tres_reglas_y_es_reproducible():
+    """DI-BA5."""
+    ruta = ba.SALIDA / "clasificadas.csv"
+    if not ruta.exists():
+        print("         (sin la clasificación en esta máquina: se omite)")
+        return
+    cl = pd.read_csv(ruta)
+    s = ba.sortear(cl)
+    assert s.equals(ba.sortear(cl))                                                  # misma semilla, mismo sorteo
+    assert not s.id.isin(ba.EXCLUIDAS).any()                                         # regla 1
+    assert set(s.ambito) == {"Bogotá", "general"} and (s[s.fuente == "ECP DANE"].ambito == "general").all()   # regla 2
+    assert (s.groupby("familia").conjunto.nunique() == 1).all()                      # regla 3: la familia no se parte
+    g = s[s.conjunto == "guardado"]
+    assert g.independiente.all() and not g.id.isin(["CNC_METRO", "CNC_CORREDOR"]).any()
+    with tempfile.TemporaryDirectory() as tmp:
+        s.to_csv(Path(tmp) / "s.csv", index=False)
+        assert not ba.practica(Path(tmp) / "s.csv").id.isin(g.id).any()            # la puerta de la práctica
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"Banco — {len(pruebas)} pruebas\n")

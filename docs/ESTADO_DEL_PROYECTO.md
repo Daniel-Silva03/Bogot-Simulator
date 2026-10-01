@@ -241,8 +241,10 @@ usando la API cuando ayude. Plan: un banco de preguntas nuevas con respuesta rea
 práctica y guardado; mejoras al puente en el de práctica; prueba final pre-registrada en el guardado.
 **Inventario del banco el 1/10** (`BANCO_PREGUNTAS_NUEVAS.md`): ~100 candidatas en cuatro fuentes (EPC de
 otros años, preguntas sueltas de la EPC, Cultura Política del DANE, biblioteca del CNC).
-**Siguiente:** permiso para el diccionario de la ECP 2023; lista definitiva clasificada con la API;
-sorteo de práctica y guardado antes de preguntarle nada al simulador.
+Diccionario de la ECP descargado; 336 candidatas clasificadas con la API (USD 0,09): **171 útiles**.
+**Sorteo hecho el 1/10** (semilla 20261001, `BANCO_PREGUNTAS_NUEVAS.md` §8): 114 de práctica y 51
+guardadas (solo 5 de Bogotá). **Siguiente:** la práctica: calcular los resultados reales por grupo de
+las preguntas de práctica y probar mejoras al puente con la API.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

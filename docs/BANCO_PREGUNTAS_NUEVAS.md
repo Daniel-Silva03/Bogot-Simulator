@@ -87,3 +87,29 @@ sigue en pie: el modelo nunca responde por las personas.
   **336** (282 ECP, 29 EPC armonizada, 21 EPC de coyuntura, 4 de la biblioteca del CNC); **307
   independientes** de la población; 16 con el texto cortado. En `data/processed/banco/candidatas.csv`.
 - La clasificación con la API (paso 2) está probada con un modelo simulado. Falta correrla.
+- **Clasificación con la API (1/10, corrida de Daniel):** 329 llamadas, USD 0,091. Válidas 333 de 336;
+  **útiles 171** (opinión, no electorales), 143 independientes. Las 3 inválidas son de la serie «a quién
+  no quisiera tener de vecino» (`P2041`), que conserva 10 válidas.
+- **Revisión de Daniel (1/10), tres reglas aprobadas** (DI-BA5): fuera 6 preguntas que el texto
+  cortado dejó sin sentido; ámbito «Bogotá» o «general»; sorteo por familia, con lo no independiente
+  y lo ya visto siempre en práctica.
+
+## 8. El sorteo (1/10, semilla 20261001)
+
+`data/processed/banco/sorteo.csv`, subido antes de hacerle ninguna pregunta del banco al simulador.
+
+| | Bogotá | General (ECP) | Total |
+|---|---|---|---|
+| **Práctica** | 37 preguntas, 15 familias | 77 preguntas, 16 familias | 114 |
+| **Guardado** | **5 preguntas, 5 familias** | 46 preguntas, 17 familias | 51 |
+
+En práctica, 25 preguntas van por no ser independientes y 2 por ya vistas (metro, Corredor).
+
+**Un límite que dejó el sorteo:** el guardado de Bogotá quedó con solo 5 preguntas (funcionamiento de
+la ciudad, oportunidades, migración venezolana, servicio de salud, metro en 10 años), porque la familia
+más grande de Bogotá (imagen de 7 entidades distritales, 2019) cayó en práctica. No se repite el sorteo:
+elegir otro a conveniencia anularía su sentido. La prueba final dirá poco de Bogotá por sí sola; su
+peso estará en el total y en el ámbito general.
+
+**El guardado no se le pregunta al simulador hasta la prueba final pre-registrada.** Los experimentos
+de práctica leen el banco solo con `banco.practica()`, que nunca devuelve una pregunta guardada.
