@@ -239,7 +239,10 @@ barras por grupo en preguntas nuevas: **aplicado el 1/10** (`PAGINA_CONSULTA.md`
 **Rumbo acordado con Daniel (1/10):** que las preguntas nuevas se acerquen a resultados reales,
 usando la API cuando ayude. Plan: un banco de preguntas nuevas con respuesta real, separado en
 práctica y guardado; mejoras al puente en el de práctica; prueba final pre-registrada en el guardado.
-**Siguiente:** el inventario del banco.
+**Inventario del banco el 1/10** (`BANCO_PREGUNTAS_NUEVAS.md`): ~100 candidatas en cuatro fuentes (EPC de
+otros años, preguntas sueltas de la EPC, Cultura Política del DANE, biblioteca del CNC).
+**Siguiente:** permiso para el diccionario de la ECP 2023; lista definitiva clasificada con la API;
+sorteo de práctica y guardado antes de preguntarle nada al simulador.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
