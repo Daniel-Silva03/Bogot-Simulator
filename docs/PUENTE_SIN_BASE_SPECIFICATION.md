@@ -5,7 +5,7 @@
 Proyecto: Bogotá Social Simulator
 Versión: 0.1 — **pre-registro**
 Fecha: 1 de octubre de 2026
-Estado: **sin código; ninguna llamada hecha con el prompt nuevo**
+Estado: **con código (`src/experiments/puente_sin_base.py`, 1/10); ninguna llamada real hecha con el prompt nuevo**
 Origen: pregunta de Daniel del 1/10 («¿y si una pregunta nueva no está medida en ningún lado?») y
 `PUENTE_SPECIFICATION.md` §7 / `PUENTE_LOCALIDADES_SPECIFICATION.md` §7 («una pregunta realmente nueva
 puede estar más lejos del catálogo»)
@@ -165,6 +165,6 @@ sí funcionaban (R1 falla). La clase B no tiene respuesta correcta: ahí solo se
 
 ## 8. Qué se hace después
 
-1. **Daniel revisa las 30 preguntas y sus clases.** Los cambios se anotan aquí antes de seguir.
+1. **Daniel revisa las 30 preguntas y sus clases.** Los cambios se anotan aquí antes de seguir. *Hecho el 1/10: «las clases están bien», sin cambios.*
 2. Código: `src/experiments/puente_sin_base.py` y sus pruebas, con un modelo simulado (sin gasto).
 3. Con permiso, la corrida (126 llamadas) y `PUENTE_SIN_BASE_RESULTS.md`, contra este documento.
