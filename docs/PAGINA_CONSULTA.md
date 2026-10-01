@@ -244,6 +244,21 @@ Verificado: 15 pruebas de `tests/test_consulta.py` (2 nuevas: la fuerza llega a 
 «sin base» se reintenta con el prompt de siempre y sale débil) y la página en modo simulado, con
 «media» y «débil». Sin probar con el modelo real.
 
+## 5.7 Las diferencias por grupo de las preguntas nuevas, escondidas (1/10/2026)
+
+Por la regla de `PREGUNTAS_REALES_NUEVAS_SPECIFICATION.md` §7 (P1 falló: 8 de 24, y el Corredor Verde
+al revés; DI-CO13):
+
+- En una pregunta nueva, las barras por grupo quedan dentro de «Diferencias por grupo: ver de todos
+  modos», cerrado de entrada, con el aviso del resultado de la prueba antes de las barras.
+- La frase de la fuerza añade: «Esto dice qué tan cerca está el tema de lo que la encuesta midió, no
+  si la suposición acierta».
+- Los textos fijos dejan de prometer diferencias entre grupos en las preguntas nuevas: la barra de
+  anuncio, la tarjeta «Preguntas sobre un cambio», la de «El puente» y el aviso del mapa.
+
+Verificado: 16 pruebas de `tests/test_consulta.py` (1 nueva) y la página en modo simulado (cerrado
+de entrada; abierto, el aviso y luego las barras).
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

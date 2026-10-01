@@ -80,6 +80,13 @@ DI-CO12. **El puente de la página usa el prompt v2 y muestra su fuerza**
     eligió Daniel el 1/10; no contradice la regla escrita). Es una llamada más, solo en
     esos casos. Si tampoco hay puente con el prompt de siempre, la pregunta no se responde,
     como antes.
+
+DI-CO13. **Las diferencias por grupo de una pregunta nueva no se muestran de entrada**
+    (`PREGUNTAS_REALES_NUEVAS_RESULTS.md`, regla de §7: P1 falló, 8 de 24, y en el Corredor
+    Verde el orden salió al revés). La respuesta las sigue trayendo, con `aviso_grupos`; la
+    página las esconde tras «Ver de todos modos». El texto de la fuerza deja claro que
+    mide qué tan cerca está el tema, no si la suposición acierta (las dos preguntas
+    reales salieron «media» y fallaron).
 """
 
 from __future__ import annotations
@@ -118,11 +125,16 @@ AVISO = ("Esto es una suposición, no una medición: muestra cómo respondería 
 
 #: DI-CO12: qué le dice la página a quien lee, según la fuerza del puente.
 FUERZA_TEXTO = {
-    "fuerte": "La encuesta midió el mismo tema que la pregunta: la suposición tiene una base fuerte.",
-    "media": "La encuesta midió algo muy cercano a la pregunta: la suposición tiene una base media.",
-    "debil": ("La encuesta no midió este tema; solo algo del área general. La suposición tiene una base "
-              "débil: tómala con mucha cautela."),
+    "fuerte": "La encuesta midió el mismo tema que la pregunta (base fuerte).",
+    "media": "La encuesta midió algo muy cercano a la pregunta (base media).",
+    "debil": "La encuesta no midió este tema; solo algo del área general (base débil): tómala con mucha cautela.",
 }
+#: DI-CO13: la fuerza dice qué tan cerca está el tema, no si acierta.
+FUERZA_ACLARACION = ("Esto dice qué tan cerca está el tema de lo que la encuesta midió, no si la suposición "
+                     "acierta.")
+AVISO_GRUPOS = ("En una prueba con dos preguntas reales que la encuesta no hizo (el metro elevado y el Corredor "
+                "Verde, encuesta del CNC de 2023), el simulador no acertó qué grupos estaban más de acuerdo: en "
+                "el Corredor Verde dio el orden al revés. Míralas solo como una idea de cómo razona el puente.")
 
 
 class ConsultaError(RuntimeError):
@@ -337,7 +349,8 @@ class Motor:
                 "consultados": len(self.agentes),                                   # DI-CO9
                 "nivel_propuesto": round(r["nivel"], 2), "grupos": grupos, "puente": puente,
                 "justificacion": r["justificacion"], "peso_por_anio": peso_anio, "aviso_anios": aviso_anios,
-                "fuerza": r["fuerza"], "fuerza_texto": FUERZA_TEXTO[r["fuerza"]], "reintento": reintento,
+                "fuerza": r["fuerza"], "fuerza_texto": f"{FUERZA_TEXTO[r['fuerza']]} {FUERZA_ACLARACION}",
+                "reintento": reintento, "aviso_grupos": AVISO_GRUPOS,                    # DI-CO13
                 "sin_mapa": ("Para preguntas nuevas el simulador no dibuja localidades: en las pruebas con preguntas "
                              "conocidas ordenó bien a las personas, pero no a las localidades "
                              "(PUENTE_RESULTS.md, PUENTE_LOCALIDADES_RESULTS.md)."),

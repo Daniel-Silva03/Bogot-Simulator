@@ -108,6 +108,14 @@ def test_si_el_v2_dice_sin_base_se_reintenta_y_sale_debil():
     assert r["tipo"] == "nueva" and r["fuerza"] == "debil" and r["reintento"] and "débil" in r["fuerza_texto"]
 
 
+def test_una_pregunta_nueva_trae_el_aviso_de_grupos_y_la_pagina_los_esconde():
+    """DI-CO13."""
+    r = M.responder_nueva("¿Qué tan de acuerdo está con W?", ["a", "b", "c", "d", "e"])
+    assert "Corredor" in r["aviso_grupos"] and "no si la suposición acierta" in r["fuerza_texto"]
+    html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
+    assert '<details class="grupos-ocultos">' in html and "ver de todos modos" in html
+
+
 def test_un_puente_roto_se_dice_y_no_se_responde():
     roto = mo.Motor(lambda *a: "esto no es json", "roto", donante=M.donante, agentes=M.agentes,
                     catalogo=M.catalogo, cache=e9.Cache(Path(_tmp.name) / "roto.json"))

@@ -100,6 +100,12 @@ section{padding:80px 0}
 .fuerza{border:1px solid var(--linea-2);color:var(--texto-2)}
 .fuerza.f-fuerte{border-color:var(--menta-palida);color:var(--menta-palida)}
 .fuerza.f-debil{border:1px dashed var(--humo);color:var(--blanco)}
+/* DI-CO13: las diferencias por grupo de una pregunta nueva, solo si se piden */
+.grupos-ocultos{margin-top:20px;border:1px solid var(--linea);border-radius:var(--r-input);padding:12px 14px}
+.grupos-ocultos summary{cursor:pointer;font:500 14px/1.4 var(--sans);color:var(--texto-2);letter-spacing:.14px}
+.grupos-ocultos summary:hover{color:var(--blanco)}
+.grupos-ocultos[open] summary{color:var(--blanco);margin-bottom:8px}
+.aviso-grupos{border-left:2px dashed var(--humo);padding-left:10px;color:var(--blanco)}
 .fuerza-nota.f-debil{border-left:2px dashed var(--humo);padding-left:10px;color:var(--blanco)}
 .ins-fuera{border:1px solid var(--humo);color:var(--humo)}
 
@@ -295,7 +301,7 @@ footer .marca{margin-bottom:16px}
 </style>
 </head>
 <body>
-<div class="anuncio"><a href="#detras">Lo que aprendimos probándolo: el simulador ordena bien a las personas, todavía no a las localidades →</a></div>
+<div class="anuncio"><a href="#detras">Lo que aprendimos probándolo: las preguntas que la encuesta hizo son dato medido; las nuevas, todavía una suposición floja →</a></div>
 <header class="barra">
   <div class="envoltura">
     <a class="marca" href="#inicio" aria-label="Bogotá Sintética, inicio">
@@ -342,7 +348,7 @@ footer .marca{margin-bottom:16px}
     </div>
     <div class="rejilla-3 tipos">
       <div class="tarjeta"><span class="insignia ins-cat">Ya medida</span><h3 style="margin-top:16px">Preguntas que la encuesta hizo</h3><p>Se responden con lo que la gente contestó, reponderado por la población. Tienen mapa, con su margen de error.</p><p class="ej">«¿Se siente seguro en su barrio?»</p></div>
-      <div class="tarjeta"><span class="insignia ins-nueva">Nueva</span><h3 style="margin-top:16px">Preguntas sobre un cambio</h3><p>Se responden con un «puente»: preguntas medidas que se relacionan. Muestran diferencias entre grupos, sin mapa.</p><p class="ej">«¿Apoyaría cobrar por entrar en carro al centro?»</p></div>
+      <div class="tarjeta"><span class="insignia ins-nueva">Nueva</span><h3 style="margin-top:16px">Preguntas sobre un cambio</h3><p>Se responden con un «puente»: preguntas medidas que se relacionan. Dan una idea, sin mapa; todavía no aciertan qué grupos estarían más de acuerdo.</p><p class="ej">«¿Apoyaría cobrar por entrar en carro al centro?»</p></div>
       <div class="tarjeta"><span class="insignia ins-fuera">Fuera de alcance</span><h3 style="margin-top:16px">Lo que no se puede suponer</h3><p>Cifras, intención de voto, lo que piensa alguien en particular. Te decimos por qué y te sugerimos algo cercano.</p><p class="ej">«¿Por quién van a votar?»</p></div>
     </div>
   </div>
@@ -398,7 +404,7 @@ footer .marca{margin-bottom:16px}
     <div class="cabeza"><span class="insignia ins-viva"><i></i>Qué hay detrás</span><h2>Lo que sostiene cada respuesta, y lo que no puede decir</h2></div>
     <div class="rejilla-3">
       <article class="tarjeta"><h3>La población</h3><p>Cada una de las 20.000 personas sintéticas hereda a un bogotano real de la Encuesta de Percepción Ciudadana 2022, 2023 o 2024 (Bogotá Cómo Vamos), de su misma localidad y parecido en sexo, edad y estrato. Las proporciones de la ciudad salen de la Encuesta Multipropósito 2021 del DANE.</p></article>
-      <article class="tarjeta"><h3>El puente</h3><p>Para una pregunta nueva, un modelo de lenguaje elige qué preguntas medidas se relacionan y en qué sentido; cada persona responde con sus propias respuestas reales. Se probó con doce preguntas cuya respuesta se conocía: ordena bien a las personas, pero no a las localidades. El modelo nunca contesta por nadie.</p></article>
+      <article class="tarjeta"><h3>El puente</h3><p>Para una pregunta nueva, un modelo de lenguaje elige qué preguntas medidas se relacionan y en qué sentido; cada persona responde con sus propias respuestas reales. Con preguntas escondidas de la misma encuesta, ordenó bien a las personas pero no a las localidades. Con dos preguntas reales que la encuesta no hizo (metro elevado y Corredor Verde, CNC 2023), no acertó qué grupos estaban más de acuerdo. Lo estamos mejorando. El modelo nunca contesta por nadie.</p></article>
       <article class="tarjeta"><h3>Los límites</h3><ul>
         <li>No predice ni reemplaza una encuesta.</li>
         <li>Opina como Bogotá entre 2022 y 2024, promediada. Cada respuesta dice de qué años sale; algunas preguntas solo se hicieron en 2023.</li>
@@ -531,8 +537,8 @@ function pintar(){
   if (estado.modo === 'nueva') {
     /* estado sin mapa: qué pasa, por qué, y qué se puede hacer (guía de la skill ui-ux-pro-max) */
     $('#velo').innerHTML = `<b style="color:var(--blanco);font-weight:500">Esta pregunta no se colorea por localidad.</b>
-      No está en la encuesta, así que la población la supone a partir de preguntas parecidas. Esa suposición sirve para
-      comparar grupos de personas (en la respuesta), pero cuando la probamos no distinguió bien unas localidades de otras.
+      No está en la encuesta, así que la población la supone a partir de preguntas parecidas. Cuando la probamos, esa
+      suposición no distinguió bien unas localidades de otras.
       <div class="acciones"><button class="btn btn-fantasma" data-ej="0">Ver una pregunta con mapa</button></div>`;
     $('#velo').querySelector('button').addEventListener('click', e => preguntar(D.ejemplos[+e.target.dataset.ej]));
   }
@@ -707,10 +713,14 @@ function mostrar(r){
       <input type="range" id="nivel" min="1" max="5" step="0.1" value="${r.nivel_propuesto}" aria-label="Nivel supuesto de la ciudad">
       <div class="medidor-etq"><span>${esc(r.escala[0])}</span><span>${esc(r.escala[4])}</span></div>
       <p class="nota">El modelo propuso ${f1(r.nivel_propuesto)}. Si crees que es otro, muévelo: es un supuesto, no un dato.</p>
+      <details class="grupos-ocultos">
+      <summary>Diferencias por grupo: ver de todos modos</summary>
+      <p class="nota aviso-grupos">${esc(r.aviso_grupos || '')}</p>
       <div class="grupos">${Object.entries(r.grupos).map(([g,fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f => {
         const w = 50*Math.abs(f.indice)/tope, izq = f.indice < 0 ? 50-w : 50;
         return `<div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista div"><i style="left:${izq}%;width:${w}%;background:${f.indice<0?'var(--humo)':'var(--menta-palida)'}"></i></span><span class="v">${f.indice>0?'+':''}${f2(f.indice)}</span></div>`; }).join('')}</div>`).join('')}</div>
       <p class="nota">Barras: qué tan más (claro) o menos (gris) de acuerdo que el promedio de la ciudad estaría cada grupo, en desviaciones estándar; la línea del centro es el promedio. El puente ordena, no dice cuántos.</p>
+      </details>
       <div class="etq-min" style="margin-top:16px">En qué se apoya la suposición</div>
       <ul class="puente-lista">${r.puente.map(p => `<li><span class="sg ${p.sentido==='+'?'mas':'menos'}">${p.sentido==='+'?'+':'−'}</span><span>${esc(p.pregunta)}${p.anios && p.anios.length < 3 ? ` <small class="sin-mapa" style="display:inline">· solo ${esc(p.anios.join(' y '))}</small>` : ''}</span></li>`).join('')}</ul>
       ${r.aviso_anios ? `<p class="nota"><b style="color:var(--blanco);font-weight:500">Años de la encuesta.</b> ${esc(r.aviso_anios)}</p>` : ''}

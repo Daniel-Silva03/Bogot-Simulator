@@ -235,8 +235,11 @@ claras entre grupos y le gana al azar). **Corrido el 1/10** (6 llamadas, USD 0,0
 `PREGUNTAS_REALES_NUEVAS_RESULTS.md`): **P1 falla, 8 de 24**, menos que el azar; en el Corredor
 Verde el puente invirtió el orden (2 de 13): eligió preguntas del mismo tema (árboles, zonas verdes)
 que no predicen quién lo apoyaba. Por la regla, la página debe dejar de mostrar de entrada las
-barras por grupo en preguntas nuevas. **Pendiente con Daniel:** aplicar ese cambio, y la pregunta
-de proyecto de si la página debe seguir respondiendo preguntas nuevas.
+barras por grupo en preguntas nuevas: **aplicado el 1/10** (`PAGINA_CONSULTA.md` §5.7, DI-CO13).
+**Rumbo acordado con Daniel (1/10):** que las preguntas nuevas se acerquen a resultados reales,
+usando la API cuando ayude. Plan: un banco de preguntas nuevas con respuesta real, separado en
+práctica y guardado; mejoras al puente en el de práctica; prueba final pre-registrada en el guardado.
+**Siguiente:** el inventario del banco.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
