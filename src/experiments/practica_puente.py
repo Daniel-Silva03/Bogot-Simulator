@@ -39,6 +39,10 @@ DI-PP4. **El tono general** es la referencia sin API que reemplaza a «estrato, 
     catálogo con dirección conocida (DI-PU4), orientadas para que arriba sea lo favorable. Supone
     que los grupos que suelen responder de forma favorable lo harán también aquí.
 
+DI-PP6. **Llamadas en paralelo** (`--paralelo`, 5 por defecto; 1/10, a pedido de Daniel: la
+    primera corrida, una por una, tardaba más de una hora). Cambia solo el tiempo: cada llamada
+    es la misma, con su misma clave de caché, y el orden de las respuestas no cambia.
+
 DI-PP5. **La medida conjunta** es aciertos / pares sobre todas las preguntas (cada par pesa
     igual), mediana de las tres llamadas. Para el azar: la media y el p95 de la medida conjunta
     de 200 repeticiones, juntando el puente al azar k de cada pregunta.
@@ -161,6 +165,27 @@ def pedir(llamar, cache, modelo, sistema, f_esc, catalogo, rep) -> tuple[Optiona
     return ({**r, "fuerza": "debil", "sin_base": False} if r else None), True
 
 
+def recolectar(qs: list[dict], llamar, cache, modelo: str, sistema: str, catalogo: dict,
+               paralelo: int = 1) -> tuple[dict, dict]:
+    """DI-PP6: las mismas llamadas, varias a la vez; el resultado no depende del orden."""
+    from concurrent.futures import ThreadPoolExecutor
+    tareas = [(q["id"], q["pregunta_pagina"], rep) for q in qs for rep in range(pu.REPETICIONES)]
+
+    def una(t):
+        return pedir(llamar, cache, modelo, sistema, ficha(t[1]), catalogo, t[2])
+    with ThreadPoolExecutor(max_workers=max(1, paralelo)) as ex:
+        res = []
+        for i, r in enumerate(ex.map(una, tareas), 1):
+            res.append(r)
+            if i % 30 == 0:
+                print(f"  {i} de {len(tareas)} llamadas", flush=True)
+    respuestas, reintentos = {}, {}
+    for (qid, _, rep), (r, x) in zip(tareas, res):
+        respuestas.setdefault(qid, []).append(r)
+        reintentos[qid] = reintentos.get(qid, 0) + int(x)
+    return respuestas, reintentos
+
+
 # --------------------------------------------------------------------------
 # Análisis
 
@@ -236,6 +261,7 @@ def main(argv=None, entrada=input) -> int:
     ap = argparse.ArgumentParser(description="Práctica del puente sobre el banco.")
     ap.add_argument("--version", choices=sorted(VERSIONES), required=True)
     ap.add_argument("--simulado", action="store_true", help="modelo simulado, sin gasto")
+    ap.add_argument("--paralelo", type=int, default=5, help="llamadas a la vez (DI-PP6)")
     args = ap.parse_args(argv)
     from src.consulta import motor as mo
     from src.consulta import reformular as rf
@@ -253,14 +279,8 @@ def main(argv=None, entrada=input) -> int:
         if not e9.confirmar_gasto(pend, entrada, e9.gasto_registrado(cache)):
             print("No se gastó nada.")
             return 1
-    respuestas, reintentos = {}, {}
     try:
-        for i, q in enumerate(qs, 1):
-            rr = [pedir(llamar, cache, modelo, sistema, ficha(q["pregunta_pagina"]), catalogo, rep) for rep in range(pu.REPETICIONES)]
-            respuestas[q["id"]] = [r for r, _ in rr]
-            reintentos[q["id"]] = sum(x for _, x in rr)
-            if i % 10 == 0:
-                print(f"  {i} de {len(qs)} preguntas", flush=True)
+        respuestas, reintentos = recolectar(qs, llamar, cache, modelo, sistema, catalogo, args.paralelo)
     except e9.Experimento9Error as e:
         print(f"\nERROR: {e}\nLo que respondió quedó en la caché; al volver a correr solo se hace lo que falta.")
         return 1

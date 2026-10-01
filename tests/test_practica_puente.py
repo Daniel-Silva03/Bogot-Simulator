@@ -67,6 +67,26 @@ def test_las_preguntas_son_de_practica_sin_excluidas_y_con_pares():
     assert all(not q["real"].get("excluida") and q["real"]["pares_claros"] for q in qs)
 
 
+def test_en_paralelo_da_lo_mismo_que_una_por_una_y_la_cache_no_se_pisa():
+    """DI-PP6."""
+    import json, tempfile, time
+    from src.experiments import experimento9 as e9
+    cat = {f"C{i}": {"variable": f"C{i}", "codigo": f"C{i}", "pregunta": f"¿C{i}?", "escala": [1, 2, 3, 4, 5],
+                     "etiquetas": {str(k): f"e{k}" for k in range(1, 6)}} for i in range(4)}
+    sim = pp.modelo_simulado(cat)
+
+    def lento(*a):
+        time.sleep(0.01)
+        return sim(*a)
+    qs = [{"id": f"Q{i}", "pregunta_pagina": f"¿Pregunta {i}?"} for i in range(12)]
+    with tempfile.TemporaryDirectory() as tmp:
+        c1, c5 = e9.Cache(Path(tmp) / "a.json"), e9.Cache(Path(tmp) / "b.json")
+        r1, _ = pp.recolectar(qs, lento, c1, "m", pp.VERSIONES["actual"], cat, 1)
+        r5, _ = pp.recolectar(qs, lento, c5, "m", pp.VERSIONES["actual"], cat, 5)
+        assert r1 == r5
+        assert len(json.loads((Path(tmp) / "b.json").read_text(encoding="utf-8"))) == 36   # 12 × 3, nada pisado
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"Práctica del puente — {len(pruebas)} pruebas\n")

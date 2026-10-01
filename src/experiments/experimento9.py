@@ -105,6 +105,7 @@ import math
 import os
 import re
 import sys
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Optional
@@ -437,8 +438,12 @@ def parsear_sonda(texto: Optional[str], campo: str) -> Optional[float]:
 # Caché y llamadas (DI-E2)
 
 class Cache:
+    """Respuestas del modelo en disco. Segura con varias llamadas a la vez (1/10/2026): un
+    candado cubre la escritura, que antes podía pisarse al compartir el archivo temporal."""
+
     def __init__(self, ruta: Path):
         self.ruta = Path(ruta)
+        self._candado = threading.Lock()
         self.datos: dict = (json.loads(self.ruta.read_text(encoding="utf-8"))
                             if self.ruta.exists() else {})
 
@@ -455,11 +460,12 @@ class Cache:
         return None if e is None else e["texto"]
 
     def put(self, clave: str, texto: str, **meta) -> None:
-        self.datos[clave] = {"texto": texto, **meta}
-        self.ruta.parent.mkdir(parents=True, exist_ok=True)
-        tmp = self.ruta.with_suffix(".tmp")
-        tmp.write_text(json.dumps(self.datos, ensure_ascii=False), encoding="utf-8")
-        os.replace(tmp, self.ruta)       # un corte a medio escribir no la corrompe
+        with self._candado:
+            self.datos[clave] = {"texto": texto, **meta}
+            self.ruta.parent.mkdir(parents=True, exist_ok=True)
+            tmp = self.ruta.with_suffix(".tmp")
+            tmp.write_text(json.dumps(self.datos, ensure_ascii=False), encoding="utf-8")
+            os.replace(tmp, self.ruta)       # un corte a medio escribir no la corrompe
 
 
 def pedir(llamar: Llamar, cache: Cache, modelo: str, temp: float,
