@@ -712,7 +712,7 @@ function mostrar(r){
           <span class="dato"><b>${pct(q.ciudad.alto)}</b> respondió «${esc(q.ciudad.etiqueta_alto.toLowerCase())}» · EPC ${esc(q.anios.join(', '))}</span>
           <span class="dist" role="img" aria-label="Distribución de respuestas">${q.ciudad.distribucion.map((d,j)=>`<span style="flex:${d};background:${color(j/(n-1))}" title="${esc(q.escala[j])}: ${pct(d)}"></span>`).join('')}</span>
           <button class="ver-rel" data-i="${i}">Ver completa, con su mapa →</button></span></li>`; }).join('')}</ul>
-      <p class="nota">+ : quien está más de acuerdo con la pregunta nueva tendería a responder más alto aquí; − : más bajo. Lo eligió un modelo de lenguaje. ${esc(r.justificacion || '')}</p>
+      <p class="nota">+ : quien está más de acuerdo con la pregunta nueva tendería a responder más alto aquí; − : más bajo. Lo eligió un modelo de lenguaje.</p>
       <div class="etq-min" style="margin-top:24px">${esc(r.tono_titulo)}</div>
       <p class="nota aviso-tono">${esc(r.tono_texto)}</p>
       <div class="grupos" style="margin-top:12px">${Object.entries(r.grupos).map(([g,fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f => {

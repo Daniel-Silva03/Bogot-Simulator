@@ -120,6 +120,10 @@ DI-CO15. **Las preguntas en que se apoya el puente traen lo que la gente respond
 DI-CO16. **Sin nivel propuesto** (D18): en la prueba con dos preguntas reales
     (`PREGUNTAS_REALES_NUEVAS_RESULTS.md`) el modelo dio 3,7 a las dos y no distinguió
     cuál tenía más apoyo. El nivel que devuelve el modelo se descarta.
+    *Añadido (2/10, prueba con el modelo real): la justificación del modelo tampoco se
+    muestra.* Hecho: en las tres preguntas de la prueba, el texto citaba el nivel o la
+    fuerza («se espera un apoyo mayoritario (media ≈ 3.8)», «la media esperada…»). El
+    prompt validado los pide, así que no se cambia; se descarta el texto.
 """
 
 from __future__ import annotations
@@ -380,7 +384,7 @@ class Motor:
                 "consultados": len(self.agentes),                                   # DI-CO9
                 "grupos": self.tono, "tono_titulo": TONO_TITULO,                     # DI-CO14
                 "tono_texto": TONO_TEXTO.format(n=self.n_tono),
-                "relacionadas": relacionadas, "justificacion": r["justificacion"],
+                "relacionadas": relacionadas,                                        # DI-CO16: sin justificación
                 "reintento": reintento,                                              # DI-CO12
                 "sin_mapa": ("Para preguntas nuevas el simulador no dibuja localidades: en las pruebas con preguntas "
                              "conocidas ordenó bien a las personas, pero no a las localidades "

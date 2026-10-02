@@ -283,6 +283,25 @@ traen el dato de `responder_catalogo`) y la página en modo simulado en Chrome (
 nueva completa; «Ver completa» abre la pregunta del catálogo con su mapa; sin errores de
 consola). Tono por estrato: 1-2 −0,07, 3-4 +0,05, 5-6 +0,24.
 
+**Prueba con el modelo real (2/10, en el PC del CNC; 6 llamadas, USD 0,022).** Se estimaron USD
+0,010-0,015 con un tope de 0,02, y el gasto real lo pasó: cada llamada costó USD 0,0033-0,0043
+(~7.300 tokens de entrada), cerca del doble de lo que se calculó con la prueba del 30/09. Tres preguntas, las tres
+nuevas:
+
+- *TransMilenio las 24 horas*: 4 relacionadas (satisfacción con el transporte, optimismo con el
+  metro, evaluación del gobierno en movilidad, paraderos), todas «+».
+- *Prohibir el parrillero hombre*: 5 relacionadas (respeto y control de las normas de tránsito,
+  seguridad), todas «−»; el v2 dio base débil sin pedir reintento.
+- *¿La gente confía en la policía de su barrio?*: se esperaba del catálogo y salió **nueva**. Es
+  correcto: el catálogo no tiene confianza en la policía. Relacionadas: seguridad en el barrio,
+  victimización, sanción del delito, evaluación del gobierno en seguridad.
+
+Hallazgo, corregido: **la justificación del modelo citaba el nivel** («se espera un apoyo
+mayoritario (media ≈ 3.8)», «la media esperada…») y la página la mostraba. Ya no se muestra
+(DI-CO16); repetido desde la caché, sin gasto: la respuesta no menciona media ni fuerza y «Ver
+completa» abre `MV4` con su mapa. Visto de paso, sin tocar: algunas etiquetas del catálogo son solo
+un número (`MV13_7`: «4 o muy satisfecho»).
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por
