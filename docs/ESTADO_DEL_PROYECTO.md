@@ -265,6 +265,11 @@ conocida) y camino 3 (pedir al CNC resultados agregados de preguntas de aprobaci
 **Camino 2, parte A sin API (2/10, pre-registrada; `NIVEL_PARECIDAS_RESULTS.md`):** el promedio del banco
 se equivoca 23 puntos en el porcentaje favorable; ni el mismo tema (23,4) ni los vecinos por texto (22,0)
 lo bajan un 20 %. Con hermanas de la misma serie, 16,1. **Vara de la parte B (con el modelo): 17,6 o menos.**
+**Alternativa 1, la forma de la pregunta (2/10, pre-registrada, sin gasto; `NIVEL_FORMA_RESULTS.md`):** una
+regresión con fracción favorable, tipo, «no conoce» y Bogotá da 22,3: **no pasa** (umbral 18,4). Patrón de las
+tres pruebas: con una pregunta hermana medida, ~16 puntos; sin ella, ~22-23 (el promedio). **Lo que acerca el
+nivel son datos (preguntas casi iguales ya medidas), no un método.** Opciones abiertas para Daniel: camino 3
+(resultados agregados del CNC) o probar un modelo de lenguaje más fuerte (con costo).
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

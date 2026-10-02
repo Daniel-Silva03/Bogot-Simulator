@@ -100,7 +100,7 @@ def main() -> int:
     coef = np.linalg.lstsq(matriz(f), y, rcond=None)[0]
     nombres = ["constante", "F1", "F2"] + [f"tipo_{n}" for n, _ in TIPOS] + ["F4"]
     pred = {"P1": sec["solo_F1"] < REFERENCIAS["R0"], "P2": completo < REFERENCIAS["R2"],
-            "P3": completo <= UMBRAL, "P4": coef[1] > 0}
+            "P3": completo <= UMBRAL, "P4": bool(coef[1] > 0)}
     print(f"{len(t)} preguntas, {len(set(fam))} familias; tipos: {f.tipo.value_counts().to_dict()}; "
           f"F2=1 en {int(f.F2.sum())}")
     print(f"EAM modelo completo: {completo:.1f}  (R0 {REFERENCIAS['R0']}, R2 {REFERENCIAS['R2']}, umbral {UMBRAL})")
