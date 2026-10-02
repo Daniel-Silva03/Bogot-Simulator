@@ -6,8 +6,9 @@ respuesta que ve en la página. Une las tres piezas validadas:
 
     reformulación (`reformular.py`, 24 de 24)
         ├─ catálogo → el dato medido: población EPC 2022-2024, por ciudad, grupo y localidad
-        ├─ nueva    → el puente (`puente.py`, lectura B): diferencias entre grupos
-        │             y un nivel propuesto, editable; SIN mapa por localidad
+        ├─ nueva    → (D18) el tono general por grupo, rotulado como tal, y las
+        │             preguntas medidas que el puente relaciona, con su dato real;
+        │             SIN nivel y SIN mapa por localidad
         └─ fuera    → por qué no, y una alternativa que vuelve a pasar por aquí
 
 Todo lo que devuelve lleva `suposicion: True` y el texto que la página muestra.
@@ -27,6 +28,8 @@ DI-CO2. **Una pregunta nueva no tiene mapa** (`PUENTE_RESULTS.md`, lectura B: el
     en desviaciones estándar del puntaje del puente («más / menos de acuerdo que el
     promedio»), no porcentajes: el puente ordena, no fija cuántos están de acuerdo.
     El nivel de la ciudad es el que propone el modelo, y la página lo deja editar.
+    *Cambio (2/10, D18): los grupos ya no salen del puente (DI-CO14) y no hay nivel
+    (DI-CO16). Sigue sin mapa.*
 
 DI-CO3. **En la página el puente usa el catálogo completo (102 preguntas)**, no el de
     la validación (91): ya no hay preguntas escondidas. Se valida y se puntúa igual.
@@ -72,6 +75,9 @@ DI-CO11. **Si el puente usa preguntas que no se hicieron todos los años, la res
     modelo (eso cambiaría su prompt y habría que validarlo otra vez). Cada pregunta
     del puente lleva sus años, y la respuesta trae qué fracción del peso del puente
     queda en cada año y un texto que lo explica.
+    *Cambio (2/10, D18): el texto sobre el peso por año se quita, porque hablaba de
+    las diferencias entre grupos del puente, que ya no se muestran. Cada pregunta
+    relacionada sigue diciendo sus años, junto a su dato real (DI-CO15).*
 
 DI-CO12. **El puente de la página usa el prompt v2 y muestra su fuerza**
     (`PUENTE_SIN_BASE_RESULTS.md`: P3 se cumple; P1 no, así que no se usa «sin base»).
@@ -80,6 +86,9 @@ DI-CO12. **El puente de la página usa el prompt v2 y muestra su fuerza**
     eligió Daniel el 1/10; no contradice la regla escrita). Es una llamada más, solo en
     esos casos. Si tampoco hay puente con el prompt de siempre, la pregunta no se responde,
     como antes.
+    *Cambio (2/10, D18): el reintento se conserva, pero la fuerza ya no se muestra.
+    Decía qué tan bien sostenía el puente sus barras por grupo, y esas barras se
+    quitan (DI-CO14).*
 
 DI-CO13. **Las diferencias por grupo de una pregunta nueva no se muestran de entrada**
     (`PREGUNTAS_REALES_NUEVAS_RESULTS.md`, regla de §7: P1 falló, 8 de 24, y en el Corredor
@@ -87,6 +96,30 @@ DI-CO13. **Las diferencias por grupo de una pregunta nueva no se muestran de ent
     página las esconde tras «Ver de todos modos». El texto de la fuerza deja claro que
     mide qué tan cerca está el tema, no si la suposición acierta (las dos preguntas
     reales salieron «media» y fallaron).
+    *Reemplazada el 2/10 por DI-CO14 (D18).*
+
+DI-CO14. **Los grupos de una pregunta nueva muestran el tono general, a la vista**
+    (D18; `BANCO_PREGUNTAS_NUEVAS.md` §10.3: el puente ordenó bien el 60-63 % de las
+    diferencias entre grupos de la práctica, y el tono general, sin API, el 62 %; la
+    regla escrita, 67 %, dijo parar). Hecho: el tono es el de DI-PP4, por agente el
+    promedio de sus respuestas estandarizadas por año (DI-CO7) en las preguntas del
+    catálogo con dirección conocida, orientadas para que arriba sea lo favorable; el
+    índice de un grupo es su media en desviaciones estándar. Supuesto: los grupos que
+    suelen responder de forma favorable también lo harán en la pregunta nueva.
+    Decisión: se calcula una vez al cargar, **es el mismo para toda pregunta nueva**, y
+    la página lo rotula «Así suelen responder estos grupos en la encuesta», no como una
+    medida de la pregunta. Los cortes de la página (estrato 1-2, 3-4, 5-6) no son los de
+    la práctica (1, 2, 3, 4, 5-6): el 62 % es de aquellos.
+
+DI-CO15. **Las preguntas en que se apoya el puente traen lo que la gente respondió de
+    verdad** (D18): la distribución de la ciudad y el porcentaje en la parte alta de su
+    escala, con los años de cada una (el mismo cálculo de ciudad que `responder_catalogo`,
+    sin localidades ni bootstrap). La página enlaza a cada una completa, con su mapa.
+    El puente sigue pidiéndose al modelo solo para elegirlas.
+
+DI-CO16. **Sin nivel propuesto** (D18): en la prueba con dos preguntas reales
+    (`PREGUNTAS_REALES_NUEVAS_RESULTS.md`) el modelo dio 3,7 a las dos y no distinguió
+    cuál tenía más apoyo. El nivel que devuelve el modelo se descarta.
 """
 
 from __future__ import annotations
@@ -123,18 +156,12 @@ AVISO = ("Esto es una suposición, no una medición: muestra cómo respondería 
          "construida con la Encuesta de Percepción Ciudadana 2022, 2023 y 2024 de Bogotá Cómo Vamos.")
 
 
-#: DI-CO12: qué le dice la página a quien lee, según la fuerza del puente.
-FUERZA_TEXTO = {
-    "fuerte": "La encuesta midió el mismo tema que la pregunta (base fuerte).",
-    "media": "La encuesta midió algo muy cercano a la pregunta (base media).",
-    "debil": "La encuesta no midió este tema; solo algo del área general (base débil): tómala con mucha cautela.",
-}
-#: DI-CO13: la fuerza dice qué tan cerca está el tema, no si acierta.
-FUERZA_ACLARACION = ("Esto dice qué tan cerca está el tema de lo que la encuesta midió, no si la suposición "
-                     "acierta.")
-AVISO_GRUPOS = ("En una prueba con dos preguntas reales que la encuesta no hizo (el metro elevado y el Corredor "
-                "Verde, encuesta del CNC de 2023), el simulador no acertó qué grupos estaban más de acuerdo: en "
-                "el Corredor Verde dio el orden al revés. Míralas solo como una idea de cómo razona el puente.")
+#: DI-CO14: el rótulo y la explicación del tono general por grupo.
+TONO_TITULO = "Así suelen responder estos grupos en la encuesta"
+TONO_TEXTO = ("No es una medición de esta pregunta: es el mismo para toda pregunta nueva. Resume cómo responde "
+              "cada grupo, en promedio, las {n} preguntas de la encuesta con un lado favorable claro. En 96 "
+              "preguntas reales que la encuesta no hizo, este tono acertó qué grupo estaba más de acuerdo en el "
+              "62 % de las diferencias claras (el azar, 50 %), y ninguna versión del puente lo superó con claridad.")
 
 
 class ConsultaError(RuntimeError):
@@ -157,24 +184,6 @@ def _grupos(ag: pd.DataFrame) -> dict[str, pd.Series]:
 def _etq(texto: str) -> str:
     """DI-CO10."""
     return re.sub(r"^\s*\d+\s*[.)-]\s*", "", str(texto)).strip()
-
-
-def cobertura_puente(puente: list[dict], anios: list[int]) -> tuple[dict, Optional[str]]:
-    """DI-CO11: (fracción del peso del puente que existe en cada año, texto o None)."""
-    total = sum(p["peso"] for p in puente)
-    frac = {a: sum(p["peso"] for p in puente if a in p["anios"]) / total for a in anios}
-    parciales = [p for p in puente if set(anios) - set(p["anios"])]
-    if not parciales:
-        return {str(a): 1.0 for a in anios}, None
-    cortos = [a for a in anios if frac[a] < 1]
-    completos = [a for a in anios if frac[a] == 1]
-    n, k = len(puente), len(parciales)
-    texto = (f"{k} de las {n} preguntas en que se apoya no se hicieron todos los años. Para quien respondió "
-             f"la encuesta en un año sin esa pregunta, cuenta como neutra: "
-             + ", ".join(f"en {a} queda el {round(100 * frac[a])} % del peso" for a in cortos) + ". ")
-    if completos:
-        texto += f"Las diferencias entre grupos se apoyan más en quienes respondieron en {_texto_anios(completos)}."
-    return {str(a): round(frac[a], 3) for a in anios}, texto
 
 
 def cargar_donantes() -> pd.DataFrame:
@@ -236,11 +245,47 @@ class Motor:
                   else np.full(len(self.donante), 2023))
         self.anio_agente = anio_d[self.idx]
         self.datos_puente = _PuenteOlas(self._x, self.catalogo, self.donante.peso.to_numpy(float), anio_d)   # DI-CO7
+        self.tono, self.n_tono = self._tono_por_grupo()                         # DI-CO14
         self._conglo = {}
         loc_d = self.donante.cod_loc.to_numpy()
         for l in sorted(set(self.loc)):
             m = loc_d == l
             self._conglo[int(l)] = (np.flatnonzero(m), pd.factorize(self.donante.conglomerado.to_numpy()[m])[0])
+
+    def _tono_por_grupo(self) -> tuple[dict, int]:
+        """DI-CO14: (índice del tono general por grupo, cuántas preguntas lo forman)."""
+        z = self.datos_puente.z
+        cols = [d * z[v] for v, f in self.catalogo.items() for d in [pu.direccion(f)] if d is not None]
+        t = np.mean(cols, axis=0)[self.idx]                    # el tono de DI-PP4, por agente
+        m = _wmean(t, self.peso)
+        t = (t - m) / (np.sqrt(_wmean((t - m) ** 2, self.peso)) or 1.0)
+        grupos = {}
+        for gname, etq in self.grupos.items():
+            e = etq.to_numpy()
+            grupos[gname] = [{"grupo": o, "indice": round(_wmean(t[e == o], self.peso[e == o]), 3)}
+                             for o in GRUPOS[gname]["orden"] if (e == o).any()]
+        return grupos, len(cols)
+
+    def _ciudad(self, codigo: str) -> tuple[dict, np.ndarray, np.ndarray, np.ndarray]:
+        """La respuesta de la ciudad a una pregunta del catálogo: (resumen, x, ok, cubre)."""
+        f = self.catalogo[codigo]
+        esc = list(f["escala"])
+        k = len(esc)
+        x = self._x[codigo][self.idx]
+        anios = sorted(self.anios.get(codigo, [2023]))
+        cubre = np.isin(self.anio_agente, anios)                                  # DI-CO6
+        ok = np.isin(x, esc) & cubre
+        w = self.peso * ok
+        dist = [_wmean((x == c).astype(float), w) for c in esc]
+        alto = [c for c in esc if c > (k + 1) / 2]           # la mitad superior de la escala
+        bajo = [c for c in esc if c < (k + 1) / 2]
+        ciudad = {"media": round(_wmean(x[ok], self.peso[ok]), 3), "distribucion": [round(d, 4) for d in dist],
+                  "alto": round(sum(d for c, d in zip(esc, dist) if c in alto), 4),
+                  "bajo": round(sum(d for c, d in zip(esc, dist) if c in bajo), 4),
+                  "etiqueta_alto": (f"{_etq(f['etiquetas'][str(esc[-2])])} o {_etq(f['etiquetas'][str(esc[-1])]).lower()}"
+                                    if k >= 4 else _etq(f["etiquetas"][str(esc[-1])])),
+                  "respondieron": round(float(ok.sum() / cubre.sum()), 4)}
+        return ciudad, x, ok, cubre
 
     # ---------------------------------------------------------------- paso 1
     def reformular(self, pregunta: str) -> dict:
@@ -262,14 +307,9 @@ class Motor:
         f = self.catalogo[codigo]
         esc = list(f["escala"])
         k = len(esc)
-        x = self._x[codigo][self.idx]
         anios = sorted(self.anios.get(codigo, [2023]))
-        cubre = np.isin(self.anio_agente, anios)                                  # DI-CO6
-        ok = np.isin(x, esc) & cubre
-        w = self.peso * ok
-        dist = [_wmean((x == c).astype(float), w) for c in esc]
+        ciudad, x, ok, cubre = self._ciudad(codigo)
         alto = [c for c in esc if c > (k + 1) / 2]           # la mitad superior de la escala
-        bajo = [c for c in esc if c < (k + 1) / 2]
         rng = np.random.default_rng(SEMILLA)
         por_loc = {}
         xd = self._x[codigo]
@@ -305,12 +345,7 @@ class Motor:
         return {"tipo": "catalogo", "suposicion": True, "aviso": AVISO, "codigo": codigo,
                 "pregunta": f["pregunta"].strip(), "escala": [_etq(f["etiquetas"][str(c)]) for c in esc],
                 "consultados": int(cubre.sum()),                                    # DI-CO9
-                "ciudad": {"media": round(_wmean(x[ok], self.peso[ok]), 3), "distribucion": [round(d, 4) for d in dist],
-                           "alto": round(sum(d for c, d in zip(esc, dist) if c in alto), 4),
-                           "bajo": round(sum(d for c, d in zip(esc, dist) if c in bajo), 4),
-                           "etiqueta_alto": (f"{_etq(f['etiquetas'][str(esc[-2])])} o {_etq(f['etiquetas'][str(esc[-1])]).lower()}"
-                                             if k >= 4 else _etq(f["etiquetas"][str(esc[-1])])),
-                           "respondieron": round(float(ok.sum() / cubre.sum()), 4)},
+                "ciudad": ciudad,
                 "localidades": por_loc, "grupos": grupos, "anios": anios,
                 "encuestados_mediana_localidad": n_loc,
                 "fuente": (f"Dato medido en la EPC {_texto_anios(anios)}, reponderado por la población sintética; "
@@ -334,28 +369,25 @@ class Motor:
                 r = {**r, "fuerza": "debil"}
         if r is None:
             return {"tipo": "invalida", "mensaje": "No pude construir el puente para esta pregunta. Prueba a reformularla."}
-        s = self.datos_puente.puntaje(r["preguntas"])[self.idx]
-        m, sd = _wmean(s, self.peso), np.sqrt(_wmean((s - _wmean(s, self.peso)) ** 2, self.peso)) or 1.0
-        z = (s - m) / sd
-        grupos = {}
-        for gname, etq in self.grupos.items():
-            e = etq.to_numpy()
-            grupos[gname] = [{"grupo": o, "indice": round(_wmean(z[e == o], self.peso[e == o]), 3)}
-                             for o in GRUPOS[gname]["orden"] if (e == o).any()]
-        puente = [{**p, "pregunta": self.catalogo[p["codigo"]]["pregunta"].strip(),
-                   "anios": sorted(self.anios.get(p["codigo"], [2023]))} for p in r["preguntas"]]
-        peso_anio, aviso_anios = cobertura_puente(puente, sorted(set(int(a) for a in self.anio_agente)))   # DI-CO11
+        relacionadas = []                                                        # DI-CO15
+        for p in r["preguntas"]:
+            f = self.catalogo[p["codigo"]]
+            ciudad, *_ = self._ciudad(p["codigo"])
+            relacionadas.append({"codigo": p["codigo"], "sentido": p["sentido"], "pregunta": f["pregunta"].strip(),
+                                 "escala": [_etq(f["etiquetas"][str(c)]) for c in f["escala"]],
+                                 "anios": sorted(self.anios.get(p["codigo"], [2023])), "ciudad": ciudad})
         return {"tipo": "nueva", "suposicion": True, "aviso": AVISO, "pregunta": pregunta.strip(), "escala": escala,
                 "consultados": len(self.agentes),                                   # DI-CO9
-                "nivel_propuesto": round(r["nivel"], 2), "grupos": grupos, "puente": puente,
-                "justificacion": r["justificacion"], "peso_por_anio": peso_anio, "aviso_anios": aviso_anios,
-                "fuerza": r["fuerza"], "fuerza_texto": f"{FUERZA_TEXTO[r['fuerza']]} {FUERZA_ACLARACION}",
-                "reintento": reintento, "aviso_grupos": AVISO_GRUPOS,                    # DI-CO13
+                "grupos": self.tono, "tono_titulo": TONO_TITULO,                     # DI-CO14
+                "tono_texto": TONO_TEXTO.format(n=self.n_tono),
+                "relacionadas": relacionadas, "justificacion": r["justificacion"],
+                "reintento": reintento,                                              # DI-CO12
                 "sin_mapa": ("Para preguntas nuevas el simulador no dibuja localidades: en las pruebas con preguntas "
                              "conocidas ordenó bien a las personas, pero no a las localidades "
                              "(PUENTE_RESULTS.md, PUENTE_LOCALIDADES_RESULTS.md)."),
-                "fuente": ("Puente: el modelo eligió preguntas medidas relacionadas; cada persona responde con sus "
-                           "propias respuestas. El nivel lo propone el modelo y se puede cambiar.")}
+                "fuente": ("Un modelo de lenguaje eligió qué preguntas medidas se relacionan con esta; lo que se "
+                           "muestra de cada una es lo que la gente respondió de verdad. El modelo no fija ninguna "
+                           "cifra.")}
 
 
 # --------------------------------------------------------------------------

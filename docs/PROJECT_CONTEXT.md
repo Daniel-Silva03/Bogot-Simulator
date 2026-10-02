@@ -1487,6 +1487,56 @@ construye para el mapa de las preguntas del catálogo.
 
 ---
 
+### D18 — Preguntas nuevas: el tono general por grupo y las preguntas relacionadas con su dato real, sin nivel
+
+**Fecha:** 2 de octubre de 2026
+**Decisión:** En una pregunta nueva (sin dato en la EPC), la página deja de mostrar lo
+que el puente supone y muestra solo datos medidos, rotulados por lo que son:
+
+1. **Grupos:** el **tono general** por grupo, a la vista, con el rótulo «Así suelen
+   responder estos grupos en la encuesta» y la aclaración de que no es una medición de
+   la pregunta y es el mismo para toda pregunta nueva. Reemplaza las barras del puente.
+2. **Preguntas relacionadas:** el modelo sigue eligiendo qué preguntas del catálogo se
+   relacionan y en qué sentido; junto a cada una se muestra lo que la gente respondió de
+   verdad (ciudad, con sus años), con enlace a verla completa con su mapa.
+3. **Sin nivel:** el nivel que propone el modelo se descarta. Una pregunta nueva no tiene
+   cifra propia.
+4. **Sin fuerza:** el rótulo «base fuerte / media / débil» se quita, porque medía qué tan
+   bien sostenía el puente unas barras que ya no se muestran.
+
+**Justificación.**
+- **Regla de salida escrita antes de correr** (`BANCO_PREGUNTAS_NUEVAS.md` §10.2-10.3): el
+  puente tenía que ordenar bien al menos el 67 % de las 699 diferencias claras entre
+  grupos de la práctica. Tres versiones dieron 60-63 % (la última, 0,627); el tono
+  general, sin API, 62 %. La regla dijo parar y adoptar el «camino 2».
+- **El nivel no distingue:** con el metro elevado y el Corredor Verde
+  (`PREGUNTAS_REALES_NUEVAS_RESULTS.md`) propuso 3,7 en las dos.
+- El Experimento 9 ya dejaba al LLM fuera de fijar cifras; con esto, en una pregunta
+  nueva **ninguna cifra que se ve sale del modelo**.
+
+**Alternativas consideradas:**
+- *Seguir mejorando el puente para el orden de los grupos* — descartada por la regla
+  escrita: no se prueban más versiones para eso. El banco guardado (51 preguntas) queda
+  para una idea nueva de verdad, pre-registrada.
+- *Mantener las barras del puente escondidas* (DI-CO13) — descartada: muestran algo que
+  no le gana al tono general y lo presentan como específico de la pregunta.
+- *Dejar la fuerza como «qué tan parecidas son las relacionadas»* — descartada por
+  simple: cada relacionada se ve con su texto y su dato, y quien lee juzga el parecido.
+
+**Límites.**
+1. El 62 % es de los cortes de la práctica (estrato 1, 2, 3, 4, 5-6); la página usa
+   1-2, 3-4, 5-6.
+2. El gasto por consulta no cambia: el puente se sigue pidiendo para elegir las
+   relacionadas.
+
+**Evidencia:** `BANCO_PREGUNTAS_NUEVAS.md` §10; `PREGUNTAS_REALES_NUEVAS_RESULTS.md`;
+DI-CO14 a DI-CO16 en `src/consulta/motor.py`; `PAGINA_CONSULTA.md` §5.8.
+
+**Estado:** **APPROVED** (Daniel, en conversación, 2 de octubre de 2026: «apruebo» la
+propuesta de tres puntos, sin cifra propia para las preguntas nuevas y sin la fuerza).
+
+---
+
 # 40. DECISIONES ABIERTAS
 
 ### ~~A01~~ — RESUELTA → ver D12

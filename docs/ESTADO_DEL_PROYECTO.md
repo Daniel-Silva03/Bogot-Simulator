@@ -1,7 +1,7 @@
 # ESTADO DEL PROYECTO — punto de partida para una conversación nueva
 
 Proyecto: Bogotá Social Simulator
-Fecha de corte: **30 de septiembre de 2026** (geografía electoral cerrada; frente nuevo: escenarios con preguntas reales)
+Fecha de corte: **2 de octubre de 2026** (D18: preguntas nuevas sin cifra propia; frente activo: la página D17)
 Para qué sirve: leer **este documento solo** basta para retomar. Los demás se
 leen cuando el trabajo los toque, no antes.
 
@@ -249,8 +249,12 @@ guardadas (solo 5 de Bogotá). Resultados reales de la práctica calculados (1/1
 diferencias entre grupos; el **tono general**, sin API, el 62 %. El puente no aporta sobre «quién suele
 responder favorable». Último intento (perfiles del catálogo y ejemplos
 resueltos, validación cruzada; §10.3): **0,627 < 0,67, se para por la regla escrita.** En total la
-práctica costó USD 2,33. **Siguiente:** llevar a la página el camino 2 (tono general por grupo en
-preguntas nuevas) y escribirlo como decisión de proyecto.
+práctica costó USD 2,33. ~~**Siguiente:** llevar a la página el camino 2 (tono general por grupo en
+preguntas nuevas) y escribirlo como decisión de proyecto.~~
+**D18, aprobada y en la página el 2/10** (`PROJECT_CONTEXT.md` §39, `PAGINA_CONSULTA.md` §5.8): una
+pregunta nueva no tiene cifra propia. Muestra las preguntas medidas que el modelo relaciona, con lo que
+la gente respondió de verdad y enlace a su mapa, y el tono general por grupo rotulado «Así suelen
+responder estos grupos en la encuesta». Sin nivel ni fuerza. **Ninguna cifra que se ve sale del modelo.**
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

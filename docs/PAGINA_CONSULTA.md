@@ -259,10 +259,35 @@ al revés; DI-CO13):
 Verificado: 16 pruebas de `tests/test_consulta.py` (1 nueva) y la página en modo simulado (cerrado
 de entrada; abierto, el aviso y luego las barras).
 
+*Reemplazado el 2/10 por §5.8 (D18).*
+
+## 5.8 Preguntas nuevas sin cifra propia (2/10/2026, D18)
+
+Por la regla de salida de `BANCO_PREGUNTAS_NUEVAS.md` §10.3 (el puente no le gana al tono
+general) y D18 (DI-CO14 a DI-CO16 en `motor.py`), una pregunta nueva muestra:
+
+- **Preguntas medidas que se relacionan**, elegidas por el modelo, cada una con su sentido
+  (+/−), el porcentaje en la parte alta de su escala, la distribución de la ciudad, sus años
+  y «Ver completa, con su mapa», que la abre como pregunta del catálogo.
+- **«Así suelen responder estos grupos en la encuesta»**: el tono general por grupo, a la
+  vista, con la aclaración de que no mide la pregunta, es el mismo para toda pregunta nueva
+  y acertó el 62 % de las diferencias de la práctica (azar, 50 %).
+- **Se quitan** el nivel propuesto y su barra deslizante, la fuerza del puente, las barras
+  del puente tras «ver de todos modos» y el texto de peso por año (DI-CO11).
+- Textos fijos ajustados: tarjeta «Preguntas sobre un cambio», paso 04, «El puente», los
+  límites y el aviso del mapa.
+
+Verificado: 16 pruebas de `tests/test_consulta.py` (tres nuevas o rehechas: sin nivel ni
+fuerza y tono fijo; el tono es el mismo de `practica_puente.tono_general`; las relacionadas
+traen el dato de `responder_catalogo`) y la página en modo simulado en Chrome (respuesta
+nueva completa; «Ver completa» abre la pregunta del catálogo con su mapa; sin errores de
+consola). Tono por estrato: 1-2 −0,07, 3-4 +0,05, 5-6 +0,24.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por
 localidad~~ opina como Bogotá entre 2022 y 2024 (v0.3); unas 250 personas por localidad en
 las preguntas que se juntan, y 80 en las que solo tiene 2023, dan márgenes anchos (la
 confiabilidad de las medias por localidad es baja, `PUENTE_RESULTS.md` §4); Sumapaz no tiene
-encuestados; el nivel de una pregunta nueva lo propone el modelo y se puede cambiar.
+encuestados; ~~el nivel de una pregunta nueva lo propone el modelo y se puede cambiar~~ una
+pregunta nueva no tiene cifra propia: lo que se ve son datos de otras preguntas (D18).

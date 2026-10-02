@@ -31,6 +31,10 @@ preguntas nuevas. Propuesta hecha a Daniel, **sin respuesta todavía**:
 
 Escribirlo como **D18** en `PROJECT_CONTEXT.md` §39 cuando Daniel lo apruebe (o cambie).
 
+**Resuelta el 2/10 en el PC del CNC:** Daniel aprobó los tres puntos, sin cifra propia y sin la
+fuerza. Es **D18**, y está en la página (`PAGINA_CONSULTA.md` §5.8). No queda decisión pendiente
+de esta nota.
+
 ## Otras cosas abiertas
 
 - Segunda vuelta 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`): esperando los datos mesa a mesa del CNC.

@@ -83,14 +83,34 @@ def test_una_pregunta_nueva_no_trae_mapa_y_sus_grupos_promedian_cero():
     assert len(ag) == 19_000
 
 
-def test_la_respuesta_nueva_trae_la_fuerza_del_puente():
-    """DI-CO12: con el simulado, el v2 responde «media» a la primera."""
-    r = M.responder_nueva("¿Qué tan de acuerdo está con Y?", ["a", "b", "c", "d", "e"])
-    assert r["fuerza"] == "media" and not r["reintento"] and "base media" in r["fuerza_texto"]
+def test_una_pregunta_nueva_no_trae_nivel_ni_fuerza_y_su_tono_es_el_mismo_siempre():
+    """D18: DI-CO14 (el tono general no depende de la pregunta) y DI-CO16 (sin nivel)."""
+    a = M.responder_nueva("¿Qué tan de acuerdo está con Y?", ["a", "b", "c", "d", "e"])
+    b = M.responder_nueva("¿Qué tan de acuerdo está con otra cosa?", ["a", "b", "c", "d", "e"])
+    for r in (a, b):
+        assert not {"nivel_propuesto", "fuerza", "fuerza_texto", "aviso_grupos", "aviso_anios"} & set(r)
+    assert a["grupos"] == b["grupos"] == M.tono
+    assert a["tono_titulo"] == "Así suelen responder estos grupos en la encuesta"
+    assert "No es una medición de esta pregunta" in a["tono_texto"] and str(M.n_tono) in a["tono_texto"]
+    assert 20 <= M.n_tono < len(M.catalogo)
 
 
-def test_si_el_v2_dice_sin_base_se_reintenta_y_sale_debil():
-    """DI-CO12, opción 1 de Daniel: no se usa «sin base»; puente de siempre, base débil."""
+def test_el_tono_es_el_mismo_que_se_midio_en_la_practica():
+    """DI-CO14: el 62 % que cita la página es del tono de `practica_puente.tono_general`."""
+    from src.experiments import practica_puente as pp
+    t = pp.tono_general(M)
+    m = np.average(t, weights=M.peso)
+    t = (t - m) / np.sqrt(np.average((t - m) ** 2, weights=M.peso))
+    for g, filas in M.tono.items():
+        e = M.grupos[g].to_numpy()
+        for f in filas:
+            assert abs(np.average(t[e == f["grupo"]], weights=M.peso[e == f["grupo"]]) - f["indice"]) < 1e-3, (g, f)
+    est = [f["indice"] for f in M.tono["estrato"]]
+    print(f"         tono por estrato (1-2, 3-4, 5-6): {est}")
+
+
+def test_si_el_v2_dice_sin_base_se_pide_el_puente_de_siempre():
+    """DI-CO12, opción 1 de Daniel: no se usa «sin base»; se pide el puente de siempre."""
     from src.experiments import puente as pu
     from src.experiments import puente_sin_base as sb
     cods = list(M.catalogo)
@@ -105,15 +125,19 @@ def test_si_el_v2_dice_sin_base_se_reintenta_y_sale_debil():
                  cache=e9.Cache(Path(_tmp.name) / "sinbase.json"))
     r = m.responder_nueva("¿Qué tan de acuerdo está con Z?", ["a", "b", "c", "d", "e"])
     assert vistos == [sb.SISTEMA_V2, pu.SISTEMA]
-    assert r["tipo"] == "nueva" and r["fuerza"] == "debil" and r["reintento"] and "débil" in r["fuerza_texto"]
+    assert r["tipo"] == "nueva" and r["reintento"] and [q["codigo"] for q in r["relacionadas"]] == [cods[0]]
 
 
-def test_una_pregunta_nueva_trae_el_aviso_de_grupos_y_la_pagina_los_esconde():
-    """DI-CO13."""
+def test_las_preguntas_relacionadas_traen_lo_que_la_gente_respondio():
+    """DI-CO15: el dato de cada relacionada es el de la ciudad en esa pregunta del catálogo."""
     r = M.responder_nueva("¿Qué tan de acuerdo está con W?", ["a", "b", "c", "d", "e"])
-    assert "Corredor" in r["aviso_grupos"] and "no si la suposición acierta" in r["fuerza_texto"]
+    assert r["relacionadas"]
+    for q in r["relacionadas"]:
+        c = M.responder_catalogo(q["codigo"])
+        assert q["ciudad"] == c["ciudad"] and q["anios"] == c["anios"] and q["escala"] == c["escala"]
+        assert q["sentido"] in "+-"
     html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
-    assert '<details class="grupos-ocultos">' in html and "ver de todos modos" in html
+    assert "ver de todos modos" not in html and 'type="range"' not in html and "Ver completa" in html
 
 
 def test_un_puente_roto_se_dice_y_no_se_responde():
@@ -160,17 +184,6 @@ def test_dice_a_cuantos_consulto_y_sin_numeros_en_las_etiquetas():
     assert 5_000 < solo["consultados"] < 8_000
     assert not any(e[0].isdigit() for e in solo["escala"]) and not solo["ciudad"]["etiqueta_alto"][0].isdigit()
     assert mo._etq("4. Alta") == "Alta" and mo._etq("Muy alta") == "Muy alta" and mo._etq("0. Sin estrato") == "Sin estrato"
-
-
-def test_el_puente_dice_si_usa_preguntas_que_no_estan_todos_los_anios():
-    """DI-CO11."""
-    p = [{"codigo": "A", "peso": 2, "anios": [2022, 2023, 2024]}, {"codigo": "B", "peso": 2, "anios": [2023]}]
-    frac, texto = mo.cobertura_puente(p, [2022, 2023, 2024])
-    assert frac == {"2022": 0.5, "2023": 1.0, "2024": 0.5}
-    assert "1 de las 2" in texto and "en 2022 queda el 50 %" in texto and "respondieron en 2023" in texto
-    assert mo.cobertura_puente(p[:1], [2022, 2023, 2024])[1] is None
-    r = M.responder_nueva("¿x?", ["a", "b", "c", "d", "e"])
-    assert all("anios" in q for q in r["puente"]) and set(r["peso_por_anio"]) == {"2022", "2023", "2024"}
 
 
 def test_sin_grupo_de_educacion():
