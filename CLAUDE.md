@@ -9,6 +9,7 @@ de Consultoría (CNC).
 
 1. `git pull`. Se trabaja en dos computadores y GitHub es la única fuente de verdad.
 2. Lee `docs/ESTADO_DEL_PROYECTO.md` completo: dónde está el proyecto, qué se cerró y qué sigue.
+   Si existe `docs/RETOMAR.md`, léelo justo después: es la nota de la última sesión y su decisión pendiente.
 3. Lee el documento del frente que vas a tocar (mapa en §7 de ESTADO_DEL_PROYECTO). No leas todo `docs/`.
 
 Todo en español: código, docstrings, commits y respuestas.
