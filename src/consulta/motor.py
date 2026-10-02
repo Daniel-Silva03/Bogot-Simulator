@@ -133,6 +133,17 @@ DI-CO17. **Escalas numéricas: se muestran como números con los extremos rotula
     como «4 o 5 (muy satisfecho)». También «NADA» → «Nada», y «5 Muy satisfecho» (SP1)
     pierde el número cuando es el código de la respuesta. Como DI-CO10, solo cambia lo que
     se muestra: el catálogo y lo que ve el modelo no cambian.
+
+DI-CO18. **El «% que respondería…» cuenta el lado favorable cuando se sabe cuál es**
+    (2/10, a pedido de Daniel). Hecho: se contaba siempre la mitad alta de los códigos, y
+    en `AG1` eso era «mal camino» y en `CC2` «no tiene opinión o no lo conoce». Decisión:
+    (1) las categorías que no son una opinión («No tiene opinión», «No lo conoce»; en el
+    catálogo solo `CC2`) no cuentan para elegir el lado; (2) si `puente.direccion` (DI-PU4)
+    dice que lo favorable está abajo, se cuenta la mitad baja (`AG1` → «Buen camino»,
+    `CC2` → «Favorable»); (3) si no se sabe (23 preguntas: probabilidad de sanción,
+    corrupción, si vota…), sigue la mitad alta, que es cierta y no juzga. Aplica a la
+    ciudad, los grupos, la ficha de cada localidad y las preguntas relacionadas. Los campos
+    se siguen llamando `alto` y `etiqueta_alto`.
 """
 
 from __future__ import annotations
@@ -217,14 +228,28 @@ def escala_visible(f: dict) -> list[str]:
     return out
 
 
-def etiqueta_alto(f: dict) -> str:
-    """DI-CO17: cómo se nombra la parte alta de la escala («Bueno o muy bueno», «4 o 5 (muy satisfecho)»)."""
-    esc, vis = list(f["escala"]), escala_visible(f)
-    if len(esc) < 4:
-        return vis[-1]
-    if " · " in vis[-1] and vis[-2] == str(esc[-2]):
-        return f"{esc[-2]} o {esc[-1]} ({vis[-1].split(' · ', 1)[1].lower()})"
-    return f"{vis[-2]} o {vis[-1].lower()}"
+#: DI-CO18: categorías que no son una opinión dentro de la escala (en el catálogo, solo CC2).
+NO_SUSTANTIVA = re.compile(r"no tiene opini|no lo conoce|no sabe|no responde", re.I)
+
+
+def lado(f: dict) -> tuple[list, str]:
+    """DI-CO18: (códigos, nombre) del lado de la escala que se cuenta en «% que respondería…».
+
+    El favorable si se sabe (DI-PU4); si no, la mitad alta de los códigos. Las categorías
+    que no son una opinión no cuentan para elegirlo.
+    """
+    vis = dict(zip(f["escala"], escala_visible(f)))
+    sus = [c for c in f["escala"] if not NO_SUSTANTIVA.search(str(f["etiquetas"][str(c)]))]
+    k = len(sus)
+    bajo = pu.direccion({**f, "escala": sus}) == -1
+    cods = [c for i, c in enumerate(sus) if (i < (k - 1) / 2 if bajo else i > (k - 1) / 2)]
+    if len(cods) == 1:
+        return cods, vis[cods[0]]
+    ext, sig = (cods[0], cods[1]) if bajo else (cods[-1], cods[-2])   # el extremo y el que le sigue
+    if " · " in vis[ext] and vis[sig] == str(sig):                    # escala numérica (DI-CO17)
+        a, b = sorted((sig, ext))
+        return cods, f"{a} o {b} ({vis[ext].split(' · ', 1)[1].lower()})"
+    return cods, f"{vis[sig]} o {vis[ext].lower()}"
 
 
 def cargar_donantes() -> pd.DataFrame:
@@ -318,12 +343,10 @@ class Motor:
         ok = np.isin(x, esc) & cubre
         w = self.peso * ok
         dist = [_wmean((x == c).astype(float), w) for c in esc]
-        alto = [c for c in esc if c > (k + 1) / 2]           # la mitad superior de la escala
-        bajo = [c for c in esc if c < (k + 1) / 2]
+        alto, nombre = lado(f)                               # DI-CO18: el lado que se cuenta
         ciudad = {"media": round(_wmean(x[ok], self.peso[ok]), 3), "distribucion": [round(d, 4) for d in dist],
                   "alto": round(sum(d for c, d in zip(esc, dist) if c in alto), 4),
-                  "bajo": round(sum(d for c, d in zip(esc, dist) if c in bajo), 4),
-                  "etiqueta_alto": etiqueta_alto(f),                             # DI-CO17
+                  "etiqueta_alto": nombre,                                       # DI-CO17, DI-CO18
                   "respondieron": round(float(ok.sum() / cubre.sum()), 4)}
         return ciudad, x, ok, cubre
 
@@ -349,7 +372,7 @@ class Motor:
         k = len(esc)
         anios = sorted(self.anios.get(codigo, [2023]))
         ciudad, x, ok, cubre = self._ciudad(codigo)
-        alto = [c for c in esc if c > (k + 1) / 2]           # la mitad superior de la escala
+        alto, _ = lado(f)                                    # DI-CO18
         rng = np.random.default_rng(SEMILLA)
         por_loc = {}
         xd = self._x[codigo]

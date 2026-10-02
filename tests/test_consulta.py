@@ -198,6 +198,19 @@ def test_las_escalas_numericas_se_muestran_como_numeros_con_sus_extremos():
             assert not e[0].isdigit() or e.isdigit() or " · " in e, (f["variable"], e)
 
 
+def test_el_porcentaje_cuenta_el_lado_favorable_si_se_sabe():
+    """DI-CO18: AG1 tiene lo favorable abajo; CC2 trae categorías que no son opinión; VS18 no tiene lado favorable."""
+    ag1, cc2, vs8 = M.responder_catalogo("AG1"), M.responder_catalogo("CC2"), M.responder_catalogo("VS8")
+    assert ag1["ciudad"]["etiqueta_alto"] == "Buen camino"
+    assert abs(ag1["ciudad"]["alto"] - ag1["ciudad"]["distribucion"][0]) < 1e-4
+    assert cc2["ciudad"]["etiqueta_alto"] == "Favorable"
+    assert abs(cc2["ciudad"]["alto"] - cc2["ciudad"]["distribucion"][0]) < 1e-4
+    assert vs8["ciudad"]["etiqueta_alto"] == "Algo seguro o muy seguro"
+    assert mo.lado(M.catalogo["VS18"]) == ([4, 5], "Alta o muy alta")
+    loc = next(iter(ag1["localidades"].values()))
+    assert 0 < loc["alto"] < 1 and all(0 < g["alto"] < 1 for g in ag1["grupos"]["estrato"])
+
+
 def test_sin_grupo_de_educacion():
     """DI-CO5: la población 2022-2024 no empareja por educación."""
     assert "educacion" not in mo.GRUPOS and "educacion" not in M.responder_catalogo("VS8")["grupos"]

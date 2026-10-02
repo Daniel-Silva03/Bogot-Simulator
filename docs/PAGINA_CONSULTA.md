@@ -314,7 +314,21 @@ página en modo simulado con `MV13_7`.
 
 Visto de paso, sin tocar: en escalas que no van de peor a mejor, «la parte alta» es la de los
 códigos, no la favorable (`AG1`: «mal camino»; `CC2`: «no tiene opinión o no lo conoce»). Lo que
-dice es cierto, pero no siempre es lo más útil de mostrar.
+dice es cierto, pero no siempre es lo más útil de mostrar. Arreglado en §5.10.
+
+## 5.10 El porcentaje cuenta el lado favorable (2/10/2026, DI-CO18)
+
+El «% que respondería…» (ciudad, grupos, ficha de la localidad y preguntas relacionadas) cuenta
+el lado favorable cuando `puente.direccion` (DI-PU4) lo sabe, sin contar las categorías que no son
+una opinión. Cambian dos preguntas: `AG1` → «33 % respondería "buen camino"» (antes «mal camino»)
+y `CC2` → «16 % respondería "favorable"» (antes «no tiene opinión o no lo conoce»). Las 23 sin lado
+favorable conocido (probabilidad de sanción, corrupción, si vota…) siguen con la mitad alta.
+
+Verificado: 18 pruebas de `tests/test_consulta.py` (1 nueva).
+
+**Queda abierto:** el mapa de `CC2` se colorea con la media de los códigos 1 a 4 (2,27), pero
+3 y 4 son «No tiene opinión» y «No lo conoce»: esa media no mide nada. Arreglarlo cambia el dato
+que se muestra (sacar 3 y 4 de la media, como el «no sabe»), así que se deja para decidirlo aparte.
 
 ## 6. Límites que la página dice
 
