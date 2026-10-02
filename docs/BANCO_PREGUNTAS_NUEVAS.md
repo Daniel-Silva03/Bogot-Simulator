@@ -188,3 +188,27 @@ Daniel eligió el camino 1. **Versión «ejemplos»** (`src/experiments/practica
 67 %** de las 699 diferencias claras (el tono general más 5 puntos), **se para**: la página adopta el
 camino 2 (mostrar el tono general por grupo como «así suelen responder estos grupos») y no se prueban
 más versiones del puente para el orden de los grupos. Si lo supera, va al banco guardado, pre-registrado.
+
+### 10.3 Resultado del último intento (1/10)
+
+273 llamadas, USD 0,95 (la caché de la práctica suma 853 llamadas y **USD 2,33** en total). Validación
+cruzada por familia:
+
+| | Todas (699) | Bogotá (226) | General (473) | r por localidad |
+|---|---|---|---|---|
+| Azar (media / p95) | 0,50 / 0,55 | 0,50 / 0,58 | 0,51 / 0,56 | — |
+| Tono general | 0,62 | 0,66 | 0,60 | — |
+| Puente «actual» | 0,61 | 0,62 | 0,62 | 0,20 |
+| Puente «afectados» | 0,60 | 0,62 | 0,60 | 0,19 |
+| **Puente «ejemplos»** | **0,63** | 0,61 | 0,63 | 0,19 |
+
+**Regla de salida (§10.2): 0,627 < 0,67 → se para.** Ver los perfiles del catálogo y ejemplos con su
+resultado real subió el puente un punto o dos, al nivel del tono general, sin superarlo de verdad; en
+Bogotá quedó por debajo. Por la regla escrita: **no se prueban más versiones del puente para el orden de
+los grupos**, y la página adopta el camino 2: en una pregunta nueva muestra el tono general por grupo,
+rotulado como «así suelen responder estos grupos en la encuesta».
+
+**Lo que se aprendió, en una frase:** para una pregunta que la encuesta no hizo, el simulador no sabe
+qué grupos estarían más de acuerdo mejor de lo que ya dice el patrón general de cada grupo; ninguna
+forma de elegir preguntas del catálogo con el modelo de lenguaje lo mejoró. El banco guardado queda sin
+usar, disponible para probar cualquier idea nueva de verdad, pre-registrada.

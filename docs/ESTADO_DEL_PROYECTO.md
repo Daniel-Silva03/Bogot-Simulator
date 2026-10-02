@@ -247,8 +247,10 @@ guardadas (solo 5 de Bogotá). Resultados reales de la práctica calculados (1/1
 699 diferencias claras**, tras una regla de estructura que sacó 18. **Práctica corrida el 1/10** (USD 1,39;
 `BANCO_PREGUNTAS_NUEVAS.md` §10.1): las dos versiones del puente ordenan bien el 60-61 % de las
 diferencias entre grupos; el **tono general**, sin API, el 62 %. El puente no aporta sobre «quién suele
-responder favorable». **Pendiente con Daniel:** un último intento (ejemplos resueltos en el prompt,
-validación cruzada en la práctica) o adoptar el tono general como lo que la página muestra.
+responder favorable». Último intento (perfiles del catálogo y ejemplos
+resueltos, validación cruzada; §10.3): **0,627 < 0,67, se para por la regla escrita.** En total la
+práctica costó USD 2,33. **Siguiente:** llevar a la página el camino 2 (tono general por grupo en
+preguntas nuevas) y escribirlo como decisión de proyecto.
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.
