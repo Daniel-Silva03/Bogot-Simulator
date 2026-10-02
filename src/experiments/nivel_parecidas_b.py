@@ -23,6 +23,14 @@ DI-NB2. **El tope se revisa antes de cada llamada** con lo que la caché registr
 
 DI-NB3. **Se aceptan ids repetidos o de más:** se quitan los repetidos, se descartan los que no
     son candidatas válidas y se toman los primeros 5. Si no queda ninguno, es respuesta inválida.
+
+DI-NB4. **Tiempo de espera de 300 s por intento y un modelo a la vez** (2/10, tras la primera
+    corrida). Hecho: DeepSeek razona unos 2.000 tokens antes de responder; con los 90 s del cliente
+    tardaba ~8 minutos por respuesta guardada, probablemente por intentos cortados y repetidos, que
+    OpenRouter podría cobrar sin que la respuesta llegue. Decisión: 300 s por intento; `--modelo`
+    para correr uno por vez, y el uso de la clave (`/api/v1/key`) se mide antes y después de cada
+    modelo para comparar con lo registrado. La clave es compartida, así que la diferencia también
+    puede incluir uso ajeno. No cambia nada del diseño pre-registrado.
 """
 
 from __future__ import annotations
@@ -107,6 +115,18 @@ def parsear(texto: str, validos: list[str]) -> Optional[list[str]]:
     return ok[:MAX_ELEGIDAS] or None
 
 
+def uso_clave() -> Optional[float]:
+    """DI-NB4: el uso acumulado de la clave según OpenRouter (USD), o None si no se puede leer."""
+    import os
+    import urllib.request
+    try:
+        r = urllib.request.Request("https://openrouter.ai/api/v1/key",
+                                   headers={"Authorization": "Bearer " + os.environ["OPENROUTER_API_KEY"].strip()})
+        return float(json.loads(urllib.request.urlopen(r, timeout=30).read())["data"]["usage"])
+    except Exception:                                                   # noqa: BLE001
+        return None
+
+
 def gastado(cache: e9.Cache) -> float:
     return e9.gasto_registrado(cache)["costo_usd"]
 
@@ -164,6 +184,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--simulado", action="store_true")
     ap.add_argument("--prueba", action="store_true", help="una llamada por modelo, para medir el costo")
+    ap.add_argument("--modelo", choices=list(MODELOS), help="correr solo este modelo (DI-NB4)")
     a = ap.parse_args()
     from src.experiments import banco as ba
     from src.experiments import nivel_parecidas as npar
@@ -174,7 +195,7 @@ def main() -> int:
         llamar = cliente_simulado(t)
     else:
         cache = e9.Cache(ba.SALIDA / CACHE_NOMBRE)
-        llamar = e9.cliente_real()
+        llamar = e9.cliente_real(timeout=300)                               # DI-NB4
     if a.prueba:
         for nombre, modelo in MODELOS.items():
             antes = gastado(cache)
@@ -182,6 +203,15 @@ def main() -> int:
             print(f"{nombre}: una llamada costó USD {gastado(cache) - antes:.4f} → la corrida (96) costaría "
                   f"~USD {96 * (gastado(cache) - antes):.2f}")
         print(f"gasto registrado total: USD {gastado(cache):.4f}")
+        return 0
+    if a.modelo:                                                            # DI-NB4
+        modelo = MODELOS[a.modelo]
+        u0, g0 = (None if a.simulado else uso_clave()), gastado(cache)
+        p = correr(t, llamar, cache, modelo)
+        u1, g1 = (None if a.simulado else uso_clave()), gastado(cache)
+        print(f"{a.modelo}: EAM {resumen(p, t)['eam']:.1f}; registrado en este bloque USD {g1 - g0:.4f}; "
+              f"uso de la clave antes {u0} y después {u1}"
+              + (f" (diferencia USD {u1 - u0:.4f})" if u0 is not None and u1 is not None else ""))
         return 0
     out = {"n": len(t), "vara": VARA, "modelos": {}}
     for nombre, modelo in MODELOS.items():

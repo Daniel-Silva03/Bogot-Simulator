@@ -875,7 +875,8 @@ def modelo_simulado(semilla: int = 0) -> Llamar:
     return llamar
 
 
-def cliente_real() -> Llamar:
+def cliente_real(timeout: int = 90) -> Llamar:
+    """`timeout` por intento, en segundos (2/10: los modelos que razonan pueden tardar más de 90)."""
     clave = (os.environ.get("OPENROUTER_API_KEY") or "").strip()
     if not clave:
         raise Experimento9Error('Falta OPENROUTER_API_KEY.  PowerShell:  $env:OPENROUTER_API_KEY = "..."')
@@ -889,7 +890,7 @@ def cliente_real() -> Llamar:
              "messages": [{"role": "system", "content": sistema},
                           {"role": "user", "content": usuario}],
              "usage": {"include": True}},                  # DI-E9: costo por llamada
-            {"authorization": f"Bearer {clave}"})
+            {"authorization": f"Bearer {clave}"}, timeout=timeout)
         if not r.get("choices"):
             # OpenRouter puede contestar 200 con un error en el cuerpo (proveedor caído,
             # límite, contexto). Se detiene con el mensaje, sin cachear nada (30/09/2026).
