@@ -255,6 +255,13 @@ preguntas nuevas) y escribirlo como decisión de proyecto.~~
 pregunta nueva no tiene cifra propia. Muestra las preguntas medidas que el modelo relaciona, con lo que
 la gente respondió de verdad y enlace a su mapa, y el tono general por grupo rotulado «Así suelen
 responder estos grupos en la encuesta». Sin nivel ni fuerza. **Ninguna cifra que se ve sale del modelo.**
+Ese mismo día, tras verla Daniel: la respuesta empieza diciendo «No podemos decir si Bogotá estaría de
+acuerdo» (DI-CO20); escalas numéricas, lado favorable y «no tiene opinión» arreglados (DI-CO17 a CO19).
+**Techo de los grupos (2/10, pre-registrado, sin gasto; `TECHO_GRUPOS_RESULTS.md`): lectura A, hay
+espacio.** Quien conociera la opinión real acertaría ~95 % de las diferencias claras entre grupos; otra
+encuesta de mitad de tamaño, 86 %; el simulador, 62 %. La distancia es información que no tenemos, no
+ruido. **Siguiente, propuesto a Daniel:** camino 2 (el nivel con preguntas parecidas de respuesta
+conocida) y camino 3 (pedir al CNC resultados agregados de preguntas de aprobación en Bogotá).
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
