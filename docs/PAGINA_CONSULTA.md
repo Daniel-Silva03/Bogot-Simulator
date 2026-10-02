@@ -299,8 +299,22 @@ nuevas:
 Hallazgo, corregido: **la justificación del modelo citaba el nivel** («se espera un apoyo
 mayoritario (media ≈ 3.8)», «la media esperada…») y la página la mostraba. Ya no se muestra
 (DI-CO16); repetido desde la caché, sin gasto: la respuesta no menciona media ni fuerza y «Ver
-completa» abre `MV4` con su mapa. Visto de paso, sin tocar: algunas etiquetas del catálogo son solo
-un número (`MV13_7`: «4 o muy satisfecho»).
+completa» abre `MV4` con su mapa. Visto de paso: algunas etiquetas del catálogo son solo
+un número (`MV13_7`: «4 o muy satisfecho»); arreglado en §5.9.
+
+## 5.9 Escalas numéricas (2/10/2026, DI-CO17)
+
+47 de las 102 preguntas usan escalas de 1 a 5 en que la EPC solo nombró los extremos. No se
+inventan nombres para el 2, el 3 y el 4: se muestran «1 · Muy insatisfecho», 2, 3, 4, «5 · Muy
+satisfecho», y la parte alta como «4 o 5 (muy satisfecho)». También «NADA» → «Nada», y en `SP1`
+«5 Muy satisfecho» → «Muy satisfecho». Solo cambia lo que se muestra.
+
+Verificado: 17 pruebas de `tests/test_consulta.py` (1 nueva, que recorre las 102 preguntas) y la
+página en modo simulado con `MV13_7`.
+
+Visto de paso, sin tocar: en escalas que no van de peor a mejor, «la parte alta» es la de los
+códigos, no la favorable (`AG1`: «mal camino»; `CC2`: «no tiene opinión o no lo conoce»). Lo que
+dice es cierto, pero no siempre es lo más útil de mostrar.
 
 ## 6. Límites que la página dice
 

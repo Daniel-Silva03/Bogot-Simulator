@@ -124,6 +124,15 @@ DI-CO16. **Sin nivel propuesto** (D18): en la prueba con dos preguntas reales
     muestra.* Hecho: en las tres preguntas de la prueba, el texto citaba el nivel o la
     fuerza («se espera un apoyo mayoritario (media ≈ 3.8)», «la media esperada…»). El
     prompt validado los pide, así que no se cambia; se descarta el texto.
+
+DI-CO17. **Escalas numéricas: se muestran como números con los extremos rotulados**
+    (2/10, a pedido de Daniel). Hecho: 47 de las 102 preguntas usan escalas de 1 a 5 en
+    que la EPC solo nombró los extremos («Muy insatisfecho», 2, 3, 4, «Muy satisfecho»);
+    la página decía «4 o muy satisfecho». Decisión: no se inventan nombres para 2, 3 y 4;
+    se muestran «1 · Muy insatisfecho», 2, 3, 4, «5 · Muy satisfecho», y la parte alta
+    como «4 o 5 (muy satisfecho)». También «NADA» → «Nada», y «5 Muy satisfecho» (SP1)
+    pierde el número cuando es el código de la respuesta. Como DI-CO10, solo cambia lo que
+    se muestra: el catálogo y lo que ve el modelo no cambian.
 """
 
 from __future__ import annotations
@@ -188,6 +197,34 @@ def _grupos(ag: pd.DataFrame) -> dict[str, pd.Series]:
 def _etq(texto: str) -> str:
     """DI-CO10."""
     return re.sub(r"^\s*\d+\s*[.)-]\s*", "", str(texto)).strip()
+
+
+def _texto(t: str) -> str:
+    """DI-CO17: «NADA» → «Nada»; lo demás, igual."""
+    return t.capitalize() if t.isupper() else t
+
+
+def escala_visible(f: dict) -> list[str]:
+    """DI-CO17: las etiquetas de una pregunta del catálogo como se muestran."""
+    crudas = {k: str(f["etiquetas"][str(k)]) for k in f["escala"]}
+    if not any(re.fullmatch(r"\s*\d+\s*", crudas[k]) for k in f["escala"][1:-1]):
+        # «5 Muy satisfecho» (SP1): el número se quita solo si es el código de esa respuesta
+        return [_texto(_etq(re.sub(rf"^\s*{k}\s+(?=\D)", "", crudas[k]))) for k in f["escala"]]
+    out = []                                  # escala numérica: solo los extremos tienen nombre
+    for k in f["escala"]:
+        t = re.sub(r"^\s*\d+\s*[.)-]?\s*", "", crudas[k]).strip()
+        out.append(f"{k} · {_texto(t)}" if t else str(k))
+    return out
+
+
+def etiqueta_alto(f: dict) -> str:
+    """DI-CO17: cómo se nombra la parte alta de la escala («Bueno o muy bueno», «4 o 5 (muy satisfecho)»)."""
+    esc, vis = list(f["escala"]), escala_visible(f)
+    if len(esc) < 4:
+        return vis[-1]
+    if " · " in vis[-1] and vis[-2] == str(esc[-2]):
+        return f"{esc[-2]} o {esc[-1]} ({vis[-1].split(' · ', 1)[1].lower()})"
+    return f"{vis[-2]} o {vis[-1].lower()}"
 
 
 def cargar_donantes() -> pd.DataFrame:
@@ -286,8 +323,7 @@ class Motor:
         ciudad = {"media": round(_wmean(x[ok], self.peso[ok]), 3), "distribucion": [round(d, 4) for d in dist],
                   "alto": round(sum(d for c, d in zip(esc, dist) if c in alto), 4),
                   "bajo": round(sum(d for c, d in zip(esc, dist) if c in bajo), 4),
-                  "etiqueta_alto": (f"{_etq(f['etiquetas'][str(esc[-2])])} o {_etq(f['etiquetas'][str(esc[-1])]).lower()}"
-                                    if k >= 4 else _etq(f["etiquetas"][str(esc[-1])])),
+                  "etiqueta_alto": etiqueta_alto(f),                             # DI-CO17
                   "respondieron": round(float(ok.sum() / cubre.sum()), 4)}
         return ciudad, x, ok, cubre
 
@@ -301,7 +337,7 @@ class Motor:
         if r["alcance"] == "catalogo":
             f = self.catalogo[r["codigo"]]
             r["pregunta_catalogo"] = f["pregunta"].strip()
-            r["escala"] = [_etq(f["etiquetas"][str(k)]) for k in f["escala"]]
+            r["escala"] = escala_visible(f)
         return r
 
     # ---------------------------------------------------------------- paso 2a
@@ -347,7 +383,7 @@ class Motor:
                               "alto": round(_wmean(np.isin(x[(e == o) & ok], alto).astype(float), self.peso[(e == o) & ok]), 3)}
                              for o in GRUPOS[gname]["orden"] if ((e == o) & ok).any()]
         return {"tipo": "catalogo", "suposicion": True, "aviso": AVISO, "codigo": codigo,
-                "pregunta": f["pregunta"].strip(), "escala": [_etq(f["etiquetas"][str(c)]) for c in esc],
+                "pregunta": f["pregunta"].strip(), "escala": escala_visible(f),
                 "consultados": int(cubre.sum()),                                    # DI-CO9
                 "ciudad": ciudad,
                 "localidades": por_loc, "grupos": grupos, "anios": anios,
@@ -378,7 +414,7 @@ class Motor:
             f = self.catalogo[p["codigo"]]
             ciudad, *_ = self._ciudad(p["codigo"])
             relacionadas.append({"codigo": p["codigo"], "sentido": p["sentido"], "pregunta": f["pregunta"].strip(),
-                                 "escala": [_etq(f["etiquetas"][str(c)]) for c in f["escala"]],
+                                 "escala": escala_visible(f),
                                  "anios": sorted(self.anios.get(p["codigo"], [2023])), "ciudad": ciudad})
         return {"tipo": "nueva", "suposicion": True, "aviso": AVISO, "pregunta": pregunta.strip(), "escala": escala,
                 "consultados": len(self.agentes),                                   # DI-CO9

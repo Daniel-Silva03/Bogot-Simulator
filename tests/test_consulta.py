@@ -186,6 +186,18 @@ def test_dice_a_cuantos_consulto_y_sin_numeros_en_las_etiquetas():
     assert mo._etq("4. Alta") == "Alta" and mo._etq("Muy alta") == "Muy alta" and mo._etq("0. Sin estrato") == "Sin estrato"
 
 
+def test_las_escalas_numericas_se_muestran_como_numeros_con_sus_extremos():
+    """DI-CO17: MV13_7 solo nombra los extremos; CO1_1 viene en mayúsculas; SP1 trae «5 Muy satisfecho»."""
+    r = M.responder_catalogo("MV13_7")
+    assert r["escala"] == ["1 · Muy insatisfecho", "2", "3", "4", "5 · Muy satisfecho"]
+    assert r["ciudad"]["etiqueta_alto"] == "4 o 5 (muy satisfecho)"
+    assert mo.escala_visible(M.catalogo["CO1_1"])[0] == "1 · Nada"
+    assert mo.escala_visible(M.catalogo["SP1"])[-1] == "Muy satisfecho"
+    for f in M.catalogo.values():                 # nada empieza con un número suelto salvo «2», «3», «4» o «1 · …»
+        for e in mo.escala_visible(f):
+            assert not e[0].isdigit() or e.isdigit() or " · " in e, (f["variable"], e)
+
+
 def test_sin_grupo_de_educacion():
     """DI-CO5: la población 2022-2024 no empareja por educación."""
     assert "educacion" not in mo.GRUPOS and "educacion" not in M.responder_catalogo("VS8")["grupos"]
