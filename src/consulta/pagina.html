@@ -676,6 +676,8 @@ async function responder(cuerpo){
 }
 
 const banda = r => `<div class="banda">${icoAviso}<span>${esc(r.aviso)}</span></div>`;
+/* DI-CO19: si más del 5 % no cuenta (no respondió, no sabe o no tiene opinión), se dice */
+const fuera = c => c.respondieron < .95 ? Math.round(100*(1 - c.respondieron)) : 0;
 
 function mostrar(r){
   const el = $('#resultado'); el.classList.remove('oculto');
@@ -692,6 +694,7 @@ function mostrar(r){
           .map(([k,l,xs]) => `<button class="filtro" data-f="${k}" aria-pressed="${k==='todas'}">${l} <span class="num">${xs.length}</span></button>`).join('')}
       </div>
       <div class="grande"><b>${pct(r.ciudad.alto)}</b><span>respondería «${esc(r.ciudad.etiqueta_alto.toLowerCase())}»</span></div>
+      ${fuera(r.ciudad) ? `<p class="nota" style="margin-top:4px">Sin contar al ${fuera(r.ciudad)} % que no respondió, no sabía o no tenía opinión: las cifras y el mapa son de quienes sí.</p>` : ''}
       <div class="dist" role="img" aria-label="Distribución de respuestas">${r.ciudad.distribucion.map((d,i)=>`<div style="flex:${d};background:${color(i/(n-1))}" title="${esc(r.escala[i])}: ${pct(d)}"></div>`).join('')}</div>
       <div class="dist-leyenda">${r.escala.map((e,i)=>`<div><b>${pct(r.ciudad.distribucion[i])}</b>${esc(e)}</div>`).join('')}</div>
       <div class="grupos">${Object.entries(r.grupos).map(([g,fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f => `
@@ -709,7 +712,7 @@ function mostrar(r){
       <ul class="puente-lista">${r.relacionadas.map((q,i) => { const n = q.escala.length; return `<li>
         <span class="sg ${q.sentido==='+'?'mas':'menos'}" title="${q.sentido==='+'?'En el mismo sentido':'En sentido contrario'}">${q.sentido==='+'?'+':'−'}</span>
         <span class="rel"><span>${esc(q.pregunta)}</span>
-          <span class="dato"><b>${pct(q.ciudad.alto)}</b> respondió «${esc(q.ciudad.etiqueta_alto.toLowerCase())}» · EPC ${esc(q.anios.join(', '))}</span>
+          <span class="dato"><b>${pct(q.ciudad.alto)}</b> respondió «${esc(q.ciudad.etiqueta_alto.toLowerCase())}»${fuera(q.ciudad) ? ` (sin el ${fuera(q.ciudad)} % sin opinión)` : ''} · EPC ${esc(q.anios.join(', '))}</span>
           <span class="dist" role="img" aria-label="Distribución de respuestas">${q.ciudad.distribucion.map((d,j)=>`<span style="flex:${d};background:${color(j/(n-1))}" title="${esc(q.escala[j])}: ${pct(d)}"></span>`).join('')}</span>
           <button class="ver-rel" data-i="${i}">Ver completa, con su mapa →</button></span></li>`; }).join('')}</ul>
       <p class="nota">+ : quien está más de acuerdo con la pregunta nueva tendería a responder más alto aquí; − : más bajo. Lo eligió un modelo de lenguaje.</p>

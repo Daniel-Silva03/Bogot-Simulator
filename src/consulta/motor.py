@@ -144,6 +144,16 @@ DI-CO18. **El «% que respondería…» cuenta el lado favorable cuando se sabe 
     corrupción, si vota…), sigue la mitad alta, que es cierta y no juzga. Aplica a la
     ciudad, los grupos, la ficha de cada localidad y las preguntas relacionadas. Los campos
     se siguen llamando `alto` y `etiqueta_alto`.
+
+DI-CO19. **Las categorías que no son una opinión cuentan como «no sabe»** (2/10, a pedido de
+    Daniel). Hecho: `CC2` (imagen del Concejo) traía en su escala «No tiene opinión» (3) y «No
+    lo conoce» (4), y el mapa se coloreaba con la media de 1 a 4 (2,27), que no mide nada.
+    Decisión: en lo que se muestra (media, margen, mapa, distribución, porcentaje), esas
+    categorías salen, como el «no sabe»; la escala de `CC2` queda «Favorable», «Desfavorable».
+    Para no esconder cuánta gente queda fuera, la página dice el porcentaje que no cuenta
+    cuando pasa del 5 % (`respondieron`), en toda pregunta. Solo cambia lo que se muestra: el
+    catálogo, lo que ve el modelo y el puente (que estandariza `CC2` con sus cuatro códigos,
+    como se validó) no cambian.
 """
 
 from __future__ import annotations
@@ -252,6 +262,11 @@ def lado(f: dict) -> tuple[list, str]:
     return cods, f"{vis[sig]} o {vis[ext].lower()}"
 
 
+def vista(f: dict) -> dict:
+    """DI-CO19: la pregunta como se muestra, sin las categorías que no son una opinión en su escala."""
+    return {**f, "escala": [c for c in f["escala"] if not NO_SUSTANTIVA.search(str(f["etiquetas"][str(c)]))]}
+
+
 def cargar_donantes() -> pd.DataFrame:
     return pd.read_parquet(POBLACION / "donantes.parquet")
 
@@ -295,6 +310,7 @@ class Motor:
                  cache: Optional[e9.Cache] = None, anios: Optional[dict] = None):
         self.llamar, self.modelo = llamar, modelo
         self.catalogo = catalogo if catalogo is not None else rf.cargar_catalogo()
+        self._vista = {v: vista(f) for v, f in self.catalogo.items()}         # DI-CO19
         self.donante = donante if donante is not None else cargar_donantes()
         self.anios = anios if anios is not None else cargar_anios()
         ag = agentes if agentes is not None else pd.read_parquet(POBLACION / "agentes.parquet")
@@ -334,7 +350,7 @@ class Motor:
 
     def _ciudad(self, codigo: str) -> tuple[dict, np.ndarray, np.ndarray, np.ndarray]:
         """La respuesta de la ciudad a una pregunta del catálogo: (resumen, x, ok, cubre)."""
-        f = self.catalogo[codigo]
+        f = self._vista[codigo]                                                  # DI-CO19
         esc = list(f["escala"])
         k = len(esc)
         x = self._x[codigo][self.idx]
@@ -358,7 +374,7 @@ class Motor:
         if r is None:
             return {"alcance": "invalida", "mensaje": "No pude reformular esta pregunta. Prueba a escribirla de otra forma."}
         if r["alcance"] == "catalogo":
-            f = self.catalogo[r["codigo"]]
+            f = self._vista[r["codigo"]]
             r["pregunta_catalogo"] = f["pregunta"].strip()
             r["escala"] = escala_visible(f)
         return r
@@ -367,7 +383,7 @@ class Motor:
     def responder_catalogo(self, codigo: str) -> dict:
         if codigo not in self.catalogo:
             raise ConsultaError(f"{codigo} no está en el catálogo.")
-        f = self.catalogo[codigo]
+        f = self._vista[codigo]                                                  # DI-CO19
         esc = list(f["escala"])
         k = len(esc)
         anios = sorted(self.anios.get(codigo, [2023]))
@@ -382,7 +398,7 @@ class Motor:
                 continue
             # DI-CO1: cuántos agentes heredan a cada encuestado de la localidad
             cuenta = np.bincount(np.searchsorted(filas, self.idx[m]), minlength=len(filas)).astype(float)
-            cuenta *= np.isin(xd[filas], esc)                   # «no sabe» no entra a la media
+            cuenta *= np.isin(xd[filas], esc)                   # «no sabe» no entra a la media (ni DI-CO19)
             vals = np.nan_to_num(xd[filas])
             media = float(np.sum(cuenta * vals) / cuenta.sum())
             nc = g.max() + 1
@@ -434,7 +450,7 @@ class Motor:
             return {"tipo": "invalida", "mensaje": "No pude construir el puente para esta pregunta. Prueba a reformularla."}
         relacionadas = []                                                        # DI-CO15
         for p in r["preguntas"]:
-            f = self.catalogo[p["codigo"]]
+            f = self._vista[p["codigo"]]
             ciudad, *_ = self._ciudad(p["codigo"])
             relacionadas.append({"codigo": p["codigo"], "sentido": p["sentido"], "pregunta": f["pregunta"].strip(),
                                  "escala": escala_visible(f),

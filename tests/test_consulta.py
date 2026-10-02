@@ -211,6 +211,18 @@ def test_el_porcentaje_cuenta_el_lado_favorable_si_se_sabe():
     assert 0 < loc["alto"] < 1 and all(0 < g["alto"] < 1 for g in ag1["grupos"]["estrato"])
 
 
+def test_no_tiene_opinion_y_no_lo_conoce_cuentan_como_no_sabe():
+    """DI-CO19: CC2 se muestra con Favorable / Desfavorable; el resto queda fuera y se dice cuánto."""
+    r = M.responder_catalogo("CC2")
+    assert r["escala"] == ["Favorable", "Desfavorable"] and len(r["ciudad"]["distribucion"]) == 2
+    assert abs(sum(r["ciudad"]["distribucion"]) - 1) < 1e-3
+    assert 1 <= r["ciudad"]["media"] <= 2 and all(1 <= v["media"] <= 2 for v in r["localidades"].values())
+    assert 0.5 < r["ciudad"]["respondieron"] < 0.95                       # la página dice cuántos no cuentan
+    assert M.catalogo["CC2"]["escala"] == [1, 2, 3, 4]                       # el catálogo del modelo no cambia
+    html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
+    assert "no sabía o no tenía opinión" in html
+
+
 def test_sin_grupo_de_educacion():
     """DI-CO5: la población 2022-2024 no empareja por educación."""
     assert "educacion" not in mo.GRUPOS and "educacion" not in M.responder_catalogo("VS8")["grupos"]

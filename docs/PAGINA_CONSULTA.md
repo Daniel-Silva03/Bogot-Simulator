@@ -326,9 +326,27 @@ favorable conocido (probabilidad de sanción, corrupción, si vota…) siguen co
 
 Verificado: 18 pruebas de `tests/test_consulta.py` (1 nueva).
 
-**Queda abierto:** el mapa de `CC2` se colorea con la media de los códigos 1 a 4 (2,27), pero
+~~**Queda abierto:** el mapa de `CC2` se colorea con la media de los códigos 1 a 4 (2,27), pero
 3 y 4 son «No tiene opinión» y «No lo conoce»: esa media no mide nada. Arreglarlo cambia el dato
-que se muestra (sacar 3 y 4 de la media, como el «no sabe»), así que se deja para decidirlo aparte.
+que se muestra (sacar 3 y 4 de la media, como el «no sabe»), así que se deja para decidirlo aparte.~~
+Arreglado en §5.11.
+
+## 5.11 «No tiene opinión» y «No lo conoce» cuentan como «no sabe» (2/10/2026, DI-CO19)
+
+En `CC2` (imagen del Concejo), esas dos categorías salen de la media, el margen, el mapa, la
+distribución y el porcentaje, como el «no sabe». Queda una escala de dos: **22 % favorable, 78 %
+desfavorable**, de quienes tienen opinión (antes la página decía 16 % favorable sobre todos y la
+media del mapa era 2,27 en 1-4). Para no esconder a quienes quedan fuera, **la página dice el
+porcentaje que no cuenta cuando pasa del 5 %**, en cualquier pregunta (5 de las 102; en `CC2`,
+28 %), y en las preguntas relacionadas lo pone junto al dato. El catálogo, lo que ve el modelo y el
+puente no cambian.
+
+Verificado: 19 pruebas de `tests/test_consulta.py` (1 nueva) y la página por HTTP en modo simulado
+(el aviso está en la página; `CC2` responde Favorable / Desfavorable en las 19 localidades). No se
+pudo mirar en Chrome: la extensión no estaba conectada en esta sesión.
+
+Queda anotado, sin tocar: el puente estandariza `CC2` con sus cuatro códigos (así se validó); si
+el modelo la eligiera como relacionada, «no lo conoce» pesaría como lo más desfavorable.
 
 ## 6. Límites que la página dice
 
