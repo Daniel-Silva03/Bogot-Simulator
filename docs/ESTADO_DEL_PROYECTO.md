@@ -262,6 +262,9 @@ espacio.** Quien conociera la opinión real acertaría ~95 % de las diferencias 
 encuesta de mitad de tamaño, 86 %; el simulador, 62 %. La distancia es información que no tenemos, no
 ruido. **Siguiente, propuesto a Daniel:** camino 2 (el nivel con preguntas parecidas de respuesta
 conocida) y camino 3 (pedir al CNC resultados agregados de preguntas de aprobación en Bogotá).
+**Camino 2, parte A sin API (2/10, pre-registrada; `NIVEL_PARECIDAS_RESULTS.md`):** el promedio del banco
+se equivoca 23 puntos en el porcentaje favorable; ni el mismo tema (23,4) ni los vecinos por texto (22,0)
+lo bajan un 20 %. Con hermanas de la misma serie, 16,1. **Vara de la parte B (con el modelo): 17,6 o menos.**
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
