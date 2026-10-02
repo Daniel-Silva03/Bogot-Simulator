@@ -3,6 +3,13 @@ numpy
 scikit-learn
 pyarrow
 pyyaml
+scipy
+openpyxl
+
+# scipy: el ladeo categórico (src/opinion/forzamiento_categorico.py).
+# openpyxl: el diccionario de la EPC («EPC Suprema.xlsx»), que usan la población y el banco.
+# pyreadstat es opcional (src/population/cnc_agregar.py funciona sin él). pypdf no lo usa
+# ningún programa: solo se usó a mano para leer los PDFs de la biblioteca del CNC.
 
 # Mesa NO es una dependencia. ARCHITECTURE.md preveía construir el ABM sobre
 # Mesa; al quedar los modelos de opinión vectorizados se decidió no hacerlo

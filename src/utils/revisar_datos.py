@@ -11,6 +11,10 @@ ruta exacta donde el código la busca, y de dónde se baja.
 
     python src/utils/revisar_datos.py            # el estado
     python src/utils/revisar_datos.py --arbol    # además, las carpetas a crear
+
+Desde el 1/10/2026 revisa también lo que necesita la página actual (D17): las poblaciones
+EPC, las librerías, la clave de OpenRouter y las cachés de la API. Para pasar a otro
+computador: `docs/TRASLADO.md`.
 """
 
 from __future__ import annotations
@@ -69,6 +73,39 @@ FUENTES = [
      "su _metadata.json — los dos, o preparar_mapa.py no puede etiquetar la "
      "escala."),
 ]
+
+#: La página actual (D17) y sus experimentos: (para qué, ruta, en el repo, cómo se rehace).
+PAGINA = [
+    ("Inventario de preguntas de la EPC", "data/processed/epc_inventario/items.csv", True,
+     "python src/population/inventario_epc.py"),
+    ("Armonización 2022-2024", "data/processed/epc_armonizado/items.csv", True,
+     "python src/population/armonizar_epc.py"),
+    ("Catálogo de 102 preguntas", "data/processed/poblacion_epc2023/catalogo.json", True,
+     "python src/population/poblacion_epc.py"),
+    ("Población 2022-2024: agentes (la de la página)", "data/processed/poblacion_epc2022_2024/agentes.parquet", False,
+     "python src/population/poblacion_epc_olas.py  (unos minutos; necesita EPC y receptor)"),
+    ("Población 2022-2024: donantes", "data/processed/poblacion_epc2022_2024/donantes.parquet", False,
+     "python src/population/poblacion_epc_olas.py"),
+    ("Población 2023: agentes", "data/processed/poblacion_epc2023/agentes.parquet", False,
+     "python src/population/poblacion_epc.py"),
+    ("Diccionario de la ECP 2023 (banco de preguntas)", "data/raw/ecp/2023/DANE-DIMPE-ECP-2023.xml", False,
+     "microdatos.dane.gov.co/index.php/metadata/export/822/ddi (982 KB)"),
+]
+
+#: Respuestas ya pagadas a la API. Sin ellas el código corre igual, pero rehacer un análisis
+#: vuelve a gastar y el modelo no responde idéntico dos veces.
+CACHES = [
+    ("página (reformulación y puente)", "data/processed/consulta/cache.json"),
+    ("validación de la reformulación", "data/processed/reformulacion/cache.json"),
+    ("puente (12 escondidas)", "data/processed/puente/cache.json"),
+    ("puente sin base", "data/processed/puente_sin_base/cache.json"),
+    ("preguntas reales (metro, Corredor)", "data/processed/preguntas_reales/cache.json"),
+    ("banco: clasificación", "data/processed/banco/cache.json"),
+    ("práctica del puente (USD 2,33)", "data/processed/practica_puente/cache.json"),
+    ("Experimento 9", "data/processed/exp9/cache.json"),
+]
+
+LIBRERIAS = ["pandas", "numpy", "sklearn", "scipy", "pyarrow", "yaml", "openpyxl"]
 
 #: Años de la ECP que el proyecto sabe leer (2015 se detecta y se excluye sola).
 ANIOS_ECP = (2013, 2017, 2019, 2021, 2023)
@@ -140,6 +177,26 @@ def main(argv=None) -> int:
     print("\nPAQUETES YA CONSTRUIDOS (lo que la página necesita si no corres los preparadores)")
     for rel in PAQUETES:
         print(f"  [{OK if (RAIZ / rel).is_file() else NO}] {rel}")
+
+    print("\nLA PÁGINA ACTUAL (D17)")
+    import importlib.util
+    faltan_lib = [m for m in LIBRERIAS if importlib.util.find_spec(m) is None]
+    print(f"  [{OK if not faltan_lib else NO}] librerías de requirements.txt"
+          + (f" — faltan: {', '.join(faltan_lib)} → pip install -r requirements.txt" if faltan_lib else ""))
+    for para, rel, en_repo, como in PAGINA:
+        hay = (RAIZ / rel).is_file()
+        print(f"  [{OK if hay else NO}] {para}{'' if en_repo else '  (no está en GitHub)'}")
+        if not hay:
+            print(f"          {rel}\n          → {como}")
+    clave = bool((os.environ.get("OPENROUTER_API_KEY") or "").strip())
+    print(f"  [{OK if clave else OPC}] clave de OpenRouter en OPENROUTER_API_KEY"
+          + ("" if clave else " — sin ella: servidor.py --simulado"))
+    elec = os.environ.get("BSS_ELECTORAL_DIR")
+    print(f"  [{OK if elec and Path(elec).exists() else OPC}] carpeta electoral del CNC en BSS_ELECTORAL_DIR"
+          + ("" if elec else " — solo para Polos 2026 y la segunda vuelta"))
+    print("\nCACHÉS DE LA API (no están en GitHub; se copian con src/utils/empacar_traslado.py)")
+    for para, rel in CACHES:
+        print(f"  [{OK if (RAIZ / rel).is_file() else OPC}] {para}")
 
     if args.arbol:
         print("\nÁRBOL — crea estas carpetas y deja los archivos tal como vienen")

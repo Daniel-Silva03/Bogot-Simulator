@@ -251,6 +251,9 @@ responder favorable». Último intento (perfiles del catálogo y ejemplos
 resueltos, validación cruzada; §10.3): **0,627 < 0,67, se para por la regla escrita.** En total la
 práctica costó USD 2,33. **Siguiente:** llevar a la página el camino 2 (tono general por grupo en
 preguntas nuevas) y escribirlo como decisión de proyecto.
+**Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
+openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
+va a GitHub (cachés, poblaciones; ~4 MB).
 
 **En espera:** la segunda vuelta de 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`, con
 código) no está publicada mesa a mesa; Daniel la pedirá al CNC.

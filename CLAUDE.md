@@ -60,6 +60,7 @@ resultó falso no se borra:** se anota la corrección al lado (§45).
 - Windows, PowerShell. `.\venv\Scripts\Activate.ps1`. El intérprete es **`python`**, no `python3`.
 - Las pruebas son scripts sueltos: `python tests/test_<módulo>.py`. No hace falta pytest.
 - `python src/utils/revisar_datos.py` dice qué datos hay en esta máquina y qué se puede correr.
+- Para pasar a otro computador: `docs/TRASLADO.md` (`src/utils/empacar_traslado.py` lleva las cachés de la API y las poblaciones).
 - Imports absolutos desde la raíz: `from src.population.matching import hot_deck_match`.
 
 ## Mapa del código
