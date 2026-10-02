@@ -96,6 +96,10 @@ section{padding:80px 0}
 .tipos .tarjeta{background:transparent}
 .ins-cat{background:var(--menta-palida);color:var(--canvas)}
 .ins-nueva{border:1px solid var(--blanco);color:var(--blanco)}
+/* DI-CO20: lo primero de una pregunta nueva es decir que no se puede responder */
+.sin-respuesta{margin:12px 0 4px;padding:16px;border:1px dashed var(--humo);border-radius:var(--r-input);background:var(--elevado)}
+.sin-respuesta .sr-titulo{font-size:22px;line-height:1.3;letter-spacing:-.4px;font-weight:300;color:var(--blanco);margin:0 0 8px}
+.sin-respuesta p:last-child{font-size:14px;color:var(--texto-2);margin:0;letter-spacing:.14px}
 /* D18 (DI-CO14): el tono general por grupo, rotulado como lo que es */
 .aviso-tono{border-left:2px dashed var(--humo);padding-left:10px;color:var(--texto-2)}
 .ins-fuera{border:1px solid var(--humo);color:var(--humo)}
@@ -704,11 +708,12 @@ function mostrar(r){
     /* D18: sin nivel ni fuerza; el tono general a la vista, rotulado; cada relacionada con su dato real */
     const tope = Math.max(.25, ...Object.values(r.grupos).flat().map(f => Math.abs(f.indice)));
     el.innerHTML = `<div class="asistente"><span class="avatar" aria-hidden="true"></span><span><b>Bogotá Sintética</b> · La encuesta no hizo
-        esta pregunta. Encontré <span class="num">${r.relacionadas.length}</span> preguntas medidas que se relacionan y te muestro lo que la gente
-        respondió a cada una. Sin cifra propia y sin mapa.</span></div>
+        esta pregunta, así que no puedo decir si la gente estaría de acuerdo. Te muestro lo que respondió a
+        <span class="num">${r.relacionadas.length}</span> preguntas parecidas que sí se midieron, y cómo suele responder cada grupo.</span></div>
       <span class="insignia ins-nueva">Pregunta nueva · sin dato propio</span>
-      <h3>${esc(r.pregunta)}</h3>${banda(r)}
-      <div class="etq-min" style="margin-top:8px">Preguntas medidas que se relacionan</div>
+      <h3>${esc(r.pregunta)}</h3>
+      <div class="sin-respuesta"><p class="sr-titulo">${esc(r.respuesta.titulo)}</p><p>${esc(r.respuesta.texto)}</p></div>
+      <div class="etq-min" style="margin-top:24px">Contexto 1 · Lo que la gente respondió a preguntas parecidas</div>
       <ul class="puente-lista">${r.relacionadas.map((q,i) => { const n = q.escala.length; return `<li>
         <span class="sg ${q.sentido==='+'?'mas':'menos'}" title="${q.sentido==='+'?'En el mismo sentido':'En sentido contrario'}">${q.sentido==='+'?'+':'−'}</span>
         <span class="rel"><span>${esc(q.pregunta)}</span>
@@ -716,7 +721,7 @@ function mostrar(r){
           <span class="dist" role="img" aria-label="Distribución de respuestas">${q.ciudad.distribucion.map((d,j)=>`<span style="flex:${d};background:${color(j/(n-1))}" title="${esc(q.escala[j])}: ${pct(d)}"></span>`).join('')}</span>
           <button class="ver-rel" data-i="${i}">Ver completa, con su mapa →</button></span></li>`; }).join('')}</ul>
       <p class="nota">+ : quien está más de acuerdo con la pregunta nueva tendería a responder más alto aquí; − : más bajo. Lo eligió un modelo de lenguaje.</p>
-      <div class="etq-min" style="margin-top:24px">${esc(r.tono_titulo)}</div>
+      <div class="etq-min" style="margin-top:24px">Contexto 2 · ${esc(r.tono_titulo)}</div>
       <p class="nota aviso-tono">${esc(r.tono_texto)}</p>
       <div class="grupos" style="margin-top:12px">${Object.entries(r.grupos).map(([g,fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f => {
         const w = 50*Math.abs(f.indice)/tope, izq = f.indice < 0 ? 50-w : 50;

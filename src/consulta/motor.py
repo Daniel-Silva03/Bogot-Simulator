@@ -154,6 +154,13 @@ DI-CO19. **Las categorías que no son una opinión cuentan como «no sabe»** (2
     cuando pasa del 5 % (`respondieron`), en toda pregunta. Solo cambia lo que se muestra: el
     catálogo, lo que ve el modelo y el puente (que estandariza `CC2` con sus cuatro códigos,
     como se validó) no cambian.
+
+DI-CO20. **Una pregunta nueva empieza diciendo que no se puede responder** (2/10, Daniel, al
+    verla en la página: «no es claro si la población está o no de acuerdo»). Hecho: con D18 la
+    respuesta no trae ninguna cifra propia, pero tampoco lo decía; se leía una lista de otras
+    preguntas y unas barras sin saber qué contestaban. Decisión: arriba va `RESPUESTA_NUEVA`
+    («No podemos decir si Bogotá estaría de acuerdo» y por qué), y debajo, rotulado como
+    contexto, lo que ya había (preguntas parecidas con su dato real y el tono por grupo).
 """
 
 from __future__ import annotations
@@ -190,6 +197,14 @@ AVISO = ("Esto es una suposición, no una medición: muestra cómo respondería 
          "construida con la Encuesta de Percepción Ciudadana 2022, 2023 y 2024 de Bogotá Cómo Vamos.")
 
 
+#: DI-CO20: lo primero que dice una pregunta nueva es que no se puede responder.
+RESPUESTA_NUEVA = {
+    "titulo": "No podemos decir si Bogotá estaría de acuerdo.",
+    "texto": ("La encuesta no hizo esta pregunta, y cuando probamos a suponerlo con preguntas reales que sí "
+              "conocíamos, el simulador no acertó cuántos estarían de acuerdo ni qué grupos o localidades lo "
+              "estarían más. Lo que sí hay es contexto medido: lo que la gente respondió a preguntas parecidas "
+              "y cómo suele responder cada grupo."),
+}
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
 TONO_TITULO = "Así suelen responder estos grupos en la encuesta"
 TONO_TEXTO = ("No es una medición de esta pregunta: es el mismo para toda pregunta nueva. Resume cómo responde "
@@ -457,6 +472,7 @@ class Motor:
                                  "anios": sorted(self.anios.get(p["codigo"], [2023])), "ciudad": ciudad})
         return {"tipo": "nueva", "suposicion": True, "aviso": AVISO, "pregunta": pregunta.strip(), "escala": escala,
                 "consultados": len(self.agentes),                                   # DI-CO9
+                "respuesta": RESPUESTA_NUEVA,                                        # DI-CO20
                 "grupos": self.tono, "tono_titulo": TONO_TITULO,                     # DI-CO14
                 "tono_texto": TONO_TEXTO.format(n=self.n_tono),
                 "relacionadas": relacionadas,                                        # DI-CO16: sin justificación

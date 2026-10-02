@@ -90,6 +90,9 @@ def test_una_pregunta_nueva_no_trae_nivel_ni_fuerza_y_su_tono_es_el_mismo_siempr
     for r in (a, b):
         assert not {"nivel_propuesto", "fuerza", "fuerza_texto", "aviso_grupos", "aviso_anios", "justificacion"} & set(r)
     assert a["grupos"] == b["grupos"] == M.tono
+    assert a["respuesta"]["titulo"] == "No podemos decir si Bogotá estaría de acuerdo."      # DI-CO20
+    html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
+    assert "sin-respuesta" in html and "Contexto 1" in html and "Contexto 2" in html
     assert a["tono_titulo"] == "Así suelen responder estos grupos en la encuesta"
     assert "No es una medición de esta pregunta" in a["tono_texto"] and str(M.n_tono) in a["tono_texto"]
     assert 20 <= M.n_tono < len(M.catalogo)
