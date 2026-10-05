@@ -280,6 +280,10 @@ vez (oráculo 0,960, réplica 0,863), pero **el tono general del simulador acier
 azar**. Explicación posible, no pre-registrada: en afirmaciones negativas el tono acierta al revés (0,36) y en las
 positivas apenas pasa el azar (0,54). **El «62 %» de la página no se generaliza: decisión pendiente para Daniel**
 sobre el tono por grupo de D18. **Resuelta el 5/10 (opción 3):** se muestra como contexto descriptivo, sin cifra de acierto (DI-CO21).
+**¿Estaría Bogotá de acuerdo? Paso 1 (5/10, pre-registrado, sin gasto; `NIVEL_ACUERDO_RESULTS.md`):** en 92 preguntas
+de acuerdo o sí/no, el mejor método (vecinos por texto) acierta el lado de la mayoría el 63 %, contra 57 % de decir
+siempre el lado mayoritario, y yerra 18 puntos en el porcentaje. **No llega a la regla:** la página sigue sin decir
+«sí» o «no». Lo siguiente, a decidir por Daniel: Sonnet sobre este subconjunto (~USD 2) o el camino 3.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
