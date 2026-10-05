@@ -110,6 +110,16 @@ def test_la_cache_evita_volver_a_pagar():
     assert len(n) == 2
 
 
+def test_deepseek_va_sin_razonar_y_sin_la_etiqueta():
+    """DI-NB5."""
+    vistos = []
+    llamar = nb.enrutar(lambda m, *a: vistos.append(("base", m)) or "{}",
+                        lambda m, *a: vistos.append(("sin_razonar", m)) or "{}")
+    llamar(nb.MODELOS["deepseek"], "s", "u", 0.0)
+    llamar(nb.MODELOS["sonnet"], "s", "u", 0.0)
+    assert vistos == [("sin_razonar", "deepseek/deepseek-v4-pro"), ("base", "anthropic/claude-sonnet-5.5")]
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"Nivel por preguntas parecidas, parte B — {len(pruebas)} pruebas\n")

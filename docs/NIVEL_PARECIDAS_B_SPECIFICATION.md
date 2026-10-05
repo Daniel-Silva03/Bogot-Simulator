@@ -91,3 +91,25 @@ esa llamada muestra que el costo de la corrida pasaría el tope, se para y se co
 `src/experiments/nivel_parecidas_b.py`, con pruebas de modelo simulado en
 `tests/test_nivel_parecidas_b.py`. Los resultados van a `NIVEL_PARECIDAS_B_RESULTS.md`, contra este
 pre-registro.
+
+## Enmienda 1 (5/10/2026): DeepSeek sin razonamiento
+
+**Qué cambia.** DeepSeek V4 Pro se pide con `"reasoning": {"enabled": false}`, que el modelo permite
+(`mandatory: false` en `/api/v1/models`). Se repiten sus 96 preguntas. Las 23 respuestas previas, que
+sí razonaron, quedan en la caché pero **no entran en la evaluación**. Sonnet no cambia. La vara, las
+predicciones y la regla de decisión tampoco.
+
+**Por qué.** Aun con 300 s de espera (DI-NB4), DeepSeek razonaba ~2.000 tokens y tardaba unos 5
+minutos por respuesta: más de 6 horas para la corrida. Lo pidió Daniel, entre tres opciones: dejarlo
+correr, apagar el razonamiento o cerrar solo con Sonnet.
+
+**Qué se sabía al decidirlo.** El bloque de Sonnet ya había terminado, y el script imprime su error al
+cerrar cada bloque: **18,1 puntos**. Las respuestas de DeepSeek no se evaluaron. La enmienda cambia
+cómo se pide uno de los dos modelos, no la vara, y no depende de ese número. Se deja escrito por
+transparencia.
+
+**Consecuencia para la lectura.** El resultado de DeepSeek mide el modelo **sin razonamiento**. Si no
+pasa, no se puede afirmar que DeepSeek con razonamiento tampoco pasaría.
+
+**Gasto.** 96 llamadas, unos USD 0,15 (sin razonamiento, la salida es corta), dentro del tope de USD 4.
+Registrado hasta ahora: USD 2,14.

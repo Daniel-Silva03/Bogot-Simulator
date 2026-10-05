@@ -875,8 +875,9 @@ def modelo_simulado(semilla: int = 0) -> Llamar:
     return llamar
 
 
-def cliente_real(timeout: int = 90) -> Llamar:
-    """`timeout` por intento, en segundos (2/10: los modelos que razonan pueden tardar más de 90)."""
+def cliente_real(timeout: int = 90, extra: Optional[dict] = None) -> Llamar:
+    """`timeout` por intento, en segundos (2/10: los modelos que razonan pueden tardar más de 90).
+    `extra` se agrega al cuerpo de cada petición (5/10: `{"reasoning": {"enabled": False}}`)."""
     clave = (os.environ.get("OPENROUTER_API_KEY") or "").strip()
     if not clave:
         raise Experimento9Error('Falta OPENROUTER_API_KEY.  PowerShell:  $env:OPENROUTER_API_KEY = "..."')
@@ -886,7 +887,7 @@ def cliente_real(timeout: int = 90) -> Llamar:
     def llamar(modelo, sistema, usuario, temp):
         r = donante_llm._post(
             f"{base}/chat/completions",
-            {"model": modelo, "temperature": temp,
+            {"model": modelo, "temperature": temp, **(extra or {}),
              "messages": [{"role": "system", "content": sistema},
                           {"role": "user", "content": usuario}],
              "usage": {"include": True}},                  # DI-E9: costo por llamada

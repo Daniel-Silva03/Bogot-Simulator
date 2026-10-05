@@ -31,6 +31,13 @@ DI-NB4. **Tiempo de espera de 300 s por intento y un modelo a la vez** (2/10, tr
     para correr uno por vez, y el uso de la clave (`/api/v1/key`) se mide antes y después de cada
     modelo para comparar con lo registrado. La clave es compartida, así que la diferencia también
     puede incluir uso ajeno. No cambia nada del diseño pre-registrado.
+
+DI-NB5. **DeepSeek sin razonamiento** (5/10, enmienda 1 del pre-registro, pedida por Daniel). Aun con
+    300 s, DeepSeek tardaba ~5 minutos por respuesta (≥ 6 horas para la corrida). Se pide con
+    `"reasoning": {"enabled": false}` (el modelo lo permite: `mandatory: false` en `/api/v1/models`).
+    En la caché va con la etiqueta `deepseek/deepseek-v4-pro#sin-razonar`, para no mezclarse con las
+    respuestas que sí razonaron; el cliente quita la etiqueta antes de llamar. Esas respuestas previas
+    quedan en la caché pero no entran en la evaluación.
 """
 
 from __future__ import annotations
@@ -50,7 +57,8 @@ sys.path.insert(0, str(RAIZ))
 
 from src.experiments import experimento9 as e9            # noqa: E402
 
-MODELOS = {"deepseek": "deepseek/deepseek-v4-pro", "sonnet": "anthropic/claude-sonnet-5.5"}
+MODELOS = {"deepseek": "deepseek/deepseek-v4-pro#sin-razonar", "sonnet": "anthropic/claude-sonnet-5.5"}   # DI-NB5
+SIN_RAZONAR = "#sin-razonar"
 TEMPERATURA = 0.0
 TOPE_USD = 4.0
 VARA = 17.6
@@ -172,6 +180,15 @@ def resumen(p: pd.DataFrame, t: pd.DataFrame) -> dict:
                     for r in p[p.id.str.startswith("CNC")].itertuples()}}
 
 
+def enrutar(base, sin_razonar):
+    """DI-NB5: los modelos con la etiqueta `#sin-razonar` van al cliente sin razonamiento, sin la etiqueta."""
+    def llamar(modelo, sistema, usuario, temp):
+        if modelo.endswith(SIN_RAZONAR):
+            return sin_razonar(modelo[: -len(SIN_RAZONAR)], sistema, usuario, temp)
+        return base(modelo, sistema, usuario, temp)
+    return llamar
+
+
 def cliente_simulado(t: pd.DataFrame):
     """Elige las tres primeras candidatas de la lista; sin gasto."""
     def llamar(modelo, sistema, usuario, temp):
@@ -195,9 +212,12 @@ def main() -> int:
         llamar = cliente_simulado(t)
     else:
         cache = e9.Cache(ba.SALIDA / CACHE_NOMBRE)
-        llamar = e9.cliente_real(timeout=300)                               # DI-NB4
+        llamar = enrutar(e9.cliente_real(timeout=300),                       # DI-NB4
+                         e9.cliente_real(timeout=300, extra={"reasoning": {"enabled": False}}))
     if a.prueba:
         for nombre, modelo in MODELOS.items():
+            if a.modelo and nombre != a.modelo:
+                continue
             antes = gastado(cache)
             correr(t, llamar, cache, modelo, solo=1)
             print(f"{nombre}: una llamada costó USD {gastado(cache) - antes:.4f} → la corrida (96) costaría "
