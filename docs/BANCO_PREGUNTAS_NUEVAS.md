@@ -212,3 +212,64 @@ rotulado como «así suelen responder estos grupos en la encuesta».
 qué grupos estarían más de acuerdo mejor de lo que ya dice el patrón general de cada grupo; ninguna
 forma de elegir preguntas del catálogo con el modelo de lenguaje lo mejoró. El banco guardado queda sin
 usar, disponible para probar cualquier idea nueva de verdad, pre-registrada.
+
+## 11. Segundo lote: Encuesta de Cultura Ambiental 2021 (pre-registro, 5/10, antes de sortear)
+
+**Fuente.** Encuesta de Cultura Ambiental (ECA) 2021 de la Secretaría de Cultura, Recreación y Deporte
+de Bogotá (datos abiertos, CC BY-SA 4.0), descargada con permiso de Daniel el 5/10 a
+`data/raw/scrd/eca_2021_scrd.xlsx` (2,6 MB; no se sube).
+- Muestreo probabilístico estratificado por conglomerados, con factor de expansión (`FACTOR PERSONAS`).
+- 2.282 encuestas desde los 13 años; se usan solo las de 18 o más.
+- Trae estrato, localidad, sexo y edad.
+- Es **independiente** de la población del simulador: otra encuesta, otras personas.
+
+**Lo que se miró antes de escribir esto:** el diccionario, los encabezados y los códigos presentes en
+cada columna. **Ningún porcentaje.**
+
+**El lote no toca el primero:** `sorteo.csv` y `reales_practica.json` quedan iguales, y las pruebas ya
+corridas dan lo mismo si se repiten. El lote 2 va en `sorteo_lote2.csv` y
+`reales_practica_lote2.json`; un experimento lo usa solo si lo pide.
+
+**Las 16 preguntas, en 7 familias.** Solo opinión: se dejan fuera las de conducta (si separa, recicla,
+reutiliza, tiene mascotas) y las de hecho (si pasa la ruta de reciclaje). El texto de la página y los
+códigos favorables siguen DI-BA3: favorable es estar de acuerdo con la pregunta tal como queda escrita.
+NS/NR (99) es «no sabe» (DI-BR1).
+
+| id | familia | columna | pregunta en la página | escala | favorables |
+|---|---|---|---|---|---|
+| ECA21_P13A | ECA21_P13 | 47 | ¿Está de acuerdo con que «da igual si se separan o no los residuos porque al final todo termina revuelto»? | 1 De acuerdo, 2 En desacuerdo | 1 |
+| ECA21_P13B | ECA21_P13 | 48 | ¿Está de acuerdo con que «da igual si se separan o no los residuos porque eso lo hacen los recicladores»? | igual | 1 |
+| ECA21_P14AA | ECA21_P14A | 53 | ¿Está de acuerdo con que confía en las personas recicladoras de oficio? | igual | 1 |
+| ECA21_P14AB | ECA21_P14A | 54 | ¿Está de acuerdo con que la población recicladora de oficio es fundamental para el aprovechamiento de residuos en Bogotá? | igual | 1 |
+| ECA21_P14AC | ECA21_P14A | 55 | ¿Está de acuerdo con que las personas recicladoras de oficio son peligrosas? | igual | 1 |
+| ECA21_P15 | ECA21_P15 | 56 | ¿Cree que la mayoría de las personas en Bogotá separa los residuos en sus hogares? | 1 Sí, 2 No | 1 |
+| ECA21_P19A | ECA21_P19 | 70 | ¿Está de acuerdo con que «el río Bogotá está tan sucio que da igual si le tiran más residuos»? | 1 Totalmente en desacuerdo … 4 Totalmente de acuerdo | 3, 4 |
+| ECA21_P19B | ECA21_P19 | 71 | ¿Está de acuerdo con que «como no existen sistemas de reciclaje en toda la ciudad, da igual si separo o no los residuos en mi casa»? | igual | 3, 4 |
+| ECA21_P19C | ECA21_P19 | 72 | ¿Está de acuerdo con que «como las industrias son las que más contaminan, los esfuerzos que haga por cuidar el ambiente son insignificantes»? | igual | 3, 4 |
+| ECA21_P22 | ECA21_P22 | 76 | ¿Qué tanto cuidan las personas en Bogotá a los animales silvestres que viven en la ciudad? | 1 Mucho, 2 Poco, 3 Nada | 1 |
+| ECA21_P32 | ECA21_P32 | 103 | ¿El estado de la mayoría de los ríos, humedales y espacios naturales de Bogotá es bueno? | 1 Muy bueno, 2 Bueno, 3 Malo, 4 Muy malo | 1, 2 |
+| ECA21_P33A | ECA21_P33 | 104 | ¿Qué tanto puede hacer usted mismo para cuidar el ambiente? | 1 Mucho, 2 Poco, 3 Nada | 1 |
+| ECA21_P33B | ECA21_P33 | 105 | ¿Qué tanto puede hacer el resto de la ciudadanía para cuidar el ambiente? | igual | 1 |
+| ECA21_P33C | ECA21_P33 | 106 | ¿Qué tanto puede hacer el gobierno de la ciudad para cuidar el ambiente? | igual | 1 |
+| ECA21_P33D | ECA21_P33 | 107 | ¿Qué tanto puede hacer el gobierno nacional para cuidar el ambiente? | igual | 1 |
+| ECA21_P33E | ECA21_P33 | 108 | ¿Qué tanto pueden hacer las fábricas y empresas en general para cuidar el ambiente? | igual | 1 |
+
+(Columnas de la hoja `NUM`, contadas desde 0.)
+
+**El sorteo.** La misma regla 3 de DI-BA5:
+- se sortea por familia, en el ámbito «Bogotá», con la semilla **20261005**;
+- la mitad de las familias, redondeando hacia arriba, va al guardado: **4 al guardado y 3 a práctica**;
+- todas son independientes y ninguna se ha visto, así que las 7 entran al sorteo;
+- el guardado del lote 2 no se calcula ni se le pregunta al simulador hasta una prueba final
+  pre-registrada.
+
+**Resultados reales, solo de las de práctica.** Mismo cálculo que `banco_reales.resultado`, con estas
+piezas:
+- **Peso:** `FACTOR PERSONAS`.
+- **Sexo:** `FC`. 1 es Hombres y 2 Mujeres; los demás códigos no entran en el grupo, sí en el total.
+- **Edad:** `FD_MAYOR`, en los tramos de la población. Solo personas de 18 o más.
+- **Estrato:** `FB`, en 1, 2, 3, 4 y 5-6. El 99 no entra.
+- **Localidad:** `FA`, de 1 a 19.
+- **Pares claros:** regla DI-BR5 de estructura y z > 1,96, como en el primer lote.
+
+**Código:** `src/experiments/banco_lote2.py`, con pruebas en `tests/test_banco_lote2.py`.
