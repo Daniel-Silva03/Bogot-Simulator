@@ -1,43 +1,54 @@
-# RETOMAR — dónde quedó la sesión del 30/09-1/10/2026
+# RETOMAR — dónde quedó la sesión del 2-5/10/2026 (PC del CNC)
 
 **Para seguir en otro computador. Léelo después de `ESTADO_DEL_PROYECTO.md`.**
 
-## Lo que se hizo en estas dos jornadas (todo en GitHub)
+## Lo pendiente (lo primero al retomar)
 
-1. **Página de consulta (D17)** con la población EPC 2022-2024 (`PAGINA_CONSULTA.md` §5.5-5.7):
-   cada pregunta del catálogo dice de qué años sale; preguntas nuevas con la fuerza del puente y las
-   barras por grupo escondidas tras «ver de todos modos».
-2. **Pruebas del puente en preguntas nuevas**, todas contra pre-registro o regla escrita antes:
-   - `PUENTE_LOCALIDADES_RESULTS.md`: el puente no ordena localidades (artefacto de ruido compartido). Lectura B.
-   - `PUENTE_SIN_BASE_RESULTS.md`: «sin base» no es confiable; la fuerza sí separa casos.
-   - `PREGUNTAS_REALES_NUEVAS_RESULTS.md`: metro elevado y Corredor Verde (encuesta del CNC, 2023): 8 de 24, el Corredor al revés.
-   - `BANCO_PREGUNTAS_NUEVAS.md` §10: **banco de 165 preguntas reales nuevas** (114 práctica / 51 guardadas,
-     sorteo con semilla 20261001). Tres versiones del puente en la práctica (actual, «afectados»,
-     perfiles+ejemplos con validación cruzada): **60-63 % de diferencias entre grupos bien ordenadas,
-     igual que el «tono general» sin API (62 %)**. La regla de salida (67 %) dijo **parar**.
-3. **Traslado:** `TRASLADO.md`, `requirements.txt` completo, `revisar_datos.py` al día, `empacar_traslado.py`.
+**La parte B del nivel está en pausa porque la cuenta de OpenRouter no tiene saldo**
+(`NIVEL_PARECIDAS_B_SPECIFICATION.md`; código `src/experiments/nivel_parecidas_b.py`).
 
-## La decisión pendiente (lo primero al retomar)
+- **Hecho:** 24 de 96 preguntas con Claude Sonnet 5.5 y 7 de 96 con DeepSeek V4 Pro, más las dos
+  llamadas de prueba. Gasto registrado: **USD 0,548**, de un tope de USD 4 aprobado por Daniel.
+- **El corte:** OpenRouter respondió 402 («Payment Required»). La cuenta, que es la del jefe de
+  Daniel y compartida con otras claves, tenía USD 625 de crédito y ~USD 624,27 usados al 5/10. Esta
+  clave lleva solo USD 4,38 de ese uso.
+- **Para retomar** hacen falta al menos **USD 3 libres**; lo que falta cuesta ~USD 1,70. Antes de
+  correr, revisa el saldo con `/api/v1/credits` (consulta gratuita) y avísale a Daniel. Después:
 
-Por la regla escrita (`BANCO_PREGUNTAS_NUEVAS.md` §10.3), la página adopta el «camino 2» para las
-preguntas nuevas. Propuesta hecha a Daniel, **sin respuesta todavía**:
+  ```
+  python src/experiments/nivel_parecidas_b.py --modelo sonnet
+  python src/experiments/nivel_parecidas_b.py --modelo deepseek
+  python src/experiments/nivel_parecidas_b.py          # junta los dos desde la caché, sin llamadas nuevas
+  ```
 
-1. **Grupos:** mostrar el tono general por grupo, a la vista, rotulado «Así suelen responder estos
-   grupos en la encuesta» (no es una medición de esta pregunta). Reemplaza las barras del puente.
-2. **Preguntas relacionadas:** junto a las preguntas del catálogo en que se apoyó el modelo, mostrar lo
-   que la gente respondió de verdad a cada una, con enlace a verla completa con su mapa.
-3. **Quitar el nivel propuesto por el modelo** (en la prueba real dio 3,7 en las dos preguntas y no
-   distinguió cuál tenía más apoyo).
+  La caché `data/processed/banco/cache_nivel_b.json` **no está en GitHub**. Sin ella, en otro
+  computador se vuelven a pagar las 33 respuestas (~USD 0,55): llévala con `empacar_traslado.py` o a
+  mano.
+- **Los resultados parciales no se han mirado.** El pre-registro se evalúa con las 96 preguntas.
 
-Escribirlo como **D18** en `PROJECT_CONTEXT.md` §39 cuando Daniel lo apruebe (o cambie).
+## Lo que se hizo del 2 al 4/10 (todo en GitHub)
 
-**Resuelta el 2/10 en el PC del CNC:** Daniel aprobó los tres puntos, sin cifra propia y sin la
-fuerza. Es **D18**, y está en la página (`PAGINA_CONSULTA.md` §5.8). No queda decisión pendiente
-de esta nota.
+1. **D18 en la página:** una pregunta nueva no tiene cifra propia. Empieza diciendo «No podemos decir
+   si Bogotá estaría de acuerdo» (DI-CO20) y muestra preguntas parecidas con su dato real y el tono
+   por grupo. También se arreglaron las escalas numéricas, el lado favorable y «no tiene opinión»
+   (DI-CO17 a DI-CO19; `PAGINA_CONSULTA.md` §5.8-5.11).
+2. **Tres pruebas pre-registradas, sin gasto:**
+   - `TECHO_GRUPOS_RESULTS.md`: lectura A, hay espacio. El techo está en 86-95 % contra el 62 % del
+     simulador; lo que falta es información.
+   - `NIVEL_PARECIDAS_RESULTS.md`: ni el tema ni el texto acercan el nivel (22-23 puntos de error);
+     con preguntas hermanas ya medidas, 16.
+   - `NIVEL_FORMA_RESULTS.md`: la forma de la pregunta tampoco (22,3).
+3. **Camino 3, propuesto a Daniel y sin respuesta:** pedir al CNC resultados agregados de preguntas
+   de aprobación de medidas en Bogotá. Es lo único que las pruebas dicen que acercaría el nivel.
 
 ## Otras cosas abiertas
 
+- En el PC del CNC falta el módulo de Democracia de la ECP 2013: `tests/test_experimento9.py` falla
+  en 1 de 52 (`test_todo_simulado_sobre_los_datos_reales`). Ya fallaba antes; no es de esta sesión.
+- `revisar_datos.py` no revisa todos los años de la EPC. En el PC del CNC faltaban 2015 y 2017, y
+  Daniel los copió el 2/10.
 - Segunda vuelta 2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`): esperando los datos mesa a mesa del CNC.
-- El banco guardado (51 preguntas) no se ha usado: queda para probar una idea nueva de verdad, pre-registrada.
-- `Claude Setup.exe` apareció en `data/processed/` del computador de casa: no es del proyecto; no se empacó.
-- La memoria de Claude (`~/.claude/…`) no viaja con el repo; lo necesario está en estos documentos.
+- El banco guardado (51 preguntas) sigue sin usarse.
+- La memoria de Claude (`~/.claude/…`) no viaja con el repo. Lo que importa de ella: **antes de
+  cualquier gasto en API, decirle a Daniel cuántas llamadas son y cuánto cuestan, y esperar su sí**
+  (~USD 0,004 por llamada con el modelo de la página; Sonnet 5.5, ~USD 0,022).
