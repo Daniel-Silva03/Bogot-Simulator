@@ -284,6 +284,10 @@ sobre el tono por grupo de D18. **Resuelta el 5/10 (opción 3):** se muestra com
 de acuerdo o sí/no, el mejor método (vecinos por texto) acierta el lado de la mayoría el 63 %, contra 57 % de decir
 siempre el lado mayoritario, y yerra 18 puntos en el porcentaje. **No llega a la regla:** la página sigue sin decir
 «sí» o «no». Lo siguiente, a decidir por Daniel: Sonnet sobre este subconjunto (~USD 2) o el camino 3.
+**Paso 2, Sonnet (5/10, pre-registrado, USD 1,73; `NIVEL_ACUERDO_SONNET_RESULTS.md`): pasa la regla.** Error 13,9
+puntos, acierta el lado de la mayoría el 80 % (contra 57 % de la referencia) y, cuando su rango no cruza el 50 %,
+acierta 16 de 16. Primer método que cruza la vara. **No va a la página todavía:** sigue la validación pre-registrada
+en el guardado.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
