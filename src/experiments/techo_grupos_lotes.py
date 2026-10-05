@@ -17,6 +17,11 @@ DI-TL1. **Las mismas funciones que el lote 1**, sin copiarlas: `techo_grupos.ora
     `banco_lote2` y `banco_lote3` que dieron sus resultados reales.
 
 DI-TL2. **Partición por persona** (pre-registro §3): cada persona es su propio «conglomerado».
+
+DI-TL3. **La réplica del lote 4 omite las particiones sin pares claros** (5/10, al correr). Hecho: con una
+    sola pregunta, a veces la mitad A no tiene ningún par claro y `techo_grupos.medida_replica` divide por
+    cero. Se cuenta solo sobre las particiones con pares y se informa cuántas fueron. No toca los lotes 2 y
+    3 (la cifra principal), que tienen pares en todas.
 """
 
 from __future__ import annotations
@@ -76,6 +81,20 @@ def base_lote(lote: int):
     return x_de, w, g
 
 
+def replica_con_pares(fuente: dict, semilla: int, n: int = tg.N_PARTICIONES) -> dict:
+    """DI-TL3: como `techo_grupos.medida_replica`, pero sin las particiones que no dejan pares claros."""
+    rng = np.random.default_rng(semilla)
+    tasas = []
+    for _ in range(n):
+        ac, pa = tg.replica(fuente["preguntas"], tg.sortear_mitad(fuente["psu"], rng))
+        if pa:
+            tasas.append(ac / pa)
+    if not tasas:
+        return {"media": None, "particiones_con_pares": 0}
+    return {"media": float(np.mean(tasas)), "p5": float(np.percentile(tasas, 5)), "p95": float(np.percentile(tasas, 95)),
+            "particiones_con_pares": len(tasas), "particiones": n}
+
+
 def tono_en_pares(motor, tono: np.ndarray, reales_lote: dict) -> tuple[int, int]:
     """(aciertos, pares) del tono general (DI-PP4, DI-PP5) en los pares claros reales."""
     from src.experiments import practica_puente as pp
@@ -110,8 +129,8 @@ def main() -> int:
         qs = preguntas_replica(R[n], sorteo, x_de, w, g)
         fuentes[(f"lote{n}", n)] = {"psu": np.arange(len(w)).astype(str), "preguntas": qs}       # DI-TL2
     rep = tg.medida_replica({k: v for k, v in fuentes.items() if k[1] in PRINCIPAL}, semilla=SEMILLA)
-    rep4 = tg.medida_replica({k: v for k, v in fuentes.items() if k[1] == 4}, semilla=SEMILLA)
-    print(f"réplica lotes 2-3: {rep['media']:.3f} (p5 {rep['p5']:.3f}, p95 {rep['p95']:.3f}) | lote 4: {rep4['media']:.3f}")
+    rep4 = replica_con_pares(fuentes[("lote4", 4)], SEMILLA)                     # DI-TL3
+    print(f"réplica lotes 2-3: {rep['media']:.3f} (p5 {rep['p5']:.3f}, p95 {rep['p95']:.3f}) | lote 4: {rep4['media'] if rep4['media'] is None else round(rep4['media'], 3)} en {rep4['particiones_con_pares']} particiones con pares")
     llamar, modelo = mo.cliente(simulado=True)                                  # sin API: solo la población
     M = mo.Motor(llamar, modelo)
     tono = pp.tono_general(M)
