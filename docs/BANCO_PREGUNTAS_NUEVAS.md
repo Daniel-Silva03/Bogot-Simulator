@@ -393,3 +393,44 @@ no entran.
   - guardado: 51 + 11 + 91 + 1 = 154.
 - Las preguntas de **valoración de proyectos de ciudad** (el metro: orgullo, necesidad, si lo usaría;
   la bicicleta) quedaron repartidas entre práctica y guardado según su familia.
+
+## 14. Quinto lote: Encuesta Distrital de Percepción 2025 (pre-registro, 5/10, antes de sortear)
+
+**Fuente.** Encuesta Distrital de Percepción (EDP), año móvil 2025, de la Secretaría Distrital de
+Planeación. Microdatos públicos y anonimizados, que Daniel encontró y cuya descarga autorizó el 5/10:
+`data/raw/sdp/base_ano_movil_2025.csv` (9,8 MB) y su diccionario (no se suben).
+- Probabilística, en hogares y presencial: **13.082 personas adultas**, una por fila, con factor de
+  expansión calibrado (`fexp_calp_anu`).
+- Las 19 localidades urbanas (`Cod_Locali`, numeración oficial) y UPL.
+- Es **independiente** de la población del simulador.
+
+**Datos personales.** El formulario pregunta documento y fecha de nacimiento, pero la base publicada no
+los trae; se revisó por nombre de columna antes de leer valores. Las `DIRECTORIO_*` son identificadores
+de la encuesta (manzana, predio, hogar y persona), no ubicaciones.
+
+**Lo que se miró antes de escribir esto:** diccionario, nombres de columnas, códigos presentes y la
+correspondencia de localidades. **Ningún porcentaje.**
+
+**Preguntas: las 40 afirmaciones de acuerdo de 1 a 5** (`[A-J]x104`, `x105`, `x408`, `x503`, `x602`,
+`x603`, `x604`, `x704`).
+- Escala: 1 Totalmente en desacuerdo … 5 Totalmente de acuerdo; 99 = Ns/Nr, que es «no sabe».
+- **No entran dos, por repetir el catálogo** (regla 3 de §12):
+  - `Hx704`, «me siento orgulloso/a de vivir en Bogotá» = `AG2`;
+  - `Ax602`, «me siento satisfecho con el principal medio de transporte» = `MV4`.
+- **Quedan 38.**
+- **Favorable:** 4 y 5 (de acuerdo y totalmente de acuerdo).
+- **Familia:** el bloque, es decir, las 8 preguntas del formulario.
+- **Texto en la página:** «¿Está de acuerdo con que «<afirmación del diccionario>»?».
+
+**Sorteo.** Regla 3 de DI-BA5, por familia, con la semilla **20261009**: 4 familias al guardado y 4 a
+práctica.
+
+**Resultados reales, solo de práctica.** Como en los demás lotes:
+- **Peso:** `fexp_calp_anu`.
+- **Sexo:** `D1`, sexo al nacer (1 Hombre, 2 Mujer; el 3 no entra en el grupo).
+- **Edad:** `A6x3`, en años, en los tramos de la población.
+- **Estrato:** `H1`, en 1, 2, 3, 4 y 5-6; 7 («no tiene servicio») y 99 no entran.
+- **Localidad:** `Cod_Locali`.
+- **Pares claros:** regla DI-BR5 y z > 1,96.
+
+**Código:** `src/experiments/banco_lote5.py`, con pruebas en `tests/test_banco_lote5.py`.
