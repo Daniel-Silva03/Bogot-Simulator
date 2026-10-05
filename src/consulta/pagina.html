@@ -7,312 +7,338 @@
 <title>Bogotá Sintética</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap">
 <style>
-/* Sistema de diseño: DESIGN.md («bioluminescent control room»), 30/09/2026.
-   Oscuro, bicromático: neutros casi negros + menta. Menta eléctrica solo para la
-   acción principal, la selección y lo que está «vivo»; el resto, menta pálida.
-   Euclid Circular A y Onsite SemiMono se sustituyen por Inter y JetBrains Mono
-   (los sustitutos que el mismo documento nombra). Única desviación consciente:
-   el gris de texto secundario se aclara (#5e6262 sobre #000a06 no se lee). */
+/* Sistema de diseño: DESIGN.md de la raíz («terminal de fósforo», 5/10/2026; reemplaza
+   el de §5.1). Negro, verde fósforo y un solo acento lima, que rellena un único
+   elemento por pantalla: el botón «Preguntar» (o el de la portada). Goga se sustituye
+   por Inter Tight, como dice el documento. Movimiento (skill emil-design-eng): solo
+   donde explica algo, con salida rápida, menos de 300 ms, y nada con movimiento reducido.
+   Variante B del 5/10: el resultado se lee de arriba abajo y el mapa y la tabla de
+   localidades quedan al mismo nivel (PAGINA_CONSULTA §5.16). */
 :root{
-  --canvas:#000a06; --card:#0a1a14; --elevado:#161818;
-  --blanco:#ffffff; --texto-2:#a3aca8; --texto-3:#7d8683; --humo:#828282;
-  --menta:#7affb4; --menta-palida:#e3ffef;
-  --linea:rgba(227,255,239,.09); --linea-2:rgba(227,255,239,.16);
-  --bloom:radial-gradient(circle, rgba(0,100,70,.4) 0%, rgba(0,60,40,.2) 30%, rgba(0,30,20,.08) 55%, rgba(0,0,0,0) 75%);
-  --pino-abismo:linear-gradient(rgb(15,58,43) 0%, rgb(0,10,7) 100%);
-  --r-card:16px; --r-input:8px; --r-pill:999px;
+  --vacio:#000000; --suelo:#181818; --velo:#212525;
+  --borde:#485346; --borde-2:#1f2a33; --pino:#3e4a3c;
+  --lima:#7fee64; --fosforo:#ddffdc;
+  --texto:#8cab87; --lead:#aed2a4; --ceja:#9cbf93; --helecho:#859984;
+  --r-card:8px; --r-btn:12px; --r-pill:9999px;
+  --titulo:"Inter Tight",Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --salida:cubic-bezier(.23,1,.32,1);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--canvas);color:var(--blanco);font:400 16px/1.5 var(--sans);letter-spacing:-.16px;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{font-weight:300;margin:0}
-a{color:var(--menta-palida)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--vacio);color:var(--texto);font:400 16px/1.5 var(--sans);letter-spacing:-.022em;font-feature-settings:"cv11";-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--titulo);font-weight:400;color:var(--fosforo);margin:0}
+p{margin:0}
+a{color:var(--helecho);text-underline-offset:3px}
 button{font:inherit;cursor:pointer}
-.envoltura{max-width:1200px;margin:0 auto;padding:0 24px}
-.mono{font-family:var(--mono);letter-spacing:.01em}
+.envoltura{max-width:1280px;margin:0 auto;padding:0 48px}
+.mono{font-family:var(--mono);letter-spacing:0}
 .oculto{display:none!important}
-#sugerencia,#resultado{scroll-margin-top:96px}
-:focus-visible{outline:2px solid var(--menta);outline-offset:2px}
+.ceja{display:block;font:500 12px/1.33 var(--sans);letter-spacing:.6px;text-transform:uppercase;color:var(--ceja)}
+.nota{font-size:12px;line-height:1.5;color:var(--helecho);letter-spacing:0}
+#sugerencia,#resultado{scroll-margin-top:80px}
+:focus-visible{outline:2px solid var(--fosforo);outline-offset:2px}
 
-/* ---------- botones (siempre píldora) ---------- */
-.btn{display:inline-flex;align-items:center;gap:8px;border-radius:var(--r-pill);padding:8px 16px;font:500 14px/1.4 var(--sans);letter-spacing:.14px;text-decoration:none;border:1px solid transparent;white-space:nowrap}
-.btn-menta{background:var(--menta);color:var(--canvas);box-shadow:rgba(1,5,27,.06) 0 0 0 1px inset}
-.btn-menta:hover{filter:brightness(1.06)}
-.btn-fantasma{background:transparent;color:var(--blanco);border-color:var(--blanco)}
-.btn-fantasma:hover{background:rgba(255,255,255,.06)}
-.btn:disabled{opacity:.45;cursor:default}
-.btn-grande{padding:12px 22px;font-size:15px}
+/* ---------- botones: 12 px de radio; la píldora lima es la única con relleno de color ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:var(--r-btn);border:1px solid var(--borde);background:var(--suelo);color:var(--fosforo);font:500 14px/1.2 var(--sans);letter-spacing:-.026em;text-decoration:none;white-space:nowrap;
+  transition:transform 160ms var(--salida),border-color 160ms ease,background-color 160ms ease}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.5;cursor:default;transform:none}
+.btn-fantasma{background:transparent}
+.btn-lima{background:var(--lima);border-color:var(--lima);color:var(--vacio);border-radius:var(--r-pill);padding:0 24px;font-size:16px;letter-spacing:-.022em}
+.btn-grande{min-height:52px;padding:0 28px;font-size:16px}
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{border-color:var(--fosforo)}
+  .btn-lima:hover{border-color:var(--lima);background:#93f27c}
+  a:hover{color:var(--fosforo)}
+}
 
-/* ---------- navegación ---------- */
-.barra{position:sticky;top:0;z-index:30;background:var(--canvas);border-bottom:1px solid var(--linea)}
-.barra .envoltura{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:80px}
-.marca{display:flex;align-items:center;gap:10px;font-weight:500;font-size:18px;letter-spacing:-.3px;color:var(--blanco);text-decoration:none}
+/* ---------- franja y barra de navegación ---------- */
+.anuncio{border-bottom:1px solid var(--borde-2);text-align:center;padding:10px 16px;font-size:14px;line-height:1.43;letter-spacing:-.026em}
+.anuncio a{color:var(--lead);text-decoration:none}
+.barra{position:sticky;top:0;z-index:30;background:rgba(33,37,37,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde-2)}
+.barra .envoltura{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:64px}
+.marca{display:inline-flex;align-items:center;gap:10px;min-height:44px;font:500 18px var(--titulo);letter-spacing:-.3px;color:var(--fosforo);text-decoration:none}
 .marca svg{width:26px;height:26px}
-.barra nav{display:flex;gap:32px}
-.barra nav a{color:var(--blanco);text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.14px;opacity:.72}
-.barra nav a:hover{opacity:1}
+.barra nav{display:flex;gap:8px}
+.barra nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;color:var(--fosforo);text-decoration:none;font-size:14px;font-weight:500;letter-spacing:-.026em}
 .barra .derecha{display:flex;justify-content:flex-end;gap:8px}
+@media (hover:hover) and (pointer:fine){.barra nav a:hover{color:var(--lima)}}
 
 /* ---------- portada ---------- */
-.portada{padding:112px 0 40px;text-align:center;position:relative;overflow-x:clip}
-.insignia{display:inline-flex;align-items:center;gap:6px;border-radius:100px;padding:4px 12px;font:500 12px/1.48 var(--sans);letter-spacing:.12px}
-.ins-viva{border:1px solid var(--linea-2);color:var(--menta-palida)}
-.ins-viva i{width:6px;height:6px;border-radius:50%;background:var(--menta);box-shadow:0 0 8px var(--menta)}
-.portada h1{font-size:clamp(40px,7vw,68px);line-height:1.04;letter-spacing:clamp(-4.08px,-.06em,-2px);margin:24px auto 24px;max-width:13em}
-.portada h1 span{color:var(--menta-palida)}
-.lead{font-size:18px;line-height:1.5;color:var(--texto-2);max-width:60ch;margin:0 auto}
-.dos-botones{display:flex;gap:8px;justify-content:center;margin-top:32px;flex-wrap:wrap}
-.escena{position:relative;margin:56px auto 0;max-width:1000px}
-.escena::before{display:none;content:"";position:absolute;inset:-120px -10%;background:var(--bloom);pointer-events:none}
-.cifras{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:760px;margin:0 auto}
-.cifra{background:var(--card);border:1px solid var(--linea);border-radius:var(--r-card);padding:24px;text-align:left}
-.cifra b{display:block;font-family:var(--mono);font-weight:400;font-size:28px;letter-spacing:-.5px}
-.cifra span{font-size:14px;color:var(--texto-2);letter-spacing:.14px}
-.puntos{position:relative;width:100%;max-width:760px;height:auto;display:block;margin:8px auto 0}
-.aviso-linea{position:relative;display:flex;gap:10px;justify-content:center;align-items:flex-start;margin:24px auto 0;max-width:640px;font-size:14px;color:var(--texto-2);letter-spacing:.14px;text-align:left}
-.aviso-linea svg{flex:none;width:18px;height:18px;color:var(--menta-palida);margin-top:1px}
+.portada{padding:112px 0 40px;position:relative}
+.portada h1{font-size:clamp(40px,7vw,64px);line-height:1;letter-spacing:-.007em;margin:16px 0 24px;max-width:12em;font-weight:500}
+.portada h1 span{color:var(--lead)}
+.lead{font-size:20px;line-height:1.5;color:var(--lead);max-width:40em;letter-spacing:-.018em}
+.dos-botones{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.escena{margin-top:56px}
+.cifras{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:840px}
+.cifra{background:var(--suelo);border:1px solid var(--borde-2);border-radius:var(--r-card);padding:24px 32px}
+.cifra b{display:block;font:400 28px/1.2 var(--mono);color:var(--fosforo)}
+.cifra span{font-size:14px;letter-spacing:-.026em}
+.puntos{width:100%;max-width:840px;height:auto;display:block;margin-top:8px}
+.aviso-linea{display:flex;gap:10px;align-items:flex-start;margin-top:24px;max-width:640px;font-size:14px;line-height:1.43;letter-spacing:-.026em}
+.aviso-linea svg{flex:none;width:18px;height:18px;color:var(--fosforo);margin-top:1px}
 
-/* ---------- secciones ---------- */
+/* ---------- secciones y tarjetas ---------- */
 section{padding:80px 0}
-.cabeza{margin-bottom:40px;max-width:720px}
-.cabeza .insignia{margin-bottom:16px}
-.cabeza h2{font-size:clamp(32px,4.5vw,48px);line-height:1.1;letter-spacing:clamp(-1.92px,-.04em,-1px)}
-.cabeza p{margin:16px 0 0;font-size:18px;color:var(--texto-2)}
+.cabeza{margin-bottom:40px;max-width:760px}
+.cabeza .ceja{margin-bottom:12px}
+.cabeza h2{font-size:clamp(32px,4.5vw,42px);line-height:1.05;letter-spacing:-.008em}
+.cabeza p{margin-top:16px;font-size:18px;color:var(--lead);letter-spacing:-.02em}
 .rejilla-4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
 .rejilla-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.tarjeta{background:var(--card);border:1px solid var(--linea);border-radius:var(--r-card);padding:24px}
-.tarjeta .ico{width:24px;height:24px;color:var(--menta-palida);margin-bottom:24px}
-.tarjeta .paso{font-family:var(--mono);font-size:12px;color:var(--texto-3);letter-spacing:.12px;display:block;margin-bottom:8px}
-.tarjeta h3{font-size:20px;font-weight:500;letter-spacing:-.4px;line-height:1.34;margin-bottom:8px}
-.tarjeta p,.tarjeta li{margin:0;color:var(--texto-2);font-size:16px}
+.tarjeta{background:var(--suelo);border:1px solid var(--borde-2);border-radius:var(--r-card);padding:32px}
+.tarjeta .ico{width:24px;height:24px;color:var(--fosforo);margin-bottom:24px}
+.tarjeta .paso{font:400 12px var(--mono);color:var(--ceja);display:block;margin-bottom:8px}
+.tarjeta h3{font-size:24px;line-height:1.3;letter-spacing:-.013em;margin-bottom:8px}
+.tarjeta p,.tarjeta li{color:var(--texto);font-size:16px}
 .tarjeta ul{padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px}
-.tarjeta .ej{margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--menta-palida);letter-spacing:.12px}
+.tarjeta .ej{margin-top:16px;font:400 12px/1.5 var(--mono);color:var(--lead)}
 .tipos{margin-top:24px}
 .tipos .tarjeta{background:transparent}
-.ins-cat{background:var(--menta-palida);color:var(--canvas)}
-.ins-nueva{border:1px solid var(--blanco);color:var(--blanco)}
-/* DI-CO20: lo primero de una pregunta nueva es decir que no se puede responder */
-.sin-respuesta{margin:12px 0 4px;padding:16px;border:1px dashed var(--humo);border-radius:var(--r-input);background:var(--elevado)}
-.sin-respuesta .sr-titulo{font-size:22px;line-height:1.3;letter-spacing:-.4px;font-weight:300;color:var(--blanco);margin:0 0 8px}
-.sin-respuesta p:last-child{font-size:14px;color:var(--texto-2);margin:0;letter-spacing:.14px}
-/* D19 (DI-CO22): la estimación de una pregunta nueva */
-.estimacion{margin:12px 0 4px;padding:16px;border:1px solid var(--linea-2);border-radius:var(--r-input);background:var(--elevado)}
-.estimacion.e-sí{border-color:var(--menta-palida)}
-.estimacion.e-dividida{border-style:dashed}
-/* auditoría 5/10: en «dividida» el porcentaje no debe leerse como respuesta; manda el rango */
-.estimacion.e-dividida .grande b{font-size:30px;color:var(--texto-2);letter-spacing:-.8px}
-.estimacion.e-dividida .grande span{color:var(--blanco);font-size:15px}
-.estimacion.e-dividida .rango-est i{background:rgba(227,255,239,.42)}
-.estimacion .est-titulo{font-size:26px;line-height:1.2;letter-spacing:-.5px;font-weight:300;color:var(--blanco);margin:0 0 4px}
-.estimacion .grande{margin:4px 0 8px}
-.estimacion .grande b{font-size:44px}
-.rango-est{position:relative;height:10px;background:rgba(255,255,255,.06);border-radius:100px;margin:10px 0 4px}
-.rango-est i{position:absolute;top:0;bottom:0;border-radius:100px;background:rgba(227,255,239,.28)}
-.rango-est b{position:absolute;top:-3px;width:4px;height:16px;border-radius:2px;background:var(--menta-palida);transform:translateX(-50%)}
-.rango-est em{position:absolute;top:-6px;bottom:-6px;width:1px;background:var(--humo)}
-.rango-etq{display:flex;justify-content:space-between;font:400 11px var(--mono);color:var(--texto-3)}
-.estimacion p.nota{margin-top:10px}
-/* D18 (DI-CO14): el tono general por grupo, rotulado como lo que es */
-.aviso-tono{border-left:2px dashed var(--humo);padding-left:10px;color:var(--texto-2)}
-.ins-fuera{border:1px solid var(--humo);color:var(--humo)}
+.insignia{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0 12px;border-radius:var(--r-pill);border:1px solid var(--borde);font:500 12px/1.3 var(--sans);letter-spacing:0;color:var(--fosforo)}
+.ins-cat{border-color:var(--fosforo)}
+.ins-nueva{border-style:dashed}
+.ins-fuera{color:var(--helecho)}
+.panel{background:var(--suelo);border:1px solid var(--borde-2);border-radius:var(--r-card);padding:32px;min-width:0}
 
-/* ---------- espacio de trabajo (la «vitrina», sobre el bloom) ---------- */
-.trabajo{position:relative;overflow:clip}   /* clip, no hidden: hidden deja que scrollIntoView desplace la sección de lado */
-.trabajo::before{content:"";position:absolute;left:50%;top:48%;width:1600px;height:1400px;transform:translate(-50%,-50%);background:var(--bloom);pointer-events:none}
-.trabajo .envoltura{position:relative}
-.mesa{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px;align-items:start;background:var(--card);border:1px solid var(--linea);border-radius:var(--r-card);padding:24px;box-shadow:rgba(0,0,0,.02) 0 3px 3px 0,rgba(0,0,0,.01) 0 7px 7px 0,rgba(0,0,0,.01) 0 14px 14px 0,rgba(0,0,0,.01) 0 25px 24px 0}
-.panel{display:flex;flex-direction:column;gap:16px;min-width:0}
-.bloque{background:var(--canvas);border:1px solid var(--linea);border-radius:var(--r-input);padding:16px}
-.etq-min{font:500 12px/1.48 var(--sans);letter-spacing:.12px;color:var(--texto-3);text-transform:uppercase}
-.entrada{position:relative;margin-top:8px}
-textarea{width:100%;min-height:104px;resize:vertical;border:1px solid var(--linea-2);border-radius:var(--r-input);padding:16px 16px 52px;font:400 16px/1.5 var(--sans);letter-spacing:-.16px;background:var(--card);color:var(--blanco)}
-textarea::placeholder{color:var(--texto-3)}
-textarea:focus{outline:none;border-color:var(--menta-palida)}
-.entrada .enviar{position:absolute;right:10px;bottom:12px}
-.contador{position:absolute;left:14px;bottom:18px;font-family:var(--mono);font-size:12px;color:var(--texto-3)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.chip{border:1px solid var(--linea-2);background:transparent;color:rgba(255,255,255,.72);border-radius:var(--r-pill);padding:4px 12px;font:500 12px/1.48 var(--sans);letter-spacing:.12px;text-align:left}
-.chip:hover{color:var(--blanco);border-color:var(--menta-palida)}
-.propuesta{font-size:20px;line-height:1.34;letter-spacing:-.4px;font-weight:300;margin:12px 0}
-.escala-lista{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 12px}
-.escala-lista span{font:400 12px/1.48 var(--mono);border:1px solid var(--linea);border-radius:100px;padding:2px 10px;color:var(--texto-2)}
-.razon{font-size:14px;color:var(--texto-2);margin:0 0 16px;letter-spacing:.14px}
+/* ---------- Pregúntale a Bogotá: la barra de la pregunta ---------- */
+.trabajo{position:relative;overflow:clip}   /* clip, no hidden: hidden deja que scrollIntoView desplace la sección de lado (§5.1) */
+.trabajo .envoltura{display:flex;flex-direction:column;gap:24px}
+.trabajo .cabeza{margin-bottom:16px}
+.consulta{display:flex;flex-direction:column;gap:16px}
+.temas{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.temas .ceja{margin-right:8px}
+.tema{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;border-radius:var(--r-btn);border:1px solid var(--borde);background:transparent;color:var(--texto);font:500 14px/1.2 var(--sans);letter-spacing:-.026em;text-align:left;
+  transition:transform 160ms var(--salida),border-color 160ms ease,color 160ms ease}
+.tema svg{width:18px;height:18px;flex:none}
+.tema:active{transform:scale(.97)}
+.tema[aria-pressed="true"]{background:var(--velo);border-color:var(--fosforo);color:var(--fosforo)}
+.sin-mapa{display:block;font:400 11px var(--mono);color:var(--helecho);margin-top:2px}
+.entrada{display:flex;gap:12px;align-items:stretch}
+.campo{position:relative;flex:1;min-width:0}
+textarea{display:block;width:100%;min-height:56px;field-sizing:content;max-height:240px;resize:vertical;border:1px solid var(--borde);border-radius:var(--r-card);padding:15px 72px 15px 16px;font:400 16px/1.5 var(--sans);letter-spacing:-.022em;background:var(--vacio);color:var(--fosforo);transition:border-color 160ms ease}
+textarea::placeholder{color:var(--helecho)}
+textarea:focus{outline:none;border-color:var(--fosforo);box-shadow:0 0 0 1px var(--fosforo)}
+.contador{position:absolute;right:14px;bottom:10px;font:400 12px var(--mono);color:var(--helecho);pointer-events:none}
+.entrada .btn-lima{min-height:56px;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:8px 14px;border-radius:var(--r-btn);border:1px solid var(--borde-2);background:transparent;color:var(--texto);font:400 14px/1.43 var(--sans);letter-spacing:-.026em;text-align:left;
+  transition:transform 160ms var(--salida),border-color 160ms ease,color 160ms ease}
+.chip:active{transform:scale(.97)}
+.chip[aria-pressed="true"]{border-color:var(--fosforo);color:var(--fosforo)}
+@media (hover:hover) and (pointer:fine){
+  .tema:hover,.chip:hover{border-color:var(--fosforo);color:var(--fosforo)}
+}
+/* la reformulación: «así entendimos tu pregunta», en la misma barra */
+.reformulacion{border-top:1px solid var(--borde-2);padding-top:16px;display:flex;flex-direction:column;gap:10px}
+.reformulacion .fila-ref{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.propuesta{font:400 20px/1.3 var(--titulo);letter-spacing:-.018em;color:var(--fosforo)}
+.escala-lista{display:flex;flex-wrap:wrap;gap:6px}
+.escala-lista span{font:400 12px/1.5 var(--mono);border:1px solid var(--borde-2);border-radius:var(--r-pill);padding:2px 10px;color:var(--texto)}
+.razon{font-size:14px;line-height:1.43;color:var(--texto);letter-spacing:-.026em}
 .acciones{display:flex;gap:8px;flex-wrap:wrap}
-.cargando{display:flex;align-items:center;gap:10px;color:var(--texto-2);font-size:14px}
-.cargando i{width:14px;height:14px;border-radius:50%;background:var(--menta);box-shadow:0 0 12px var(--menta);animation:latido 1s ease-in-out infinite}
-@keyframes latido{50%{opacity:.25;transform:scale(.7)}}
-.editable{min-height:84px;padding-bottom:16px;margin-top:8px}
+.editable{min-height:84px;padding:12px 16px}
+/* estados: cargando y error */
+.cargando{display:flex;align-items:center;gap:12px;color:var(--lead);font-size:14px}
+.cargando i{width:10px;height:10px;border-radius:50%;background:var(--fosforo);animation:latido 1s linear infinite}
+@keyframes latido{50%{opacity:.25}}
+.error{display:flex;flex-direction:column;gap:12px;align-items:flex-start;border-color:var(--borde)}
+.error p{color:var(--lead)}
 
-/* resultado */
-.banda{display:flex;gap:10px;align-items:flex-start;background:var(--elevado);border-left:2px solid var(--menta-palida);border-radius:var(--r-input);padding:10px 14px;font-size:14px;color:var(--texto-2);margin:12px 0 16px;letter-spacing:.14px}
-.banda svg{flex:none;width:16px;height:16px;color:var(--menta-palida);margin-top:2px}
-.resultado h3{font-size:22px;line-height:1.3;letter-spacing:-.4px;margin-top:12px}
-.grande{display:flex;align-items:baseline;gap:12px;margin:8px 0 4px}
-.grande b{font-weight:300;font-size:56px;line-height:1;letter-spacing:-2.5px;color:var(--menta-palida)}
-.grande span{color:var(--texto-2);font-size:14px;max-width:16em;letter-spacing:.14px}
-.dist{display:flex;height:28px;border-radius:var(--r-input);overflow:hidden;margin:16px 0 8px;gap:2px}
-.dist div{height:100%}
-.dist-leyenda{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-size:12px;color:var(--texto-3);letter-spacing:.12px}
-.dist-leyenda b{display:block;font:400 14px var(--mono);color:var(--blanco)}
-.grupos{display:grid;gap:16px;margin-top:24px}
-.grupo h4{font:500 12px/1.48 var(--sans);letter-spacing:.12px;color:var(--texto-3);text-transform:uppercase;margin-bottom:6px}
-.barra-g{display:grid;grid-template-columns:11em 1fr 3.4em;align-items:center;gap:8px;font-size:14px;margin:6px 0;color:var(--texto-2)}
-.pista{height:6px;background:rgba(255,255,255,.06);border-radius:100px;position:relative;overflow:hidden}
-.pista i{position:absolute;top:0;bottom:0;border-radius:100px}
-.pista.div::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--humo)}
-.barra-g .v{text-align:right;font:400 12px var(--mono);color:var(--blanco)}
-.puente-lista{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:8px}
-.puente-lista li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--texto-2)}
-/* D18 (DI-CO15): cada pregunta relacionada con lo que la gente respondió de verdad */
-.puente-lista .rel{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
-.puente-lista .dato{display:block;font-size:12px;color:var(--texto-3)}
-.puente-lista .dato b{font:400 14px var(--mono);color:var(--menta-palida);margin-right:6px}
-.puente-lista .dist{height:8px;margin:0}
-.puente-lista .dist span{height:100%}
-.ver-rel{align-self:flex-start;background:none;border:0;padding:0;color:var(--menta-palida);font:500 12px/1.48 var(--sans);letter-spacing:.12px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-.ver-rel:hover{color:var(--blanco)}
-.sg{flex:none;width:20px;height:20px;border-radius:4px;display:grid;place-items:center;font:400 12px var(--mono)}
-.sg.mas{background:var(--menta-palida);color:var(--canvas)}
-.sg.menos{border:1px solid var(--humo);color:var(--humo)}
-.nota{font-size:12px;color:var(--texto-3);margin-top:12px;letter-spacing:.12px;line-height:1.48}
+/* ---------- el resultado: franja de resumen ---------- */
+#resultado{display:flex;flex-direction:column;gap:24px}
+.resumen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.resumen .panel{display:flex;flex-direction:column;gap:12px}
+.cifra-grande{font:400 64px/1 var(--mono);color:var(--fosforo);letter-spacing:-.02em;white-space:nowrap}
+.lead-t{font-size:16px;line-height:1.5;color:var(--lead)}
+.lead-t .mono{color:var(--fosforo);white-space:nowrap}
+.dist{display:flex;height:12px;border-radius:4px;overflow:hidden;gap:2px}
+.dist > *{height:100%}
+.dist-leyenda{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:6px 10px;align-items:center;font-size:14px;line-height:1.3}
+.dist-leyenda i{width:10px;height:10px;border-radius:2px;outline:1px solid var(--borde)}
+.dist-leyenda b{font:400 14px var(--mono);color:var(--fosforo);text-align:right}
+.filtros{display:flex;flex-direction:column;gap:8px}
+.filtro{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;padding:0 16px;border-radius:var(--r-btn);border:1px solid var(--borde);background:transparent;color:var(--texto);font:500 14px var(--sans);letter-spacing:-.026em;
+  transition:transform 160ms var(--salida),border-color 160ms ease,background-color 160ms ease,color 160ms ease}
+.filtro:active{transform:scale(.97)}
+.filtro .num{font-family:var(--mono);color:var(--fosforo)}
+.muestra{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px;vertical-align:-1px;outline:1px solid rgba(0,0,0,.4)}
+.filtro > span:first-child{display:inline-flex;align-items:center}
+.leyenda-cat{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:8px 10px;align-items:center}
+.leyenda-cat b{font:400 14px var(--mono);color:var(--fosforo)}
+.filtro[aria-pressed="true"]{background:var(--velo);border-color:var(--fosforo);color:var(--fosforo)}
+@media (hover:hover) and (pointer:fine){.filtro:hover{border-color:var(--fosforo)}}
+.banda{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--borde);border-radius:var(--r-card);padding:14px 20px;font-size:14px;line-height:1.43;color:var(--lead);letter-spacing:-.026em}
+.banda svg{flex:none;width:18px;height:18px;color:var(--fosforo);margin-top:1px}
+/* D19 (DI-CO22): la estimación; punteada porque no es una medición */
+.estimacion{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:40px;align-items:center}
+.estimacion.e-dividida{border:1px dashed var(--borde)}
+.estimacion.e-sí,.estimacion.e-no{border-color:var(--borde)}
+.est-cab{display:flex;flex-direction:column;gap:8px}
+.est-titulo{font:400 42px/1.05 var(--titulo);letter-spacing:-.008em;color:var(--fosforo)}
+.estimacion .cifra-grande{font-size:44px}
+.est-rango{display:flex;flex-direction:column;gap:10px}
+.rango-est{position:relative;height:28px;background:var(--velo);border-radius:6px}
+.rango-est i{position:absolute;top:0;bottom:0;border-radius:6px;background:var(--borde)}
+.rango-est b{position:absolute;top:6px;width:3px;height:16px;border-radius:1px;background:var(--texto);transform:translateX(-50%)}
+.estimacion:not(.e-dividida) .rango-est b{background:var(--fosforo)}
+.rango-est em{position:absolute;top:-6px;bottom:-6px;width:1px;background:var(--fosforo)}
+.rango-etq{display:grid;grid-template-columns:1fr auto 1fr;font:400 12px var(--mono);color:var(--helecho)}
+.rango-etq span:nth-child(2){color:var(--fosforo)}
+.rango-etq span:last-child{text-align:right}
+.apoyo{display:flex;flex-direction:column;gap:12px}
+.apoyo-rejilla{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.dato-t{background:var(--velo);border-radius:var(--r-card);padding:20px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.43}
+.dato-t > span:first-child{color:var(--fosforo)}
+.dato-t b{font:400 24px/1.2 var(--mono);color:var(--fosforo)}
+/* DI-CO20: sin estimación, lo primero es decir que no se puede responder */
+.sin-respuesta{border:1px dashed var(--borde);display:flex;flex-direction:column;gap:8px}
+.sin-respuesta .sr-titulo{font:400 24px/1.3 var(--titulo);letter-spacing:-.013em;color:var(--fosforo)}
+.sin-respuesta p:last-child{font-size:14px;line-height:1.43}
+.intro{font-size:14px;line-height:1.43;color:var(--lead);letter-spacing:-.026em}
 
-/* mapa */
-.lienzo{position:sticky;top:104px;background:var(--canvas);border:1px solid var(--linea);border-radius:var(--r-card);overflow:hidden;min-width:0}
-.lienzo-cab{padding:16px 20px 0}
-.lienzo-cab h3{font-size:20px;letter-spacing:-.4px;font-weight:400}
-.lienzo-cab p{margin:4px 0 0;font-size:14px;color:var(--texto-2);letter-spacing:.14px}
-#mapa{width:100%;height:min(62vh,580px);display:block;letter-spacing:0}   /* en grados, el tracking del cuerpo amontona las letras */
-#mapa .loc{stroke:rgba(227,255,239,.22);stroke-width:.0007;cursor:pointer;transition:fill .6s ease;outline:none}
+/* ---------- el informe: mapa y tabla al mismo nivel ---------- */
+.informe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+.lienzo,.lado{display:flex;flex-direction:column;gap:16px}
+.lienzo-cab h3,.lado h3,.grupos-panel h3{font-size:24px;line-height:1.3;letter-spacing:-.013em}
+.lienzo-cab p,.lado .sub{margin-top:4px;font-size:14px;line-height:1.43;letter-spacing:-.026em}
+.marco{background:var(--vacio);border:1px solid var(--borde-2);border-radius:var(--r-card);overflow:hidden}
+#mapa{width:100%;height:auto;aspect-ratio:3/4;max-height:760px;display:block;letter-spacing:0}   /* en grados, el tracking del cuerpo amontona las letras (§5.1) */
+#mapa .loc{stroke:rgba(221,255,220,.24);stroke-width:.0007;cursor:pointer;outline:none}
+@media (prefers-reduced-motion:no-preference){#mapa .loc{transition:fill 240ms ease,opacity 200ms ease}}
 /* El foco del teclado no puede usar `outline`: en un SVG en grados, el contorno se
    escala miles de veces y tapa todo el mapa (el «amarillo» del 30/09). */
 #mapa .loc:focus,#mapa .loc:focus-visible{outline:none}
-#mapa .loc:hover{stroke:var(--menta-palida);stroke-width:.0016}
-#mapa .loc.sel,#mapa .loc:focus-visible{stroke:var(--menta);stroke-width:.0024}
-#mapa .verde{fill:rgba(227,255,239,.05);pointer-events:none}
-#mapa .via{fill:none;stroke:rgba(255,255,255,.14);stroke-width:.0009;pointer-events:none}
-#mapa .etq{letter-spacing:0;font:500 .0064px var(--sans);fill:rgba(255,255,255,.82);text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:rgba(0,10,6,.75);stroke-width:.0012px}
-#mapa.apagado .loc{fill:#0d1f18!important}
-.leyenda{background:var(--elevado);border:1px solid var(--linea);border-radius:var(--r-input);padding:12px 14px;font-size:12px;letter-spacing:.12px}
-.leyenda b{font-weight:500;color:var(--blanco)}
-.leyenda .rampa{height:8px;border-radius:100px;margin:8px 0 4px}
-.leyenda .ext{display:flex;justify-content:space-between;color:var(--texto-2);gap:8px}
-.ficha{background:var(--elevado);border:1px solid var(--linea);border-radius:var(--r-input);padding:14px;font-size:14px}
-.ficha h4{font-size:20px;letter-spacing:-.4px;margin-bottom:8px;font-weight:400}
-.ficha dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:6px 10px}
-.ficha dt{color:var(--texto-2);font-size:12px;letter-spacing:.12px}
-.ficha dd{margin:0;text-align:right;font:400 12px var(--mono)}
-.velo{margin:12px 20px 0;background:var(--elevado);border:1px solid var(--linea-2);border-left:2px solid var(--menta-palida);border-radius:var(--r-input);padding:14px 16px;font-size:14px;color:var(--texto-2);letter-spacing:.14px}
-.velo .acciones{margin-top:10px}
-/* debajo del mapa, nunca encima (30/09: la ficha y la leyenda tapaban localidades) */
-.lienzo-pie{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:0 16px 16px;align-items:start}
-.ranking{padding:0 16px 16px}
-.ranking h4{font:500 12px/1.48 var(--sans);letter-spacing:.12px;color:var(--texto-3);text-transform:uppercase;margin:4px 0 8px}
-.fila-r{display:grid;grid-template-columns:9.5em 1fr 3.2em;align-items:center;gap:8px;font-size:13px;padding:3px 4px;border-radius:4px;color:var(--texto-2);cursor:pointer;background:transparent;border:0;width:100%;text-align:left}
-.fila-r:hover,.fila-r.sel{background:rgba(255,255,255,.05);color:var(--blanco)}
-.fila-r.atenuada{opacity:.3}
-.fila-r .v{font:400 12px var(--mono);color:var(--blanco);text-align:right}
-.intervalo{position:relative;height:14px}
-.intervalo i{position:absolute;top:6px;height:2px;background:var(--linea-2);border-radius:2px}
-.intervalo b{position:absolute;top:3px;width:8px;height:8px;margin-left:-4px;border-radius:50%}
-.intervalo em{position:absolute;top:0;bottom:0;width:1px;background:var(--humo)}
-.sin-mapa{display:block;font:400 11px var(--mono);color:var(--texto-3);letter-spacing:.1px}
-.riel button[aria-pressed="true"] .sin-mapa{color:var(--canvas);opacity:.7}
-@keyframes cambio{0%{box-shadow:0 0 0 0 rgba(122,255,180,.55);border-color:var(--menta)}100%{box-shadow:0 0 0 14px rgba(122,255,180,0);border-color:var(--linea)}}
-.lienzo.cambio{animation:cambio 1.2s ease-out}
-.velo b{display:block;color:var(--blanco);font-weight:500;font-size:16px;margin-bottom:6px}
-
-/* ---------- lo que se copió de la referencia de Refero (Metaview), 30/09 ---------- */
-.anuncio{background:var(--canvas);border-bottom:1px solid var(--linea);text-align:center;padding:8px 16px;font-size:14px;letter-spacing:.14px}
-.anuncio a{color:var(--blanco);text-decoration:none}
-.anuncio a:hover{text-decoration:underline}
-.btn-blanco{background:var(--blanco);color:var(--canvas)}
-.btn-blanco:hover{background:var(--menta-palida)}
-.btn-oscuro{background:var(--canvas);color:var(--blanco);border-color:var(--linea-2)}
-.portada{text-align:left}
-.portada h1{margin-left:0;max-width:12em}
-.portada .lead{margin:0}
-.dos-botones{justify-content:flex-start}
-.escena{margin-left:0;max-width:none}
-.cifras{margin:0;max-width:760px}
-.puntos{margin-left:0}
-.aviso-linea{justify-content:flex-start;margin-left:0}
-/* la vitrina: franja de aurora a todo lo ancho, con la maqueta del producto encima */
-.vitrina{position:relative;padding:56px 0 64px;margin-top:8px;overflow:clip;
-  background:radial-gradient(60% 90% at 12% 55%, rgba(0,150,170,.55) 0%, rgba(0,110,120,.25) 40%, rgba(0,0,0,0) 72%),
-             radial-gradient(55% 80% at 88% 40%, rgba(40,210,150,.40) 0%, rgba(0,110,80,.18) 45%, rgba(0,0,0,0) 75%),
-             linear-gradient(180deg, var(--canvas) 0%, #03261c 22%, #062a22 60%, var(--canvas) 100%)}
-.trabajo::before{display:none}
-.trabajo{padding-bottom:0}
-.mesa{grid-template-columns:190px minmax(0,400px) minmax(0,1fr);background:rgba(10,26,20,.92);backdrop-filter:blur(6px)}
-.riel{display:flex;flex-direction:column;gap:8px;padding-top:4px}
-.riel .etq-min{margin-bottom:4px}
-.riel button{display:flex;align-items:center;gap:10px;text-align:left;border:0;background:transparent;color:var(--texto-2);font:500 16px/1.3 var(--sans);letter-spacing:-.16px;padding:8px 10px;border-radius:4px}
-.riel button svg{width:18px;height:18px;flex:none}
-.riel button:hover{color:var(--blanco);background:rgba(255,255,255,.04)}
-.riel button[aria-pressed="true"]{background:var(--menta-palida);color:var(--canvas)}
-.entrada textarea{padding-right:64px}
-.enviar-circulo{position:absolute;right:12px;bottom:12px;width:40px;height:40px;border-radius:50%;border:1px solid var(--linea-2);background:var(--elevado);color:var(--blanco);display:grid;place-items:center}
-.enviar-circulo:hover{background:var(--menta);color:var(--canvas);border-color:var(--menta)}
-.enviar-circulo:disabled{opacity:.45}
-.enviar-circulo svg{width:18px;height:18px}
-.chips .chip[aria-pressed="true"]{background:var(--menta-palida);color:var(--canvas);border-color:var(--menta-palida)}
-.asistente{display:flex;gap:10px;align-items:flex-start;margin:4px 0 12px;font-size:14px;color:var(--texto-2);letter-spacing:.14px}
-.asistente .avatar{flex:none;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #7affb4, #0f3a2b 70%);box-shadow:0 0 10px rgba(122,255,180,.35)}
-.asistente b{color:var(--blanco);font-weight:500}
-.asistente .num{font-family:var(--mono);color:var(--blanco)}
-.filtros{display:flex;flex-wrap:wrap;gap:4px;margin:12px 0 4px}
-.filtro{height:28px;display:inline-flex;align-items:center;gap:6px;padding:0 10px;border:1px solid var(--linea-2);border-radius:4px;background:transparent;color:var(--texto-2);font:500 12px var(--sans);letter-spacing:.12px}
-.filtro .num{font-family:var(--mono);color:var(--blanco)}
-.filtro[aria-pressed="true"]{background:var(--menta-palida);color:var(--canvas);border-color:var(--menta-palida)}
-.filtro[aria-pressed="true"] .num{color:var(--canvas)}
+@media (hover:hover) and (pointer:fine){#mapa .loc:hover{stroke:var(--fosforo);stroke-width:.0016}}
+#mapa .loc.sel,#mapa .loc:focus-visible{stroke:var(--fosforo);stroke-width:.0032}   /* no en lima: se confundiría con «por encima» */
 #mapa .loc.atenuada{opacity:.18}
-/* declaración centrada con esfera luminosa */
-.declaracion{text-align:center;padding:96px 0 40px;overflow:clip}
+#mapa .verde{fill:rgba(221,255,220,.05);pointer-events:none}
+#mapa .via{fill:none;stroke:rgba(221,255,220,.12);stroke-width:.0009;pointer-events:none}
+#mapa .etq{letter-spacing:0;font:500 .0072px var(--sans);fill:rgba(221,255,220,.9);text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:rgba(0,0,0,.8);stroke-width:.0013px}
+#mapa.apagado .loc{fill:#101410!important;cursor:default}
+#mapa.apagado .etq{fill:rgba(221,255,220,.45)}
+#mapa.apagado .loc.sel{stroke:rgba(221,255,220,.5);stroke-width:.0016}   /* sin dato, la selección no se pinta de lima: no es una respuesta */
+/* debajo del mapa, nunca encima (30/09: la ficha y la leyenda tapaban localidades) */
+.lienzo-pie{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.leyenda{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.leyenda .rampa{height:8px;border-radius:4px}
+.leyenda .ext{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--helecho)}
+.ficha{background:var(--velo);border-radius:var(--r-card);padding:16px;font-size:14px}
+.ficha h4{font-size:20px;font-weight:500;letter-spacing:-.018em;margin-bottom:8px}
+.ficha dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:6px 12px}
+.ficha dt{font-size:14px}
+.ficha dd{margin:0;text-align:right;font:400 14px var(--mono);color:var(--fosforo)}
+/* sin mapa: qué pasa, por qué y qué hacer, en el encabezado y no encima del mapa */
+.velo{border:1px solid var(--borde);border-radius:var(--r-card);padding:20px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.43}
+.velo b{font:500 20px/1.3 var(--titulo);color:var(--fosforo);letter-spacing:-.018em}
+.velo .acciones{margin-top:4px}
+/* la tabla de localidades: la lectura accesible del mapa, de mayor a menor */
+.tabla-cab,.fila-r{display:grid;grid-template-columns:minmax(0,11em) minmax(0,1fr) 3.4em;align-items:center;gap:12px}
+.tabla-cab{min-height:32px;font-size:12px;color:var(--helecho);border-bottom:1px solid var(--borde-2);letter-spacing:0}
+.tabla-cab span:last-child{text-align:right}
+.fila-r{width:100%;min-height:44px;padding:0 8px;margin:0;border:0;border-bottom:1px solid var(--borde-2);background:transparent;color:var(--texto);font:400 14px var(--sans);letter-spacing:-.026em;text-align:left;
+  transition:opacity 200ms ease,background-color 160ms ease}
+.fila-r .marca-r{color:var(--helecho);margin-left:4px;font-size:12px}
+.fila-r.sel{background:var(--velo);color:var(--fosforo)}
+.fila-r.atenuada{opacity:.3}
+.fila-r .v{font:400 14px var(--mono);color:var(--fosforo);text-align:right}
+@media (hover:hover) and (pointer:fine){.fila-r:hover{background:var(--velo);color:var(--fosforo)}}
+.intervalo{position:relative;height:16px}
+.intervalo i{position:absolute;top:7px;height:2px;background:var(--borde);border-radius:1px}
+.intervalo b{position:absolute;top:3px;width:10px;height:10px;margin-left:-5px;border-radius:50%}
+.intervalo em{position:absolute;top:0;bottom:0;width:1px;background:var(--ceja)}
+.vacio{display:flex;flex-direction:column;gap:8px;padding:24px;border:1px dashed var(--borde-2);border-radius:var(--r-card);font-size:14px;line-height:1.43}
+.vacio b{font:400 20px/1.3 var(--titulo);color:var(--fosforo);letter-spacing:-.018em}
+/* «para explorar»: cada pregunta relacionada con lo que la gente respondió de verdad (D18, DI-CO15) */
+.puente-lista{list-style:none;padding:0;margin:0;display:flex;flex-direction:column}
+.puente-lista li{display:flex;gap:12px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--borde-2);font-size:14px;line-height:1.43}
+.puente-lista li:last-child{border-bottom:0}
+.puente-lista .rel{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+.puente-lista .rel > span:first-child{color:var(--fosforo)}
+.puente-lista .dato{font-size:12px;color:var(--helecho)}
+.puente-lista .dato b{font:400 14px var(--mono);color:var(--fosforo);margin-right:6px}
+.puente-lista .dist{height:8px}
+.ver-rel{align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;background:none;border:0;padding:0;color:var(--lead);font:500 14px var(--sans);letter-spacing:-.026em;text-decoration:underline;text-underline-offset:3px}
+@media (hover:hover) and (pointer:fine){.ver-rel:hover{color:var(--fosforo)}}
+.sg{flex:none;width:22px;height:22px;border-radius:4px;display:grid;place-items:center;font:400 12px var(--mono);margin-top:1px}
+.sg.mas{border:1px solid var(--fosforo);color:var(--fosforo)}
+.sg.menos{border:1px solid var(--borde);color:var(--helecho)}
+
+/* ---------- grupos ---------- */
+.grupos-panel{display:flex;flex-direction:column;gap:16px}
+.grupos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px 32px}
+.grupo h4{font:500 12px/1.33 var(--sans);letter-spacing:.6px;text-transform:uppercase;color:var(--ceja);margin-bottom:8px}
+.barra-g{display:grid;grid-template-columns:minmax(0,8em) minmax(0,1fr) 3.4em;align-items:center;gap:10px;font-size:14px;margin:8px 0}
+.pista{height:6px;background:var(--borde-2);border-radius:3px;position:relative;overflow:hidden}
+.pista i{position:absolute;top:0;bottom:0;border-radius:3px}
+.pista.div{overflow:visible}
+.pista.div::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--helecho)}
+.barra-g .v{text-align:right;font:400 14px var(--mono);color:var(--fosforo)}
+.aviso-tono{border-left:2px dashed var(--borde);padding-left:12px}
+
+/* ---------- declaración, fuentes y pie ---------- */
+.declaracion{text-align:center;padding:96px 0 40px}
 .declaracion + section{padding-top:40px}
-.declaracion h2{font-size:clamp(28px,4vw,40px);line-height:1.16;letter-spacing:-1.08px;max-width:22em;margin:0 auto}
-.declaracion h2 span{color:var(--texto-3)}
+.declaracion h2{font-size:clamp(28px,4vw,42px);line-height:1.1;letter-spacing:-.008em;max-width:22em;margin:0 auto}
+.declaracion h2 span{color:var(--helecho)}
 .declaracion .btn{margin-top:28px}
-.esfera{width:min(320px,64vw);aspect-ratio:1;margin:56px auto 0;border-radius:50%;
-  background:radial-gradient(circle at 38% 32%, #b8fff0 0%, #3fd6c0 14%, #0a8a9a 38%, #06405a 64%, #021a22 82%);
-  box-shadow:0 0 120px 30px rgba(0,160,170,.35), inset -30px -40px 80px rgba(0,0,0,.55);animation:flota 9s ease-in-out infinite}
-@keyframes flota{50%{transform:translateY(-10px) rotate(4deg)}}
-@media (prefers-reduced-motion: reduce){.esfera,.ins-viva i,.cargando i{animation:none}}
-/* muro de fuentes */
-.fuentes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px}
-.fuente{border:1px solid var(--linea);border-radius:8px;padding:18px 16px;text-align:center;font-weight:500;letter-spacing:-.2px;color:var(--blanco);background:var(--card)}
-.fuente small{display:block;font-weight:400;font-size:12px;color:var(--texto-3);letter-spacing:.12px;margin-top:4px}
-@media (max-width:1200px){
-  .mesa{grid-template-columns:minmax(0,400px) minmax(0,1fr)}
-  .riel{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}
-  .riel .etq-min{width:100%}
-}
-@media (max-width:1000px){ .mesa{grid-template-columns:1fr} }
-@media (max-width:600px){ .fuentes{grid-template-columns:1fr 1fr} .riel button{font-size:14px;padding:6px 8px} }
-footer{background:var(--pino-abismo);padding:80px 0 56px;color:var(--texto-2);font-size:14px;letter-spacing:.14px}
+.fuentes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+.fuente{border:1px solid var(--borde-2);border-radius:var(--r-card);padding:20px 16px;text-align:center;font-weight:500;color:var(--fosforo);background:var(--suelo)}
+.fuente small{display:block;font-weight:400;font-size:12px;color:var(--helecho);margin-top:4px;letter-spacing:0}
+footer{border-top:1px solid var(--borde-2);padding:64px 0 56px;color:var(--helecho);font-size:14px;line-height:1.43;letter-spacing:-.026em}
 footer .marca{margin-bottom:16px}
 
+/* ---------- movimiento reducido: nada se mueve ---------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:0s!important;animation:none!important}
+}
+
+/* ---------- pantallas medianas y celular ---------- */
+@media (max-width:1100px){
+  .resumen{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .resumen > :last-child{grid-column:1/-1}
+  .resumen > :last-child .filtros{flex-direction:row;flex-wrap:wrap}
+  .resumen > :last-child .filtro{flex:1 1 180px}
+}
 @media (max-width:1000px){
+  .envoltura{padding:0 24px}
   .barra nav{display:none}
   .barra .envoltura{grid-template-columns:1fr auto}
-  .mesa{grid-template-columns:1fr}
+  .informe{grid-template-columns:1fr}
   .rejilla-4{grid-template-columns:1fr 1fr}
   .rejilla-3{grid-template-columns:1fr}
-  .lienzo{position:relative;top:0}
+  .estimacion{grid-template-columns:1fr;gap:20px}
+}
+@media (max-width:700px){
+  .resumen{grid-template-columns:1fr}
+  .resumen > :last-child .filtros{flex-direction:column}
+  .resumen > :last-child .filtro{flex:none}
+  .lienzo-pie{grid-template-columns:1fr}
 }
 @media (max-width:600px){
   .envoltura{padding:0 16px}
+  .anuncio{font-size:12px;line-height:1.5;padding:8px 16px}
   .barra .derecha .btn-fantasma{display:none}
-  .portada{padding-top:64px}
+  .portada{padding-top:56px}
+  .lead{font-size:18px}
   .cifras,.rejilla-4{grid-template-columns:1fr}
-  .mesa{padding:16px}
-  .lienzo-pie{grid-template-columns:1fr}
-  #mapa{height:420px}
-  .barra-g{grid-template-columns:8.5em 1fr 3.2em}
+  .panel,.tarjeta{padding:20px}
+  .cabeza p{font-size:16px}
+  .entrada{flex-direction:column}
+  .entrada .btn-lima{min-height:52px}
+  .temas .ceja{width:100%}
+  .chip{flex:1 1 100%}
+  .cifra-grande{font-size:56px}
+  .est-titulo{font-size:32px}
+  .tabla-cab,.fila-r{grid-template-columns:minmax(0,8.5em) minmax(0,1fr) 3em;gap:8px}
+  .barra-g{grid-template-columns:minmax(0,7em) minmax(0,1fr) 3.2em}
+  .fuentes{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -321,21 +347,21 @@ footer .marca{margin-bottom:16px}
 <header class="barra">
   <div class="envoltura">
     <a class="marca" href="#inicio" aria-label="Bogotá Sintética, inicio">
-      <svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="#e3ffef" stroke-opacity=".5"/><circle cx="9" cy="10" r="2" fill="#7affb4"/><circle cx="17" cy="10" r="2" fill="#e3ffef"/><circle cx="13" cy="17" r="2" fill="#e3ffef"/></svg>
+      <svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="#485346"/><circle cx="9" cy="10" r="2" fill="#7fee64"/><circle cx="17" cy="10" r="2" fill="#ddffdc"/><circle cx="13" cy="17" r="2" fill="#ddffdc"/></svg>
       Bogotá Sintética
     </a>
     <nav aria-label="Secciones"><a href="#como">Cómo funciona</a><a href="#preguntar">Preguntar</a><a href="#detras">Qué hay detrás</a></nav>
-    <div class="derecha"><a class="btn btn-fantasma" href="#detras">Límites</a><a class="btn btn-menta" href="#preguntar">Hacer una pregunta</a></div>
+    <div class="derecha"><a class="btn btn-fantasma" href="#detras">Límites</a><a class="btn" href="#preguntar">Hacer una pregunta</a></div>
   </div>
 </header>
 
 <main id="inicio">
 <section class="portada">
   <div class="envoltura">
-    <span class="insignia ins-viva"><i></i>Todo lo que responde es una suposición</span>
+    <span class="ceja">Todo lo que responde es una suposición</span>
     <h1>¿Qué opinaría Bogotá <span>si…?</span></h1>
     <p class="lead">Una población sintética de la ciudad, hecha con bogotanos reales que respondieron la Encuesta de Percepción Ciudadana. Hazle una pregunta de opinión o sobre un cambio en la ciudad, y mira cómo respondería: en total, por grupos y por localidad.</p>
-    <div class="dos-botones"><a class="btn btn-blanco btn-grande" href="#preguntar">Hacer una pregunta</a><a class="btn btn-oscuro btn-grande" href="#como">Cómo funciona</a></div>
+    <div class="dos-botones"><a class="btn btn-lima btn-grande" href="#preguntar">Hacer una pregunta</a><a class="btn btn-fantasma btn-grande" href="#como">Cómo funciona</a></div>
     <div class="escena">
       <div class="cifras">
         <div class="cifra"><b>19.000</b><span>personas sintéticas</span></div>
@@ -351,7 +377,7 @@ footer .marca{margin-bottom:16px}
 
 <section id="como">
   <div class="envoltura">
-    <div class="cabeza"><span class="insignia ins-viva"><i></i>Cómo funciona</span><h2>De tu pregunta al mapa, en cuatro pasos</h2></div>
+    <div class="cabeza"><span class="ceja">Cómo funciona</span><h2>De tu pregunta al mapa, en cuatro pasos</h2></div>
     <div class="rejilla-4">
       <article class="tarjeta"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg><span class="paso">01</span>
         <h3>Escribe tu pregunta</h3><p>Con tus palabras. Sobre lo que opina la gente de Bogotá, o si estaría de acuerdo con un cambio en la ciudad.</p></article>
@@ -372,52 +398,50 @@ footer .marca{margin-bottom:16px}
 
 <section class="trabajo" id="preguntar">
   <div class="envoltura">
-    <div class="cabeza" style="margin-bottom:24px"><span class="insignia ins-viva"><i></i><span id="modoTexto">Cada pregunta es independiente</span></span><h2>Pregúntale a Bogotá</h2><p>Escribe una pregunta o toca un ejemplo: verás cómo respondería la ciudad, por grupos y, si la pregunta ya fue medida, en el mapa.</p></div>
-  </div>
-  <div class="vitrina"><div class="envoltura">
-    <div class="mesa">
-      <nav class="riel" aria-label="Temas de ejemplo">
-        <span class="etq-min">Temas</span>
-        <button data-tema="0" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Seguridad</button>
-        <button data-tema="2" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>La ciudad</button>
-        <button data-tema="4" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Medio ambiente</button>
-        <button data-tema="1" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M8 21l1.5-4M16 21l-1.5-4"/></svg><span>Cambios en la ciudad<small class="sin-mapa">sin mapa</small></span></button>
-      </nav>
-      <div class="panel">
-        <div>
-          <label for="pregunta" class="etq-min">Tu pregunta</label>
-          <div class="entrada">
-            <textarea id="pregunta" maxlength="500" placeholder="¿La gente estaría de acuerdo con que el metro funcione las 24 horas?"></textarea>
-            <span class="contador" id="contador">0/500</span>
-            <button class="enviar-circulo" id="enviar" aria-label="Preguntar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
-          </div>
-          <div class="chips" id="ejemplos" aria-label="Ejemplos"></div>
-        </div>
-        <div class="bloque oculto" id="sugerencia" aria-live="polite"></div>
-        <div class="bloque resultado oculto" id="resultado" aria-live="polite"></div>
+    <div class="cabeza"><span class="ceja" id="modoTexto">Cada pregunta es independiente</span><h2>Pregúntale a Bogotá</h2><p>Escribe una pregunta o toca un ejemplo: verás cómo respondería la ciudad, por grupos y, si la pregunta ya fue medida, en el mapa.</p></div>
+    <div class="panel consulta">
+      <div class="temas" role="group" aria-label="Temas de ejemplo">
+        <span class="ceja">Temas</span>
+        <button class="tema" data-tema="0" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Seguridad</button>
+        <button class="tema" data-tema="2" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>La ciudad</button>
+        <button class="tema" data-tema="4" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Medio ambiente</button>
+        <button class="tema" data-tema="1" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M8 21l1.5-4M16 21l-1.5-4"/></svg><span>Cambios en la ciudad<small class="sin-mapa">sin mapa</small></span></button>
       </div>
-      <div class="lienzo" id="lienzo">
+      <label for="pregunta" class="ceja">Tu pregunta</label>
+      <div class="entrada">
+        <div class="campo">
+          <textarea id="pregunta" rows="1" maxlength="500" placeholder="¿La gente estaría de acuerdo con que el metro funcione las 24 horas?" aria-describedby="contador"></textarea>
+          <span class="contador" id="contador">0/500</span>
+        </div>
+        <button class="btn btn-lima" id="enviar">Preguntar</button>
+      </div>
+      <div class="chips" id="ejemplos" role="group" aria-label="Ejemplos"></div>
+      <div class="reformulacion oculto" id="sugerencia" aria-live="polite"></div>
+    </div>
+    <div class="oculto" id="resultado" aria-live="polite"></div>
+    <div class="informe">
+      <div class="panel lienzo" id="lienzo">
         <div class="lienzo-cab"><h3 id="mapaTitulo">Bogotá por localidades</h3><p id="mapaSub"></p></div>
         <div class="velo oculto" id="velo" role="status"></div>
-        <svg id="mapa" role="img" aria-label="Mapa de las localidades urbanas de Bogotá"></svg>
+        <div class="marco"><svg id="mapa" role="group" aria-label="Mapa de las localidades urbanas de Bogotá; cada localidad es un botón"></svg></div>
         <div class="lienzo-pie"><div class="leyenda" id="leyenda"></div><div class="ficha" id="ficha" aria-live="polite"></div></div>
-        <div class="ranking oculto" id="ranking"></div>
       </div>
+      <div class="panel lado" id="lado"></div>
     </div>
-  </div></div>
+    <div class="panel grupos-panel oculto" id="grupos"></div>
+  </div>
 </section>
 
 <section class="declaracion" aria-labelledby="decl">
   <div class="envoltura">
     <h2 id="decl">Una población con todo el contexto de la encuesta,<br><span>para suponer cómo respondería Bogotá.</span></h2>
-    <a class="btn btn-blanco" href="#preguntar">Probar una pregunta</a>
-    <div class="esfera" aria-hidden="true"></div>
+    <a class="btn" href="#preguntar">Probar una pregunta</a>
   </div>
 </section>
 
 <section id="detras">
   <div class="envoltura">
-    <div class="cabeza"><span class="insignia ins-viva"><i></i>Qué hay detrás</span><h2>Lo que sostiene cada respuesta, y lo que no puede decir</h2></div>
+    <div class="cabeza"><span class="ceja">Qué hay detrás</span><h2>Lo que sostiene cada respuesta, y lo que no puede decir</h2></div>
     <div class="rejilla-3">
       <article class="tarjeta"><h3>La población</h3><p>Cada una de las 19.000 personas sintéticas (Sumapaz no tiene encuestados) hereda a un bogotano real de la Encuesta de Percepción Ciudadana 2022, 2023 o 2024 (Bogotá Cómo Vamos), de su misma localidad y parecido en sexo, edad y estrato. Las proporciones de la ciudad salen de la Encuesta Multipropósito 2021 del DANE.</p></article>
       <article class="tarjeta"><h3>El puente</h3><p>Para una pregunta nueva, un modelo de lenguaje elige qué preguntas medidas se relacionan y en qué sentido; cada persona responde con sus propias respuestas reales. Con preguntas escondidas de la misma encuesta, ordenó bien a las personas pero no a las localidades. Con preguntas reales que la encuesta no hizo, no acertó qué grupos estaban más de acuerdo. Por eso hoy solo elige qué preguntas mostrar: no fija ninguna cifra ni contesta por nadie.</p></article>
@@ -441,7 +465,7 @@ footer .marca{margin-bottom:16px}
 </section>
 </main>
 <footer><div class="envoltura">
-  <div class="marca"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="#e3ffef" stroke-opacity=".5"/><circle cx="9" cy="10" r="2" fill="#7affb4"/><circle cx="17" cy="10" r="2" fill="#e3ffef"/><circle cx="13" cy="17" r="2" fill="#e3ffef"/></svg>Bogotá Sintética</div>
+  <div class="marca"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="#485346"/><circle cx="9" cy="10" r="2" fill="#7fee64"/><circle cx="17" cy="10" r="2" fill="#ddffdc"/><circle cx="13" cy="17" r="2" fill="#ddffdc"/></svg>Bogotá Sintética</div>
   Centro Nacional de Consultoría. Datos: Encuesta de Percepción Ciudadana 2022, 2023 y 2024 (Bogotá Cómo Vamos), Encuesta Multipropósito 2021 y proyecciones de población (DANE-SDP), geometría de localidades (Catastro Distrital), mapa base © colaboradores de OpenStreetMap (ODbL). Todo lo que muestra esta página es una suposición de una población sintética, no una medición.
 </div></footer>
 
@@ -458,15 +482,38 @@ const f2 = v => v.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractio
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const NS = 'http://www.w3.org/2000/svg';
 const icoAviso = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 16.5v.5"/></svg>';
+const reducido = matchMedia('(prefers-reduced-motion: reduce)');
 
 if (D.simulado) $('#modoTexto').textContent = 'Modo simulado: respuestas del asistente de prueba, sin gasto';
 
-/* ---------- rampa de datos: del pino a la menta pálida (bicromática, DESIGN.md) ---------- */
-const RAMPA = [[15,58,43],[31,96,73],[74,150,118],[150,210,178],[227,255,239]];
+/* ---------- rampa de datos: de pino a fósforo, sin otro color (DESIGN.md) ---------- */
+const RAMPA = [[36,51,34],[62,74,60],[103,125,100],[156,191,147],[221,255,220]];
 const mez = (a,b,t) => a.map((v,i) => Math.round(v+(b[i]-v)*t));
 const rgb = c => `rgb(${c})`;
 const color = t => { t = Math.max(0, Math.min(1, t)); const x = t*(RAMPA.length-1), i = Math.min(RAMPA.length-2, Math.floor(x)); return rgb(mez(RAMPA[i], RAMPA[i+1], x-i)); };
 const gradiente = () => `linear-gradient(90deg,${RAMPA.map(rgb).join(',')})`;
+/* El mapa y la tabla de una pregunta medida se colorean frente a la ciudad, no por el
+   promedio (5/10, a pedido de Daniel): con la escala completa las localidades quedaban
+   casi del mismo tono. Tres clases, según el margen del 95 %, así que el color nunca
+   muestra una diferencia que el margen no respalda. Verde claro y ámbar medio, sobre un
+   gris oscuro: difieren en luminosidad además de tono, y se distinguen también con
+   daltonismo rojo-verde. Es la única excepción al «solo verde» del DESIGN.md, y vale
+   solo para estos datos. */
+const CAT = {arriba:'#9fe08a', igual:'#3c413c', abajo:'#c7782a'};
+const PUNTO = {...CAT, igual:'#9aa29a'};   /* en la tabla, el gris del mapa no se ve sobre el fondo */
+const CAT_TXT = {arriba:'Por encima de la ciudad', igual:'Sin diferencia clara', abajo:'Por debajo de la ciudad'};
+const claseDe = (c, cod) => c.arriba.includes(String(cod)) ? 'arriba' : c.abajo.includes(String(cod)) ? 'abajo' : 'igual';
+const MARCA = {arriba:' ▲', abajo:' ▼', igual:''};
+
+/* Movimiento (skill emil-design-eng): lo nuevo entra con opacidad y 6 px, 220 ms de
+   salida rápida. Con la Web Animations API se puede interrumpir: una consulta nueva
+   cancela la entrada anterior en vez de esperarla. Con movimiento reducido, nada. */
+function aparecer(el){
+  if (reducido.matches || !el.animate) return;
+  el.getAnimations().forEach(a => a.cancel());
+  el.animate([{opacity:0, transform:'translateY(6px)'}, {opacity:1, transform:'none'}], {duration:220, easing:'cubic-bezier(.23,1,.32,1)'});
+}
+const desplazar = el => el.scrollIntoView({behavior: reducido.matches ? 'auto' : 'smooth', block:'start'});
 
 /* ---------- escena de la portada: puntos que son personas ---------- */
 (() => {
@@ -476,8 +523,7 @@ const gradiente = () => `linear-gradient(90deg,${RAMPA.map(rgb).join(',')})`;
     const c = document.createElementNS(NS,'circle');
     const x = 20 + r()*720, y = 20 + r()*130;
     c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 1.5 + r()*2.5);
-    const t = r();
-    c.setAttribute('fill', t < .06 ? '#7affb4' : color(t));
+    c.setAttribute('fill', color(r()));
     c.setAttribute('opacity', (.25 + r()*.6) * (1 - Math.abs(x-380)/520));
     g.append(c);
   }
@@ -506,7 +552,7 @@ const trazo = (pts, cerrar) => pts.map((p,i) => (i?'L':'M') + px(p[0]).toFixed(5
 const capa = (lineas, clase, cerrar) => (lineas || []).forEach(pl => { const p = document.createElementNS(NS,'path'); p.setAttribute('d', trazo(decodificar(pl), cerrar)); p.setAttribute('class', clase); gBase.append(p); });
 capa(B.verde.g, 'verde', true); capa(B.vias.trunk, 'via', false);
 
-const rutas = {};
+const rutas = {}, etiquetas = {};
 URB.forEach(l => {
   const p = document.createElementNS(NS,'path');
   p.setAttribute('d', dPath(l.geometry)); p.setAttribute('class','loc');
@@ -520,6 +566,7 @@ URB.forEach(l => {
   const t = document.createElementNS(NS,'text'); t.setAttribute('class','etq');
   t.setAttribute('x', px(l.centroide[0]).toFixed(4)); t.setAttribute('y', py(l.centroide[1]).toFixed(4));
   t.textContent = l.nombre.replace('Rafael Uribe Uribe','R. Uribe Uribe').replace('Antonio Nariño','A. Nariño');
+  t.dataset.base = t.textContent; etiquetas[l.codigo] = t;
   gEtq.append(t);
 });
 
@@ -539,11 +586,14 @@ function pintar(){
   svg.classList.toggle('apagado', estado.modo === 'nueva');
   const visibles = estado.modo === 'catalogo' && estado.filtro && estado.filtro !== 'todas' ? clasificar(estado.resp)[estado.filtro] : null;
   URB.forEach(l => rutas[l.codigo].classList.toggle('atenuada', !!visibles && !visibles.includes(String(l.codigo))));
+  const cls = estado.modo === 'catalogo' ? clasificar(estado.resp) : null;
   URB.forEach(l => {
-    const p = rutas[l.codigo];
+    const p = rutas[l.codigo], t = etiquetas[l.codigo];
+    /* ▲/▼ junto al nombre: la clase se lee también sin distinguir colores */
+    const k = cls && estado.resp.localidades[l.codigo] ? claseDe(cls, l.codigo) : null;
+    t.textContent = t.dataset.base + (k ? MARCA[k] : '');
     if (estado.modo === 'catalogo') {
-      const v = estado.resp.localidades[l.codigo], n = estado.resp.escala.length;
-      p.style.fill = v ? color((v.media-1)/(n-1)) : '#0d1f18';
+      p.style.fill = k ? CAT[k] : '#101410';
     } else {
       p.style.fill = color(.1 + .6*Math.sqrt(G[l.codigo].adultos / maxAdultos));
     }
@@ -551,50 +601,90 @@ function pintar(){
   leyenda(); seleccionar(estado.sel, true);
   $('#velo').classList.toggle('oculto', estado.modo !== 'nueva');
   if (estado.modo === 'nueva') {
-    /* estado sin mapa: qué pasa, por qué, y qué se puede hacer (guía de la skill ui-ux-pro-max) */
-    $('#velo').innerHTML = `<b style="color:var(--blanco);font-weight:500">Esta pregunta no se colorea por localidad.</b>
-      No está en la encuesta, así que no hay dato de ella por localidad. Las preguntas medidas que se relacionan sí
-      tienen mapa: ábrelas desde la respuesta.
+    /* estado sin mapa: qué pasa, por qué y qué se puede hacer; en el encabezado, no encima del mapa */
+    $('#velo').innerHTML = `<b>Esta pregunta no se colorea por localidad</b>
+      <span>No está en la encuesta, así que no hay dato de ella por localidad. Las preguntas medidas que se relacionan sí
+      tienen mapa: ábrelas desde «Para explorar».</span>
       <div class="acciones"><button class="btn btn-fantasma" data-ej="0">Ver una pregunta con mapa</button></div>`;
-    $('#velo').querySelector('button').addEventListener('click', e => preguntar(D.ejemplos[+e.target.dataset.ej]));
+    $('#velo').querySelector('button').addEventListener('click', e => preguntar(D.ejemplos[+e.currentTarget.dataset.ej]));
   }
-  ranking(visibles);
+  lado(visibles);
 }
 
 function leyenda(){
   const el = $('#leyenda');
   el.classList.toggle('oculto', estado.modo === 'nueva');
   if (estado.modo === 'catalogo') {
-    const e = estado.resp.escala;
-    el.innerHTML = `<b>Promedio de la localidad</b><div class="rampa" style="background:${gradiente()}"></div>
-      <div class="ext"><span>${esc(e[0])}</span><span>${esc(e[e.length-1])}</span></div>
-      <div class="nota" style="margin-top:8px">Escala completa de la pregunta. Cada localidad tiene un margen de error ancho: míralo en su ficha.</div>`;
+    const c = clasificar(estado.resp);
+    el.innerHTML = `<span class="ceja">Frente a la ciudad (${f2(estado.resp.ciudad.media)})</span>
+      <div class="leyenda-cat">${['arriba','igual','abajo'].map(k => `<i class="muestra" style="background:${CAT[k]};margin:0"></i><span>${CAT_TXT[k]}${MARCA[k]}</span><b>${c[k].length}</b>`).join('')}</div>
+      <p class="nota">Cuenta como diferencia solo si el margen del 95 % de la localidad no incluye el promedio de la ciudad. El promedio de cada una, con su margen, está en la tabla y en su ficha.</p>`;
   } else {
-    el.innerHTML = `<b>Personas de 18 años o más</b><div class="rampa" style="background:linear-gradient(90deg,${color(.1)},${color(.7)})"></div>
+    el.innerHTML = `<span class="ceja">Personas de 18 años o más</span><div class="rampa" style="background:linear-gradient(90deg,${color(.1)},${color(.7)})"></div>
       <div class="ext"><span>menos</span><span class="mono">${fmt(maxAdultos)}</span></div>`;
   }
 }
 
-/* Tabla de localidades de mayor a menor, con su margen: la alternativa accesible al mapa
-   de colores (guía de la skill: «sortable region table»). */
-function ranking(visibles){
-  const el = $('#ranking');
-  if (estado.modo !== 'catalogo') { el.classList.add('oculto'); return; }
-  const r = estado.resp, n = r.escala.length, pos = v => 100*(v-1)/(n-1);
+/* La columna al lado del mapa. Con una pregunta medida, la tabla de localidades de mayor
+   a menor con su margen: la lectura accesible del mapa de colores, al mismo nivel que él.
+   Con una nueva, las preguntas medidas para explorar. Sin pregunta, un estado vacío. */
+function lado(visibles){
+  const el = $('#lado');
+  if (estado.modo === 'catalogo') return ranking(el, visibles);
+  if (estado.modo === 'nueva') return explorar(el, estado.resp);
+  el.innerHTML = `<h3>Localidad por localidad</h3>
+    <div class="vacio"><b>Haz una pregunta para llenar esta tabla</b>
+      <span>Con una pregunta que la encuesta hizo, aquí aparece cada localidad con su promedio y su margen de error,
+      frente al de la ciudad. Mientras tanto, el mapa muestra cuántos adultos viven en cada una: toca una para ver su ficha.</span></div>`;
+}
+
+function ranking(el, visibles){
+  const r = estado.resp, n = r.escala.length, c = clasificar(r);
   const filas = Object.entries(r.localidades).sort((a,b) => b[1].media - a[1].media);
-  el.classList.remove('oculto');
-  el.innerHTML = `<h4>Localidades, de mayor a menor promedio · la línea es la ciudad</h4>` + filas.map(([c,v]) => `
-    <button class="fila-r${visibles && !visibles.includes(c) ? ' atenuada' : ''}${+c === +estado.sel ? ' sel' : ''}" data-c="${c}">
-      <span>${esc(G[c].nombre)}</span>
+  /* El eje de la tabla va del margen más bajo al más alto (redondeado a una décima), no
+     de 1 a n: con la escala completa todas las localidades quedaban en el centro. Los
+     márgenes se dibujan en el mismo eje, así que no exagera nada, y el eje va escrito. */
+  const ext = filas.flatMap(([,v]) => v.margen).concat(r.ciudad.media);
+  const lo = Math.max(1, Math.floor(10*Math.min(...ext) - 1)/10), hi = Math.min(n, Math.ceil(10*Math.max(...ext) + 1)/10);
+  const pos = v => 100*(v-lo)/(hi-lo);
+  el.innerHTML = `<div><h3>Localidad por localidad</h3><p class="sub">De mayor a menor promedio. La línea es la ciudad (${f2(r.ciudad.media)}); el trazo, el margen del 95 %. ▲ por encima y ▼ por debajo, solo si el margen no incluye a la ciudad.</p></div>
+    <div role="list">
+    <div class="tabla-cab" aria-hidden="true"><span>Localidad</span><span>Promedio y margen · eje de ${f1(lo)} a ${f1(hi)}</span><span>1 a ${n}</span></div>` + filas.map(([cod,v]) => {
+      const marca = c.arriba.includes(cod) ? '▲' : c.abajo.includes(cod) ? '▼' : '';
+      const dif = marca === '▲' ? ', por encima de la ciudad' : marca === '▼' ? ', por debajo de la ciudad' : '';
+      return `<button role="listitem" class="fila-r${visibles && !visibles.includes(cod) ? ' atenuada' : ''}${+cod === +estado.sel ? ' sel' : ''}" data-c="${cod}"
+        aria-label="${esc(G[cod].nombre)}: ${f2(v.media)}, margen ${f2(v.margen[0])} a ${f2(v.margen[1])}${dif}">
+      <span>${esc(G[cod].nombre)}${marca ? `<span class="marca-r" aria-hidden="true">${marca}</span>` : ''}</span>
       <span class="intervalo" aria-hidden="true"><em style="left:${pos(r.ciudad.media)}%"></em>
         <i style="left:${pos(v.margen[0])}%;width:${pos(v.margen[1])-pos(v.margen[0])}%"></i>
-        <b style="left:${pos(v.media)}%;background:${color((v.media-1)/(n-1))}"></b></span>
-      <span class="v">${f2(v.media)}</span></button>`).join('');
+        <b style="left:${pos(v.media)}%;background:${+cod === +estado.sel ? 'var(--fosforo)' : PUNTO[claseDe(c, cod)]}"></b></span>
+      <span class="v">${f2(v.media)}</span></button>`; }).join('') + `</div>`;
   el.querySelectorAll('.fila-r').forEach(b => b.addEventListener('click', () => seleccionar(+b.dataset.c)));
 }
 
+/* D18 (DI-CO15): preguntas medidas que se relacionan, cada una con su dato real y su mapa */
+function explorar(el, r){
+  el.innerHTML = `<div><span class="ceja">Para explorar · Preguntas de la Encuesta de Percepción Ciudadana que se relacionan (con mapa)</span>
+    <p class="sub">Estas sí tienen mapa y tabla por localidad.</p></div>
+    <ul class="puente-lista">${r.relacionadas.map((q,i) => { const n = q.escala.length; return `<li>
+      <span class="sg ${q.sentido==='+'?'mas':'menos'}" title="${q.sentido==='+'?'En el mismo sentido':'En sentido contrario'}">${q.sentido==='+'?'+':'−'}</span>
+      <span class="rel"><span>${esc(q.pregunta)}</span>
+        <span class="dato"><b>${pct(q.ciudad.alto)}</b> respondió «${esc(q.ciudad.etiqueta_alto.toLowerCase())}»${fuera(q.ciudad) ? ` (sin el ${fuera(q.ciudad)} % sin opinión)` : ''} · EPC ${esc(q.anios.join(', '))}</span>
+        <span class="dist" role="img" aria-label="Distribución de respuestas">${q.ciudad.distribucion.map((d,j)=>`<span style="flex:${d};background:${color(j/(n-1))}" title="${esc(q.escala[j])}: ${pct(d)}"></span>`).join('')}</span>
+        <button class="ver-rel" data-i="${i}">Ver completa, con su mapa →</button></span></li>`; }).join('')}</ul>
+    <p class="nota">+ : quien está más de acuerdo con la pregunta nueva tendería a responder más alto aquí; − : más bajo. Lo eligió un modelo de lenguaje.</p>`;
+  el.querySelectorAll('.ver-rel').forEach(b => b.addEventListener('click', () => verRelacionada(r.relacionadas[+b.dataset.i])));
+}
+
 function seleccionar(cod, suave){
-  if (!suave) { estado.sel = cod; document.querySelectorAll('.fila-r').forEach(b => b.classList.toggle('sel', +b.dataset.c === +cod)); }
+  if (!suave) {
+    estado.sel = cod;
+    document.querySelectorAll('.fila-r').forEach(b => {
+      const sel = +b.dataset.c === +cod; b.classList.toggle('sel', sel);
+      const punto = b.querySelector('.intervalo b'), v = estado.resp && estado.resp.localidades && estado.resp.localidades[b.dataset.c];
+      if (punto && v) punto.style.background = sel ? 'var(--fosforo)' : PUNTO[claseDe(clasificar(estado.resp), b.dataset.c)];
+    });
+  }
   Object.entries(rutas).forEach(([c,p]) => p.classList.toggle('sel', +c === +estado.sel));
   const g = G[cod]; if (!g) return;
   let filas = `<dt>Adultos</dt><dd>${fmt(g.adultos)}</dd>
@@ -607,7 +697,7 @@ function seleccionar(cod, suave){
       filas = `<dt>Promedio</dt><dd>${f2(v.media)}</dd>
         <dt>Margen (95 %)</dt><dd>${f2(v.margen[0])}–${f2(v.margen[1])}</dd>
         <dt>${esc(estado.resp.ciudad.etiqueta_alto)}</dt><dd>${pct(v.alto)}</dd>` + filas;
-      extra = `<div class="nota">Escala de 1 a ${estado.resp.escala.length}. Ciudad: ${f2(estado.resp.ciudad.media)}.</div>`;
+      extra = `<p class="nota" style="margin-top:8px">Escala de 1 a ${estado.resp.escala.length}. Ciudad: ${f2(estado.resp.ciudad.media)}.</p>`;
     }
   }
   $('#ficha').innerHTML = `<h4>${esc(g.nombre)}</h4><dl>${filas}</dl>${extra}`;
@@ -620,11 +710,13 @@ campo.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || 
 $('#enviar').addEventListener('click', () => preguntar());
 D.ejemplos.forEach(t => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = t;
   b.addEventListener('click', () => preguntar(t)); $('#ejemplos').append(b); });
-/* el riel de temas (de la referencia): cada tema lanza su pregunta de ejemplo */
-document.querySelectorAll('.riel button').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('.riel button').forEach(x => x.setAttribute('aria-pressed', x === b));
-  preguntar(D.ejemplos[+b.dataset.tema]);
-}));
+/* cada tema lanza su pregunta de ejemplo */
+document.querySelectorAll('.tema').forEach(b => b.addEventListener('click', () => preguntar(D.ejemplos[+b.dataset.tema])));
+/* el tema o el ejemplo que coincide con la pregunta queda marcado; si se escribe otra, ninguno */
+function marcar(q){
+  document.querySelectorAll('.tema').forEach(b => b.setAttribute('aria-pressed', D.ejemplos[+b.dataset.tema] === q));
+  document.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', b.textContent === q));
+}
 
 async function api(ruta, cuerpo){
   const r = await fetch(ruta, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(cuerpo)});
@@ -632,17 +724,25 @@ async function api(ruta, cuerpo){
   if (!r.ok || d.error) throw new Error(d.error || 'Error del servidor');
   return d;
 }
-const cargando = (el, texto) => { el.classList.remove('oculto'); el.innerHTML = `<div class="cargando"><i></i>${texto}</div>`; };
-const error = (el, texto) => { el.classList.remove('oculto'); el.innerHTML = `<p class="razon" style="margin:0">${esc(texto)}</p>`; };
+const cargando = (el, texto) => { el.classList.remove('oculto'); el.innerHTML = `<div class="panel cargando" role="status"><i aria-hidden="true"></i>${texto}</div>`; };
+/* estado de error: qué pasó y cómo volver a intentarlo */
+const error = (el, texto) => {
+  el.classList.remove('oculto');
+  el.innerHTML = `<div class="panel error" role="alert"><span class="ceja">No se pudo responder</span><p>${esc(texto)}</p>
+    <button class="btn btn-fantasma">Intentar de nuevo</button></div>`;
+  el.querySelector('button').addEventListener('click', () => preguntar());
+  aparecer(el);
+};
 
 /* Un solo paso (30/09, a pedido de Daniel): preguntar → la respuesta y el mapa. La
-   reformulación ya no pide confirmación: se muestra arriba de la respuesta, como
+   reformulación ya no pide confirmación: se muestra en la barra de la pregunta, como
    «así entendimos tu pregunta», y se puede editar y volver a suponer. */
 async function preguntar(texto){
   const q = (texto ?? campo.value).trim(); if (!q) { campo.focus(); return; }
   if (texto) { campo.value = texto; campo.dispatchEvent(new Event('input')); }
+  marcar(q);
   $('#enviar').disabled = true;
-  $('#sugerencia').classList.add('oculto');
+  $('#sugerencia').classList.add('oculto'); $('#grupos').classList.add('oculto');
   estado = { ...estado, modo:'general', resp:null }; pintar(); titulosMapa();
   const el = $('#resultado'); cargando(el, 'Entendiendo tu pregunta…');
   try {
@@ -657,122 +757,132 @@ async function preguntar(texto){
 
 function mostrarEntendida(r){
   const s = $('#sugerencia'); s.classList.remove('oculto');
-  if (r.alcance === 'invalida') { s.innerHTML = `<p class="razon" style="margin:0">${esc(r.mensaje)}</p>`; return; }
+  if (r.alcance === 'invalida') { s.innerHTML = `<p class="razon">${esc(r.mensaje)}</p>`; aparecer(s); return; }
   const ins = {catalogo:['ins-cat','Ya medida en la encuesta'], nueva:['ins-nueva','Pregunta nueva · suposición'], fuera:['ins-fuera','Fuera de alcance']}[r.alcance];
   if (r.alcance === 'fuera') {
-    s.innerHTML = `<span class="insignia ${ins[0]}">${ins[1]}</span>
+    s.innerHTML = `<div class="fila-ref"><span class="insignia ${ins[0]}">${ins[1]}</span></div>
       <p class="propuesta">Esta pregunta no se puede suponer con la población.</p><p class="razon">${esc(r.razon || '')}</p>
-      ${r.reformulada ? `<p class="razon" style="margin:0 0 8px">Algo cercano que sí:</p><p class="propuesta" style="margin-top:0">${esc(r.reformulada)}</p>
-      <div class="acciones"><button class="btn btn-menta" id="usar">Preguntar esto</button></div>` : ''}`;
+      ${r.reformulada ? `<p class="razon">Algo cercano que sí:</p><p class="propuesta">${esc(r.reformulada)}</p>
+      <div class="acciones"><button class="btn" id="usar">Preguntar esto</button></div>` : ''}`;
     const b = $('#usar'); if (b) b.addEventListener('click', () => preguntar(r.reformulada));   /* DI-CO4 */
-    return;
+    aparecer(s); return;
   }
   const texto = r.alcance === 'catalogo' ? r.pregunta_catalogo : r.reformulada;
-  s.innerHTML = `<span class="insignia ${ins[0]}">${ins[1]}</span>
-    <div class="etq-min" style="margin-top:12px">Así entendimos tu pregunta</div>
+  s.innerHTML = `<div class="fila-ref"><span class="ceja">Así entendimos tu pregunta</span><span class="insignia ${ins[0]}">${ins[1]}</span></div>
     <p class="propuesta" id="entendida">${esc(texto)}</p>
-    <div class="escala-lista">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>
-    ${r.alcance === 'nueva' ? `<div class="acciones"><button class="btn btn-fantasma" id="editar">Editar y volver a suponer</button></div>
-      <div class="oculto" id="edicion"><textarea id="editada" class="editable">${esc(r.reformulada)}</textarea>
-      <div class="acciones" style="margin-top:8px"><button class="btn btn-menta" id="resuponer">Volver a suponer</button></div></div>` : ''}`;
+    <div class="escala-lista" aria-label="Escala de respuesta">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>
+    ${r.alcance === 'nueva' ? `<div class="acciones"><button class="btn btn-fantasma" id="editar" aria-expanded="false" aria-controls="edicion">Editar y volver a suponer</button></div>
+      <div class="oculto" id="edicion"><label for="editada" class="ceja">Edita la pregunta</label><textarea id="editada" class="editable">${esc(r.reformulada)}</textarea>
+      <div class="acciones" style="margin-top:8px"><button class="btn" id="resuponer">Volver a suponer</button></div></div>` : ''}`;
   if (r.alcance === 'nueva') {
-    $('#editar').addEventListener('click', () => { $('#edicion').classList.remove('oculto'); $('#editar').classList.add('oculto'); $('#editada').focus(); });
+    $('#editar').addEventListener('click', () => {
+      $('#edicion').classList.remove('oculto'); $('#editar').classList.add('oculto'); $('#editar').setAttribute('aria-expanded', 'true');
+      aparecer($('#edicion')); $('#editada').focus();
+    });
     $('#resuponer').addEventListener('click', () => {
       const v = $('#editada').value.trim(); if (!v) return;
       $('#entendida').textContent = v; responder({pregunta:v, escala:r.escala});
     });
   }
+  aparecer(s);
 }
 
-/* En pantallas angostas el resultado queda debajo: se lleva a la vista. En anchas,
-   el mapa está al lado y parpadea para decir que cambió. */
+/* En pantallas angostas el resultado queda debajo de la pregunta: se lleva a la vista. */
 function verResultado(){
-  if (innerWidth < 1000) $('#sugerencia').scrollIntoView({behavior:'smooth', block:'start'});
+  if (innerWidth < 1000) desplazar($('#sugerencia'));
 }
 
 async function responder(cuerpo){
-  const el = $('#resultado'); cargando(el, cuerpo.codigo ? 'Consultando a la población…' : 'Construyendo el puente y consultando a la población…');
+  const el = $('#resultado'); cargando(el, cuerpo.codigo ? 'Consultando a la población…' : 'Buscando preguntas parecidas y consultando a la población…');
+  $('#enviar').disabled = true;
   try { const r = await api('/api/responder', cuerpo); if (r.tipo === 'invalida') return error(el, r.mensaje); mostrar(r); }
   catch (e) { error(el, e.message); }
+  finally { $('#enviar').disabled = false; }
 }
 
 const banda = r => `<div class="banda">${icoAviso}<span>${esc(r.aviso)}</span></div>`;
 /* DI-CO19: si más del 5 % no cuenta (no respondió, no sabe o no tiene opinión), se dice */
 const fuera = c => c.respondieron < .95 ? Math.round(100*(1 - c.respondieron)) : 0;
+const anios = a => a.length > 1 ? a[0] + '–' + a[a.length-1] : a[0];
 
 function mostrar(r){
-  const el = $('#resultado'); el.classList.remove('oculto');
+  const el = $('#resultado'), gr = $('#grupos'); el.classList.remove('oculto'); gr.classList.remove('oculto');
   estado = { ...estado, modo:r.tipo, resp:r, filtro:'todas' };
   if (r.tipo === 'catalogo') {
     const n = r.escala.length, c = clasificar(r);
-    el.innerHTML = `<div class="asistente"><span class="avatar" aria-hidden="true"></span><span><b>Bogotá Sintética</b> · Consulté a
-        <span class="num">${fmt(r.consultados)}</span> personas sintéticas${r.anios.length === 1 ? ` (las que heredan a alguien encuestado en ${r.anios[0]})` : ''}. En <span class="num">${c.arriba.length}</span> localidades la respuesta
-        queda por encima de la ciudad y en <span class="num">${c.abajo.length}</span> por debajo, con su margen de error.</span></div>
-      <span class="insignia ins-cat">Dato medido · EPC ${r.anios.length > 1 ? r.anios[0] + '–' + r.anios[r.anios.length-1] : r.anios[0]}</span>
-      <h3>${esc(r.pregunta)}</h3>${banda(r)}
-      <div class="filtros" role="group" aria-label="Filtrar localidades en el mapa">
-        ${[['todas','Todas',c.todas],['arriba','Por encima',c.arriba],['abajo','Por debajo',c.abajo],['igual','Sin diferencia clara',c.igual]]
-          .map(([k,l,xs]) => `<button class="filtro" data-f="${k}" aria-pressed="${k==='todas'}">${l} <span class="num">${xs.length}</span></button>`).join('')}
+    el.innerHTML = `<div class="resumen">
+      <div class="panel">
+        <span class="ceja">Dato medido · EPC ${anios(r.anios)}</span>
+        <p class="cifra-grande">${pct(r.ciudad.alto)}</p>
+        <p class="lead-t">respondería «${esc(r.ciudad.etiqueta_alto.toLowerCase())}»</p>
+        ${fuera(r.ciudad) ? `<p class="nota">Sin contar al ${fuera(r.ciudad)} % que no respondió, no sabía o no tenía opinión: las cifras y el mapa son de quienes sí.</p>` : ''}
+        <p class="nota">Consulté a ${fmt(r.consultados)} personas sintéticas${r.anios.length === 1 ? ` (las que heredan a alguien encuestado en ${r.anios[0]})` : ''}.</p>
       </div>
-      <div class="grande"><b>${pct(r.ciudad.alto)}</b><span>respondería «${esc(r.ciudad.etiqueta_alto.toLowerCase())}»</span></div>
-      ${fuera(r.ciudad) ? `<p class="nota" style="margin-top:4px">Sin contar al ${fuera(r.ciudad)} % que no respondió, no sabía o no tenía opinión: las cifras y el mapa son de quienes sí.</p>` : ''}
-      <div class="dist" role="img" aria-label="Distribución de respuestas">${r.ciudad.distribucion.map((d,i)=>`<div style="flex:${d};background:${color(i/(n-1))}" title="${esc(r.escala[i])}: ${pct(d)}"></div>`).join('')}</div>
-      <div class="dist-leyenda">${r.escala.map((e,i)=>`<div><b>${pct(r.ciudad.distribucion[i])}</b>${esc(e)}</div>`).join('')}</div>
+      <div class="panel">
+        <span class="ceja">Cómo se reparte</span>
+        <div class="dist" role="img" aria-label="Distribución de respuestas: ${r.escala.map((e,i) => `${esc(e)} ${pct(r.ciudad.distribucion[i])}`).join(', ')}">${r.ciudad.distribucion.map((d,i)=>`<div style="flex:${d};background:${color(i/(n-1))}"></div>`).join('')}</div>
+        <div class="dist-leyenda">${r.escala.map((e,i)=>`<i style="background:${color(i/(n-1))}" aria-hidden="true"></i><span>${esc(e)}</span><b>${pct(r.ciudad.distribucion[i])}</b>`).join('')}</div>
+      </div>
+      <div class="panel">
+        <span class="ceja">Las ${c.todas.length} localidades frente a la ciudad</span>
+        <div class="filtros" role="group" aria-label="Filtrar localidades en el mapa y la tabla">
+          ${[['todas','Todas',c.todas],['arriba','▲ Por encima',c.arriba],['igual','Sin diferencia clara',c.igual],['abajo','▼ Por debajo',c.abajo]]
+            .map(([k,l,xs]) => `<button class="filtro" data-f="${k}" aria-pressed="${k==='todas'}"><span>${CAT[k] ? `<i class="muestra" style="background:${CAT[k]}" aria-hidden="true"></i>` : ''}${l}</span> <span class="num">${xs.length}</span></button>`).join('')}
+        </div>
+        <p class="nota">Cuenta solo si el margen del 95 % de la localidad no incluye el promedio de la ciudad (${f2(r.ciudad.media)}).</p>
+      </div>
+    </div>${banda(r)}`;
+    gr.innerHTML = `<h3>Por grupos</h3>
       <div class="grupos">${Object.entries(r.grupos).map(([g,fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f => `
-        <div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista"><i style="left:0;width:${100*f.alto}%;background:var(--menta-palida)"></i></span><span class="v">${pct(f.alto)}</span></div>`).join('')}</div>`).join('')}</div>
-      <p class="nota">Barras: porcentaje que respondería «${esc(r.ciudad.etiqueta_alto.toLowerCase())}» en cada grupo. En el mapa, cada localidad con su promedio y su margen de error. ${esc(r.fuente)}</p>`;
+        <div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista"><i style="left:0;width:${100*f.alto}%;background:var(--ceja)"></i></span><span class="v">${pct(f.alto)}</span></div>`).join('')}</div>`).join('')}</div>
+      <p class="nota">Barras: porcentaje que respondería «${esc(r.ciudad.etiqueta_alto.toLowerCase())}» en cada grupo. En el mapa y la tabla, cada localidad con su promedio y su margen de error. ${esc(r.fuente)}</p>`;
   } else {
     /* D18: sin nivel ni fuerza; el tono general a la vista, rotulado; cada relacionada con su dato real */
     const tope = Math.max(.25, ...Object.values(r.grupos).flat().map(f => Math.abs(f.indice)));
     const e = r.estimacion;                                               /* D19: puede faltar, y entonces vale DI-CO20 */
-    el.innerHTML = `<div class="asistente"><span class="avatar" aria-hidden="true"></span><span><b>Bogotá Sintética</b> · La encuesta no hizo
-        esta pregunta. ${e ? `La estimé con <span class="num">${e.preguntas.length}</span> preguntas parecidas que sí se midieron:
-        <b style="font-weight:500">${esc(e.titulo.toLowerCase())}</b>.` : 'No pude estimar si la gente estaría de acuerdo.'} También te muestro
-        preguntas de la encuesta de Bogotá que se relacionan y cómo responde cada grupo en general.</span></div>
-      <span class="insignia ins-nueva">Pregunta nueva · ${e ? 'estimación' : 'sin dato propio'}</span>
-      <h3>${esc(r.pregunta)}</h3>
-      ${e ? `<div class="estimacion e-${e.llamada}">
-        <p class="est-titulo">${esc(e.titulo)}</p>
-        <div class="grande"><b>${Math.round(e.porcentaje)} %</b><span>${e.llamada === 'dividida'
-          ? `estaría de acuerdo entre ${Math.round(e.rango[0])} % y ${Math.round(e.rango[1])} %: el rango cruza la mitad`
-          : `estaría de acuerdo · entre ${Math.round(e.rango[0])} % y ${Math.round(e.rango[1])} %`}</span></div>
-        <div class="rango-est" role="img" aria-label="Rango estimado entre ${Math.round(e.rango[0])} y ${Math.round(e.rango[1])} por ciento">
-          <i style="left:${e.rango[0]}%;width:${e.rango[1]-e.rango[0]}%"></i><em style="left:50%"></em><b style="left:${e.porcentaje}%"></b></div>
-        <div class="rango-etq"><span>0 %</span><span>50 %</span><span>100 %</span></div>
-        <p class="nota">${esc(e.texto)}</p></div>
-      <div class="etq-min" style="margin-top:20px">En qué se apoya la estimación · preguntas de otras encuestas y su resultado real</div>
-      <ul class="puente-lista">${e.preguntas.map(q => `<li><span class="sg mas">·</span><span class="rel"><span>${esc(q.pregunta)}</span>
-        <span class="dato"><b>${Math.round(q.porcentaje)} %</b> de acuerdo o «sí» · ${esc(q.fuente)}</span></span></li>`).join('')}</ul>`
-      : `<div class="sin-respuesta"><p class="sr-titulo">${esc(r.respuesta.titulo)}</p><p>${esc(r.respuesta.texto)}</p></div>`}
-      <div class="etq-min" style="margin-top:24px">Para explorar · Preguntas de la Encuesta de Percepción Ciudadana que se relacionan (con mapa)</div>
-      <ul class="puente-lista">${r.relacionadas.map((q,i) => { const n = q.escala.length; return `<li>
-        <span class="sg ${q.sentido==='+'?'mas':'menos'}" title="${q.sentido==='+'?'En el mismo sentido':'En sentido contrario'}">${q.sentido==='+'?'+':'−'}</span>
-        <span class="rel"><span>${esc(q.pregunta)}</span>
-          <span class="dato"><b>${pct(q.ciudad.alto)}</b> respondió «${esc(q.ciudad.etiqueta_alto.toLowerCase())}»${fuera(q.ciudad) ? ` (sin el ${fuera(q.ciudad)} % sin opinión)` : ''} · EPC ${esc(q.anios.join(', '))}</span>
-          <span class="dist" role="img" aria-label="Distribución de respuestas">${q.ciudad.distribucion.map((d,j)=>`<span style="flex:${d};background:${color(j/(n-1))}" title="${esc(q.escala[j])}: ${pct(d)}"></span>`).join('')}</span>
-          <button class="ver-rel" data-i="${i}">Ver completa, con su mapa →</button></span></li>`; }).join('')}</ul>
-      <p class="nota">+ : quien está más de acuerdo con la pregunta nueva tendería a responder más alto aquí; − : más bajo. Lo eligió un modelo de lenguaje.</p>
-      <div class="etq-min" style="margin-top:24px">Para explorar · ${esc(r.tono_titulo)}</div>
+    const div = e && e.llamada === 'dividida', de = e ? Math.round(e.rango[0]) : 0, a = e ? Math.round(e.rango[1]) : 0;
+    el.innerHTML = `<p class="intro">La encuesta no hizo esta pregunta. ${e ? `La estimé con <span class="mono">${e.preguntas.length}</span> preguntas parecidas que sí se midieron.` : 'No pude estimar si la gente estaría de acuerdo.'}
+        Debajo están las preguntas de la encuesta de Bogotá que se relacionan y cómo responde cada grupo en general.</p>
+      ${e ? `<div class="estimacion panel e-${e.llamada}">
+        <div class="est-cab">
+          <span class="ceja">Estimación · no es una medición</span>
+          <p class="est-titulo">${esc(e.titulo)}</p>
+          ${div ? `<p class="lead-t">Estaría de acuerdo <span class="mono">entre ${de} % y ${a} %</span>: el rango cruza la mitad.</p>`
+                : `<p class="cifra-grande">${Math.round(e.porcentaje)} %</p><p class="lead-t">estaría de acuerdo · <span class="mono">entre ${de} % y ${a} %</span></p>`}
+        </div>
+        <div class="est-rango">
+          <div class="rango-est" role="img" aria-label="Rango estimado entre ${de} y ${a} por ciento; la línea marca el 50 %">
+            <i style="left:${e.rango[0]}%;width:${e.rango[1]-e.rango[0]}%"></i><em style="left:50%"></em><b style="left:${e.porcentaje}%"></b></div>
+          <div class="rango-etq"><span>0 %</span><span>50 % · la mitad</span><span>100 %</span></div>
+          ${div ? `<p class="nota">Punto medio <span class="mono">${Math.round(e.porcentaje)} %</span>.</p>` : ''}
+          <p class="nota">${esc(e.texto)}</p>
+        </div></div>
+      <div class="apoyo"><span class="ceja">En qué se apoya la estimación · preguntas de otras encuestas y su resultado real</span>
+        <div class="apoyo-rejilla">${e.preguntas.map(q => `<div class="dato-t"><span>${esc(q.pregunta)}</span>
+          <b>${Math.round(q.porcentaje)} %</b><span class="nota">de acuerdo o «sí» · ${esc(q.fuente)}</span></div>`).join('')}</div></div>`
+      : `<div class="panel sin-respuesta"><p class="sr-titulo">${esc(r.respuesta.titulo)}</p><p>${esc(r.respuesta.texto)}</p></div>`}
+      ${banda(r)}`;
+    gr.innerHTML = `<span class="ceja">Para explorar · ${esc(r.tono_titulo)}</span>
       <p class="nota aviso-tono">${esc(r.tono_texto)}</p>
-      <div class="grupos" style="margin-top:12px">${Object.entries(r.grupos).map(([g,fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f => {
+      <div class="grupos">${Object.entries(r.grupos).map(([g,fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f => {
         const w = 50*Math.abs(f.indice)/tope, izq = f.indice < 0 ? 50-w : 50;
-        return `<div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista div"><i style="left:${izq}%;width:${w}%;background:${f.indice<0?'var(--humo)':'var(--menta-palida)'}"></i></span><span class="v">${f.indice>0?'+':''}${f2(f.indice)}</span></div>`; }).join('')}</div>`).join('')}</div>
-      <p class="nota">Barras: qué tan más (claro) o menos (gris) favorable que el promedio de la ciudad suele responder cada grupo, en desviaciones estándar; la línea del centro es el promedio.</p>
+        return `<div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista div"><i style="left:${izq}%;width:${w}%;background:${f.indice<0?'var(--pino)':'var(--ceja)'}"></i></span><span class="v">${f.indice>0?'+':''}${f2(f.indice)}</span></div>`; }).join('')}</div>`).join('')}</div>
+      <p class="nota">Barras: qué tan más (claro) o menos (oscuro) favorable que el promedio de la ciudad suele responder cada grupo, en desviaciones estándar; la línea del centro es el promedio.</p>
       <p class="nota">${esc(r.fuente)}</p>`;
-    el.querySelectorAll('.ver-rel').forEach(b => b.addEventListener('click', () => verRelacionada(r.relacionadas[+b.dataset.i])));
   }
   el.querySelectorAll('.filtro').forEach(b => b.addEventListener('click', () => {
     el.querySelectorAll('.filtro').forEach(x => x.setAttribute('aria-pressed', x === b));
     estado.filtro = b.dataset.f; pintar();
   }));
   titulosMapa(); pintar(); verResultado();
-  const lz = $('#lienzo'); lz.classList.remove('cambio'); void lz.offsetWidth; lz.classList.add('cambio');
+  [el, $('#lado'), gr].forEach(aparecer);
 }
 
 /* D18 (DI-CO15): una pregunta relacionada se abre completa, como pregunta del catálogo */
 function verRelacionada(q){
+  marcar(q.pregunta);
   mostrarEntendida({alcance:'catalogo', pregunta_catalogo:q.pregunta, escala:q.escala});
-  $('#sugerencia').scrollIntoView({behavior:'smooth', block:'start'});
+  desplazar($('#sugerencia'));
   responder({codigo:q.codigo});
 }
 

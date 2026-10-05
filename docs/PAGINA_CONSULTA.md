@@ -53,7 +53,7 @@ por localidad (en color), estrato medio y cuántos encuestados de la EPC viven a
 
 | Tipo | Resultado | Mapa |
 |---|---|---|
-| **Ya medida** (catálogo) | % en la mitad alta de la escala, la distribución completa y el mismo % por estrato, edad, sexo y educación | Promedio por localidad en la escala completa, con su margen del 95 % en la ficha |
+| **Ya medida** (catálogo) | % en la mitad alta de la escala, la distribución completa y el mismo % por estrato, edad, sexo y educación | ~~Promedio por localidad en la escala completa~~ Cada localidad frente a la ciudad (por encima, sin diferencia clara o por debajo, según su margen del 95 %; §5.16, 5/10), con su promedio y margen en la tabla y la ficha |
 | **Nueva** (puente) | Nivel de la ciudad propuesto por el modelo, **editable** con un deslizador; cuánto más o menos de acuerdo estaría cada grupo (en desviaciones estándar); las preguntas medidas en las que se apoya | **No se dibuja por localidad** (lectura B del puente), y la página dice por qué |
 | **Fuera de alcance** | La razón, y una alternativa que, si se elige, vuelve a pasar por la reformulación (DI-CO4) | — |
 
@@ -429,6 +429,121 @@ extensión de Chrome no estaba conectada.
 
 Verificado: 21 pruebas de `tests/test_consulta.py` y la página servida por HTTP en modo simulado, con
 las seis frases nuevas presentes.
+
+## 5.16 Rediseño con el sistema nuevo, variante B (5/10/2026)
+
+Daniel pidió este rediseño como «§5.8», pero ese número ya era D18. Va aquí, como el siguiente libre.
+
+**El sistema.** `DESIGN.md` de la raíz («terminal de fósforo») reemplaza al de §5.1. Lo que cambia:
+- **Color:**
+  - fondo negro puro, superficies `#181818` y `#212525`, bordes `#485346` y `#1f2a33`;
+  - texto en la escala de salvia (`#8cab87`, `#aed2a4`, `#9cbf93`, `#859984`);
+  - los títulos van en `#ddffdc`.
+- **Se van:** el blanco puro, la aurora y la esfera verde azulado, el brillo del punto «vivo» y el avatar luminoso.
+- **El lima `#7fee64` rellena un solo elemento por pantalla:**
+  - en la portada, «Hacer una pregunta»;
+  - en la sección de preguntar, «Preguntar».
+  - Los demás botones (la barra, «Preguntar esto», «Volver a suponer») son oscuros con borde.
+- **Tipografía:**
+  - títulos en Inter Tight 400/500, el sustituto de Goga que nombra el documento;
+  - texto en Inter 400/500 con `cv11` y tracking negativo;
+  - el mono queda solo para los datos.
+- **Forma:**
+  - botones con radio de 12 px; la píldora queda solo para el botón principal y las etiquetas;
+  - tarjetas de 8 px con relleno de 32 px (20 px en celular);
+  - barra de 64 px con desenfoque, sin sombras.
+- **Rampa de datos:** de `#243322` a `#ddffdc`, sin otro tono.
+
+**La disposición (variante B, elegida por Daniel entre dos maquetas):** de arriba abajo:
+1. **Barra de la pregunta** a todo el ancho: temas, campo, «Preguntar» y ejemplos. Debajo, «así entendimos tu pregunta».
+2. **Franja de resumen.**
+   - Con una pregunta medida, tres paneles:
+     - la cifra (64 px, sin cortes de línea);
+     - cómo se reparte, con una leyenda en lista y no en cinco columnas que se pisaban;
+     - los contadores que filtran: todas, ▲ por encima, sin diferencia clara, ▼ por debajo.
+   - Con una nueva:
+     - la estimación con una barra de rango grande y la línea del 50 %;
+     - las preguntas de apoyo en tarjetas, cada una con su cifra real.
+3. **La banda «es una suposición, no una medición»,** ahora también en las preguntas nuevas, como dice §3. Antes faltaba ahí.
+4. **El mapa y una segunda columna al mismo nivel.** La segunda columna cambia según el caso:
+   - con una pregunta medida, la tabla de localidades, que deja de ser un anexo debajo del mapa;
+   - con una nueva, «Para explorar»;
+   - sin pregunta, un estado vacío que dice qué aparecerá.
+5. **Los grupos,** en columnas.
+
+**Lo que no cambió:**
+- los rótulos honestos;
+- los años de cada pregunta;
+- los márgenes;
+- el mapa apagado con su explicación, que va en el encabezado y nunca encima;
+- ~~la escala completa en el color del mapa~~ (cambió después, a pedido de Daniel: ver «Actualización» al final de esta sección).
+
+Siguen los tres arreglos de §5.1: el foco del SVG por borde, el tracking 0 en el mapa y el `overflow:clip`. La fuerza del puente y «ver de todos modos» ya no existían (D18, DI-CO21), así que no se restituyeron.
+
+**Decisiones nuevas:**
+- **El eje de la tabla** va del margen más bajo al más alto, redondeado a una décima (2,3 a 4,0 en la seguridad del barrio), y no de 1 a 5. Con la escala completa, las 19 localidades quedaban apiñadas en el centro. Los márgenes se dibujan en el mismo eje y el eje va escrito en el encabezado, así que no exagera nada.
+- **El mapa** se dibuja con proporción 3:4, porque limitarlo por el alto lo dejaba pequeño.
+- **En el mapa apagado**, la localidad seleccionada se marca tenue y no en lima, para que no parezca un dato.
+- **Las filas de la tabla** llevan ▲/▼ y una etiqueta para lector de pantalla con el margen.
+- **El mapa pasa de `role="img"` a `role="group"`.** Era uno de los pendientes de §5.15: escondía a los lectores de pantalla las localidades, que son botones.
+- **Estados:**
+  - cargando, en un panel con estado para lector de pantalla;
+  - error, con «Intentar de nuevo»;
+  - vacío;
+  - el tema o el ejemplo en uso queda marcado.
+
+**Movimiento (skill emil-design-eng):**
+- **Lo nuevo entra** con opacidad y 6 px, en 220 ms con `cubic-bezier(.23,1,.32,1)`: el resultado, la tabla, los grupos, la reformulación y la edición. Usa la Web Animations API, así que una consulta nueva cancela la entrada anterior.
+- **El mapa cambia de color** en 240 ms.
+- **Al presionar**, los botones se achican a `scale(.97)` en 160 ms.
+- **El hover** solo aplica con puntero fino.
+- **Se fueron** el parpadeo del mapa (1,2 s), el relleno de 600 ms y la esfera flotante.
+- **Con «menos movimiento»** nada se anima, el desplazamiento no es suave y el indicador de carga queda quieto. Era el otro pendiente de §5.15.
+
+**Accesibilidad:**
+- **Contraste:** todo el texto pasa AA. El más tenue, `#859984`, da 6,9:1 sobre negro, 5,8:1 sobre `#181818` y 5,1:1 sobre `#212525`.
+- **Foco:** contorno de 2 px en `#ddffdc`.
+- **Objetivos táctiles:** todos los botones y enlaces de la página miden 44 px o más (medido en celular).
+
+**Verificado:**
+- las 21 pruebas de `tests/test_consulta.py`;
+- en modo simulado, en escritorio (1280 px) y en celular (390 px, dentro de un marco):
+  - una pregunta medida y una nueva;
+  - editar y volver a suponer;
+  - el error, simulando que el servidor falla;
+  - sin desplazamiento horizontal;
+  - sin errores en la consola.
+
+**Pendiente:**
+- textos de 11 a 12 px en notas y ejes;
+- fuentes de Google sin copia local;
+- la clase `e-sí` con tilde;
+- ~~el mapa sigue casi uniforme con la escala completa. Es a propósito, y ahora lo compensa la tabla.~~ Resuelto en la actualización de abajo.
+
+**Actualización (5/10/2026): el mapa se colorea frente a la ciudad.** Daniel vio que los colores no se
+distinguían. Había dos causas:
+- con la escala completa, las 19 localidades caían en el mismo tramo de la rampa (de 2,8 a 3,6 sobre 1 a 5);
+- la rampa solo tenía verdes.
+
+Le propuse dos caminos: colorear frente a la ciudad o estirar el gradiente al rango de los datos. Eligió el primero, en
+verde y ámbar.
+- **Tres clases, con la misma regla de los contadores:**
+  - **por encima** de la ciudad, en verde claro `#9fe08a`;
+  - **sin diferencia clara**, en gris `#3c413c` (en la tabla el punto va en `#9aa29a`, porque el gris del mapa no se ve sobre el fondo);
+  - **por debajo**, en ámbar `#c7782a`.
+  - La regla es la de siempre: cuenta como diferencia solo si el margen del 95 % no incluye el promedio de la ciudad. Así el color no muestra
+    nada que el margen no respalde. El promedio y el margen de cada localidad siguen en la tabla y en la ficha.
+- **Los tres tonos difieren en luminosidad, no solo en tono,** y se distinguen también con daltonismo rojo-verde.
+  Además, el mapa y la tabla ponen ▲/▼ junto al nombre, y los filtros llevan la muestra del color.
+- **La leyenda** pasa de la rampa a tres filas con su conteo y la regla.
+- **La localidad seleccionada** se marca en fósforo y no en lima, para no confundirla con «por encima».
+- **Excepción al DESIGN.md:** el ámbar rompe el «solo verde». Vale solo para estos datos; la interfaz sigue en verde.
+- **Sin cambios:**
+  - la rampa verde se queda en la distribución de respuestas y en el mapa de información general (adultos);
+  - las preguntas nuevas siguen con el mapa apagado.
+
+Verificado: las 21 pruebas y la página en modo simulado. Con la pregunta de seguridad, 5 localidades salen en verde, 11 en gris y 3 en ámbar, y coinciden con los
+contadores y con la tabla.
 
 ## 6. Límites que la página dice
 
