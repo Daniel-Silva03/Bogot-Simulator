@@ -288,6 +288,9 @@ siempre el lado mayoritario, y yerra 18 puntos en el porcentaje. **No llega a la
 puntos, acierta el lado de la mayoría el 80 % (contra 57 % de la referencia) y, cuando su rango no cruza el 50 %,
 acierta 16 de 16. Primer método que cruza la vara. **No va a la página todavía:** sigue la validación pre-registrada
 en el guardado.
+**Validación en el guardado (5/10, pre-registrada, USD 1,47; `NIVEL_ACUERDO_VALIDACION_RESULTS.md`): pasa.** En 74
+preguntas que nadie había mirado: error 12,5, lado de la mayoría 77 % (referencia 51 %), y al decidir 12 de 12 (28 de
+28 entre práctica y guardado). **Siguiente: D19, cómo mostrarlo en la página (decisión de Daniel).**
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
