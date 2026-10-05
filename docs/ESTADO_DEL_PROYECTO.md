@@ -296,6 +296,9 @@ preguntas que nadie había mirado: error 12,5, lado de la mayoría 77 % (referen
 13,5; lado 73 % y 72 %), pero falla la práctica por 0,4 puntos y, al decir «probablemente», acierta 18 de 21 contra
 28 de 28 de Sonnet. Sigue Sonnet. **Banco ampliado con el lote 5** (Encuesta Distrital de Percepción 2025, SDP): 38
 afirmaciones de acuerdo; banco en 411 preguntas.
+**Candidatas con el lote 5 (5/10, pre-registrado, USD 2,73; `NIVEL_ACUERDO_LOTE5_RESULTS.md`): B (109 candidatas)
+reemplaza a A (92).** En 95 guardadas: error 11,9 contra 12,8; al decir «probablemente», 17 de 17 contra 12 de 12; en
+las 21 del lote 5, error 9,9 contra 13,6. Pendiente: llevarlo a la página (confirmación de Daniel).
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
