@@ -1,0 +1,452 @@
+{
+ "CNC_METRO10": {
+  "total": 43.78,
+  "n": 4575,
+  "excluida": null,
+  "fuente": "Biblioteca CNC"
+ },
+ "ECP23_P3329S3": {
+  "total": 73.13,
+  "n": 618,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5261S1": {
+  "total": 82.72,
+  "n": 4389,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5261S2": {
+  "total": 8.13,
+  "n": 4411,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5261S3": {
+  "total": 32.34,
+  "n": 4406,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5261S4": {
+  "total": 4.58,
+  "n": 4413,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5261S5": {
+  "total": 78.59,
+  "n": 4382,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5261S7": {
+  "total": 56.87,
+  "n": 4352,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5261S8": {
+  "total": 85.59,
+  "n": 4404,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5302": {
+  "total": 18.04,
+  "n": 4173,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5304S1": {
+  "total": 56.33,
+  "n": 4298,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5304S10": {
+  "total": 37.67,
+  "n": 4251,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5304S2": {
+  "total": 58.9,
+  "n": 4284,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5304S3": {
+  "total": 49.43,
+  "n": 4308,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5304S5": {
+  "total": 40.24,
+  "n": 4285,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5304S6": {
+  "total": 36.92,
+  "n": 4307,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5304S9": {
+  "total": 40.68,
+  "n": 4261,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5314S5": {
+  "total": 84.27,
+  "n": 4365,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5314S6": {
+  "total": 84.08,
+  "n": 4367,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5314S7": {
+  "total": 76.81,
+  "n": 4336,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S1": {
+  "total": 71.83,
+  "n": 4322,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S10": {
+  "total": 92.59,
+  "n": 4374,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S11": {
+  "total": 78.68,
+  "n": 4257,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S2": {
+  "total": 74.62,
+  "n": 4312,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S3": {
+  "total": 82.35,
+  "n": 4317,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S4": {
+  "total": 87.67,
+  "n": 4345,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S5": {
+  "total": 87.47,
+  "n": 4350,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S6": {
+  "total": 89.07,
+  "n": 4328,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S7": {
+  "total": 51.68,
+  "n": 4225,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S8": {
+  "total": 83.08,
+  "n": 4265,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5317S9": {
+  "total": 88.42,
+  "n": 4358,
+  "excluida": null,
+  "fuente": "ECP DANE"
+ },
+ "ECP23_P5366": {
+  "total": 64.46,
+  "n": 114,
+  "excluida": "menos de 300 respuestas válidas (114)",
+  "fuente": "ECP DANE"
+ },
+ "EPC2017_PI3": {
+  "total": 27.72,
+  "n": 1442,
+  "excluida": null,
+  "fuente": "EPC coyuntura"
+ },
+ "ECA21_P13A": {
+  "total": 18.33,
+  "n": 2269,
+  "excluida": null,
+  "fuente": "SCRD Cultura Ambiental"
+ },
+ "ECA21_P13B": {
+  "total": 18.37,
+  "n": 2274,
+  "excluida": null,
+  "fuente": "SCRD Cultura Ambiental"
+ },
+ "ECA21_P19A": {
+  "total": 14.83,
+  "n": 2268,
+  "excluida": null,
+  "fuente": "SCRD Cultura Ambiental"
+ },
+ "ECA21_P19B": {
+  "total": 22.41,
+  "n": 2259,
+  "excluida": null,
+  "fuente": "SCRD Cultura Ambiental"
+ },
+ "ECA21_P19C": {
+  "total": 28.72,
+  "n": 2248,
+  "excluida": null,
+  "fuente": "SCRD Cultura Ambiental"
+ },
+ "EBC25_P105.1": {
+  "total": 74.86,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P108": {
+  "total": 70.83,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P1.1": {
+  "total": 70.67,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P1.2": {
+  "total": 65.43,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P6.1": {
+  "total": 35.54,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P6.2": {
+  "total": 50.69,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P6.3": {
+  "total": 44.31,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P6.4": {
+  "total": 57.29,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P6.5": {
+  "total": 55.45,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P6.6": {
+  "total": 47.86,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P6.7": {
+  "total": 56.8,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.1": {
+  "total": 52.15,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.10": {
+  "total": 31.6,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.11": {
+  "total": 41.69,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.2": {
+  "total": 46.81,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.3": {
+  "total": 49.96,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.4": {
+  "total": 55.4,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.5": {
+  "total": 31.86,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.6": {
+  "total": 29.55,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.7": {
+  "total": 31.5,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.8": {
+  "total": 42.55,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P10.9": {
+  "total": 37.06,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P13.1": {
+  "total": 25.82,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P13.2": {
+  "total": 31.9,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P13.3": {
+  "total": 36.05,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P13.4": {
+  "total": 30.0,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P13.5": {
+  "total": 51.79,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P25.1": {
+  "total": 24.37,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P25.2": {
+  "total": 29.18,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P25.3": {
+  "total": 67.78,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P25.4": {
+  "total": 24.02,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P51.1": {
+  "total": 41.83,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P51.2": {
+  "total": 52.9,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P51.3": {
+  "total": 67.54,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P51.4": {
+  "total": 45.45,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P51.5": {
+  "total": 27.58,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ },
+ "EBC25_P56": {
+  "total": 73.02,
+  "n": 5639,
+  "excluida": null,
+  "fuente": "SCRD Bienal de Culturas"
+ }
+}

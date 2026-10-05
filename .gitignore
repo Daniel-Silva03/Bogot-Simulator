@@ -1,18 +1,18 @@
-# ---------------------------------------------------------------------------
-# Bogotá Social Simulator — qué NO va al repositorio
+﻿# ---------------------------------------------------------------------------
+# BogotÃ¡ Social Simulator â€” quÃ© NO va al repositorio
 #
-# Regla de fondo: el repositorio lleva el CÓDIGO y la DOCUMENTACIÓN. Los datos
+# Regla de fondo: el repositorio lleva el CÃ“DIGO y la DOCUMENTACIÃ“N. Los datos
 # se quedan afuera y se regeneran desde sus fuentes (ver docs/DATA_SPECIFICATION.md
 # y docs/DATA_INVENTORY.md). Razones, en orden de importancia:
 #
 #   1. Confidencialidad. Los estudios del CNC no salen del equipo, ni siquiera
-#      agregados, mientras no haya autorización explícita (R10, PROJECT_CONTEXT §32).
-#   2. Terceros. Los microdatos del DANE y de Bogotá Cómo Vamos son públicos EN SU
-#      FUENTE; duplicarlos acá no aporta y complica la trazabilidad de versiones.
-#   3. Tamaño. em2021.csv pesa 1,25 GB — GitHub rechaza archivos de más de 100 MB.
+#      agregados, mientras no haya autorizaciÃ³n explÃ­cita (R10, PROJECT_CONTEXT Â§32).
+#   2. Terceros. Los microdatos del DANE y de BogotÃ¡ CÃ³mo Vamos son pÃºblicos EN SU
+#      FUENTE; duplicarlos acÃ¡ no aporta y complica la trazabilidad de versiones.
+#   3. TamaÃ±o. em2021.csv pesa 1,25 GB â€” GitHub rechaza archivos de mÃ¡s de 100 MB.
 # ---------------------------------------------------------------------------
 
-# --- entornos y caché de Python ---
+# --- entornos y cachÃ© de Python ---
 venv/
 .venv/
 env/
@@ -42,59 +42,59 @@ docs_out/
 build/
 Claude outputs/
 
-# --- notebooks: el contenido sí, la salida ejecutada no ---
+# --- notebooks: el contenido sÃ­, la salida ejecutada no ---
 notebooks/**/*.nbconvert.ipynb
 
 # ===========================================================================
-# DATOS — se excluye todo y se vuelven a incluir solo las rutas publicables.
-# Si agregás una excepción nueva, agregá también su carpeta padre: git no
-# entra a una carpeta excluida, así que un archivo no se puede rescatar si su
-# carpeta está fuera.
+# DATOS â€” se excluye todo y se vuelven a incluir solo las rutas publicables.
+# Si agregÃ¡s una excepciÃ³n nueva, agregÃ¡ tambiÃ©n su carpeta padre: git no
+# entra a una carpeta excluida, asÃ­ que un archivo no se puede rescatar si su
+# carpeta estÃ¡ fuera.
 # ===========================================================================
 data/**
 
-# marginal territorial (fuente pública: proyecciones DANE-SDP)
+# marginal territorial (fuente pÃºblica: proyecciones DANE-SDP)
 !data/external/
 !data/external/marginal_localidad_18mas.csv
-# la misma fuente por año (DI-V48): sin ella el mapa pierde la capa de Crecimiento
+# la misma fuente por aÃ±o (DI-V48): sin ella el mapa pierde la capa de Crecimiento
 !data/external/marginal_localidad_18mas_serie.csv
 
-# resultados electorales por localidad (D16): agregados de resultados públicos de
-# la Registraduría. Los archivos por mesa NO: viven fuera del repo.
+# resultados electorales por localidad (D16): agregados de resultados pÃºblicos de
+# la RegistradurÃ­a. Los archivos por mesa NO: viven fuera del repo.
 !data/external/electoral/
 !data/external/electoral/presidente_1v_*
 !data/external/electoral/presidente_2v_*
 !data/external/electoral/congreso_2018_*
 
-# geometría oficial de localidades (fuente pública: Catastro Distrital)
+# geometrÃ­a oficial de localidades (fuente pÃºblica: Catastro Distrital)
 !data/external/geo/
 !data/external/geo/**
 
-# el producto de la capa visual: paquete de datos + página autocontenida
+# el producto de la capa visual: paquete de datos + pÃ¡gina autocontenida
 !data/processed/
 !data/processed/viz/
 !data/processed/viz/**
 
-# veredictos de los experimentos: son el registro de qué se pre-registró y
-# qué salió. Pesan kilobytes y son el resultado, no el dato.
+# veredictos de los experimentos: son el registro de quÃ© se pre-registrÃ³ y
+# quÃ© saliÃ³. Pesan kilobytes y son el resultado, no el dato.
 !data/processed/exp*/
 !data/processed/exp*/veredicto.json
 
-# A08 paso 0: agregados por localidad de datos públicos (DANE). Pesan kilobytes
+# A08 paso 0: agregados por localidad de datos pÃºblicos (DANE). Pesan kilobytes
 # y sostienen A08_PASO0_RESULTS.md.
 !data/processed/a08/
 !data/processed/a08/paso0.json
 !data/processed/a08/paso0b_*.json
 
-# EPC: la medición del efecto de diseño y la serie que la acompaña (DI-D7). Son
+# EPC: la mediciÃ³n del efecto de diseÃ±o y la serie que la acompaÃ±a (DI-D7). Son
 # agregados de kilobytes y el PC sin microdato depende de ellos: si no se
-# versionan, cada máquina publica su propia copia.
+# versionan, cada mÃ¡quina publica su propia copia.
 !data/processed/deff_epc_seis_olas.csv
 !data/processed/serie_epc_bcv.csv
 !data/processed/transiciones_epc_con_diseno.csv
 !data/processed/validacion_proxy_conglomerado.csv
 
-# geografía electoral: el resultado del análisis pre-registrado (kilobytes, agregados)
+# geografÃ­a electoral: el resultado del anÃ¡lisis pre-registrado (kilobytes, agregados)
 !data/processed/geografia_electoral/
 !data/processed/geografia_electoral/resultado.json
 !data/processed/eje_partidos/
@@ -130,6 +130,7 @@ data/**
 !data/processed/banco/reales_practica_lote3.json
 !data/processed/banco/sorteo_lote4.csv
 !data/processed/banco/reales_practica_lote4.json
+!data/processed/banco/reales_guardado_acuerdo.json
 !data/processed/practica_puente/
 !data/processed/practica_puente/actual.json
 !data/processed/practica_puente/afectados.json
@@ -137,7 +138,7 @@ data/**
 !data/processed/reformulacion/
 !data/processed/reformulacion/resultado.json
 
-# --- explícito, aunque ya esté cubierto arriba: agregados del CNC ---
+# --- explÃ­cito, aunque ya estÃ© cubierto arriba: agregados del CNC ---
 data/external/cnc/
 data/raw/cnc/
 
