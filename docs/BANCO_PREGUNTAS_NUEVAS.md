@@ -434,3 +434,18 @@ práctica.
 - **Pares claros:** regla DI-BR5 y z > 1,96.
 
 **Código:** `src/experiments/banco_lote5.py`, con pruebas en `tests/test_banco_lote5.py`.
+
+### 14.1 Sorteo y resultados de práctica del lote 5 (5/10)
+
+- **Sorteo** (commit `1f05bad`, antes de calcular):
+  - práctica: bloques 104, 602, 603 y 604 (áreas verdes; movilidad y obras; metro y espacio público;
+    ambiente), 17 preguntas;
+  - guardado: bloques 105, 408, 503 y 704 (mascotas; seguridad y justicia; economía y turismo;
+    confianza), 21 preguntas.
+- **Resultados de práctica** (`reales_practica_lote5.json`): ninguna queda fuera por estructura; entre
+  12.121 y 13.058 respuestas válidas por pregunta; **162 pares claros**.
+- **Con el lote 5, el banco suma 411 preguntas.**
+- **Las preguntas de acuerdo o sí/no que usa la estimación de D19** pasan de 92 a 109 en práctica y de
+  74 a 95 en el guardado.
+- **Las candidatas de D19 no cambian solas:** siguen siendo las 92 validadas. Usar estas nuevas como
+  candidatas es otra configuración, que necesita su propia prueba pre-registrada.
