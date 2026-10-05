@@ -1543,6 +1543,47 @@ había recomendado quitarlo (opción 2). DI-CO21 en `src/consulta/motor.py`.
 
 ---
 
+### D19 — Una pregunta nueva trae una estimación de si Bogotá estaría de acuerdo
+
+**Fecha:** 5 de octubre de 2026
+**Decisión:** Para una pregunta nueva, la página da una **estimación del porcentaje que estaría de acuerdo**:
+- se calcula con Claude Sonnet 5.5 eligiendo preguntas parecidas entre las 92 de acuerdo o sí/no medidas de
+  la práctica del banco; el porcentaje es la media real de las elegidas;
+- se muestra con un rango de ±21,9 puntos;
+- dice **«probablemente sí» o «probablemente no» solo cuando el rango no cruza el 50 %**; si lo cruza, dice
+  «dividida»;
+- siempre va rotulada como estimación, con las preguntas en que se apoya y su resultado real, y sin mapa.
+
+Es la configuración validada, sin cambios. Reemplaza el «no podemos decir…» de DI-CO20, que queda como
+respaldo si la estimación falla.
+
+**Justificación.**
+- Pasó la regla pre-registrada en la práctica (`NIVEL_ACUERDO_SONNET_RESULTS.md`: error 13,9; lado de la
+  mayoría 80 %; al decidir, 16 de 16).
+- La repitió en el guardado, con 74 preguntas que nadie había mirado
+  (`NIVEL_ACUERDO_VALIDACION_RESULTS.md`: error 12,5; lado 77 %, contra 51 % de decir siempre «no»; al
+  decidir, 12 de 12).
+- El modelo no responde por nadie ni pone cifras (Experimentos 8 y 9): solo elige preguntas medidas.
+
+**Alternativas consideradas:**
+- *Seguir sin estimación* (D18): honesto, pero Daniel lo pidió y ya hay evidencia validada.
+- *Usar mimo, el modelo de la página*: más barato, pero nunca se probó para esto.
+- *Sumar como candidatas las 74 del guardado*: es una configuración no probada; queda para una prueba propia.
+
+**Límites.**
+1. En ~5 de cada 6 preguntas la respuesta es «dividida».
+2. El rango es ancho (±22).
+3. En las tres preguntas guardadas sobre el metro, el lado de la mayoría quedó sin decidir.
+4. Las candidatas son 92 fijas: una pregunta sin ninguna parecida entre ellas recibe una estimación pobre.
+5. Cuesta ~USD 0,02 por pregunta nueva, además de la reformulación y el puente.
+
+**Evidencia:** la de la justificación; DI-CO22 en `src/consulta/motor.py`.
+
+**Estado:** **APPROVED** (Daniel, en conversación, 5 de octubre de 2026: «apruebo las tres como las
+propones»: Sonnet, las 92 candidatas validadas y la forma de mostrarlo).
+
+---
+
 # 40. DECISIONES ABIERTAS
 
 ### ~~A01~~ — RESUELTA → ver D12

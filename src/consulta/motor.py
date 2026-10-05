@@ -170,6 +170,20 @@ DI-CO21. **El tono por grupo queda como contexto descriptivo, sin cifra de acier
     generaliza. Decisión: se sigue mostrando, con el título «Así responden estos grupos en general» y un
     texto que dice que es contexto y que no sirvió para anticipar respuestas. Se descartaron quitarlo
     (opción 2, la que recomendó Claude) y mostrar las dos cifras de acierto (opción 1).
+
+DI-CO22. **Una pregunta nueva trae una estimación de si Bogotá estaría de acuerdo** (5/10, D19). Hecho:
+    Claude Sonnet eligiendo preguntas parecidas entre las 92 de práctica de acuerdo o sí/no del banco pasó
+    la regla en la práctica y en el guardado (`NIVEL_ACUERDO_VALIDACION_RESULTS.md`: error 12,5, lado de
+    la mayoría 77 %, 28 de 28 al decidir). Decisión, la configuración validada sin cambios:
+    - mismo modelo (`anthropic/claude-sonnet-5.5`), instrucciones (`nivel_parecidas_b.SISTEMA`) y
+      candidatas (`nivel_acuerdo.tabla()`, que se arma con archivos del repo, sin datos crudos);
+    - la pregunta nueva va con su escala de cinco puntos y «de acuerdo» y «muy de acuerdo» marcados como
+      favorables;
+    - porcentaje = media real de las elegidas; rango = ± 21,9 (`nivel_acuerdo_validacion.H`), recortado
+      a 0-100; «probablemente sí/no» solo si el rango no cruza el 50 %; si no, «dividida».
+
+    La reformulación y el puente siguen con el modelo de siempre. Si la estimación falla, la respuesta
+    trae `estimacion: None` y la página muestra el texto de DI-CO20.
 """
 
 from __future__ import annotations
@@ -214,6 +228,15 @@ RESPUESTA_NUEVA = {
               "estarían más. Lo que sí hay es contexto medido: lo que la gente respondió a preguntas parecidas "
               "y cómo responde cada grupo en general."),
 }
+#: DI-CO22: la estimación de una pregunta nueva.
+MODELO_ESTIMACION = "anthropic/claude-sonnet-5.5"
+LLAMADA_TITULO = {"sí": "Probablemente sí", "no": "Probablemente no", "dividida": "Dividida"}
+ESTIMACION_TEXTO = ("Es una estimación, no una medición: sale de lo que la gente respondió de verdad a {n} preguntas "
+                    "parecidas que sí se midieron, que eligió un modelo de lenguaje (aparecen debajo, con su resultado). "
+                    "En pruebas con 166 preguntas reales cuyo resultado se conocía, acertó si la mayoría estaba de "
+                    "acuerdo en 3 de cada 4 casos, y las 28 veces que dijo «probablemente» acertó.")
+ESTIMACION_DIVIDIDA = (" El rango cruza el 50 %: con lo que hay medido no se puede decir de qué lado queda la "
+                       "mayoría.")
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
 TONO_TITULO = "Así responden estos grupos en general"                       # DI-CO21
 TONO_TEXTO = ("Es contexto, no una respuesta a esta pregunta: es igual para toda pregunta nueva. Resume cómo "
@@ -291,6 +314,22 @@ def vista(f: dict) -> dict:
     return {**f, "escala": [c for c in f["escala"] if not NO_SUSTANTIVA.search(str(f["etiquetas"][str(c)]))]}
 
 
+def _candidatas_estimacion() -> Optional[pd.DataFrame]:
+    """DI-CO22: las 92 preguntas validadas, con su fuente legible; None si faltan los archivos del banco."""
+    try:
+        from src.experiments import nivel_acuerdo as na
+        c = na.tabla()
+    except Exception:                                                           # noqa: BLE001
+        return None
+    s = pd.concat([pd.read_csv(f) for f in sorted((RAIZ / "data" / "processed" / "banco").glob("sorteo*.csv"))])
+    nombres = {"ECP DANE": "Encuesta de Cultura Política, DANE", "EPC armonizada": "Encuesta de Percepción Ciudadana, Bogotá Cómo Vamos",
+               "EPC coyuntura": "Encuesta de Percepción Ciudadana, Bogotá Cómo Vamos", "Biblioteca CNC": "Encuesta del CNC",
+               "SCRD Cultura Ambiental": "Encuesta de Cultura Ambiental, Secretaría de Cultura",
+               "SCRD Bienal de Culturas": "Encuesta Bienal de Culturas, Secretaría de Cultura"}
+    fuente = dict(zip(s.id, s.fuente.map(lambda f: nombres.get(f, f)) + ", " + s.anio.astype(str)))
+    return c.assign(fuente_txt=c.id.map(fuente))
+
+
 def cargar_donantes() -> pd.DataFrame:
     return pd.read_parquet(POBLACION / "donantes.parquet")
 
@@ -335,6 +374,7 @@ class Motor:
         self.llamar, self.modelo = llamar, modelo
         self.catalogo = catalogo if catalogo is not None else rf.cargar_catalogo()
         self._vista = {v: vista(f) for v, f in self.catalogo.items()}         # DI-CO19
+        self._candidatas = _candidatas_estimacion()                              # DI-CO22
         self.donante = donante if donante is not None else cargar_donantes()
         self.anios = anios if anios is not None else cargar_anios()
         ag = agentes if agentes is not None else pd.read_parquet(POBLACION / "agentes.parquet")
@@ -455,6 +495,35 @@ class Motor:
                            f"unas {n_loc} personas encuestadas por localidad.")}
 
     # ---------------------------------------------------------------- paso 2b
+    def estimar(self, pregunta: str, escala: list[str]) -> Optional[dict]:
+        """DI-CO22: (porcentaje, rango, llamada y las preguntas medidas en que se apoya), o None."""
+        from src.experiments import nivel_acuerdo as na
+        from src.experiments import nivel_acuerdo_validacion as nv
+        from src.experiments import nivel_parecidas_b as nb
+        c = self._candidatas
+        if c is None or c.empty:
+            return None
+        nueva = pd.DataFrame([{"id": "NUEVA", "familia": "NUEVA", "pregunta_pagina": pregunta,
+                               "categorias": "; ".join(f"{i + 1}={e}" for i, e in enumerate(escala)),
+                               "codigos_favorables": "[4, 5]", "total": np.nan}])
+        cols = ["id", "familia", "pregunta_pagina", "categorias", "codigos_favorables", "total"]
+        t = pd.concat([nueva, c[cols]], ignore_index=True)
+        try:
+            ids, _ = nb.elegir(t, 0, self.llamar, self.cache, MODELO_ESTIMACION, float("inf"))
+        except Exception:                                                       # noqa: BLE001 — se cae al texto de DI-CO20
+            return None
+        if not ids:
+            return None
+        elegidas = c.set_index("id").loc[ids]
+        pct = float(elegidas.total.mean())
+        lo, hi = max(0.0, pct - nv.H), min(100.0, pct + nv.H)
+        llam = str(na.llamada(np.array([pct]), np.array([nv.H]))[0])
+        return {"porcentaje": round(pct, 1), "rango": [round(lo, 1), round(hi, 1)], "llamada": llam,
+                "titulo": LLAMADA_TITULO[llam],
+                "texto": ESTIMACION_TEXTO.format(n=len(ids)) + (ESTIMACION_DIVIDIDA if llam == "dividida" else ""),
+                "preguntas": [{"pregunta": r.pregunta_pagina, "fuente": r.fuente_txt, "porcentaje": round(float(r.total), 1)}
+                              for r in elegidas.itertuples()]}
+
     def responder_nueva(self, pregunta: str, escala: list[str]) -> dict:
         if not pregunta or len(escala) != 5:
             raise ConsultaError("Una pregunta nueva necesita su texto y cinco etiquetas.")
@@ -482,6 +551,7 @@ class Motor:
         return {"tipo": "nueva", "suposicion": True, "aviso": AVISO, "pregunta": pregunta.strip(), "escala": escala,
                 "consultados": len(self.agentes),                                   # DI-CO9
                 "respuesta": RESPUESTA_NUEVA,                                        # DI-CO20
+                "estimacion": self.estimar(pregunta.strip(), escala),               # DI-CO22
                 "grupos": self.tono, "tono_titulo": TONO_TITULO,                     # DI-CO14
                 "tono_texto": TONO_TEXTO.format(n=self.n_tono),
                 "relacionadas": relacionadas,                                        # DI-CO16: sin justificación
@@ -524,6 +594,9 @@ def cliente(simulado: bool = False):
     def llamar(modelo, sistema, usuario, temp):
         if sistema == rf.SISTEMA:
             return ref(modelo, sistema, usuario, temp)
+        from src.experiments import nivel_parecidas_b as nb
+        if sistema == nb.SISTEMA:                                               # DI-CO22: las tres primeras candidatas
+            return json.dumps({"ids": re.findall(r"^- (\S+) \|", usuario, re.M)[:3], "razon": "simulado"})
         return json.dumps({"preguntas": [{"codigo": cods[0], "sentido": "+", "peso": 2},
                                          {"codigo": cods[1], "sentido": "-", "peso": 1}],
                            "fuerza": "media", "sin_base": False, "nivel": 3.2, "justificacion": "simulado"})

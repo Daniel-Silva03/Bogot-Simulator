@@ -100,6 +100,19 @@ section{padding:80px 0}
 .sin-respuesta{margin:12px 0 4px;padding:16px;border:1px dashed var(--humo);border-radius:var(--r-input);background:var(--elevado)}
 .sin-respuesta .sr-titulo{font-size:22px;line-height:1.3;letter-spacing:-.4px;font-weight:300;color:var(--blanco);margin:0 0 8px}
 .sin-respuesta p:last-child{font-size:14px;color:var(--texto-2);margin:0;letter-spacing:.14px}
+/* D19 (DI-CO22): la estimación de una pregunta nueva */
+.estimacion{margin:12px 0 4px;padding:16px;border:1px solid var(--linea-2);border-radius:var(--r-input);background:var(--elevado)}
+.estimacion.e-sí{border-color:var(--menta-palida)}
+.estimacion.e-dividida{border-style:dashed}
+.estimacion .est-titulo{font-size:26px;line-height:1.2;letter-spacing:-.5px;font-weight:300;color:var(--blanco);margin:0 0 4px}
+.estimacion .grande{margin:4px 0 8px}
+.estimacion .grande b{font-size:44px}
+.rango-est{position:relative;height:10px;background:rgba(255,255,255,.06);border-radius:100px;margin:10px 0 4px}
+.rango-est i{position:absolute;top:0;bottom:0;border-radius:100px;background:rgba(227,255,239,.28)}
+.rango-est b{position:absolute;top:-3px;width:4px;height:16px;border-radius:2px;background:var(--menta-palida);transform:translateX(-50%)}
+.rango-est em{position:absolute;top:-6px;bottom:-6px;width:1px;background:var(--humo)}
+.rango-etq{display:flex;justify-content:space-between;font:400 11px var(--mono);color:var(--texto-3)}
+.estimacion p.nota{margin-top:10px}
 /* D18 (DI-CO14): el tono general por grupo, rotulado como lo que es */
 .aviso-tono{border-left:2px dashed var(--humo);padding-left:10px;color:var(--texto-2)}
 .ins-fuera{border:1px solid var(--humo);color:var(--humo)}
@@ -347,7 +360,7 @@ footer .marca{margin-bottom:16px}
     </div>
     <div class="rejilla-3 tipos">
       <div class="tarjeta"><span class="insignia ins-cat">Ya medida</span><h3 style="margin-top:16px">Preguntas que la encuesta hizo</h3><p>Se responden con lo que la gente contestó, reponderado por la población. Tienen mapa, con su margen de error.</p><p class="ej">«¿Se siente seguro en su barrio?»</p></div>
-      <div class="tarjeta"><span class="insignia ins-nueva">Nueva</span><h3 style="margin-top:16px">Preguntas sobre un cambio</h3><p>No hay dato de la pregunta: te mostramos lo que la gente respondió a las preguntas medidas que más se relacionan, y cómo suele responder cada grupo. Sin cifra propia y sin mapa.</p><p class="ej">«¿Apoyaría cobrar por entrar en carro al centro?»</p></div>
+      <div class="tarjeta"><span class="insignia ins-nueva">Nueva</span><h3 style="margin-top:16px">Preguntas sobre un cambio</h3><p>Se estiman con preguntas parecidas que sí se midieron: «probablemente sí» o «probablemente no» solo cuando el rango lo permite; si no, «dividida». Sin mapa.</p><p class="ej">«¿Apoyaría cobrar por entrar en carro al centro?»</p></div>
       <div class="tarjeta"><span class="insignia ins-fuera">Fuera de alcance</span><h3 style="margin-top:16px">Lo que no se puede suponer</h3><p>Cifras, intención de voto, lo que piensa alguien en particular. Te decimos por qué y te sugerimos algo cercano.</p><p class="ej">«¿Por quién van a votar?»</p></div>
     </div>
   </div>
@@ -409,7 +422,7 @@ footer .marca{margin-bottom:16px}
         <li>Opina como Bogotá entre 2022 y 2024, promediada. Cada respuesta dice de qué años sale; algunas preguntas solo se hicieron en 2023.</li>
         <li>Unas 80 personas por localidad: el mapa tiene márgenes anchos.</li>
         <li>Sumapaz no tiene encuestados.</li>
-        <li>Una pregunta nueva no tiene cifra propia: lo que ves son datos de otras preguntas.</li></ul></article>
+        <li>En una pregunta nueva, la cifra es una estimación con un rango de unos ±22 puntos.</li></ul></article>
     </div>
     <div class="cabeza" style="margin:56px 0 0"><h2 style="font-size:28px;letter-spacing:-.56px">Hecho con datos públicos</h2></div>
     <div class="fuentes">
@@ -707,12 +720,24 @@ function mostrar(r){
   } else {
     /* D18: sin nivel ni fuerza; el tono general a la vista, rotulado; cada relacionada con su dato real */
     const tope = Math.max(.25, ...Object.values(r.grupos).flat().map(f => Math.abs(f.indice)));
+    const e = r.estimacion;                                               /* D19: puede faltar, y entonces vale DI-CO20 */
     el.innerHTML = `<div class="asistente"><span class="avatar" aria-hidden="true"></span><span><b>Bogotá Sintética</b> · La encuesta no hizo
-        esta pregunta, así que no puedo decir si la gente estaría de acuerdo. Te muestro lo que respondió a
-        <span class="num">${r.relacionadas.length}</span> preguntas parecidas que sí se midieron, y cómo suele responder cada grupo.</span></div>
-      <span class="insignia ins-nueva">Pregunta nueva · sin dato propio</span>
+        esta pregunta. ${e ? `La estimé con <span class="num">${e.preguntas.length}</span> preguntas parecidas que sí se midieron:
+        <b style="font-weight:500">${esc(e.titulo.toLowerCase())}</b>.` : 'No pude estimar si la gente estaría de acuerdo.'} También te muestro
+        preguntas de la encuesta de Bogotá que se relacionan y cómo responde cada grupo en general.</span></div>
+      <span class="insignia ins-nueva">Pregunta nueva · ${e ? 'estimación' : 'sin dato propio'}</span>
       <h3>${esc(r.pregunta)}</h3>
-      <div class="sin-respuesta"><p class="sr-titulo">${esc(r.respuesta.titulo)}</p><p>${esc(r.respuesta.texto)}</p></div>
+      ${e ? `<div class="estimacion e-${e.llamada}">
+        <p class="est-titulo">${esc(e.titulo)}</p>
+        <div class="grande"><b>${Math.round(e.porcentaje)} %</b><span>estaría de acuerdo · entre ${Math.round(e.rango[0])} % y ${Math.round(e.rango[1])} %</span></div>
+        <div class="rango-est" role="img" aria-label="Rango estimado entre ${Math.round(e.rango[0])} y ${Math.round(e.rango[1])} por ciento">
+          <i style="left:${e.rango[0]}%;width:${e.rango[1]-e.rango[0]}%"></i><em style="left:50%"></em><b style="left:${e.porcentaje}%"></b></div>
+        <div class="rango-etq"><span>0 %</span><span>50 %</span><span>100 %</span></div>
+        <p class="nota">${esc(e.texto)}</p></div>
+      <div class="etq-min" style="margin-top:20px">En qué se apoya la estimación · preguntas medidas y su resultado real</div>
+      <ul class="puente-lista">${e.preguntas.map(q => `<li><span class="sg mas">·</span><span class="rel"><span>${esc(q.pregunta)}</span>
+        <span class="dato"><b>${Math.round(q.porcentaje)} %</b> de acuerdo o «sí» · ${esc(q.fuente)}</span></span></li>`).join('')}</ul>`
+      : `<div class="sin-respuesta"><p class="sr-titulo">${esc(r.respuesta.titulo)}</p><p>${esc(r.respuesta.texto)}</p></div>`}
       <div class="etq-min" style="margin-top:24px">Contexto 1 · Lo que la gente respondió a preguntas parecidas</div>
       <ul class="puente-lista">${r.relacionadas.map((q,i) => { const n = q.escala.length; return `<li>
         <span class="sg ${q.sentido==='+'?'mas':'menos'}" title="${q.sentido==='+'?'En el mismo sentido':'En sentido contrario'}">${q.sentido==='+'?'+':'−'}</span>

@@ -361,11 +361,34 @@ preguntas nuevas, pero:
 
 Verificado: 19 pruebas de `tests/test_consulta.py` (el texto no lleva ningún porcentaje).
 
+## 5.13 Una pregunta nueva trae una estimación (5/10/2026, D19, DI-CO22)
+
+Lo primero de la respuesta a una pregunta nueva pasa a ser **la estimación**:
+- «**Probablemente sí**», «**Probablemente no**» o «**Dividida**»;
+- el porcentaje que estaría de acuerdo y su rango (± 21,9) sobre una barra con la línea del 50 %;
+- un texto que dice que es una estimación, cómo se hizo y cuánto acertó en las pruebas;
+- debajo, **«En qué se apoya la estimación»**: las preguntas medidas que eligió Sonnet, con su resultado real
+  y su fuente.
+
+Después siguen, como contexto, las preguntas relacionadas de la EPC (con mapa) y el tono por grupo. Si la
+estimación falla, se muestra el «No podemos decir…» de §5.11-DI-CO20. También cambian la tarjeta «Preguntas
+sobre un cambio» y la línea de límites.
+
+**Costo:** una llamada a Sonnet por pregunta nueva (~USD 0,02), además de la reformulación y el puente.
+
+Verificado:
+- 21 pruebas de `tests/test_consulta.py` (2 nuevas: la estimación validada y la caída al aviso anterior) y
+  las 7 de la reformulación;
+- la página y `/api/responder` por HTTP en modo simulado.
+
+No se miró en el navegador, porque la extensión de Chrome no estaba conectada.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por
 localidad~~ opina como Bogotá entre 2022 y 2024 (v0.3); unas 250 personas por localidad en
 las preguntas que se juntan, y 80 en las que solo tiene 2023, dan márgenes anchos (la
 confiabilidad de las medias por localidad es baja, `PUENTE_RESULTS.md` §4); Sumapaz no tiene
-encuestados; ~~el nivel de una pregunta nueva lo propone el modelo y se puede cambiar~~ una
-pregunta nueva no tiene cifra propia: lo que se ve son datos de otras preguntas (D18).
+encuestados; ~~el nivel de una pregunta nueva lo propone el modelo y se puede cambiar~~ ~~una
+pregunta nueva no tiene cifra propia (D18)~~ en una pregunta nueva, la cifra es una estimación con un rango de
+~±22 puntos (D19).

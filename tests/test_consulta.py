@@ -127,7 +127,8 @@ def test_si_el_v2_dice_sin_base_se_pide_el_puente_de_siempre():
     m = mo.Motor(llamar, "prueba", donante=M.donante, agentes=M.agentes, catalogo=M.catalogo,
                  cache=e9.Cache(Path(_tmp.name) / "sinbase.json"))
     r = m.responder_nueva("¿Qué tan de acuerdo está con Z?", ["a", "b", "c", "d", "e"])
-    assert vistos == [sb.SISTEMA_V2, pu.SISTEMA]
+    from src.experiments import nivel_parecidas_b as nb
+    assert vistos[:2] == [sb.SISTEMA_V2, pu.SISTEMA] and set(vistos[2:]) <= {nb.SISTEMA}     # DI-CO22: luego, la estimación
     assert r["tipo"] == "nueva" and r["reintento"] and [q["codigo"] for q in r["relacionadas"]] == [cods[0]]
 
 
@@ -141,6 +142,39 @@ def test_las_preguntas_relacionadas_traen_lo_que_la_gente_respondio():
         assert q["sentido"] in "+-"
     html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
     assert "ver de todos modos" not in html and 'type="range"' not in html and "Ver completa" in html
+
+
+def test_una_pregunta_nueva_trae_la_estimacion_validada():
+    """DI-CO22: Sonnet, las 92 candidatas validadas y el rango fijo de ±21,9."""
+    from src.experiments import nivel_acuerdo_validacion as nv
+    vistos = []
+
+    def llamar(modelo, sistema, usuario, temp):
+        vistos.append(modelo)
+        return LLAMAR(modelo, sistema, usuario, temp)
+    m = mo.Motor(llamar, MODELO, donante=M.donante, agentes=M.agentes, catalogo=M.catalogo,
+                 cache=e9.Cache(Path(_tmp.name) / "est.json"))
+    r = m.responder_nueva("¿Qué tan de acuerdo está con V?", ["a", "b", "c", "d", "e"])
+    e = r["estimacion"]
+    assert len(m._candidatas) == 92 and mo.MODELO_ESTIMACION in vistos
+    assert 0 <= e["rango"][0] <= e["porcentaje"] <= e["rango"][1] <= 100
+    assert abs(e["rango"][1] - min(100, e["porcentaje"] + nv.H)) < 0.06 and e["preguntas"]
+    lado = "sí" if e["rango"][0] > 50 else ("no" if e["rango"][1] < 50 else "dividida")
+    assert e["llamada"] == lado and e["titulo"] == mo.LLAMADA_TITULO[lado] and "estimación, no una medición" in e["texto"]
+    html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
+    assert 'class="estimacion' in html and "En qué se apoya la estimación" in html
+
+
+def test_si_la_estimacion_falla_queda_el_aviso_de_siempre():
+    """DI-CO22: si Sonnet no da candidatas válidas, `estimacion` es None y la página muestra DI-CO20."""
+    from src.experiments import nivel_parecidas_b as nb
+
+    def llamar(modelo, sistema, usuario, temp):
+        return "no sé" if sistema == nb.SISTEMA else LLAMAR(modelo, sistema, usuario, temp)
+    m = mo.Motor(llamar, MODELO, donante=M.donante, agentes=M.agentes, catalogo=M.catalogo,
+                 cache=e9.Cache(Path(_tmp.name) / "est_roto.json"))
+    r = m.responder_nueva("¿Qué tan de acuerdo está con U?", ["a", "b", "c", "d", "e"])
+    assert r["estimacion"] is None and r["respuesta"]["titulo"].startswith("No podemos decir")
 
 
 def test_un_puente_roto_se_dice_y_no_se_responde():
