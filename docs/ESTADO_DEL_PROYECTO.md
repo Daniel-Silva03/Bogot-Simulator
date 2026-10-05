@@ -292,6 +292,10 @@ en el guardado.
 preguntas que nadie había mirado: error 12,5, lado de la mayoría 77 % (referencia 51 %), y al decidir 12 de 12 (28 de
 28 entre práctica y guardado). ~~**Siguiente: D19, cómo mostrarlo en la página (decisión de Daniel).**~~ **D19 aprobada y en la página el
 5/10:** «probablemente sí / no / dividida», con porcentaje, rango de ±21,9 y las preguntas en que se apoya (DI-CO22).
+**¿Alcanza mimo? (5/10, pre-registrado, USD 0,54; `NIVEL_ACUERDO_MIMO_RESULTS.md`): no.** Se acerca (error 16,2 y
+13,5; lado 73 % y 72 %), pero falla la práctica por 0,4 puntos y, al decir «probablemente», acierta 18 de 21 contra
+28 de 28 de Sonnet. Sigue Sonnet. **Banco ampliado con el lote 5** (Encuesta Distrital de Percepción 2025, SDP): 38
+afirmaciones de acuerdo; banco en 411 preguntas.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
