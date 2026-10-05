@@ -1,0 +1,3 @@
+id,familia,conjunto,motivo,ambito,fuente,anio,variable,independiente,pregunta_pagina,codigos_favorables,categorias,tema
+BV25_P3,BV25_P3,guardado,sorteo,Bogotá (no representativa),SCRD Barrios Vivos,2025,3. ¿En cuántas personas que viven en Bogotá cree que podría confiar?,True,¿Cree que podría confiar en más de la mitad de las personas que viven en Bogotá?,[2],1=Menos de la mitad; 2=Más de la mitad,orgullo y confianza
+BV25_P6,BV25_P6,practica,sorteo,Bogotá (no representativa),SCRD Barrios Vivos,2025,6_orgullo_ordenado,True,¿Qué tan orgulloso/a se siente de vivir en su barrio?,"[1, 2]",1=Muy orgulloso/a; 2=Orgulloso/a; 3=Indiferente; 4=Poco orgulloso/a; 5=Nada orgulloso/a; 99=Ns/Nr,orgullo y confianza
