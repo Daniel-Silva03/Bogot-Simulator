@@ -284,3 +284,92 @@ piezas:
   62.
 - Ninguna de las 16 es de aprobación de una medida, así que el lote no cambia lo que concluyeron las
   pruebas del nivel: hacen falta preguntas hermanas de medidas de ciudad (camino 3).
+
+## 12. Tercer lote: Encuesta Bienal de Culturas 2025 (pre-registro, 5/10, antes de sortear)
+
+**Fuente.** Encuesta de Indicadores de Cultura Ciudadana y Garantía de Derechos 2025, módulo de la
+Encuesta Bienal de Culturas (Secretaría de Cultura, Recreación y Deporte). Daniel la compartió el 5/10
+como dato público.
+- Probabilística en hogares, por manzanas estratificadas: 5.860 personas desde los 13 años, con
+  factor de expansión.
+- Es **independiente** de la población del simulador.
+
+**Datos sensibles: no se leen ni se copian.** La base original trae dirección, coordenadas, manzana,
+sector, teléfono, datos de cada miembro del hogar y preguntas sobre sexualidad. Se guardó una copia
+reducida, `data/raw/scrd/bienal_culturas_2025_reducida.xlsx` (no se sube), con solo las secciones de
+opinión (3 a 11), localidad, estrato, sexo, edad, grupo de edad y factor. La descarga completa se borró.
+
+**Lo que se miró antes de escribir esto:** preguntas, subpreguntas y etiquetas de respuesta. **Ningún
+porcentaje.**
+
+**Reglas de selección (opción 1, a mano, sin API):**
+1. **Entra** lo que es opinión, actitud o percepción.
+2. **No entra:**
+   - lo que es conducta, experiencia, conocimiento o un hecho («¿participa?», «¿presenció…?»,
+     «¿hay parques cerca?», «¿separa residuos?»);
+   - las preguntas nominales sin orden (motivos, emociones, medios de transporte);
+   - las condicionadas a una respuesta previa (73, 103, 131);
+   - las de selección múltiple sin escala (142);
+   - las de votar (42, 53), por el criterio 5 de §2;
+   - las que tienen las etiquetas fuera del orden de sus códigos (49, 57, 81);
+   - las abiertas.
+3. **No entra lo que repite una pregunta del catálogo**, mismo objeto y mismo alcance:
+   - seguridad en la ciudad, 104 = `VS10`;
+   - satisfacción con la movilidad, 133 = `MV4`;
+   - orgullo de vivir en Bogotá, 84 = `AG2`;
+   - satisfacción con vivir en Bogotá, `P61.1` = `CV1`;
+   - satisfacción con la vivienda, `P61.3` = `VS7`;
+   - seguridad en la zona, `P66.8` = `VS8`.
+
+   Tampoco entra «no tiene problemas con ningún vecino» (`P5.17`), que es un resumen de las demás
+   opciones.
+4. **Favorable** (DI-BA3): estar de acuerdo con la pregunta tal como queda en la página.
+   - Escalas ordenadas: la mitad alta. Con 4 puntos, 3 y 4; con 3 puntos (nada, poco, mucho), 3;
+     binarias de acuerdo, «de acuerdo».
+   - Sí/No: «sí». «Menos/más de la mitad»: «más de la mitad».
+   - Escalas de 1 a 10 («de 10 personas, ¿cuántas…?»): de 6 a 10.
+   - 109 («la ciudad, respecto al año pasado, es…»): «más segura».
+   - Los «NS/NR» de la etiqueta son «no sabe» (DI-BR1).
+5. **Familia** = una pregunta de la encuesta con todas sus subpreguntas (`indice_pregunta`).
+
+**Resultado de las reglas: 52 familias, 190 preguntas.** La lista exacta (pregunta y favorables) está
+en `src/experiments/banco_lote3.py` (`INCLUIR`, `EXCLUIR_SUB`), subida antes del sorteo.
+
+**Sorteo.** La regla 3 de DI-BA5, por familia, con la semilla **20261006**: la mitad, redondeando
+hacia arriba, al guardado.
+
+**Resultados reales, solo de práctica.** Mismo cálculo que los lotes 1 y 2:
+- **Peso:** el factor.
+- **Edad:** solo personas de 18 o más, en los tramos de la población.
+- **Estrato:** 1, 2, 3, 4 y 5-6.
+- **Localidad:** de 1 a 19.
+- **Pares claros:** regla DI-BR5 de estructura y z > 1,96.
+
+## 13. Cuarto lote: Barrios Vivos 2025 (pre-registro, 5/10, antes de sortear)
+
+**Fuente.** «Barrios Vivos: Orgullo, Confianza e Identidad» (Secretaría de Cultura, dic. 2024 - ene.
+2025), compartida por Daniel el 5/10 como dato público. Se usa a pedido suyo, por su columna de
+localidad.
+
+**No es representativa de Bogotá.**
+- La muestra es de **9 barrios intervenidos en 5 localidades** (Barrios Unidos, Bosa, La Candelaria,
+  Suba y Usme), con muestreo aleatorio simple en cada barrio.
+- Su `total` no es el de la ciudad: **no entra en las pruebas del nivel de la ciudad**. Sirve para
+  comparar grupos y esas 5 localidades, y se reporta aparte.
+
+**Datos personales: no se leen ni se copian.** Se quitaron el nombre de quien responde, el nombre del
+encuestador, quién subió el registro, los identificadores del formulario y las coordenadas. Copia
+reducida en `data/raw/scrd/barrios_vivos_2025_reducida.xlsx` (no se sube).
+
+**Las preguntas (2, en 2 familias).** El orgullo de vivir en Bogotá (P2) no entra porque repite `AG2`;
+las abiertas tampoco.
+
+| id | pregunta en la página | favorables |
+|---|---|---|
+| BV25_P3 | ¿Cree que podría confiar en más de la mitad de las personas que viven en Bogotá? | «Más de la mitad» |
+| BV25_P6 | ¿Qué tan orgulloso/a se siente de vivir en su barrio? | «Muy orgulloso/a», «Orgulloso/a» |
+
+Los «Ns/Nr» y «Sin información» son «no sabe». Las filas sin factor de expansión («Sin información»)
+no entran.
+
+**Sorteo.** Por familia, con la semilla **20261007**: 1 al guardado y 1 a práctica.
