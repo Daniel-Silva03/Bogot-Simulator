@@ -275,6 +275,11 @@ Sonnet 5.5 eligiendo preguntas parecidas da 18,1 puntos (vara 17,6): **no pasa, 
 en las preguntas generales; en las de Bogotá no mejora. DeepSeek V4 Pro sin razonar, 21,6. **Se cierra el
 camino 2 con modelos de lenguaje.** El banco se amplía con fuentes públicas: lote 2, Cultura Ambiental 2021
 (16 preguntas); lotes 3 y 4, Bienal de Culturas 2025 y Barrios Vivos 2025, pre-registrados el 5/10.
+**Techo en el banco ampliado (5/10, pre-registrado, sin gasto; `TECHO_GRUPOS_LOTES_RESULTS.md`):** lectura A otra
+vez (oráculo 0,960, réplica 0,863), pero **el tono general del simulador acierta 0,466 en los lotes 2 y 3: peor que el
+azar**. Explicación posible, no pre-registrada: en afirmaciones negativas el tono acierta al revés (0,36) y en las
+positivas apenas pasa el azar (0,54). **El «62 %» de la página no se generaliza: decisión pendiente para Daniel**
+sobre el tono por grupo de D18.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
