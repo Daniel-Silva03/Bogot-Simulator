@@ -19,7 +19,10 @@ DI-NR1. **La estimación usa `Motor.estimar` sin construir el motor** (que carga
     objeto con las tres cosas que lee, `_candidatas`, `llamar` y `cache`. Así no hay una copia de la lógica
     de la página que pueda separarse de ella. Hecho: `estimar` no lee nada más de `self`.
 DI-NR2. **El tope se revisa antes de cada llamada**, porque `Motor.estimar` llama sin tope (la página no lo
-    necesita). Si lo registrado llega al tope, la corrida se detiene y guarda lo que hay.
+    necesita). Si lo registrado llega al tope, la corrida se detiene sin evaluar (el pre-registro pide las 95);
+    lo pagado queda en la caché, y una corrida con más tope, aprobada por Daniel, no lo vuelve a pagar.
+    Hecho (llamada de prueba, 5/10): cuando Sonnet devuelve un id que no es candidata, `nb.elegir` reintenta,
+    igual que en la página; esa pregunta cuesta el doble (USD 0,056 contra ~0,030).
 DI-NR3. **Las extremas** son las de real < 25 o > 65, como dice el pre-registro (§1: umbral elegido después
     de mirar las guardadas).
 """
