@@ -130,3 +130,26 @@ No justificaría cambiar la página.
   2. se corre la parte B (`--estirar`, sin gasto);
   3. con el sí de Daniel, la llamada de prueba de la parte A y, después, la corrida.
 - **Los resultados** van a `NIVEL_ACUERDO_REDACCION_RESULTS.md`, contra este pre-registro.
+
+## 5. Enmienda 1 (5/10/2026, después de la primera corrida de la parte A y antes de evaluarla)
+
+La primera corrida de la parte A terminó sin cumplir el diseño. La cuenta de OpenRouter se quedó sin saldo
+(HTTP 402) más o menos a la mitad; la estimación de la página atrapaba cualquier error, así que 37 preguntas
+quedaron sin estimar sin avisar. Además, 1 pregunta perdió su estimación porque Sonnet se corrigió dentro
+de la misma respuesta y la lectura no lo aceptó. Gasto: USD 1,51. Se vieron cifras parciales de 46 preguntas
+(se declara: EAM 16,0 con reformulación contra 12,8 original). **No se evalúan contra la regla.**
+
+Cambios, pedidos por Daniel:
+1. **Lectura de las respuestas** (`nivel_parecidas_b` DI-NB6): si hay varios JSON, vale el último con ids
+   válidos.
+   - Se aplica igual a las dos columnas.
+   - En la caché de la prueba del lote 5, de donde sale la S original, no cambia ninguna de las 116 respuestas,
+     así que la columna original queda igual.
+2. **Errores del servicio** (`motor` DI-CO24): un error de red o de HTTP ya no se convierte en «sin estimación».
+   Detiene la corrida (DI-NR4).
+3. **La corrida se retoma desde la caché** cuando haya saldo. Lo pagado no se vuelve a pedir.
+4. **Si alguna pregunta queda como `nueva` sin estimación** porque el modelo no dio ids válidos (DI-CO20, igual que en la
+   página), se cuenta y se deja fuera de las dos columnas.
+   - En las 95 ya no puede quedar ninguna sin estimar por error del servicio.
+
+Las medidas, la regla, las predicciones y el tope (USD 3,50 en total, contado lo ya gastado) no cambian.

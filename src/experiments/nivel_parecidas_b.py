@@ -38,6 +38,15 @@ DI-NB5. **DeepSeek sin razonamiento** (5/10, enmienda 1 del pre-registro, pedida
     En la caché va con la etiqueta `deepseek/deepseek-v4-pro#sin-razonar`, para no mezclarse con las
     respuestas que sí razonaron; el cliente quita la etiqueta antes de llamar. Esas respuestas previas
     quedan en la caché pero no entran en la evaluación.
+
+DI-NB6. **Si la respuesta trae varios JSON, vale el último que tenga ids válidos** (5/10, pedido por
+    Daniel). Hecho: en la parte A de `NIVEL_ACUERDO_REDACCION`, Sonnet a veces se corrige en la misma
+    respuesta («Corrección: el último id no existe; la respuesta válida es: {…}»); la lectura anterior
+    tomaba todo entre la primera `{` y la última `}`, no era JSON y la daba por inválida. Antes, la
+    página caía al texto de DI-CO20 en esos casos. Efecto en lo ya guardado (medido el 5/10): rescata 1 de
+    93 respuestas en `cache_nivel_acuerdo`, 2 de 75 en `cache_nivel_acuerdo_validacion`, 0 de 116 en
+    `cache_nivel_acuerdo_lote5` y 2 de 48 en `cache_nivel_redaccion`. Los resultados ya escritos de
+    esos experimentos no se recalculan: se evaluaron con la lectura de su pre-registro.
 """
 
 from __future__ import annotations
@@ -103,24 +112,33 @@ def prompt(t: pd.DataFrame, i: int) -> tuple[str, list[str]]:
     return u, cand.id.tolist()
 
 
+def _objetos(texto: str) -> list:
+    """Los objetos JSON que aparecen en el texto, en orden."""
+    dec, out, i = json.JSONDecoder(), [], 0
+    while (j := texto.find("{", i)) >= 0:
+        try:
+            o, i = dec.raw_decode(texto, j)
+            out.append(o)
+        except json.JSONDecodeError:
+            i = j + 1
+    return out
+
+
 def parsear(texto: str, validos: list[str]) -> Optional[list[str]]:
-    """DI-NB3: los ids válidos elegidos, o None."""
-    m = re.search(r"\{.*\}", texto or "", re.S)
-    if not m:
-        return None
-    try:
-        ids = json.loads(m.group(0)).get("ids")
-    except (json.JSONDecodeError, AttributeError):
-        return None
-    if not isinstance(ids, list):
-        return None
-    ok, vistos = [], set()
-    for x in ids:
-        x = str(x).strip()
-        if x in validos and x not in vistos:
-            ok.append(x)
-            vistos.add(x)
-    return ok[:MAX_ELEGIDAS] or None
+    """DI-NB3 y DI-NB6: los ids válidos elegidos, o None."""
+    for o in reversed(_objetos(texto or "")):                               # DI-NB6: el último que sirve
+        ids = o.get("ids") if isinstance(o, dict) else None
+        if not isinstance(ids, list):
+            continue
+        ok, vistos = [], set()
+        for x in ids:
+            x = str(x).strip()
+            if x in validos and x not in vistos:
+                ok.append(x)
+                vistos.add(x)
+        if ok:
+            return ok[:MAX_ELEGIDAS]
+    return None
 
 
 def uso_clave() -> Optional[float]:

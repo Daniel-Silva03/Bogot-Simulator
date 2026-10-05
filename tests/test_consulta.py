@@ -178,6 +178,36 @@ def test_si_la_estimacion_falla_queda_el_aviso_de_siempre():
     assert r["estimacion"] is None and r["respuesta"]["titulo"].startswith("No podemos decir")
 
 
+def test_sin_saldo_o_sin_red_se_dice_que_el_servicio_no_respondio():
+    """DI-CO24: un error de HTTP o de red no se confunde con «no se pudo estimar»."""
+    import urllib.error
+    from src.experiments import nivel_parecidas_b as nb
+
+    def sin_saldo(modelo, sistema, usuario, temp):
+        if sistema == nb.SISTEMA:
+            raise urllib.error.HTTPError("https://openrouter.ai", 402, "Payment Required", {}, None)
+        return LLAMAR(modelo, sistema, usuario, temp)
+    m = mo.Motor(sin_saldo, MODELO, donante=M.donante, agentes=M.agentes, catalogo=M.catalogo,
+                 cache=e9.Cache(Path(_tmp.name) / "sin_saldo.json"))
+    try:
+        m.responder_nueva("¿Qué tan de acuerdo está con T?", ["a", "b", "c", "d", "e"])
+    except mo.ServicioNoDisponible as e:
+        assert "saldo" in str(e) and isinstance(e, mo.ConsultaError)
+    else:
+        raise AssertionError("un 402 no puede quedar como «no se pudo estimar»")
+
+    def sin_red(*a):
+        raise TimeoutError("sin red")
+    m2 = mo.Motor(sin_red, MODELO, donante=M.donante, agentes=M.agentes, catalogo=M.catalogo,
+                  cache=e9.Cache(Path(_tmp.name) / "sin_red.json"))
+    try:
+        m2.reformular("¿x?")
+    except mo.ServicioNoDisponible as e:
+        assert "conexión" in str(e)
+    else:
+        raise AssertionError("sin red, la reformulación debe decir que el servicio no respondió")
+
+
 def test_un_puente_roto_se_dice_y_no_se_responde():
     roto = mo.Motor(lambda *a: "esto no es json", "roto", donante=M.donante, agentes=M.agentes,
                     catalogo=M.catalogo, cache=e9.Cache(Path(_tmp.name) / "roto.json"))

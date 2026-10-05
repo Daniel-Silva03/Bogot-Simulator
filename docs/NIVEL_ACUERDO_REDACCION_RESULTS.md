@@ -49,4 +49,11 @@ Contra el pre-registro `NIVEL_ACUERDO_REDACCION_SPECIFICATION.md` (commit `c791e
 
 ## Parte A — estabilidad ante la reformulación
 
-**Pendiente.** Espera el sí de Daniel al gasto (~USD 2,7, con tope de USD 3,50) y la llamada de prueba.
+~~**Pendiente.** Espera el sí de Daniel al gasto (~USD 2,7, con tope de USD 3,50) y la llamada de prueba.~~
+
+**En pausa (5/10):** la primera corrida quedó incompleta. La cuenta se quedó sin saldo y 37 preguntas no se
+estimaron. No se evalúa; ver la enmienda 1 del pre-registro (§5).
+- **Gasto:** USD 1,51.
+- **Para retomar:**
+  - recargar la cuenta (lo que falta cuesta ~USD 0,9);
+  - correr `python src/experiments/nivel_acuerdo_redaccion.py`, que sigue desde la caché.

@@ -23,6 +23,10 @@ DI-NR2. **El tope se revisa antes de cada llamada**, porque `Motor.estimar` llam
     lo pagado queda en la caché, y una corrida con más tope, aprobada por Daniel, no lo vuelve a pagar.
     Hecho (llamada de prueba, 5/10): cuando Sonnet devuelve un id que no es candidata, `nb.elegir` reintenta,
     igual que en la página; esa pregunta cuesta el doble (USD 0,056 contra ~0,030).
+DI-NR4. **Si el servicio no responde, la corrida se detiene** (5/10, enmienda 1). Hecho: en la primera
+    corrida la cuenta se quedó sin saldo (HTTP 402) y `Motor.estimar`, que entonces atrapaba todo, dejó 37
+    preguntas sin estimar sin avisar. Con DI-CO24 el error sube como `ServicioNoDisponible` y se detiene; lo
+    pagado queda en la caché y la corrida se retoma desde ahí.
 DI-NR3. **Las extremas** son las de real < 25 o > 65, como dice el pre-registro (§1: umbral elegido después
     de mirar las guardadas).
 """
@@ -252,7 +256,7 @@ def main() -> int:
         return 0
     try:
         res = correr_a(o95, ref_llamar, est_llamar, cache, TOPE_USD)
-    except TopeAlcanzado as e:
+    except (TopeAlcanzado, mo.ServicioNoDisponible) as e:                    # DI-NR4
         print(e)
         return 1
     r = evaluar_a(res, originales())

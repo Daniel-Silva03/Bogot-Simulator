@@ -58,6 +58,11 @@ def test_el_parseo_limpia_ids():
     assert nb.parsear('```json\n{"ids": ["b", "b", "zz", "a"], "razon": "x"}\n```', val) == ["b", "a"]
     assert nb.parsear('{"ids": ["a","b","c","d","e","f"]}', val) == ["a", "b", "c", "d", "e"]
     assert nb.parsear('{"ids": ["zz"]}', val) is None and nb.parsear("no es json", val) is None
+    # DI-NB6: si se corrige en la misma respuesta, vale el último JSON con ids válidos
+    doble = '{"ids": ["a", "zz"], "razon": "x"}\n\nCorrección: la válida es:\n\n{"ids": ["b", "c"], "razon": "y"}'
+    assert nb.parsear(doble, val) == ["b", "c"]
+    assert nb.parsear('{"ids": ["a"]} y luego {"ids": ["zz"]}', val) == ["a"]
+    assert nb.parsear('{"razon": "sin ids"} {"ids": "a"}', val) is None
 
 
 def test_la_prediccion_es_la_media_real_de_las_elegidas():

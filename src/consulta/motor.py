@@ -191,13 +191,25 @@ DI-CO23. **Las candidatas de la estimación pasan a ser 109** (5/10, D19 actuali
     «probablemente», acierta 17 de 17 contra 12 de 12 (`NIVEL_ACUERDO_LOTE5_RESULTS.md`); la regla
     pre-registrada dice que reemplace a la de 92. El rango sigue en ±21,9. El texto de la página cita las
     cifras de esa prueba. Cuesta ~USD 0,024 por pregunta nueva, contra ~0,019.
+
+DI-CO24. **Un error del servicio del modelo ya no se confunde con «no se pudo estimar»** (5/10, pedido por
+    Daniel). Hecho: el 5/10 la cuenta de OpenRouter quedó sin saldo (HTTP 402) y `estimar`, que atrapaba
+    toda excepción, devolvía None: la página decía «No podemos decir si Bogotá estaría de acuerdo»
+    (DI-CO20) como si fuera un límite del método, y la parte A de `NIVEL_ACUERDO_REDACCION` siguió sin
+    estimar 37 preguntas sin avisar. Decisión: los errores de red y de HTTP (`OSError`, que incluye
+    `urllib.error.URLError` y los tiempos de espera, y `http.client.HTTPException`) se convierten en
+    `ServicioNoDisponible`, una `ConsultaError`: el servidor responde con el mensaje y la página muestra su
+    estado de error con «Intentar de nuevo». Cualquier otro error se escribe en la terminal y cae a
+    DI-CO20, como antes. Una respuesta del modelo que no sirve (sin ids válidos) sigue siendo DI-CO20.
 """
 
 from __future__ import annotations
 
+import http.client
 import json
 import re
 import sys
+import urllib.error
 from pathlib import Path
 from typing import Optional
 
@@ -254,6 +266,21 @@ TONO_TEXTO = ("Es contexto, no una respuesta a esta pregunta: es igual para toda
 
 class ConsultaError(RuntimeError):
     """La consulta no se puede responder como está especificada."""
+
+
+class ServicioNoDisponible(ConsultaError):
+    """DI-CO24: el servicio del modelo de lenguaje no respondió (sin saldo, red, tiempo de espera)."""
+
+
+def _servicio(e: Exception) -> ServicioNoDisponible:
+    if isinstance(e, urllib.error.HTTPError) and e.code == 402:
+        motivo = "la cuenta del servicio no tiene saldo (error 402)"
+    elif isinstance(e, urllib.error.HTTPError):
+        motivo = f"error {e.code} del servicio"
+    else:
+        motivo = "no hubo conexión o tardó demasiado"
+    return ServicioNoDisponible(f"El modelo de lenguaje no respondió: {motivo}. Inténtalo más tarde; "
+                                "las preguntas que la encuesta ya hizo siguen funcionando.")
 
 
 def _wmean(x, w):
@@ -443,7 +470,10 @@ class Motor:
     def reformular(self, pregunta: str) -> dict:
         if not pregunta or not pregunta.strip():
             raise ConsultaError("La pregunta está vacía.")
-        r, _ = rf.reformular(pregunta[:500], self.catalogo, self.llamar, self.cache, self.modelo)
+        try:
+            r, _ = rf.reformular(pregunta[:500], self.catalogo, self.llamar, self.cache, self.modelo)
+        except (OSError, http.client.HTTPException) as e:                       # DI-CO24
+            raise _servicio(e) from e
         if r is None:
             return {"alcance": "invalida", "mensaje": "No pude reformular esta pregunta. Prueba a escribirla de otra forma."}
         if r["alcance"] == "catalogo":
@@ -519,7 +549,10 @@ class Motor:
         t = pd.concat([nueva, c[cols]], ignore_index=True)
         try:
             ids, _ = nb.elegir(t, 0, self.llamar, self.cache, MODELO_ESTIMACION, float("inf"))
-        except Exception:                                                       # noqa: BLE001 — se cae al texto de DI-CO20
+        except (OSError, http.client.HTTPException) as e:                       # DI-CO24
+            raise _servicio(e) from e
+        except Exception as e:                                                  # noqa: BLE001 — se cae al texto de DI-CO20
+            print(f"[estimar] error inesperado, se muestra DI-CO20: {e!r}", file=sys.stderr, flush=True)
             return None
         if not ids:
             return None
@@ -540,14 +573,17 @@ class Motor:
                  "etiquetas": {str(i + 1): e for i, e in enumerate(escala)}}
         from src.experiments import puente_sin_base as sb
         u = pu.prompt(f_esc, self.catalogo)
-        texto, _ = e9.pedir(self.llamar, self.cache, self.modelo, pu.TEMPERATURA, sb.SISTEMA_V2, u, 0)
-        r = sb.parsear_v2(texto, f_esc, self.catalogo)                          # DI-CO12
-        reintento = r is None or r["sin_base"]
-        if reintento:
-            texto, _ = e9.pedir(self.llamar, self.cache, self.modelo, pu.TEMPERATURA, pu.SISTEMA, u, 0)
-            r = pu.parsear(texto, f_esc, self.catalogo)                          # DI-CO3
-            if r is not None:
-                r = {**r, "fuerza": "debil"}
+        try:
+            texto, _ = e9.pedir(self.llamar, self.cache, self.modelo, pu.TEMPERATURA, sb.SISTEMA_V2, u, 0)
+            r = sb.parsear_v2(texto, f_esc, self.catalogo)                      # DI-CO12
+            reintento = r is None or r["sin_base"]
+            if reintento:
+                texto, _ = e9.pedir(self.llamar, self.cache, self.modelo, pu.TEMPERATURA, pu.SISTEMA, u, 0)
+                r = pu.parsear(texto, f_esc, self.catalogo)                      # DI-CO3
+                if r is not None:
+                    r = {**r, "fuerza": "debil"}
+        except (OSError, http.client.HTTPException) as e:                       # DI-CO24
+            raise _servicio(e) from e
         if r is None:
             return {"tipo": "invalida", "mensaje": "No pude construir el puente para esta pregunta. Prueba a reformularla."}
         relacionadas = []                                                        # DI-CO15
