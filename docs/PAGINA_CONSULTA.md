@@ -395,6 +395,41 @@ No se miró en el navegador, porque la extensión de Chrome no estaba conectada.
 
 Verificado: 21 pruebas de `tests/test_consulta.py` (109 candidatas, 17 del lote 5, todas con fuente).
 
+## 5.15 Auditoría de diseño: textos viejos y la respuesta a una pregunta nueva (5/10/2026)
+
+Daniel pidió una auditoría del diseño de la página. Se hizo leyendo el código, sin el navegador: la
+extensión de Chrome no estaba conectada.
+- **Lo que está bien:**
+  - el sistema de diseño se aplica con coherencia;
+  - **todo el texto pasa el contraste WCAG AA**: texto secundario 7,7-8,6:1, gris más tenue 4,6-5,4:1,
+    botones 16-19:1;
+  - el mapa tiene la tabla como alternativa, y los estados vacíos explican qué pasa.
+- **Arreglado (hallazgos 1 a 5):**
+  1. **La franja de arriba** decía que las preguntas nuevas eran «todavía una suposición floja».
+     Ahora dice que se estiman con preguntas parecidas y que acertaron el lado de la mayoría en 7 de
+     cada 10 casos (D19).
+  2. **«20.000 personas sintéticas» → 19.000** en las tres apariciones: Sumapaz no tiene encuestados,
+     y la propia respuesta dice «consulté a 19.000».
+  3. **«Unas 80 personas por localidad»**, que era de la población 2023, pasa a «unas 250 en la
+     mayoría de las preguntas (unas 80 en las que solo se hicieron en 2023)».
+  4. **Las dos listas de «preguntas parecidas»** de una pregunta nueva se distinguen:
+     - «En qué se apoya la estimación · preguntas de otras encuestas y su resultado real»;
+     - «Para explorar · Preguntas de la Encuesta de Percepción Ciudadana que se relacionan (con mapa)»;
+     - el tono por grupo pasa a «Para explorar · Así responden estos grupos en general».
+  5. **En «Dividida», el porcentaje pierde peso:** baja de 44 a 30 px, pasa a gris y el texto dice
+     primero el rango («…entre 31 % y 75 %: el rango cruza la mitad»), para que no se lea como «sí».
+- **Pendiente, sin arreglar:**
+  - el SVG del mapa con `role="img"` esconde de los lectores de pantalla las localidades, que son
+    botones;
+  - el parpadeo del mapa y el desplazamiento suave no respetan «menos movimiento»;
+  - textos de 11-12 px;
+  - fuentes de Google sin respaldo local;
+  - la clase `e-sí` con tilde;
+  - la revisión en pantalla a varios anchos.
+
+Verificado: 21 pruebas de `tests/test_consulta.py` y la página servida por HTTP en modo simulado, con
+las seis frases nuevas presentes.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por
