@@ -74,6 +74,7 @@ resultó falso no se borra:** se anota la corrección al lado (§45).
 | `src/experiments/` | experimentos 3 a 8 y A08 (`a08_paso0.py`, `a08_paso0b.py`); `donante_llm.py` llama a OpenRouter con caché |
 | `src/consulta/` | **la página actual (D17):** `servidor.py` (local, `127.0.0.1:8765`), `motor.py` (une reformulación, catálogo y puente), `pagina.html`, `reformular.py` |
 | `src/viz/` | tablero anterior (se conserva): preparadores y `plantilla_mapa.html` → `data/processed/viz/mapa_bogota.html` |
+| `DESIGN.md` (raíz) | sistema de diseño de la página. Cualquier cambio visual en `src/consulta/pagina.html` lo sigue. |
 | `src/utils/` | `diseno.py` (medias y DEFF con diseño muestral), `revisar_datos.py` |
 | `config/experimento9/` | los 12 dossiers del Experimento 9 y el script que los genera |
 | `src/experiments/experimento9.py` | Experimento 9: LLM como proponente de escenarios (cerrado) |
