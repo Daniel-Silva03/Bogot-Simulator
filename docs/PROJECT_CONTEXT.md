@@ -1535,6 +1535,12 @@ DI-CO14 a DI-CO16 en `src/consulta/motor.py`; `PAGINA_CONSULTA.md` §5.8.
 **Estado:** **APPROVED** (Daniel, en conversación, 2 de octubre de 2026: «apruebo» la
 propuesta de tres puntos, sin cifra propia para las preguntas nuevas y sin la fuerza).
 
+**Actualización (5/10/2026): el tono por grupo queda como contexto, sin cifra de acierto.** En el banco
+ampliado (`TECHO_GRUPOS_LOTES_RESULTS.md`), el tono acertó 0,466 de las diferencias claras de los lotes 2 y
+3, peor que el azar; el «62 %» del lote 1 no se generaliza. Daniel eligió seguir mostrándolo como contexto
+descriptivo («Así responden estos grupos en general») y sin decir que sirve para predecir (opción 3). Claude
+había recomendado quitarlo (opción 2). DI-CO21 en `src/consulta/motor.py`.
+
 ---
 
 # 40. DECISIONES ABIERTAS

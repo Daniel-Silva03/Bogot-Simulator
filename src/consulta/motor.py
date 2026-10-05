@@ -110,6 +110,8 @@ DI-CO14. **Los grupos de una pregunta nueva muestran el tono general, a la vista
     la página lo rotula «Así suelen responder estos grupos en la encuesta», no como una
     medida de la pregunta. Los cortes de la página (estrato 1-2, 3-4, 5-6) no son los de
     la práctica (1, 2, 3, 4, 5-6): el 62 % es de aquellos.
+    *Corrección (5/10, DI-CO21): el 62 % no se generalizó; en el banco ampliado el tono acierta 0,466
+    (`TECHO_GRUPOS_LOTES_RESULTS.md`). La página ya no lo cita ni lo presenta como predicción.*
 
 DI-CO15. **Las preguntas en que se apoya el puente traen lo que la gente respondió de
     verdad** (D18): la distribución de la ciudad y el porcentaje en la parte alta de su
@@ -161,6 +163,13 @@ DI-CO20. **Una pregunta nueva empieza diciendo que no se puede responder** (2/10
     preguntas y unas barras sin saber qué contestaban. Decisión: arriba va `RESPUESTA_NUEVA`
     («No podemos decir si Bogotá estaría de acuerdo» y por qué), y debajo, rotulado como
     contexto, lo que ya había (preguntas parecidas con su dato real y el tono por grupo).
+
+DI-CO21. **El tono por grupo queda como contexto descriptivo, sin cifra de acierto** (5/10, D18
+    actualizada, opción 3 de Daniel). Hecho: en los lotes 2 y 3 del banco el tono acertó 0,466 de las
+    diferencias claras, peor que el azar (`TECHO_GRUPOS_LOTES_RESULTS.md`); el 62 % del lote 1 no se
+    generaliza. Decisión: se sigue mostrando, con el título «Así responden estos grupos en general» y un
+    texto que dice que es contexto y que no sirvió para anticipar respuestas. Se descartaron quitarlo
+    (opción 2, la que recomendó Claude) y mostrar las dos cifras de acierto (opción 1).
 """
 
 from __future__ import annotations
@@ -203,14 +212,14 @@ RESPUESTA_NUEVA = {
     "texto": ("La encuesta no hizo esta pregunta, y cuando probamos a suponerlo con preguntas reales que sí "
               "conocíamos, el simulador no acertó cuántos estarían de acuerdo ni qué grupos o localidades lo "
               "estarían más. Lo que sí hay es contexto medido: lo que la gente respondió a preguntas parecidas "
-              "y cómo suele responder cada grupo."),
+              "y cómo responde cada grupo en general."),
 }
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
-TONO_TITULO = "Así suelen responder estos grupos en la encuesta"
-TONO_TEXTO = ("No es una medición de esta pregunta: es el mismo para toda pregunta nueva. Resume cómo responde "
-              "cada grupo, en promedio, las {n} preguntas de la encuesta con un lado favorable claro. En 96 "
-              "preguntas reales que la encuesta no hizo, este tono acertó qué grupo estaba más de acuerdo en el "
-              "62 % de las diferencias claras (el azar, 50 %), y ninguna versión del puente lo superó con claridad.")
+TONO_TITULO = "Así responden estos grupos en general"                       # DI-CO21
+TONO_TEXTO = ("Es contexto, no una respuesta a esta pregunta: es igual para toda pregunta nueva. Resume cómo "
+              "responde cada grupo, en promedio, las {n} preguntas de la encuesta con un lado favorable claro. En "
+              "las pruebas con preguntas reales que la encuesta no hizo, no sirvió para anticipar qué grupos "
+              "estarían más de acuerdo.")
 
 
 class ConsultaError(RuntimeError):

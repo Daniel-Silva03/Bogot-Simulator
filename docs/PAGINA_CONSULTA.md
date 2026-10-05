@@ -269,7 +269,7 @@ general) y D18 (DI-CO14 a DI-CO16 en `motor.py`), una pregunta nueva muestra:
 - **Preguntas medidas que se relacionan**, elegidas por el modelo, cada una con su sentido
   (+/−), el porcentaje en la parte alta de su escala, la distribución de la ciudad, sus años
   y «Ver completa, con su mapa», que la abre como pregunta del catálogo.
-- **«Así suelen responder estos grupos en la encuesta»**: el tono general por grupo, a la
+- ~~**«Así suelen responder estos grupos en la encuesta»**~~ (cambiado el 5/10, §5.12): el tono general por grupo, a la
   vista, con la aclaración de que no mide la pregunta, es el mismo para toda pregunta nueva
   y acertó el 62 % de las diferencias de la práctica (azar, 50 %).
 - **Se quitan** el nivel propuesto y su barra deslizante, la fuerza del puente, las barras
@@ -347,6 +347,19 @@ pudo mirar en Chrome: la extensión no estaba conectada en esta sesión.
 
 Queda anotado, sin tocar: el puente estandariza `CC2` con sus cuatro códigos (así se validó); si
 el modelo la eligiera como relacionada, «no lo conoce» pesaría como lo más desfavorable.
+
+## 5.12 El tono por grupo, como contexto (5/10/2026, DI-CO21)
+
+En los lotes 2 y 3 del banco, el tono acertó 0,466 de las diferencias claras entre grupos, peor que el azar
+(`TECHO_GRUPOS_LOTES_RESULTS.md`). Por decisión de Daniel (opción 3), la página lo sigue mostrando en las
+preguntas nuevas, pero:
+- con el título **«Así responden estos grupos en general»** (antes: «Así suelen responder estos grupos en la
+  encuesta»);
+- con un texto que dice que es contexto, igual para toda pregunta nueva, y que **no sirvió para anticipar** qué
+  grupos estarían más de acuerdo. Ya no cita «acertó el 62 %»;
+- la tarjeta «El puente» deja de compararlo con el tono.
+
+Verificado: 19 pruebas de `tests/test_consulta.py` (el texto no lleva ningún porcentaje).
 
 ## 6. Límites que la página dice
 

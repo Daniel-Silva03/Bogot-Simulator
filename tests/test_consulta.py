@@ -93,13 +93,13 @@ def test_una_pregunta_nueva_no_trae_nivel_ni_fuerza_y_su_tono_es_el_mismo_siempr
     assert a["respuesta"]["titulo"] == "No podemos decir si Bogotá estaría de acuerdo."      # DI-CO20
     html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
     assert "sin-respuesta" in html and "Contexto 1" in html and "Contexto 2" in html
-    assert a["tono_titulo"] == "Así suelen responder estos grupos en la encuesta"
-    assert "No es una medición de esta pregunta" in a["tono_texto"] and str(M.n_tono) in a["tono_texto"]
+    assert a["tono_titulo"] == "Así responden estos grupos en general"                  # DI-CO21
+    assert "Es contexto" in a["tono_texto"] and "%" not in a["tono_texto"] and str(M.n_tono) in a["tono_texto"]
     assert 20 <= M.n_tono < len(M.catalogo)
 
 
 def test_el_tono_es_el_mismo_que_se_midio_en_la_practica():
-    """DI-CO14: el 62 % que cita la página es del tono de `practica_puente.tono_general`."""
+    """DI-CO14: el tono de la página es el mismo de `practica_puente.tono_general` (el que se midió en el banco)."""
     from src.experiments import practica_puente as pp
     t = pp.tono_general(M)
     m = np.average(t, weights=M.peso)
