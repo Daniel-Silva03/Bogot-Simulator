@@ -273,3 +273,14 @@ piezas:
 - **Pares claros:** regla DI-BR5 de estructura y z > 1,96, como en el primer lote.
 
 **Código:** `src/experiments/banco_lote2.py`, con pruebas en `tests/test_banco_lote2.py`.
+
+### 11.1 Sorteo y resultados de práctica del lote 2 (5/10)
+
+- **Sorteo** (`sorteo_lote2.csv`, commit antes de calcular): práctica, familias P14A, P15 y P22
+  (5 preguntas); guardado, P13, P19, P32 y P33 (11 preguntas).
+- **Resultados de práctica** (`reales_practica_lote2.json`): ninguna queda fuera por estructura; entre
+  2.133 y 2.257 respuestas válidas por pregunta; **30 pares claros** entre grupos.
+- Con el lote 2, el banco suma 181 preguntas: práctica 119 (101 con resultado utilizable) y guardado
+  62.
+- Ninguna de las 16 es de aprobación de una medida, así que el lote no cambia lo que concluyeron las
+  pruebas del nivel: hacen falta preguntas hermanas de medidas de ciudad (camino 3).
