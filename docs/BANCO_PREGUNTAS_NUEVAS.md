@@ -384,8 +384,7 @@ no entran.
   - 2 quedan fuera por la regla de estructura (DI-BR5). Son la séptima opción de las listas de
     derechos vulnerados (preguntas 75 y 77, probablemente «otro»): `P48.7` solo tiene «No» en los datos
     y `P49.7` está vacía.
-  - Entre preguntas, de unas 300 a 5.639 respuestas válidas: algunas solo se le preguntan a parte de
-    la muestra.
+  - Entre 5.437 y 5.639 respuestas válidas por pregunta utilizable: casi toda la muestra adulta.
 - **Lote 4, práctica** (`reales_practica_lote4.json`): 1 pregunta, 2.031 respuestas válidas y 7 pares
   claros. Sigue marcada como no representativa de la ciudad.
 - **El banco, en total:**
