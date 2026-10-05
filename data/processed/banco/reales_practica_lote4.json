@@ -1,0 +1,105 @@
+{
+ "BV25_P6": {
+  "familia": "BV25_P6",
+  "ambito": "Bogotá (no representativa)",
+  "fuente": "SCRD Barrios Vivos",
+  "anio": 2025,
+  "pregunta_pagina": "¿Qué tan orgulloso/a se siente de vivir en su barrio?",
+  "total": 88.3,
+  "n": 2031,
+  "grupos": {
+   "sexo": {
+    "Hombres": 89.57,
+    "Mujeres": 86.5
+   },
+   "edad": {
+    "18-25": 90.85,
+    "26-35": 89.55,
+    "36-45": 82.49,
+    "46-55": 87.48,
+    "56+": 91.16
+   },
+   "estrato": {
+    "1": 93.32,
+    "2": 88.03,
+    "3": 89.05,
+    "4": 93.46,
+    "5-6": 100.0
+   }
+  },
+  "bases": {
+   "sexo": {
+    "Hombres": 1202,
+    "Mujeres": 829
+   },
+   "edad": {
+    "18-25": 383,
+    "26-35": 476,
+    "36-45": 421,
+    "46-55": 278,
+    "56+": 473
+   },
+   "estrato": {
+    "1": 61,
+    "2": 1582,
+    "3": 371,
+    "4": 16,
+    "5-6": 1
+   }
+  },
+  "codigos_validos_presentes": 5,
+  "localidad": {
+   "11": 90.46,
+   "12": 87.24,
+   "17": 91.02,
+   "5": 88.27,
+   "7": 85.81
+  },
+  "bases_localidad": {
+   "11": 304,
+   "12": 384,
+   "17": 568,
+   "5": 324,
+   "7": 451
+  },
+  "cortes_edad": "18-25, 26-35, 36-45, 46-55, 56+",
+  "pares_claros": [
+   [
+    "sexo",
+    "Hombres",
+    "Mujeres"
+   ],
+   [
+    "edad",
+    "18-25",
+    "36-45"
+   ],
+   [
+    "edad",
+    "26-35",
+    "36-45"
+   ],
+   [
+    "edad",
+    "56+",
+    "36-45"
+   ],
+   [
+    "estrato",
+    "5-6",
+    "1"
+   ],
+   [
+    "estrato",
+    "5-6",
+    "2"
+   ],
+   [
+    "estrato",
+    "5-6",
+    "3"
+   ]
+  ],
+  "excluida": null
+ }
+}

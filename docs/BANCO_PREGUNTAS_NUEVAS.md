@@ -373,3 +373,24 @@ Los «Ns/Nr» y «Sin información» son «no sabe». Las filas sin factor de ex
 no entran.
 
 **Sorteo.** Por familia, con la semilla **20261007**: 1 al guardado y 1 a práctica.
+
+### 13.1 Sorteo y resultados de práctica de los lotes 3 y 4 (5/10)
+
+- **Sorteo** (commit `05dd598`, antes de calcular):
+  - lote 3: 26 familias y 99 preguntas a práctica; 26 familias y 91 preguntas al guardado;
+  - lote 4: `BV25_P3` y `BV25_P6`, una en cada conjunto.
+- **Lote 3, práctica** (`reales_practica_lote3.json`):
+  - 97 preguntas utilizables y **930 pares claros**.
+  - 2 quedan fuera por la regla de estructura (DI-BR5). Son la séptima opción de las listas de
+    derechos vulnerados (preguntas 75 y 77, probablemente «otro»): `P48.7` solo tiene «No» en los datos
+    y `P49.7` está vacía.
+  - Entre preguntas, de unas 300 a 5.639 respuestas válidas: algunas solo se le preguntan a parte de
+    la muestra.
+- **Lote 4, práctica** (`reales_practica_lote4.json`): 1 pregunta, 2.031 respuestas válidas y 7 pares
+  claros. Sigue marcada como no representativa de la ciudad.
+- **El banco, en total:**
+  - 373 preguntas;
+  - práctica: lote 1, 96 utilizables; lote 2, 5; lote 3, 97; lote 4, 1;
+  - guardado: 51 + 11 + 91 + 1 = 154.
+- Las preguntas de **valoración de proyectos de ciudad** (el metro: orgullo, necesidad, si lo usaría;
+  la bicicleta) quedaron repartidas entre práctica y guardado según su familia.
