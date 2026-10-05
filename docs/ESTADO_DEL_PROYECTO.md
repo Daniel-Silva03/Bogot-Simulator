@@ -270,6 +270,11 @@ regresión con fracción favorable, tipo, «no conoce» y Bogotá da 22,3: **no 
 tres pruebas: con una pregunta hermana medida, ~16 puntos; sin ella, ~22-23 (el promedio). **Lo que acerca el
 nivel son datos (preguntas casi iguales ya medidas), no un método.** Opciones abiertas para Daniel: camino 3
 (resultados agregados del CNC) o probar un modelo de lenguaje más fuerte (con costo).
+**Parte B, modelos más fuertes (2-5/10, pre-registrada, USD 2,38; `NIVEL_PARECIDAS_B_RESULTS.md`):** Claude
+Sonnet 5.5 eligiendo preguntas parecidas da 18,1 puntos (vara 17,6): **no pasa, por 0,5**. Toda su ventaja está
+en las preguntas generales; en las de Bogotá no mejora. DeepSeek V4 Pro sin razonar, 21,6. **Se cierra el
+camino 2 con modelos de lenguaje.** El banco se amplía con fuentes públicas: lote 2, Cultura Ambiental 2021
+(16 preguntas); lotes 3 y 4, Bienal de Culturas 2025 y Barrios Vivos 2025, pre-registrados el 5/10.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

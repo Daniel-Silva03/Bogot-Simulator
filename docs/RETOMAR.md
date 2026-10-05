@@ -4,6 +4,9 @@
 
 ## Lo pendiente (lo primero al retomar)
 
+**Actualización 5/10:** la parte B ya terminó (`NIVEL_PARECIDAS_B_RESULTS.md`). Lo que sigue de esta nota
+sobre la pausa queda como registro.
+
 **La parte B del nivel está en pausa porque la cuenta de OpenRouter no tiene saldo**
 (`NIVEL_PARECIDAS_B_SPECIFICATION.md`; código `src/experiments/nivel_parecidas_b.py`).
 
