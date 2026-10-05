@@ -150,7 +150,8 @@ def _variable(v: pd.DataFrame, nombre: str) -> str:
     return m.codigo_variable.iloc[0]
 
 
-def reales_bienal(sorteo: pd.DataFrame, ruta: Path = BIENAL) -> dict:
+def base_bienal(ruta: Path = BIENAL):
+    """(x de una fila del sorteo, peso, grupos, localidad), solo adultos. La usan `reales_bienal` y el techo."""
     x = pd.ExcelFile(ruta)
     d, v, e = x.parse("datos"), x.parse("variables"), x.parse("etiquetas_respuestas")
     p = x.parse("preguntas").set_index("indice_pregunta")
@@ -171,10 +172,15 @@ def reales_bienal(sorteo: pd.DataFrame, ruta: Path = BIENAL) -> dict:
     loc = loc.where(loc.between(1, 19)).astype("Int64").astype(str).replace("<NA>", None)
     adultos = num(soc["Edad"]) >= 18
     g = {k: s[adultos] for k, s in _grupos(sexo, num(soc["Edad"]), num(soc["Estrato"])).items()}
-    return _calcular(sorteo, lambda f: num(f["variable"])[adultos], num(soc["Factor"])[adultos], g, loc[adultos])
+    return (lambda f: num(f["variable"])[adultos]), num(soc["Factor"])[adultos], g, loc[adultos]
 
 
-def reales_barrios(sorteo: pd.DataFrame, ruta: Path = BARRIOS) -> dict:
+def reales_bienal(sorteo: pd.DataFrame, ruta: Path = BIENAL) -> dict:
+    return _calcular(sorteo, *base_bienal(ruta))
+
+
+def base_barrios(ruta: Path = BARRIOS):
+    """(x de una fila del sorteo, peso, grupos, localidad), solo adultos con factor (DI-BL5)."""
     d = pd.read_excel(ruta, sheet_name="base")
     w = pd.to_numeric(d["Fexp"], errors="coerce")
     edad = pd.to_numeric(d["A6. Edad"], errors="coerce")
@@ -184,7 +190,11 @@ def reales_barrios(sorteo: pd.DataFrame, ruta: Path = BARRIOS) -> dict:
     loc = d["localidad_norm"].map(LOCALIDADES).astype("Int64").astype(str).replace("<NA>", None)
     cod = {i: (col, mapa) for i, col, _, mapa, _, _ in BV}
     g = {k: s[ok] for k, s in _grupos(sexo, edad, estrato).items()}
-    return _calcular(sorteo, lambda f: d[cod[f["id"]][0]].map(cod[f["id"]][1])[ok], w[ok], g, loc[ok])
+    return (lambda f: d[cod[f["id"]][0]].map(cod[f["id"]][1])[ok]), w[ok], g, loc[ok]
+
+
+def reales_barrios(sorteo: pd.DataFrame, ruta: Path = BARRIOS) -> dict:
+    return _calcular(sorteo, *base_barrios(ruta))
 
 
 def main(argv=None) -> int:
