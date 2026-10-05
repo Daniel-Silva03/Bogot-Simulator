@@ -106,7 +106,8 @@ def tabla_objetivo(o: pd.DataFrame, reales: dict) -> pd.DataFrame:
     return o.reset_index(drop=True)
 
 
-def elegir_todas(objetivo: pd.DataFrame, candidatas: pd.DataFrame, llamar, cache, tope: float, solo=None) -> pd.DataFrame:
+def elegir_todas(objetivo: pd.DataFrame, candidatas: pd.DataFrame, llamar, cache, tope: float, solo=None,
+                 modelo: str = MODELO) -> pd.DataFrame:
     """DI-NV3."""
     cols = ["id", "familia", "pregunta_pagina", "categorias", "codigos_favorables", "total"]
     tot = dict(zip(candidatas.id, candidatas.total))
@@ -114,7 +115,7 @@ def elegir_todas(objetivo: pd.DataFrame, candidatas: pd.DataFrame, llamar, cache
     for i in range(len(objetivo) if solo is None else solo):
         q = objetivo.iloc[[i]][cols]
         t = pd.concat([q, candidatas[cols]], ignore_index=True)
-        ids, _ = nb.elegir(t, 0, llamar, cache, MODELO, tope)
+        ids, _ = nb.elegir(t, 0, llamar, cache, modelo, tope)
         pred = float(np.mean([tot[x] for x in ids])) if ids else float(candidatas.total.mean())
         filas.append({"id": q.id.iloc[0], "familia": q.familia.iloc[0], "total": float(q.total.iloc[0]), "S": pred,
                       "ids": ids or [], "fallo": ids is None})
@@ -123,11 +124,11 @@ def elegir_todas(objetivo: pd.DataFrame, candidatas: pd.DataFrame, llamar, cache
     return pd.DataFrame(filas)
 
 
-def evaluar(p: pd.DataFrame, candidatas: pd.DataFrame, objetivo: pd.DataFrame) -> dict:
+def evaluar(p: pd.DataFrame, candidatas: pd.DataFrame, objetivo: pd.DataFrame, h: float = H) -> dict:
     real_si = p.total.to_numpy() > 50
     ref_si = bool(np.mean(candidatas.total > 50) > 0.5)
     ref = float(np.mean(real_si == ref_si))
-    d = na.llamada(p.S.to_numpy(), np.full(len(p), H))
+    d = na.llamada(p.S.to_numpy(), np.full(len(p), h))
     dec = d != "dividida"
     err = (p.S - p.total).abs()
     general = p.id.isin(objetivo[objetivo.fuente == "ECP DANE"].id)
