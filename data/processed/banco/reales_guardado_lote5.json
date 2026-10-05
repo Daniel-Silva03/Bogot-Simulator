@@ -1,0 +1,128 @@
+{
+ "EDP25_Ax105": {
+  "total": 59.56,
+  "n": 12639,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Bx105": {
+  "total": 22.86,
+  "n": 12230,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Cx105": {
+  "total": 38.04,
+  "n": 12912,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Ax408": {
+  "total": 24.01,
+  "n": 12460,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Cx408": {
+  "total": 36.92,
+  "n": 11904,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Ex408": {
+  "total": 9.93,
+  "n": 12776,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Ax503": {
+  "total": 55.56,
+  "n": 12140,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Bx503": {
+  "total": 66.08,
+  "n": 12741,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Cx503": {
+  "total": 66.13,
+  "n": 12596,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Dx503": {
+  "total": 71.38,
+  "n": 12632,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Ex503": {
+  "total": 54.45,
+  "n": 12589,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Fx503": {
+  "total": 42.99,
+  "n": 12419,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Gx503": {
+  "total": 35.43,
+  "n": 13033,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Hx503": {
+  "total": 21.0,
+  "n": 12630,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Ix503": {
+  "total": 56.22,
+  "n": 12979,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Jx503": {
+  "total": 48.07,
+  "n": 12888,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Bx704": {
+  "total": 45.46,
+  "n": 12912,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Cx704": {
+  "total": 46.56,
+  "n": 12902,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Dx704": {
+  "total": 33.77,
+  "n": 12928,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Ex704": {
+  "total": 63.86,
+  "n": 12998,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ },
+ "EDP25_Gx704": {
+  "total": 42.02,
+  "n": 12859,
+  "excluida": null,
+  "fuente": "SDP Percepción Distrital"
+ }
+}
