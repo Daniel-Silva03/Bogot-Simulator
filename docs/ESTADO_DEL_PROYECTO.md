@@ -298,7 +298,7 @@ preguntas que nadie había mirado: error 12,5, lado de la mayoría 77 % (referen
 afirmaciones de acuerdo; banco en 411 preguntas.
 **Candidatas con el lote 5 (5/10, pre-registrado, USD 2,73; `NIVEL_ACUERDO_LOTE5_RESULTS.md`): B (109 candidatas)
 reemplaza a A (92).** En 95 guardadas: error 11,9 contra 12,8; al decir «probablemente», 17 de 17 contra 12 de 12; en
-las 21 del lote 5, error 9,9 contra 13,6. Pendiente: llevarlo a la página (confirmación de Daniel).
+las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23).**
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

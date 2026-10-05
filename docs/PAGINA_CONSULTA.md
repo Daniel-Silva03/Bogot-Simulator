@@ -383,6 +383,18 @@ Verificado:
 
 No se miró en el navegador, porque la extensión de Chrome no estaba conectada.
 
+## 5.14 La estimación usa 109 candidatas (5/10/2026, DI-CO23)
+
+- **Candidatas:** las 92 validadas más las 17 de práctica del lote 5 (Encuesta Distrital de Percepción 2025);
+  su fuente aparece como «Encuesta Distrital de Percepción, Secretaría de Planeación».
+- **El texto cita la prueba que justificó el cambio:** «En una prueba con 95 preguntas reales que no se habían
+  usado para armarla, acertó si la mayoría estaba de acuerdo en el 72 % de los casos, y las 17 veces que dijo
+  "probablemente" acertó».
+- **El rango no cambia:** ±21,9.
+- **Costo:** ~USD 0,024 por pregunta nueva.
+
+Verificado: 21 pruebas de `tests/test_consulta.py` (109 candidatas, 17 del lote 5, todas con fuente).
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

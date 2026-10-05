@@ -1582,6 +1582,11 @@ respaldo si la estimación falla.
 **Estado:** **APPROVED** (Daniel, en conversación, 5 de octubre de 2026: «apruebo las tres como las
 propones»: Sonnet, las 92 candidatas validadas y la forma de mostrarlo).
 
+**Actualización (5/10/2026): 109 candidatas.** Con las 17 preguntas de práctica del lote 5 (Encuesta Distrital de
+Percepción 2025, mismo formato que la página), en 95 preguntas guardadas el error bajó de 12,8 a 11,9 y, al decir
+«probablemente», acertó 17 de 17 contra 12 de 12 (`NIVEL_ACUERDO_LOTE5_RESULTS.md`). La regla pre-registrada pedía
+reemplazar la configuración, y Daniel aprobó llevarlo a la página. DI-CO23 en `src/consulta/motor.py`.
+
 ---
 
 # 40. DECISIONES ABIERTAS

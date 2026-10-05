@@ -145,7 +145,7 @@ def test_las_preguntas_relacionadas_traen_lo_que_la_gente_respondio():
 
 
 def test_una_pregunta_nueva_trae_la_estimacion_validada():
-    """DI-CO22: Sonnet, las 92 candidatas validadas y el rango fijo de ±21,9."""
+    """DI-CO22 y DI-CO23: Sonnet, las 109 candidatas y el rango fijo de ±21,9."""
     from src.experiments import nivel_acuerdo_validacion as nv
     vistos = []
 
@@ -156,7 +156,8 @@ def test_una_pregunta_nueva_trae_la_estimacion_validada():
                  cache=e9.Cache(Path(_tmp.name) / "est.json"))
     r = m.responder_nueva("¿Qué tan de acuerdo está con V?", ["a", "b", "c", "d", "e"])
     e = r["estimacion"]
-    assert len(m._candidatas) == 92 and mo.MODELO_ESTIMACION in vistos
+    assert len(m._candidatas) == 109 and mo.MODELO_ESTIMACION in vistos                    # DI-CO23
+    assert m._candidatas.fuente_txt.notna().all() and m._candidatas.id.str.startswith('EDP25_').sum() == 17
     assert 0 <= e["rango"][0] <= e["porcentaje"] <= e["rango"][1] <= 100
     assert abs(e["rango"][1] - min(100, e["porcentaje"] + nv.H)) < 0.06 and e["preguntas"]
     lado = "sí" if e["rango"][0] > 50 else ("no" if e["rango"][1] < 50 else "dividida")

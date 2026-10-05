@@ -184,6 +184,13 @@ DI-CO22. **Una pregunta nueva trae una estimación de si Bogotá estaría de acu
 
     La reformulación y el puente siguen con el modelo de siempre. Si la estimación falla, la respuesta
     trae `estimacion: None` y la página muestra el texto de DI-CO20.
+
+DI-CO23. **Las candidatas de la estimación pasan a ser 109** (5/10, D19 actualizada): las 92 validadas más las
+    17 preguntas de práctica del lote 5 (Encuesta Distrital de Percepción 2025, mismo formato que la página).
+    Hecho: en 95 preguntas guardadas, con 109 candidatas el error baja de 12,8 a 11,9 y, al decir
+    «probablemente», acierta 17 de 17 contra 12 de 12 (`NIVEL_ACUERDO_LOTE5_RESULTS.md`); la regla
+    pre-registrada dice que reemplace a la de 92. El rango sigue en ±21,9. El texto de la página cita las
+    cifras de esa prueba. Cuesta ~USD 0,024 por pregunta nueva, contra ~0,019.
 """
 
 from __future__ import annotations
@@ -233,8 +240,8 @@ MODELO_ESTIMACION = "anthropic/claude-sonnet-5.5"
 LLAMADA_TITULO = {"sí": "Probablemente sí", "no": "Probablemente no", "dividida": "Dividida"}
 ESTIMACION_TEXTO = ("Es una estimación, no una medición: sale de lo que la gente respondió de verdad a {n} preguntas "
                     "parecidas que sí se midieron, que eligió un modelo de lenguaje (aparecen debajo, con su resultado). "
-                    "En pruebas con 166 preguntas reales cuyo resultado se conocía, acertó si la mayoría estaba de "
-                    "acuerdo en 3 de cada 4 casos, y las 28 veces que dijo «probablemente» acertó.")
+                    "En una prueba con 95 preguntas reales que no se habían usado para armarla, acertó si la mayoría "
+                    "estaba de acuerdo en el 72 % de los casos, y las 17 veces que dijo «probablemente» acertó.")   # DI-CO23
 ESTIMACION_DIVIDIDA = (" El rango cruza el 50 %: con lo que hay medido no se puede decir de qué lado queda la "
                        "mayoría.")
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
@@ -315,17 +322,19 @@ def vista(f: dict) -> dict:
 
 
 def _candidatas_estimacion() -> Optional[pd.DataFrame]:
-    """DI-CO22: las 92 preguntas validadas, con su fuente legible; None si faltan los archivos del banco."""
+    """DI-CO23: las 109 candidatas (las 92 validadas más las 17 de práctica del lote 5), con su fuente legible;
+    None si faltan los archivos del banco."""
     try:
-        from src.experiments import nivel_acuerdo as na
-        c = na.tabla()
+        from src.experiments import nivel_acuerdo_lote5 as nl
+        c = nl.candidatas()[1]
     except Exception:                                                           # noqa: BLE001
         return None
     s = pd.concat([pd.read_csv(f) for f in sorted((RAIZ / "data" / "processed" / "banco").glob("sorteo*.csv"))])
     nombres = {"ECP DANE": "Encuesta de Cultura Política, DANE", "EPC armonizada": "Encuesta de Percepción Ciudadana, Bogotá Cómo Vamos",
                "EPC coyuntura": "Encuesta de Percepción Ciudadana, Bogotá Cómo Vamos", "Biblioteca CNC": "Encuesta del CNC",
                "SCRD Cultura Ambiental": "Encuesta de Cultura Ambiental, Secretaría de Cultura",
-               "SCRD Bienal de Culturas": "Encuesta Bienal de Culturas, Secretaría de Cultura"}
+               "SCRD Bienal de Culturas": "Encuesta Bienal de Culturas, Secretaría de Cultura",
+               "SDP Percepción Distrital": "Encuesta Distrital de Percepción, Secretaría de Planeación"}
     fuente = dict(zip(s.id, s.fuente.map(lambda f: nombres.get(f, f)) + ", " + s.anio.astype(str)))
     return c.assign(fuente_txt=c.id.map(fuente))
 
