@@ -228,6 +228,8 @@ def modelo_simulado(fichas: dict, semilla: int = pu.SEMILLA):
 def main(argv=None, entrada=input) -> int:
     ap = argparse.ArgumentParser(description="Puente sin base (docs/PUENTE_SIN_BASE_SPECIFICATION.md).")
     ap.add_argument("--simulado", action="store_true", help="modelo simulado, sin gasto")
+    ap.add_argument("--modelo", default=pu.MODELO, help="modelo real (LUNA_PAGINA §4); por defecto, el de la página")
+    ap.add_argument("--salida", default="", help="subcarpeta de la salida y la caché, para otro modelo")
     args = ap.parse_args(argv)
     from src.consulta import reformular as rf
     from src.population import poblacion_epc as pe
@@ -236,12 +238,12 @@ def main(argv=None, entrada=input) -> int:
     if len(catalogo) != 102 or len(fichas_91) != 91:
         raise PuenteSinBaseError(f"Catálogos de {len(catalogo)} y {len(fichas_91)}; el pre-registro dice 102 y 91.")
     nuevas = {i: ficha_nueva(t) for i, _, t in PREGUNTAS}
-    salida = SALIDA / ("simulado" if args.simulado else "")
+    salida = SALIDA / args.salida / ("simulado" if args.simulado else "")
     cache = e9.Cache(salida / "cache.json")
     if args.simulado:
         llamar, modelo = modelo_simulado(catalogo), e9.MODELO_SIMULADO
     else:
-        llamar, modelo = e9.cliente_real(), pu.MODELO
+        llamar, modelo = e9.cliente_real(), args.modelo
         pend = [(SISTEMA_V2, u, 400) for fs, cat in ((nuevas, catalogo), (fichas_esc, fichas_91))
                 for f in fs.values() for u in [pu.prompt(f, cat)] for rep in range(pu.REPETICIONES)
                 if e9.Cache.clave(modelo, pu.TEMPERATURA, SISTEMA_V2, u, rep) not in cache]

@@ -189,7 +189,8 @@ def estimador(llamar, cache) -> SimpleNamespace:
     return SimpleNamespace(_candidatas=mo._candidatas_estimacion(), llamar=llamar, cache=cache)
 
 
-def correr_a(objetivo: pd.DataFrame, llamar_ref, llamar_est, cache, tope: float, solo=None) -> pd.DataFrame:
+def correr_a(objetivo: pd.DataFrame, llamar_ref, llamar_est, cache, tope: float, solo=None,
+             modelo_ref: str = rf.MODELO) -> pd.DataFrame:
     cat = rf.cargar_catalogo()
     est = estimador(llamar_est, cache)
     filas = []
@@ -197,7 +198,7 @@ def correr_a(objetivo: pd.DataFrame, llamar_ref, llamar_est, cache, tope: float,
         q = objetivo.iloc[i]
         if nb.gastado(cache) >= tope:                                          # DI-NR2
             raise TopeAlcanzado(f"tope de USD {tope} alcanzado en la pregunta {i}")
-        r, _ = rf.reformular(q.pregunta_pagina[:500], cat, llamar_ref, cache, rf.MODELO)
+        r, _ = rf.reformular(q.pregunta_pagina[:500], cat, llamar_ref, cache, modelo_ref)
         fila = {"id": q.id, "familia": q.familia, "total": float(q.total), "alcance": r["alcance"] if r else "invalida",
                 "reformulada": (r or {}).get("reformulada"), "S": None, "ids": None, "porcentaje": None}
         if r and r["alcance"] == "nueva":
