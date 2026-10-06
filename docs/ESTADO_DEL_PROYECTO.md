@@ -323,6 +323,14 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     - estimar con el texto de la persona pasó su prueba (`TEXTO_PERSONA_RESULTS.md`, USD 0,10): error 15,6 contra 16,7, lado 68 %;
     - la página lo hace desde DI-CO28.
   - **Siguiente:** medir la ganancia con preguntas escritas por personas, no copiadas de una encuesta.
+
+**Encuestas políticas del CNC (6/10, D21):** 10 estudios para Semana y Revista Cambio, solo de Bogotá.
+- **Lote 6, opinión política:** 64 preguntas, con dos enmiendas (mínimo de 200 respuestas; CC355801 sí trae edad).
+- **Lote 7, intención de voto:** 373 preguntas, electorales. Fuera de la página hasta la revisión jurídica; su guardado
+  queda para el nivel 3.
+- **La estimación usa ahora 139 candidatas,** con las 30 del lote 6 (`NIVEL_ACUERDO_LOTE6_RESULTS.md`, DI-CO29).
+- **Los resultados agregados de estas encuestas no se suben a GitHub;** viajan con el traslado.
+- **Siguiente:** el pre-registro del nivel 3, simular la intención de voto.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

@@ -31,10 +31,12 @@ def check(nombre, cuerpo):
 
 def test_lo_electoral_no_entra_a_las_candidatas_de_la_pagina():
     """D21: nada del lote 7 se usa en la página antes de la revisión jurídica."""
+    # Por las preguntas del lote 7, no por el estudio: el lote 6 (opinión, sí permitido) comparte estudios con él.
+    import pandas as pd
     from src.consulta import motor as mo
     c = mo._candidatas_estimacion()
-    estudios = tuple(f"{e}_" for e in b7.ESTUDIOS)
-    assert c is not None and not c.id.str.startswith(estudios).any()
+    s7 = pd.read_csv(b7.SORTEO)
+    assert c is not None and not set(c.id) & set(s7.id) and not set(c.familia) & set(s7.familia)
 
 
 def test_las_opciones_que_no_son_un_nombre_quedan_fuera():

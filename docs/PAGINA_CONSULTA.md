@@ -605,6 +605,25 @@ Cumple su regla, por poco.
 - **Verificado:** las 23 pruebas de `tests/test_consulta.py`, una nueva que revisa qué texto ve el modelo que estima.
 - **Pendiente:** medir la ganancia con preguntas escritas por personas, no con las de una encuesta.
 
+## 5.21 Las candidatas de la estimación pasan a 139: entra la opinión política (6/10/2026, DI-CO29)
+
+Se suman a las candidatas las 30 preguntas de práctica del lote 6: opinión política de las encuestas del CNC para
+Semana, solo de Bogotá (migración, el paro de 2021, el rumbo del país, la vacunación). Pasó su prueba pre-registrada
+(`NIVEL_ACUERDO_LOTE6_RESULTS.md`): en 129 guardadas, error 14,8 contra 15,0, y 10 de 11 al decir «probablemente».
+- **Lo que mejora:** las preguntas políticas, con error de 14,1 contra 16,9.
+- **Lo que se pierde:** dice «probablemente» menos veces, 11 contra 26 en las 129.
+- **Texto de la estimación:** «…en una prueba con 129 preguntas reales…, acertó… en el 71 % de los casos, y de las 11 veces
+  que dijo "probablemente" acertó 10», con la advertencia de que se midió con el texto de la encuesta.
+- **Franja:** «unos 7 de cada 10».
+- **«En qué se apoya la estimación»** puede mostrar ahora preguntas de las encuestas del CNC para Semana, con su porcentaje
+  de Bogotá. Son de opinión, no de voto. Lo electoral (lote 7) no entra (D21).
+- **Los resultados del lote 6 no están en GitHub:** viajan con `empacar_traslado.py`. Sin ellos, la página usa las 109 de
+  antes y avisa en la terminal.
+- **Verificado:**
+  - las 23 pruebas de `tests/test_consulta.py`;
+  - las de los lotes 6 y 7 y de las pruebas de la estimación;
+  - la página cargó las 139 candidatas, todas con su fuente.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

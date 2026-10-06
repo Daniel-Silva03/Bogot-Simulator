@@ -1641,6 +1641,11 @@ preguntas guardadas acierta el lado el **63 %** y, al decir «probablemente», *
 en 90 guardadas (`TEXTO_PERSONA_RESULTS.md`), medido con el texto de la encuesta, que es el mejor caso. La página lo dice.
 DI-CO28.
 
+**Actualización (6/10/2026): 139 candidatas.** Entran las 30 de práctica del lote 6, de opinión política de las encuestas
+del CNC (D21). En 129 guardadas, error 14,8 contra 15,0, acierta el lado el 71 % y 10 de 11 al decidir
+(`NIVEL_ACUERDO_LOTE6_RESULTS.md`). Cumple la regla pre-registrada y Daniel aprobó llevarlo a la página. Decide menos
+veces. DI-CO29.
+
 
 ### D21 — Las encuestas políticas del CNC entran al proyecto, incluida la intención de voto
 

@@ -231,6 +231,15 @@ DI-CO28. **La estimación usa el texto que escribió la persona** (6/10, pedido 
     reformulada. La estimación usa `original` y la escala reformulada; el título, el puente y lo que se muestra
     siguen con la reformulada. Si `original` no viene, se usa la reformulada, como antes. El texto cita 68 % y 5 de
     5 con esa advertencia, y la franja dice «unos 2 de cada 3».
+
+DI-CO29. **Las candidatas pasan a 139: se suman las 30 de práctica del lote 6** (6/10, aprobado por Daniel). El lote 6 trae la
+    opinión política de las encuestas del CNC para Semana, solo de Bogotá. Hecho (`NIVEL_ACUERDO_LOTE6_RESULTS.md`): en
+    129 guardadas, el error baja de 15,0 a 14,8 y acierta 10 de 11 al decidir, y la regla pre-registrada dice que
+    reemplace a la de 109. La mejora está en las preguntas políticas (14,1 contra 16,9). En las demás es 0,7 peor y
+    dice «probablemente» menos veces (11 contra 26 en las 129). El texto cita esas cifras, medidas con el texto de la
+    encuesta, con la misma advertencia de DI-CO28, y la franja dice «unos 7 de cada 10». Los resultados del lote 6 no
+    están en GitHub (D21): si faltan en este computador, se usan las 109 con un aviso en la terminal. Lo electoral
+    (lote 7) nunca entra (`test_banco_lote7`).
 """
 
 from __future__ import annotations
@@ -286,10 +295,10 @@ H_ESTIMACION = 23.4
 LLAMADA_TITULO = {"sí": "Probablemente sí", "no": "Probablemente no", "dividida": "Dividida"}
 ESTIMACION_TEXTO = ("Es una estimación, no una medición: sale de lo que la gente respondió de verdad a {n} preguntas "
                     "parecidas que sí se midieron, que eligió un modelo de lenguaje (aparecen debajo, con su resultado). "
-                    "En una prueba con 90 preguntas reales que no se habían usado para armarla, acertó si la mayoría "
-                    "estaba de acuerdo en el 68 % de los casos, y las 5 veces que dijo «probablemente» acertó. Esa "
-                    "prueba usó el texto original de cada encuesta, más claro que una pregunta escrita aquí: con la "
-                    "tuya puede acertar algo menos.")   # DI-CO28
+                    "En una prueba con 129 preguntas reales que no se habían usado para armarla, acertó si la mayoría "
+                    "estaba de acuerdo en el 71 % de los casos, y de las 11 veces que dijo «probablemente» acertó 10. "
+                    "Esa prueba usó el texto original de cada encuesta, más claro que una pregunta escrita aquí: con la "
+                    "tuya puede acertar algo menos.")   # DI-CO29
 ESTIMACION_DIVIDIDA = (" El rango cruza el 50 %: con lo que hay medido no se puede decir de qué lado queda la "
                        "mayoría.")
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
@@ -385,11 +394,19 @@ def vista(f: dict) -> dict:
 
 
 def _candidatas_estimacion() -> Optional[pd.DataFrame]:
-    """DI-CO23: las 109 candidatas (las 92 validadas más las 17 de práctica del lote 5), con su fuente legible;
-    None si faltan los archivos del banco."""
+    """DI-CO29: las 139 candidatas (las 109 de DI-CO23 más las 30 de práctica del lote 6), con su fuente legible.
+    Sin los resultados del lote 6 en este computador, las 109, con un aviso; None si faltan los del banco."""
     try:
-        from src.experiments import nivel_acuerdo_lote5 as nl
-        c = nl.candidatas()[1]
+        from src.experiments import nivel_acuerdo_lote6 as n6
+        c = n6.candidatas()[1]
+    except FileNotFoundError:
+        print("[candidatas] faltan los resultados del lote 6 (traslado): se usan las 109 de DI-CO23",
+              file=sys.stderr, flush=True)
+        try:
+            from src.experiments import nivel_acuerdo_lote5 as nl
+            c = nl.candidatas()[1]
+        except Exception:                                                       # noqa: BLE001
+            return None
     except Exception:                                                           # noqa: BLE001
         return None
     s = pd.concat([pd.read_csv(f) for f in sorted((RAIZ / "data" / "processed" / "banco").glob("sorteo*.csv"))])
@@ -397,7 +414,8 @@ def _candidatas_estimacion() -> Optional[pd.DataFrame]:
                "EPC coyuntura": "Encuesta de Percepción Ciudadana, Bogotá Cómo Vamos", "Biblioteca CNC": "Encuesta del CNC",
                "SCRD Cultura Ambiental": "Encuesta de Cultura Ambiental, Secretaría de Cultura",
                "SCRD Bienal de Culturas": "Encuesta Bienal de Culturas, Secretaría de Cultura",
-               "SDP Percepción Distrital": "Encuesta Distrital de Percepción, Secretaría de Planeación"}
+               "SDP Percepción Distrital": "Encuesta Distrital de Percepción, Secretaría de Planeación",
+               "CNC para Semana": "Encuesta del CNC para Semana"}
     fuente = dict(zip(s.id, s.fuente.map(lambda f: nombres.get(f, f)) + ", " + s.anio.astype(str)))
     return c.assign(fuente_txt=c.id.map(fuente))
 

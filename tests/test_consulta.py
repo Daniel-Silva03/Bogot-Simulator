@@ -145,7 +145,7 @@ def test_las_preguntas_relacionadas_traen_lo_que_la_gente_respondio():
 
 
 def test_una_pregunta_nueva_trae_la_estimacion_validada():
-    """DI-CO22, DI-CO23 y DI-CO25: Luna, las 109 candidatas y el rango fijo de ±23,4."""
+    """DI-CO22, DI-CO25 y DI-CO29: Luna, las 139 candidatas y el rango fijo de ±23,4."""
     vistos = []
 
     def llamar(modelo, sistema, usuario, temp):
@@ -155,13 +155,15 @@ def test_una_pregunta_nueva_trae_la_estimacion_validada():
                  cache=e9.Cache(Path(_tmp.name) / "est.json"))
     r = m.responder_nueva("¿Qué tan de acuerdo está con V?", ["a", "b", "c", "d", "e"])
     e = r["estimacion"]
-    assert len(m._candidatas) == 109 and mo.MODELO_ESTIMACION in vistos                    # DI-CO23
+    from src.experiments import banco_lote6 as b6
+    n = 139 if b6.REALES.exists() else 109                                                # DI-CO29: sin traslado, 109
+    assert len(m._candidatas) == n and mo.MODELO_ESTIMACION in vistos
     assert m._candidatas.fuente_txt.notna().all() and m._candidatas.id.str.startswith('EDP25_').sum() == 17
     assert 0 <= e["rango"][0] <= e["porcentaje"] <= e["rango"][1] <= 100
     assert mo.MODELO_ESTIMACION == "openai/gpt-6-luna" and mo.H_ESTIMACION == 23.4                 # DI-CO25
     assert mo.MODELO_PAGINA == "openai/gpt-6-luna"                                                 # DI-CO26
     assert abs(e["rango"][1] - min(100, e["porcentaje"] + mo.H_ESTIMACION)) < 0.06 and e["preguntas"]
-    assert "68 %" in e["texto"] and "las 5 veces" in e["texto"] and "texto original" in e["texto"]   # DI-CO28
+    assert "71 %" in e["texto"] and "acertó 10" in e["texto"] and "texto original" in e["texto"]    # DI-CO29
     lado = "sí" if e["rango"][0] > 50 else ("no" if e["rango"][1] < 50 else "dividida")
     assert e["llamada"] == lado and e["titulo"] == mo.LLAMADA_TITULO[lado] and "estimación, no una medición" in e["texto"]
     html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
