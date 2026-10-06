@@ -18,7 +18,7 @@ DI-BL9. **Las preguntas van en una lista explícita** (`PREGUNTAS`), copiada de 
 DI-BL10. **El texto de la página sale de la etiqueta del diccionario**, sin el número de la pregunta, sin las
     instrucciones al encuestador y con la subpregunta dentro de la frase (`texto`).
 DI-BL11. **La edad va en los grupos de cada encuesta** (18-25, 26-40, 41-55, 56+), no en los de la
-    población, y `cortes_edad` lo dice. CC355801 no trae edad: va sin ese grupo.
+    población, y `cortes_edad` lo dice. ~~CC355801 no trae edad: va sin ese grupo.~~ Sí la trae (DI-BL16).
 DI-BL13. **El año de CC873501 es 2022.** Hecho: ni la base ni el diccionario traen fecha. ~~Supuesto, por el
     contenido…~~ Daniel lo confirmó el 6/10 («El año de CC873501 es 2022»).
 DI-BL14. **Nueve textos van escritos a mano** (`TEXTO_MANUAL`). Hecho: en el diccionario, tres etiquetas de
@@ -30,6 +30,9 @@ DI-BL15. **En este lote basta con 200 respuestas válidas, no 300** (enmienda 1 
     **después de ver** que la regla dejaba fuera las 6 preguntas del paro). Se marca `bajo_300` en las que
     quedan entre 200 y 299. Su margen es más ancho (unos ±6 puntos). Es un cambio posterior a ver los datos y
     queda dicho así. La otra condición de estructura (un solo código válido) sigue igual.
+DI-BL16. **CC355801 sí trae edad** (enmienda 2 de §15, 6/10). ~~«CC355801 no trae edad en la base»~~ (DI-BL11 y
+    §15) era falso: está en `EDAD_RANGO`, en tres grupos (18-34, 35-54, 55+). Se corrige antes de calcular el
+    guardado. Solo cambian los resultados por edad de sus 21 preguntas de práctica, no el total.
 DI-BL12. **Sin localidad:** se pasa una serie vacía a `banco_lote3._calcular`, así que `localidad` sale
     vacía y no hay pares claros de localidades.
 """
@@ -77,6 +80,7 @@ PREGUNTAS = {
 #: DI-BL13: CC873501 no trae fecha ni en la base ni en el diccionario; Daniel confirmó 2022.
 ANIO_SUPUESTO = {"CC873501": 2022}
 MIN_LOTE6 = 200                                                  # DI-BL15
+EDAD_RANGO = {"1": "18-34", "2": "35-54", "3": "55+"}                    # DI-BL16: CC355801; el 4 (NR) no entra
 EDAD = {"1": "18-25", "2": "26-40", "3": "41-55", "4": "56+"}
 
 
@@ -183,7 +187,7 @@ def base_estudio(est: str, d: Path | None = None):
     d = d or carpeta()
     base = d / PREGUNTAS[est][0]
     cols = pd.read_excel(base, nrows=0).columns
-    edad = next((c for c in ("EDAD", "REDAD") if c in cols), None)
+    edad = next((c for c in ("EDAD", "REDAD", "EDAD_RANGO") if c in cols), None)
     usar = [v for v, _ in PREGUNTAS[est][2]] + ["DANE", "GENERO", "ESTRATO", "factor"] + ([edad] if edad else [])
     b = pd.read_excel(base, usecols=usar)
     b = b[b.DANE.astype(str).str.replace(r"\.0$", "", regex=True).str.strip() == BOGOTA].reset_index(drop=True)
@@ -191,7 +195,7 @@ def base_estudio(est: str, d: Path | None = None):
     est_ = num("ESTRATO")
     g = {"sexo": num("GENERO").map({1: "Hombres", 2: "Mujeres"}), "estrato": est_.where(est_.between(1, 6)).map(br.estrato_grupo)}
     if edad:
-        g["edad"] = num(edad).astype("Int64").astype(str).map(EDAD)
+        g["edad"] = num(edad).astype("Int64").astype(str).map(EDAD_RANGO if edad == "EDAD_RANGO" else EDAD)
     loc = pd.Series([None] * len(b), dtype=object)
     return (lambda f: num(f["variable"])), num("factor"), g, loc
 
@@ -205,7 +209,8 @@ def reales(sorteo: pd.DataFrame, d: Path | None = None) -> dict:
             for v in r.values():
                 if v["excluida"] and v["excluida"].startswith(f"menos de {br.MIN_VALIDAS}") and v["n"] >= MIN_LOTE6:
                     v["excluida"], v["bajo_300"] = None, True                     # DI-BL15
-                v["cortes_edad"] = "18-25, 26-40, 41-55, 56+ (los de la encuesta)" if est != "CC355801" else "sin edad"
+                v["cortes_edad"] = ("18-34, 35-54, 55+ (los de la encuesta)" if est == "CC355801"
+                                    else "18-25, 26-40, 41-55, 56+ (los de la encuesta)")                 # DI-BL16
             out.update(r)
     return out
 

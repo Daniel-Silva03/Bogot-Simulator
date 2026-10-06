@@ -513,7 +513,7 @@ arriba, al guardado.
 - **Sexo:** `GENERO` (1 Hombres, 2 Mujeres).
 - **Estrato:** `ESTRATO`, en 1, 2, 3, 4 y 5-6; el 0 («sin estrato») no entra.
 - **Edad:** `EDAD` o `REDAD`, en los grupos de cada encuesta (18-25, 26-40, 41-55, 56 o más). No coinciden con los de la
-  población; se dice en `cortes_edad`. CC355801 no trae edad en la base.
+  población; se dice en `cortes_edad`. ~~CC355801 no trae edad en la base.~~ Falso: la trae en `EDAD_RANGO` (§15.3).
 - **Localidad: no hay.** Estas preguntas no entran al mapa ni a la parte de localidades.
 - **Pares claros:** regla DI-BR5 y z > 1,96.
 
@@ -557,4 +557,13 @@ porcentaje es de unos ±5 a ±6 puntos. Es más ancho que en la EDP (13.000) o l
 - **La regla de 300 sigue igual en los lotes 1 a 5.**
 - **El guardado** del lote 6 se calculará con el mismo mínimo de 200.
 - **Resultado:** quedan las 30 de práctica utilizables, con entre 242 y 408 respuestas válidas y 130 pares claros.
+
+### 15.3 Enmienda 2 del lote 6 (6/10/2026): CC355801 sí trae edad
+
+**Lo que estaba escrito era falso.** El pre-registro decía «CC355801 no trae edad en la base», pero la trae en `EDAD_RANGO`,
+con tres grupos (18-34, 35-54 y 55 o más) y NR. Al revisar los nombres de columna de los otros estudios se vio que el
+nombre era distinto.
+- **Se corrige:** el grupo de edad de sus 21 preguntas de práctica se calcula con esos tres grupos (DI-BL16).
+- **Qué cambia:** solo los resultados por edad y sus pares claros, no los totales. El guardado aún no se ha calculado.
+- **Resultado:** 30 de práctica utilizables y 145 pares claros (antes, 130).
 
