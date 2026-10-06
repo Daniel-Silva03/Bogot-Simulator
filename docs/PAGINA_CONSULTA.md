@@ -27,7 +27,8 @@ que a su vez usa `poblacion_epc.py` y la armonización) y el microdato de la EPC
 (`BSS_EPC_DIR`). *Hasta el 30/09 usaba la población 2023; ver §5.5.*
 
 **Gasto:** una pregunta del catálogo cuesta una llamada (la reformulación, unos USD 0,003);
-una nueva, dos (reformulación y puente, unos USD 0,006). Las respuestas se guardan en
+una nueva, dos (reformulación y puente, unos USD 0,006). ~~Más la estimación con Sonnet (~USD 0,024).~~ Más la
+estimación con GPT-6 Luna (~USD 0,0012, §5.17): una nueva cuesta en total unos USD 0,009. Las respuestas se guardan en
 `data/processed/consulta/cache.json`, que no se sube: repetir una pregunta no cuesta.
 
 ---
@@ -544,6 +545,23 @@ verde y ámbar.
 
 Verificado: las 21 pruebas y la página en modo simulado. Con la pregunta de seguridad, 5 localidades salen en verde, 11 en gris y 3 en ámbar, y coinciden con los
 contadores y con la tabla.
+
+## 5.17 La estimación pasa a GPT-6 Luna (6/10/2026, D20, DI-CO25)
+
+El jefe de Daniel pidió bajar el gasto. La estimación de una pregunta nueva pasa de Claude Sonnet 5.5 a
+`openai/gpt-6-luna`, que cuesta unas 20 veces menos: ~USD 0,0012 contra ~0,024.
+- **No pasó su prueba completa** (`NIVEL_ACUERDO_LUNA_RESULTS.md`). Cumplió la regla con que se validó Sonnet, pero en el
+  guardado se equivoca 2,4 puntos más que él (14,3 contra 11,9). Daniel decidió cambiar igual (D20).
+- **Lo que cambia en la página:**
+  - el rango pasa de ±21,9 a ±23,4;
+  - el texto de la estimación cita las cifras de Luna: «…acertó si la mayoría estaba de acuerdo en el 69 % de los casos, y
+    de las 11 veces que dijo "probablemente" acertó 10»;
+  - «Qué hay detrás» dice ±23.
+- **Lo que no cambia:** el método, las 109 candidatas, la forma de mostrarlo ni la franja de arriba. «7 de cada 10» sigue
+  valiendo para el 69 %.
+- **Verificado:** las 22 pruebas de `tests/test_consulta.py`, que ahora revisan el modelo, el rango y las cifras del texto.
+- **Pendiente:** la cifra que cita la página se midió con el texto original de cada encuesta. Cuánto cambia con la
+  reformulación de la página es la parte A de `NIVEL_ACUERDO_REDACCION`, que falta terminar con Luna.
 
 ## 6. Límites que la página dice
 

@@ -299,6 +299,20 @@ afirmaciones de acuerdo; banco en 411 preguntas.
 **Candidatas con el lote 5 (5/10, pre-registrado, USD 2,73; `NIVEL_ACUERDO_LOTE5_RESULTS.md`): B (109 candidatas)
 reemplaza a A (92).** En 95 guardadas: error 11,9 contra 12,8; al decir «probablemente», 17 de 17 contra 12 de 12; en
 las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23).**
+**Rediseño de la página (5/10, variante B; `PAGINA_CONSULTA.md` §5.16).** El mapa se colorea frente a la ciudad.
+**La estimación, tal como la sirve la página (5/10, `NIVEL_ACUERDO_REDACCION_*`):**
+- **Parte B (sin gasto):** estirar o corregir la estimación no ayuda.
+- **Parte A** (la reformulación de la página): quedó a medias porque la cuenta se quedó sin saldo. Las 46 preguntas con
+  estimación, sin evaluar, apuntan a una pérdida de precisión.
+- **Arreglos (DI-CO24, DI-NB6):** los errores del servicio ya se dicen como tales, y ya no se pierden las respuestas
+  en que el modelo se corrige.
+
+**GPT-6 Luna (6/10, pre-registrado, USD 0,19; `NIVEL_ACUERDO_LUNA_RESULTS.md`; D20).**
+- **En la prueba:** cumple las tres condiciones de la regla de Sonnet, pero se equivoca 2,4 puntos más en el guardado
+  (14,3 contra 11,9) y no pasa la cuarta.
+- **Decisión de Daniel:** cambiar igual, por costo (20 veces menos por pregunta). La página cita sus cifras: 69 % del
+  lado de la mayoría; 10 de 11 al decir «probablemente»; ±23,4.
+- **Siguiente:** terminar la parte A con Luna (~USD 0,10).
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

@@ -201,6 +201,13 @@ DI-CO24. **Un error del servicio del modelo ya no se confunde con «no se pudo e
     `ServicioNoDisponible`, una `ConsultaError`: el servidor responde con el mensaje y la página muestra su
     estado de error con «Intentar de nuevo». Cualquier otro error se escribe en la terminal y cae a
     DI-CO20, como antes. Una respuesta del modelo que no sirve (sin ids válidos) sigue siendo DI-CO20.
+
+DI-CO25. **La estimación usa GPT-6 Luna** (6/10, D20). Hecho: en su prueba pre-registrada, Luna cumplió las tres
+    condiciones de la regla de Sonnet, pero no la de no perder más de 1,5 puntos de error frente a él en el
+    guardado (14,3 contra 11,9). Decisión de Daniel: cambiar por costo, unas 20 veces menos por pregunta nueva.
+    Cambian el modelo (`MODELO_ESTIMACION`), el rango (`H_ESTIMACION` = 23,4, el h de Luna; antes,
+    `nivel_acuerdo_validacion.H` = 21,9) y las cifras del texto (69 % del lado de la mayoría; 10 de 11 al
+    decir «probablemente»). El método y las 109 candidatas no cambian.
 """
 
 from __future__ import annotations
@@ -248,12 +255,14 @@ RESPUESTA_NUEVA = {
               "y cómo responde cada grupo en general."),
 }
 #: DI-CO22: la estimación de una pregunta nueva.
-MODELO_ESTIMACION = "anthropic/claude-sonnet-5.5"
+MODELO_ESTIMACION = "openai/gpt-6-luna"                    # DI-CO25 (D20); antes, anthropic/claude-sonnet-5.5
+#: DI-CO25: el rango de Luna, cuantil 80 % de su error en las 92 de práctica (NIVEL_ACUERDO_LUNA_RESULTS.md).
+H_ESTIMACION = 23.4
 LLAMADA_TITULO = {"sí": "Probablemente sí", "no": "Probablemente no", "dividida": "Dividida"}
 ESTIMACION_TEXTO = ("Es una estimación, no una medición: sale de lo que la gente respondió de verdad a {n} preguntas "
                     "parecidas que sí se midieron, que eligió un modelo de lenguaje (aparecen debajo, con su resultado). "
                     "En una prueba con 95 preguntas reales que no se habían usado para armarla, acertó si la mayoría "
-                    "estaba de acuerdo en el 72 % de los casos, y las 17 veces que dijo «probablemente» acertó.")   # DI-CO23
+                    "estaba de acuerdo en el 69 % de los casos, y de las 11 veces que dijo «probablemente» acertó 10.")   # DI-CO25
 ESTIMACION_DIVIDIDA = (" El rango cruza el 50 %: con lo que hay medido no se puede decir de qué lado queda la "
                        "mayoría.")
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
@@ -537,7 +546,6 @@ class Motor:
     def estimar(self, pregunta: str, escala: list[str]) -> Optional[dict]:
         """DI-CO22: (porcentaje, rango, llamada y las preguntas medidas en que se apoya), o None."""
         from src.experiments import nivel_acuerdo as na
-        from src.experiments import nivel_acuerdo_validacion as nv
         from src.experiments import nivel_parecidas_b as nb
         c = self._candidatas
         if c is None or c.empty:
@@ -558,8 +566,8 @@ class Motor:
             return None
         elegidas = c.set_index("id").loc[ids]
         pct = float(elegidas.total.mean())
-        lo, hi = max(0.0, pct - nv.H), min(100.0, pct + nv.H)
-        llam = str(na.llamada(np.array([pct]), np.array([nv.H]))[0])
+        lo, hi = max(0.0, pct - H_ESTIMACION), min(100.0, pct + H_ESTIMACION)          # DI-CO25
+        llam = str(na.llamada(np.array([pct]), np.array([H_ESTIMACION]))[0])
         return {"porcentaje": round(pct, 1), "rango": [round(lo, 1), round(hi, 1)], "llamada": llam,
                 "titulo": LLAMADA_TITULO[llam],
                 "texto": ESTIMACION_TEXTO.format(n=len(ids)) + (ESTIMACION_DIVIDIDA if llam == "dividida" else ""),

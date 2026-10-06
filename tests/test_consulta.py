@@ -145,8 +145,7 @@ def test_las_preguntas_relacionadas_traen_lo_que_la_gente_respondio():
 
 
 def test_una_pregunta_nueva_trae_la_estimacion_validada():
-    """DI-CO22 y DI-CO23: Sonnet, las 109 candidatas y el rango fijo de ±21,9."""
-    from src.experiments import nivel_acuerdo_validacion as nv
+    """DI-CO22, DI-CO23 y DI-CO25: Luna, las 109 candidatas y el rango fijo de ±23,4."""
     vistos = []
 
     def llamar(modelo, sistema, usuario, temp):
@@ -159,7 +158,9 @@ def test_una_pregunta_nueva_trae_la_estimacion_validada():
     assert len(m._candidatas) == 109 and mo.MODELO_ESTIMACION in vistos                    # DI-CO23
     assert m._candidatas.fuente_txt.notna().all() and m._candidatas.id.str.startswith('EDP25_').sum() == 17
     assert 0 <= e["rango"][0] <= e["porcentaje"] <= e["rango"][1] <= 100
-    assert abs(e["rango"][1] - min(100, e["porcentaje"] + nv.H)) < 0.06 and e["preguntas"]
+    assert mo.MODELO_ESTIMACION == "openai/gpt-6-luna" and mo.H_ESTIMACION == 23.4                 # DI-CO25
+    assert abs(e["rango"][1] - min(100, e["porcentaje"] + mo.H_ESTIMACION)) < 0.06 and e["preguntas"]
+    assert "69 %" in e["texto"] and "acertó 10" in e["texto"]
     lado = "sí" if e["rango"][0] > 50 else ("no" if e["rango"][1] < 50 else "dividida")
     assert e["llamada"] == lado and e["titulo"] == mo.LLAMADA_TITULO[lado] and "estimación, no una medición" in e["texto"]
     html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
@@ -167,7 +168,7 @@ def test_una_pregunta_nueva_trae_la_estimacion_validada():
 
 
 def test_si_la_estimacion_falla_queda_el_aviso_de_siempre():
-    """DI-CO22: si Sonnet no da candidatas válidas, `estimacion` es None y la página muestra DI-CO20."""
+    """DI-CO22: si el modelo no da candidatas válidas, `estimacion` es None y la página muestra DI-CO20."""
     from src.experiments import nivel_parecidas_b as nb
 
     def llamar(modelo, sistema, usuario, temp):

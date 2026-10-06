@@ -1587,6 +1587,51 @@ Percepción 2025, mismo formato que la página), en 95 preguntas guardadas el er
 «probablemente», acertó 17 de 17 contra 12 de 12 (`NIVEL_ACUERDO_LOTE5_RESULTS.md`). La regla pre-registrada pedía
 reemplazar la configuración, y Daniel aprobó llevarlo a la página. DI-CO23 en `src/consulta/motor.py`.
 
+**Actualización (6/10/2026): el modelo pasa a GPT-6 Luna** por D20. Lo demás de D19 sigue igual.
+
+### D20 — La estimación de una pregunta nueva usa GPT-6 Luna, aunque no igualó a Sonnet
+
+**Fecha:** 6 de octubre de 2026
+**Decisión:** La estimación de D19 pasa de Claude Sonnet 5.5 a `openai/gpt-6-luna`.
+- Mismo método y mismas 109 candidatas.
+- El rango pasa a **±23,4 puntos**: es el h de Luna, el cuantil 80 % de su error en la práctica.
+- La página cita las cifras de Luna, no las de Sonnet.
+
+**Justificación.** El jefe de Daniel pidió bajar el gasto en la API. Luna cuesta **unas 20 veces menos** por
+pregunta nueva (~USD 0,0012 contra ~0,024). En su prueba pre-registrada (`NIVEL_ACUERDO_LUNA_RESULTS.md`)
+cumplió las tres condiciones de la regla con que se validó Sonnet:
+- error 14,5 en la práctica y 14,3 en el guardado;
+- lado de la mayoría 83 % y 69 %;
+- 26 de 28 al decir «probablemente».
+
+**Lo que se acepta perder, dicho tal cual.** Luna **no** cumplió la cuarta condición del pre-registro: no
+perder más de 1,5 puntos de error frente a Sonnet en el guardado. Pierde 2,4 (14,3 contra 11,9). Además:
+- decide menos (11 de 95 contra 17);
+- al decidir se equivocó 2 veces (10 de 11), y Sonnet ninguna (17 de 17).
+
+**Esto no es un «pasó».** Es una decisión de proyecto: se cambia precisión por costo, con la pérdida medida y
+a la vista.
+
+**Alternativas consideradas:**
+- *Seguir con Sonnet*: la mejor precisión medida, pero al costo que el jefe objetó.
+- *mimo*: no cumplió la regla (16,2 de error en la práctica, 86 % al decidir).
+- *Volver a D18, sin estimación*: costo cero de Sonnet, pero se pierde una estimación que acierta el lado
+  de la mayoría 7 de cada 10 veces.
+
+**Límites.**
+1. Valen los de D19, con el rango algo más ancho (±23,4).
+2. La cifra que cita la página se midió con el texto original de cada encuesta, no con la reformulación.
+   Medir eso es la parte A de `NIVEL_ACUERDO_REDACCION`, que debe terminarse con Luna, el modelo de la página.
+3. Los conjuntos de la prueba de Luna ya se habían usado para Sonnet y mimo, así que no es una validación con
+   preguntas nuevas.
+
+**Evidencia:**
+- `NIVEL_ACUERDO_LUNA_RESULTS.md`;
+- DI-CO25 en `src/consulta/motor.py`.
+
+**Estado:** **APPROVED** (Daniel, en conversación, 6 de octubre de 2026: «cambiemos a luna», después de ver
+las cifras de los dos modelos lado a lado y la advertencia de que no era un «pasó»).
+
 ---
 
 # 40. DECISIONES ABIERTAS
