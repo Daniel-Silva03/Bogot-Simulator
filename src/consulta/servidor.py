@@ -119,7 +119,8 @@ def crear_servidor(motor: mo.Motor, pagina, puerto: int = PUERTO) -> ThreadingHT
                         if d.get("codigo"):
                             r = motor.responder_catalogo(str(d["codigo"]))
                         else:
-                            r = motor.responder_nueva(str(d.get("pregunta", "")), [str(x) for x in d.get("escala") or []])
+                            r = motor.responder_nueva(str(d.get("pregunta", "")), [str(x) for x in d.get("escala") or []],
+                                                      original=str(d.get("original") or "")[:500] or None)   # DI-CO28
                     else:
                         return self._json(404, {"error": "no existe"})
                 self._json(200, r)

@@ -161,11 +161,30 @@ def test_una_pregunta_nueva_trae_la_estimacion_validada():
     assert mo.MODELO_ESTIMACION == "openai/gpt-6-luna" and mo.H_ESTIMACION == 23.4                 # DI-CO25
     assert mo.MODELO_PAGINA == "openai/gpt-6-luna"                                                 # DI-CO26
     assert abs(e["rango"][1] - min(100, e["porcentaje"] + mo.H_ESTIMACION)) < 0.06 and e["preguntas"]
-    assert "63 %" in e["texto"] and "acertó 3" in e["texto"] and "reformuladas" in e["texto"]       # DI-CO27
+    assert "68 %" in e["texto"] and "las 5 veces" in e["texto"] and "texto original" in e["texto"]   # DI-CO28
     lado = "sí" if e["rango"][0] > 50 else ("no" if e["rango"][1] < 50 else "dividida")
     assert e["llamada"] == lado and e["titulo"] == mo.LLAMADA_TITULO[lado] and "estimación, no una medición" in e["texto"]
     html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
     assert 'class="estimacion' in html and "En qué se apoya la estimación" in html
+
+
+def test_la_estimacion_usa_lo_que_escribio_la_persona():
+    """DI-CO28: con `original`, el modelo que estima ve lo escrito; lo mostrado sigue siendo la reformulada."""
+    from src.experiments import nivel_parecidas_b as nb
+    vistos = []
+
+    def llamar(modelo, sistema, usuario, temp):
+        if sistema == nb.SISTEMA:
+            vistos.append(usuario.split("\n")[1])
+        return LLAMAR(modelo, sistema, usuario, temp)
+    m = mo.Motor(llamar, MODELO, donante=M.donante, agentes=M.agentes, catalogo=M.catalogo,
+                 cache=e9.Cache(Path(_tmp.name) / "original.json"))
+    r = m.responder_nueva("¿Qué tan de acuerdo está con S?", ["a", "b", "c", "d", "e"], original="¿la gente quiere S?")
+    assert vistos == ["¿la gente quiere S?"] and r["pregunta"] == "¿Qué tan de acuerdo está con S?"
+    m.responder_nueva("¿Qué tan de acuerdo está con R?", ["a", "b", "c", "d", "e"])            # sin original, como antes
+    assert vistos[-1] == "¿Qué tan de acuerdo está con R?"
+    html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)
+    assert "original:q" in html and "original:v" in html
 
 
 def test_si_la_estimacion_falla_queda_el_aviso_de_siempre():

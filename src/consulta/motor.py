@@ -222,6 +222,15 @@ DI-CO27. **El texto cita lo medido con la página tal como funciona** (6/10, ped
     (`NIVEL_ACUERDO_REDACCION_RESULTS.md` parte A; `LUNA_PAGINA_RESULTS.md` parte 2): con Luna reformulando y
     estimando, en las 90 de las 95 guardadas que quedan como pregunta nueva, acierta el lado el 63 % y, al
     decir «probablemente», 3 de 4. La franja de la página pasa de «7 de cada 10» a «6 de cada 10».
+
+DI-CO28. **La estimación usa el texto que escribió la persona** (6/10, pedido por Daniel). Hecho
+    (`TEXTO_PERSONA_RESULTS.md`): en 90 guardadas, estimar con el texto original y la escala de la reformulación
+    baja el error de 16,7 a 15,6, sube el lado de 63 % a 68 % y acierta 5 de 5 al decidir. Cumple la regla
+    pre-registrada, por 0,1 puntos. Supuesto, dicho en la página: allí el texto era el de la encuesta, el mejor caso.
+    Decisión: la página manda `original` (lo escrito, o lo editado en «Editar y volver a suponer») junto con la
+    reformulada. La estimación usa `original` y la escala reformulada; el título, el puente y lo que se muestra
+    siguen con la reformulada. Si `original` no viene, se usa la reformulada, como antes. El texto cita 68 % y 5 de
+    5 con esa advertencia, y la franja dice «unos 2 de cada 3».
 """
 
 from __future__ import annotations
@@ -277,9 +286,10 @@ H_ESTIMACION = 23.4
 LLAMADA_TITULO = {"sí": "Probablemente sí", "no": "Probablemente no", "dividida": "Dividida"}
 ESTIMACION_TEXTO = ("Es una estimación, no una medición: sale de lo que la gente respondió de verdad a {n} preguntas "
                     "parecidas que sí se midieron, que eligió un modelo de lenguaje (aparecen debajo, con su resultado). "
-                    "En una prueba con 90 preguntas reales que no se habían usado para armarla, pasadas por esta misma "
-                    "página (reformuladas y estimadas), acertó si la mayoría estaba de acuerdo en el 63 % de los casos, "
-                    "y de las 4 veces que dijo «probablemente» acertó 3.")   # DI-CO27
+                    "En una prueba con 90 preguntas reales que no se habían usado para armarla, acertó si la mayoría "
+                    "estaba de acuerdo en el 68 % de los casos, y las 5 veces que dijo «probablemente» acertó. Esa "
+                    "prueba usó el texto original de cada encuesta, más claro que una pregunta escrita aquí: con la "
+                    "tuya puede acertar algo menos.")   # DI-CO28
 ESTIMACION_DIVIDIDA = (" El rango cruza el 50 %: con lo que hay medido no se puede decir de qué lado queda la "
                        "mayoría.")
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
@@ -591,7 +601,8 @@ class Motor:
                 "preguntas": [{"pregunta": r.pregunta_pagina, "fuente": r.fuente_txt, "porcentaje": round(float(r.total), 1)}
                               for r in elegidas.itertuples()]}
 
-    def responder_nueva(self, pregunta: str, escala: list[str]) -> dict:
+    def responder_nueva(self, pregunta: str, escala: list[str], original: Optional[str] = None) -> dict:
+        """`original`: lo que escribió la persona; si viene, la estimación se hace con él (DI-CO28)."""
         if not pregunta or len(escala) != 5:
             raise ConsultaError("Una pregunta nueva necesita su texto y cinco etiquetas.")
         f_esc = {"variable": "NUEVA", "codigo": "NUEVA", "pregunta": pregunta.strip(), "escala": [1, 2, 3, 4, 5],
@@ -621,7 +632,7 @@ class Motor:
         return {"tipo": "nueva", "suposicion": True, "aviso": AVISO, "pregunta": pregunta.strip(), "escala": escala,
                 "consultados": len(self.agentes),                                   # DI-CO9
                 "respuesta": RESPUESTA_NUEVA,                                        # DI-CO20
-                "estimacion": self.estimar(pregunta.strip(), escala),               # DI-CO22
+                "estimacion": self.estimar((original or pregunta).strip(), escala),  # DI-CO22, DI-CO28
                 "grupos": self.tono, "tono_titulo": TONO_TITULO,                     # DI-CO14
                 "tono_texto": TONO_TEXTO.format(n=self.n_tono),
                 "relacionadas": relacionadas,                                        # DI-CO16: sin justificación

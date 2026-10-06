@@ -343,7 +343,7 @@ footer .marca{margin-bottom:16px}
 </style>
 </head>
 <body>
-<div class="anuncio"><a href="#detras">Lo que aprendimos probándolo: las preguntas que la encuesta hizo son dato medido; las nuevas se estiman con preguntas parecidas: en las pruebas, acertó si la mayoría estaba de acuerdo en 6 de cada 10 casos →</a></div>
+<div class="anuncio"><a href="#detras">Lo que aprendimos probándolo: las preguntas que la encuesta hizo son dato medido; las nuevas se estiman con preguntas parecidas: en las pruebas, acertó si la mayoría estaba de acuerdo en unos 2 de cada 3 casos →</a></div>
 <header class="barra">
   <div class="envoltura">
     <a class="marca" href="#inicio" aria-label="Bogotá Sintética, inicio">
@@ -749,7 +749,7 @@ async function preguntar(texto){
     const r = await api('/api/reformular', {pregunta:q});
     mostrarEntendida(r);
     if (r.alcance === 'catalogo') await responder({codigo:r.codigo});
-    else if (r.alcance === 'nueva') await responder({pregunta:r.reformulada, escala:r.escala});
+    else if (r.alcance === 'nueva') await responder({pregunta:r.reformulada, escala:r.escala, original:q});   /* DI-CO28: se estima con lo escrito */
     else { el.classList.add('oculto'); verResultado(); }
   } catch (e) { error(el, e.message); }
   finally { $('#enviar').disabled = false; }
@@ -781,7 +781,7 @@ function mostrarEntendida(r){
     });
     $('#resuponer').addEventListener('click', () => {
       const v = $('#editada').value.trim(); if (!v) return;
-      $('#entendida').textContent = v; responder({pregunta:v, escala:r.escala});
+      $('#entendida').textContent = v; responder({pregunta:v, escala:r.escala, original:v});
     });
   }
   aparecer(s);

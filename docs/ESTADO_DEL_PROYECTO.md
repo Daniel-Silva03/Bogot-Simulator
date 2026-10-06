@@ -317,8 +317,12 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     lado 63 % contra 69 %; 5 de 6 al decidir. La pérdida está en las extremas, porque la reformulación a veces cambia el sentido.
   - **La reformulación y el puente pasan a Luna** (`LUNA_PAGINA_RESULTS.md`, USD 0,28, DI-CO26), y pasan su validación.
     Toda la página va con Luna, a ~USD 0,003 por pregunta nueva.
-  - **Siguiente:** corregir el texto de la página con las cifras con reformulación, y pre-registrar darle al modelo el texto
-    de la persona.
+  - ~~**Siguiente:** corregir el texto de la página con las cifras con reformulación, y pre-registrar darle al modelo el
+    texto de la persona.~~ Hecho:
+    - el texto pasó a 63 % (DI-CO27);
+    - estimar con el texto de la persona pasó su prueba (`TEXTO_PERSONA_RESULTS.md`, USD 0,10): error 15,6 contra 16,7, lado 68 %;
+    - la página lo hace desde DI-CO28.
+  - **Siguiente:** medir la ganancia con preguntas escritas por personas, no copiadas de una encuesta.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

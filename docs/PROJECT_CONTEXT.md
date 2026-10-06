@@ -1637,6 +1637,10 @@ original de cada encuesta. Con la página tal como funciona, que reformula prime
 preguntas guardadas acierta el lado el **63 %** y, al decir «probablemente», **3 de 4**
 (`NIVEL_ACUERDO_REDACCION_RESULTS.md` y `LUNA_PAGINA_RESULTS.md`). La página cita estas desde DI-CO27.
 
+**Actualización (6/10/2026): la estimación usa el texto de la persona.** Así se recupera parte de lo perdido: 68 % y 5 de 5
+en 90 guardadas (`TEXTO_PERSONA_RESULTS.md`), medido con el texto de la encuesta, que es el mejor caso. La página lo dice.
+DI-CO28.
+
 ---
 
 # 40. DECISIONES ABIERTAS

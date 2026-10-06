@@ -585,6 +585,26 @@ Toda la página usa ahora `openai/gpt-6-luna`. Una pregunta nueva cuesta ~USD 0,
 - **La franja de arriba:** pasa de «7 de cada 10» a «6 de cada 10».
 - **Verificado:** las 22 pruebas de `tests/test_consulta.py`, que revisan las cifras nuevas.
 
+## 5.20 La estimación usa lo que escribió la persona (6/10/2026, DI-CO28)
+
+La prueba `TEXTO_PERSONA` mostró que estimar con el texto original, más la escala de la reformulación, es mejor que
+estimar con la reformulada:
+- error 15,6 contra 16,7;
+- lado de la mayoría 68 % contra 63 %;
+- 5 de 5 al decir «probablemente».
+
+Cumple su regla, por poco.
+- **Qué hace ahora la página:**
+  - manda al servidor lo que escribió la persona, o lo que editó en «Editar y volver a suponer», junto con la reformulada;
+  - la estimación usa ese texto;
+  - lo que se muestra (el título, el puente y la escala) sigue siendo la reformulada.
+- **Texto de la estimación:** «…acertó si la mayoría estaba de acuerdo en el 68 % de los casos, y las 5 veces que dijo
+  "probablemente" acertó. Esa prueba usó el texto original de cada encuesta, más claro que una pregunta escrita aquí: con
+  la tuya puede acertar algo menos».
+- **Franja:** «unos 2 de cada 3».
+- **Verificado:** las 23 pruebas de `tests/test_consulta.py`, una nueva que revisa qué texto ve el modelo que estima.
+- **Pendiente:** medir la ganancia con preguntas escritas por personas, no con las de una encuesta.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por
