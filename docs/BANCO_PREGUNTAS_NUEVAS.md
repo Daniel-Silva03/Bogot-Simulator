@@ -626,3 +626,14 @@ la pregunta numerada de cada estudio.
 
 **Código:** `src/experiments/banco_lote7.py`, con pruebas en `tests/test_banco_lote7.py`.
 
+### 16.1 Sorteo y resultados de práctica del lote 7 (6/10)
+
+- **Sorteo** (commit `6404b29`, antes de calcular): 47 familias y 158 preguntas a práctica; 47 familias y 215 al
+  guardado.
+- **Un arreglo de lectura** (DI-BL21): el factor de expansión de la base en CSV (CC892901) trae coma decimal, y en la
+  primera pasada sus 31 preguntas de práctica salieron con 0 respuestas válidas. Corregido, no cambia nada del diseño.
+- **Resultados de práctica** (`reales_practica_lote7.json`, no se sube): las 158 son utilizables, con entre 203 y 540
+  respuestas válidas.
+- **El guardado no se ha calculado.** Queda para la validación pre-registrada del nivel 3.
+- **Con el lote 7, el banco suma 848 preguntas.** Las 373 del lote 7 son electorales y quedan fuera de la página (D21).
+

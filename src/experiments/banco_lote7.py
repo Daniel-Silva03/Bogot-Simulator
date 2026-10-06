@@ -22,6 +22,9 @@ DI-BL18. **Las etiquetas de valor** salen de la sección «Valor/Etiqueta» del 
     tenga: en los estudios de 2026 está en una segunda hoja (`Valores_variable`).
 DI-BL19. **La fecha del texto** sale del nombre del estudio («mayo de 2021») o, si no lo trae, solo el año.
     El texto empieza siempre por la fecha, porque la intención de voto depende del momento.
+DI-BL21. **El factor de expansión del CSV (CC892901) viene con coma decimal** («1,23»). Hecho: leído como número
+    salía vacío y las 31 preguntas de práctica quedaban con 0 respuestas válidas. Se cambia la coma por punto
+    antes de convertirlo. Es un arreglo de lectura, no del diseño.
 DI-BL20. **Las coaliciones de CC873501 P20 se nombran sin sus integrantes.** Hecho: la etiqueta del
     diccionario corta la lista («…Juan Manue»). Se deja el nombre de la coalición («la Coalición de la
     Esperanza»), que es lo que identifica la opción.
@@ -178,7 +181,8 @@ def base_estudio(est: str, d: Path | None = None):
     mapa = EDAD5 if int(re.findall(r"20\d\d", ESTUDIOS[est][3])[-1]) >= 2026 else EDAD4
     g = {"sexo": num("GENERO").map({1: "Hombres", 2: "Mujeres"}), "estrato": e.where(e.between(1, 6)).map(br.estrato_grupo),
          "edad": num(edad).astype("Int64").astype(str).map(mapa)}
-    return (lambda f: num(f["variable"])), num(peso), g, pd.Series([None] * len(b), dtype=object)
+    w = pd.to_numeric(b[peso].astype(str).str.replace(",", ".", regex=False), errors="coerce")     # DI-BL21
+    return (lambda f: num(f["variable"])), w, g, pd.Series([None] * len(b), dtype=object)
 
 
 def reales(sorteo: pd.DataFrame, d: Path | None = None) -> dict:
