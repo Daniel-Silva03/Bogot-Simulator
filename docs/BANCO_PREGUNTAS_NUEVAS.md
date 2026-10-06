@@ -567,3 +567,62 @@ nombre era distinto.
 - **Qué cambia:** solo los resultados por edad y sus pares claros, no los totales. El guardado aún no se ha calculado.
 - **Resultado:** 30 de práctica utilizables y 145 pares claros (antes, 130).
 
+## 16. Séptimo lote: intención de voto de las encuestas del CNC, niveles 2 y 3 de D21 (pre-registro, 6/10, antes de sortear)
+
+**Lo pidió Daniel** («incluye intención de voto»). **Es material electoral.** Por D21, nada de este lote se muestra en la
+página ni entra a las candidatas de la estimación antes de la revisión jurídica del CNC.
+`tests/test_banco_lote7.py` comprueba que no entre. Su guardado queda para validar el nivel 3 (simular la intención de
+voto), con su propio pre-registro.
+
+**Fuente.** Las nueve encuestas del CNC de `DATA_INVENTORY.md` §16 que preguntan por el voto, solo con los encuestados de
+Bogotá (`DANE` = 11001) y su factor de expansión:
+- **para Semana:** mayo y junio de 2021, 2022 y abril de 2022;
+- **para Revista Cambio:** enero de 2026, más cuatro de 2026 sin mes en el nombre.
+
+**Lo que se miró antes de escribir esto:** diccionarios, etiquetas de valor y nombres de columnas. **Ningún porcentaje.**
+
+**Las preguntas** (lista explícita en `banco_lote7.ESTUDIOS`):
+- **intención de voto presidencial en primera vuelta** y por fórmulas (2026);
+- **segundas vueltas** entre dos candidatos;
+- **escenarios de primera vuelta** con candidatos dados (CC891901 P6 a P9);
+- **consultas interpartidistas** y los precandidatos de cada consulta;
+- **«nunca votaría por…»** (2026);
+- **la tendencia** por la que votaría (izquierda, centro izquierda, centro derecha, derecha; CC873501 P25);
+- **la probabilidad de votar** (F1).
+
+**No entran:**
+- **las preguntas condicionadas a una respuesta anterior**, porque no las contestó toda la muestra: CC873501 P21 a P23
+  («si piensa votar por la coalición…») y CC891901 P2 («si no se presenta…»);
+- **la pregunta abierta** CC871801 P21 («¿por cuál candidato jamás votaría?»);
+- **la imagen de personajes,** que tampoco está en el lote 6 y queda para después.
+
+**Cómo se arma cada pregunta del banco** (DI-BL17):
+- **una por cada opción con nombre:** candidato, fórmula, consulta, coalición o tendencia;
+- **lo favorable** es esa opción;
+- **«otro», el voto en blanco y «ninguno»** son respuestas válidas que no son esa opción;
+- **NS/NR** es «no sabe»;
+- **la probabilidad de votar** es una sola pregunta, y lo favorable es «definitivamente» o «probablemente» sí;
+- **el texto empieza por la fecha** («En mayo de 2021: en una segunda vuelta entre Sergio Fajardo y Gustavo Petro, ¿votaría
+  por Gustavo Petro?»). Si el estudio no dice el mes, solo el año.
+
+**En abril de 2022 (CC875701) solo contestaron quienes piensan votar.** Su texto lo dice («entre quienes piensan votar»).
+
+**Quedan 373 preguntas en 94 familias** (`python src/experiments/banco_lote7.py --tabla`, que no lee datos). La familia es
+la pregunta numerada de cada estudio.
+
+**Sorteo.** Regla 3 de DI-BA5, por familia, con la semilla **20261011**.
+
+**Resultados reales, solo de práctica.** Igual que el lote 6:
+- **peso:** `factor` o `FACTOR`;
+- **sexo:** `GENERO`;
+- **estrato:** `ESTRATO`, en 1, 2, 3, 4 y 5-6;
+- **edad:** en los grupos de cada encuesta. En 2021-2022: 18-25, 26-40, 41-55 y 56+. En 2026: 18-24, 25-34, 35-44, 45-54
+  y 55+;
+- **sin localidad.**
+- **Mínimo de respuestas:** 200 desde el principio, como pidió Daniel para el lote 6 (§15.2). Con 256 a 545 encuestados de
+  Bogotá por estudio, el margen de cada porcentaje es de unos ±4 a ±6 puntos.
+
+**Los resultados no se suben al repositorio**, como en el lote 6.
+
+**Código:** `src/experiments/banco_lote7.py`, con pruebas en `tests/test_banco_lote7.py`.
+
