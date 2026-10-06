@@ -27,6 +27,10 @@ DI-NR4. **Si el servicio no responde, la corrida se detiene** (5/10, enmienda 1)
     corrida la cuenta se quedó sin saldo (HTTP 402) y `Motor.estimar`, que entonces atrapaba todo, dejó 37
     preguntas sin estimar sin avisar. Con DI-CO24 el error sube como `ServicioNoDisponible` y se detiene; lo
     pagado queda en la caché y la corrida se retoma desde ahí.
+DI-NR5. **La parte A se termina con Luna** (6/10, enmienda 2). Con D20 la página estima con GPT-6 Luna, así
+    que la parte A mide a Luna: la S reformulada sale de `Motor.estimar` (que ya usa Luna y su h = 23,4), y la
+    S original es la de Luna con el texto original en las mismas 95 (`NIVEL_ACUERDO_LUNA`). Las
+    reformulaciones ya pagadas se reutilizan desde la caché.
 DI-NR3. **Las extremas** son las de real < 25 o > 65, como dice el pre-registro (§1: umbral elegido después
     de mirar las guardadas).
 """
@@ -78,6 +82,11 @@ def _por_pregunta(ruta: Path, *claves) -> pd.DataFrame:
 def originales() -> pd.DataFrame:
     """La S de la prueba del lote 5 (configuración B) en las 95 guardadas."""
     return _por_pregunta(ba.SALIDA / "nivel_acuerdo_lote5.json", "B")
+
+
+def originales_luna() -> pd.DataFrame:
+    """DI-NR5: la S de Luna con el texto original en las mismas 95 (`NIVEL_ACUERDO_LUNA`, guardado)."""
+    return _por_pregunta(ba.SALIDA / "nivel_acuerdo_luna.json", "guardado")
 
 
 def practica() -> pd.DataFrame:
@@ -204,13 +213,13 @@ def correr_a(objetivo: pd.DataFrame, llamar_ref, llamar_est, cache, tope: float,
     return pd.DataFrame(filas)
 
 
-def evaluar_a(a: pd.DataFrame, orig: pd.DataFrame) -> dict:
+def evaluar_a(a: pd.DataFrame, orig: pd.DataFrame, h: float = H) -> dict:
     j = a.merge(orig[["id", "S"]].rename(columns={"S": "S_orig"}), on="id")
     nuevas = j[(j.alcance == "nueva") & j.S.notna()]
-    ref = medir(nuevas.S, nuevas.total, H)
-    org = medir(nuevas.S_orig, nuevas.total, H)
-    lr = na.llamada(nuevas.S.to_numpy(float), np.full(len(nuevas), H))
-    lo = na.llamada(nuevas.S_orig.to_numpy(float), np.full(len(nuevas), H))
+    ref = medir(nuevas.S, nuevas.total, h)
+    org = medir(nuevas.S_orig, nuevas.total, h)
+    lr = na.llamada(nuevas.S.to_numpy(float), np.full(len(nuevas), h))
+    lo = na.llamada(nuevas.S_orig.to_numpy(float), np.full(len(nuevas), h))
     est = {"dif_media": float(np.mean(np.abs(nuevas.S - nuevas.S_orig))), "misma_llamada": float(np.mean(lr == lo)),
            "alcances": j.alcance.value_counts().to_dict(), "n": int(len(j)), "n_nuevas_con_S": int(len(nuevas))}
     regla = {"eam": ref["eam"] <= org["eam"] + 1.5, "lado": ref["lado"] >= org["lado"] - 0.05,
@@ -259,7 +268,9 @@ def main() -> int:
     except (TopeAlcanzado, mo.ServicioNoDisponible) as e:                    # DI-NR4
         print(e)
         return 1
-    r = evaluar_a(res, originales())
+    r = evaluar_a(res, originales_luna(), mo.H_ESTIMACION)                 # DI-NR5 (enmienda 2)
+    sin_estimar = int(((res.alcance == "nueva") & res.S.isna()).sum())
+    print(f"nuevas sin estimación (respuesta sin ids válidos, DI-CO20): {sin_estimar}")
     x, y = r["reformulada"], r["original"]
     print(f"alcances: {r['estabilidad']['alcances']} | |ΔS| medio {r['estabilidad']['dif_media']:.1f} | "
           f"misma llamada {r['estabilidad']['misma_llamada']:.0%}")
@@ -270,7 +281,10 @@ def main() -> int:
     print(f"regla: {r['regla']} | predicciones: {r['predicciones']} | gasto: {gasto and round(gasto['costo_usd'], 4)}")
     if not a.simulado:
         previo = json.loads(SALIDA.read_text(encoding="utf-8")) if SALIDA.exists() else {}
-        SALIDA.write_text(json.dumps({**previo, "A": {**r, "gasto": gasto}}, ensure_ascii=False, indent=1, default=str),
+        if "A" in previo and "A_sonnet_parcial" not in previo:              # la primera corrida, sin evaluar (enmienda 1)
+            previo["A_sonnet_parcial"] = previo.pop("A")
+        SALIDA.write_text(json.dumps({**previo, "A": {**r, "modelo": mo.MODELO_ESTIMACION, "h": mo.H_ESTIMACION,
+                                                     "sin_estimar": sin_estimar, "gasto": gasto}}, ensure_ascii=False, indent=1, default=str),
                           encoding="utf-8")
     return 0
 

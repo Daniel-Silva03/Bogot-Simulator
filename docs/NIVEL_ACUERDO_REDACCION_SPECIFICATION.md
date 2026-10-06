@@ -153,3 +153,19 @@ Cambios, pedidos por Daniel:
    - En las 95 ya no puede quedar ninguna sin estimar por error del servicio.
 
 Las medidas, la regla, las predicciones y el tope (USD 3,50 en total, contado lo ya gastado) no cambian.
+
+## 6. Enmienda 2 (6/10/2026, antes de retomar la parte A)
+
+Por D20, la página ya no estima con Sonnet sino con GPT-6 Luna, así que la parte A mide a Luna. Daniel lo pidió
+(«corre la parte A con luna»).
+1. **S reformulada:** sale de `Motor.estimar`, que ahora usa Luna y su rango h = 23,4.
+2. **S original:** la de Luna con el texto original en las mismas 95 y las mismas 109 candidatas
+   (`NIVEL_ACUERDO_LUNA_RESULTS.md`, guardado). Reemplaza a la de Sonnet de la prueba del lote 5.
+3. **Medidas y regla:** son las mismas de §2, con h = 23,4 en lugar de 21,9 en las dos columnas.
+4. **Reformulaciones:** las 95 de la primera corrida, con mimo, ya están pagadas y se reutilizan. Siguen siendo las de la
+   página, que todavía reformula con mimo.
+5. **Las estimaciones parciales con Sonnet** (46 preguntas, sin evaluar) quedan guardadas como `A_sonnet_parcial`.
+   No entran.
+6. **Las predicciones PA1 a PA5 se mantienen.** Se escribieron para Sonnet, y ahora se evalúan sobre Luna.
+
+**Gasto:** ~84 estimaciones a ~USD 0,0012, unos USD 0,10. El tope de USD 3,50 de §2 se mantiene, contado lo gastado.
