@@ -208,6 +208,13 @@ DI-CO25. **La estimación usa GPT-6 Luna** (6/10, D20). Hecho: en su prueba pre-
     Cambian el modelo (`MODELO_ESTIMACION`), el rango (`H_ESTIMACION` = 23,4, el h de Luna; antes,
     `nivel_acuerdo_validacion.H` = 21,9) y las cifras del texto (69 % del lado de la mayoría; 10 de 11 al
     decir «probablemente»). El método y las 109 candidatas no cambian.
+
+DI-CO26. **La reformulación y el puente también usan GPT-6 Luna** (6/10, pedido por Daniel con prueba). Hecho
+    (`LUNA_PAGINA_RESULTS.md`): con Luna, la reformulación saca 24 de 24 en su validación, como mimo, y no
+    empeora la estimación de las 95 guardadas (EAM 16,5 contra 16,2; lado 64 % y 64 %). El puente cumple
+    R1, R2 y P2 de `PUENTE_SIN_BASE` (0 de 12, 12 de 12 y 0 de 10, como mimo). Las dos pasan su regla
+    pre-registrada. Cuestan ~USD 0,0009 por llamada contra ~0,004. Una pregunta nueva pasa de ~USD 0,009 a
+    ~0,003. Las instrucciones (`reformular.SISTEMA`, `puente_sin_base.SISTEMA_V2`) no cambian.
 """
 
 from __future__ import annotations
@@ -255,6 +262,8 @@ RESPUESTA_NUEVA = {
               "y cómo responde cada grupo en general."),
 }
 #: DI-CO22: la estimación de una pregunta nueva.
+#: DI-CO26: la reformulación y el puente; antes, `reformular.MODELO` (xiaomi/mimo-v2.6-pro).
+MODELO_PAGINA = "openai/gpt-6-luna"
 MODELO_ESTIMACION = "openai/gpt-6-luna"                    # DI-CO25 (D20); antes, anthropic/claude-sonnet-5.5
 #: DI-CO25: el rango de Luna, cuantil 80 % de su error en las 92 de práctica (NIVEL_ACUERDO_LUNA_RESULTS.md).
 H_ESTIMACION = 23.4
@@ -639,7 +648,7 @@ def informacion_general(agentes: Optional[pd.DataFrame] = None, donante: Optiona
 def cliente(simulado: bool = False):
     """(llamar, modelo). El simulado contesta la reformulación y el puente sin gasto."""
     if not simulado:
-        return e9.cliente_real(), rf.MODELO
+        return e9.cliente_real(), MODELO_PAGINA                                  # DI-CO26
     cat = rf.cargar_catalogo()
     ref = rf.modelo_simulado(cat)
     cods = list(cat)

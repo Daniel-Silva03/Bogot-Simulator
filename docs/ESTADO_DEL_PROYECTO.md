@@ -312,7 +312,13 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
   (14,3 contra 11,9) y no pasa la cuarta.
 - **Decisión de Daniel:** cambiar igual, por costo (20 veces menos por pregunta). La página cita sus cifras: 69 % del
   lado de la mayoría; 10 de 11 al decir «probablemente»; ±23,4.
-- **Siguiente:** terminar la parte A con Luna (~USD 0,10).
+- ~~**Siguiente:** terminar la parte A con Luna (~USD 0,10).~~ Hecho (6/10):
+  - **La parte A con Luna no se sostiene.** Con la reformulación de la página, la estimación empeora: error 16,2 contra 14,0;
+    lado 63 % contra 69 %; 5 de 6 al decidir. La pérdida está en las extremas, porque la reformulación a veces cambia el sentido.
+  - **La reformulación y el puente pasan a Luna** (`LUNA_PAGINA_RESULTS.md`, USD 0,28, DI-CO26), y pasan su validación.
+    Toda la página va con Luna, a ~USD 0,003 por pregunta nueva.
+  - **Siguiente:** corregir el texto de la página con las cifras con reformulación, y pre-registrar darle al modelo el texto
+    de la persona.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

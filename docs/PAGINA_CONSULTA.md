@@ -28,7 +28,8 @@ que a su vez usa `poblacion_epc.py` y la armonización) y el microdato de la EPC
 
 **Gasto:** una pregunta del catálogo cuesta una llamada (la reformulación, unos USD 0,003);
 una nueva, dos (reformulación y puente, unos USD 0,006). ~~Más la estimación con Sonnet (~USD 0,024).~~ Más la
-estimación con GPT-6 Luna (~USD 0,0012, §5.17): una nueva cuesta en total unos USD 0,009. Las respuestas se guardan en
+estimación con GPT-6 Luna (~USD 0,0012, §5.17): ~~una nueva cuesta en total unos USD 0,009~~. Desde el 6/10 todo va con
+Luna (§5.18): una del catálogo cuesta ~USD 0,0009 y una nueva ~USD 0,003. Las respuestas se guardan en
 `data/processed/consulta/cache.json`, que no se sube: repetir una pregunta no cuesta.
 
 ---
@@ -562,6 +563,18 @@ El jefe de Daniel pidió bajar el gasto. La estimación de una pregunta nueva pa
 - **Verificado:** las 22 pruebas de `tests/test_consulta.py`, que ahora revisan el modelo, el rango y las cifras del texto.
 - **Pendiente:** la cifra que cita la página se midió con el texto original de cada encuesta. Cuánto cambia con la
   reformulación de la página es la parte A de `NIVEL_ACUERDO_REDACCION`, que falta terminar con Luna.
+
+## 5.18 La reformulación y el puente también pasan a Luna (6/10/2026, DI-CO26)
+
+Pasaron su validación con Luna (`LUNA_PAGINA_RESULTS.md`):
+- **la reformulación:** 24 de 24 en su prueba, y no empeora la estimación de las 95 guardadas;
+- **el puente:** cumple R1, R2 y P2, como mimo.
+
+Toda la página usa ahora `openai/gpt-6-luna`. Una pregunta nueva cuesta ~USD 0,003, contra ~0,03 con Sonnet y mimo.
+- **Verificado:** las pruebas de `tests/test_consulta.py` (22) y `tests/test_luna_pagina.py` (3).
+- **Pendiente:**
+  - corregir el texto de la estimación con lo medido con la reformulación (`NIVEL_ACUERDO_REDACCION_RESULTS.md`);
+  - probar la página en vivo con el modelo real.
 
 ## 6. Límites que la página dice
 

@@ -159,6 +159,7 @@ def test_una_pregunta_nueva_trae_la_estimacion_validada():
     assert m._candidatas.fuente_txt.notna().all() and m._candidatas.id.str.startswith('EDP25_').sum() == 17
     assert 0 <= e["rango"][0] <= e["porcentaje"] <= e["rango"][1] <= 100
     assert mo.MODELO_ESTIMACION == "openai/gpt-6-luna" and mo.H_ESTIMACION == 23.4                 # DI-CO25
+    assert mo.MODELO_PAGINA == "openai/gpt-6-luna"                                                 # DI-CO26
     assert abs(e["rango"][1] - min(100, e["porcentaje"] + mo.H_ESTIMACION)) < 0.06 and e["preguntas"]
     assert "69 %" in e["texto"] and "acertó 10" in e["texto"]
     lado = "sí" if e["rango"][0] > 50 else ("no" if e["rango"][1] < 50 else "dividida")
