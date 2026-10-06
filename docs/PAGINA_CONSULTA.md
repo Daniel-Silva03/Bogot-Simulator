@@ -576,6 +576,15 @@ Toda la página usa ahora `openai/gpt-6-luna`. Una pregunta nueva cuesta ~USD 0,
   - corregir el texto de la estimación con lo medido con la reformulación (`NIVEL_ACUERDO_REDACCION_RESULTS.md`);
   - probar la página en vivo con el modelo real.
 
+## 5.19 El texto de la estimación cita lo medido con la página (6/10/2026, DI-CO27)
+
+- **El texto de la estimación:** decía «…acertó si la mayoría estaba de acuerdo en el 69 % de los casos, y de las 11 veces
+  que dijo "probablemente" acertó 10». Eso se midió con el texto original de cada encuesta. Ahora dice «En una prueba con
+  90 preguntas reales…, pasadas por esta misma página (reformuladas y estimadas), acertó… en el 63 % de los casos, y de las 4
+  veces que dijo "probablemente" acertó 3».
+- **La franja de arriba:** pasa de «7 de cada 10» a «6 de cada 10».
+- **Verificado:** las 22 pruebas de `tests/test_consulta.py`, que revisan las cifras nuevas.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

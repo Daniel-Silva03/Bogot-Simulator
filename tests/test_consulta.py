@@ -161,7 +161,7 @@ def test_una_pregunta_nueva_trae_la_estimacion_validada():
     assert mo.MODELO_ESTIMACION == "openai/gpt-6-luna" and mo.H_ESTIMACION == 23.4                 # DI-CO25
     assert mo.MODELO_PAGINA == "openai/gpt-6-luna"                                                 # DI-CO26
     assert abs(e["rango"][1] - min(100, e["porcentaje"] + mo.H_ESTIMACION)) < 0.06 and e["preguntas"]
-    assert "69 %" in e["texto"] and "acertó 10" in e["texto"]
+    assert "63 %" in e["texto"] and "acertó 3" in e["texto"] and "reformuladas" in e["texto"]       # DI-CO27
     lado = "sí" if e["rango"][0] > 50 else ("no" if e["rango"][1] < 50 else "dividida")
     assert e["llamada"] == lado and e["titulo"] == mo.LLAMADA_TITULO[lado] and "estimación, no una medición" in e["texto"]
     html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)

@@ -1632,6 +1632,11 @@ a la vista.
 **Estado:** **APPROVED** (Daniel, en conversación, 6 de octubre de 2026: «cambiemos a luna», después de ver
 las cifras de los dos modelos lado a lado y la advertencia de que no era un «pasó»).
 
+**Corrección (6/10/2026): las cifras que cita la página.** Las de arriba (69 %; 10 de 11) se midieron con el texto
+original de cada encuesta. Con la página tal como funciona, que reformula primero y desde DI-CO26 lo hace con Luna, en 90
+preguntas guardadas acierta el lado el **63 %** y, al decir «probablemente», **3 de 4**
+(`NIVEL_ACUERDO_REDACCION_RESULTS.md` y `LUNA_PAGINA_RESULTS.md`). La página cita estas desde DI-CO27.
+
 ---
 
 # 40. DECISIONES ABIERTAS

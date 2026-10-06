@@ -207,7 +207,7 @@ DI-CO25. **La estimación usa GPT-6 Luna** (6/10, D20). Hecho: en su prueba pre-
     guardado (14,3 contra 11,9). Decisión de Daniel: cambiar por costo, unas 20 veces menos por pregunta nueva.
     Cambian el modelo (`MODELO_ESTIMACION`), el rango (`H_ESTIMACION` = 23,4, el h de Luna; antes,
     `nivel_acuerdo_validacion.H` = 21,9) y las cifras del texto (69 % del lado de la mayoría; 10 de 11 al
-    decir «probablemente»). El método y las 109 candidatas no cambian.
+    decir «probablemente»; corregidas después por DI-CO27). El método y las 109 candidatas no cambian.
 
 DI-CO26. **La reformulación y el puente también usan GPT-6 Luna** (6/10, pedido por Daniel con prueba). Hecho
     (`LUNA_PAGINA_RESULTS.md`): con Luna, la reformulación saca 24 de 24 en su validación, como mimo, y no
@@ -215,6 +215,13 @@ DI-CO26. **La reformulación y el puente también usan GPT-6 Luna** (6/10, pedid
     R1, R2 y P2 de `PUENTE_SIN_BASE` (0 de 12, 12 de 12 y 0 de 10, como mimo). Las dos pasan su regla
     pre-registrada. Cuestan ~USD 0,0009 por llamada contra ~0,004. Una pregunta nueva pasa de ~USD 0,009 a
     ~0,003. Las instrucciones (`reformular.SISTEMA`, `puente_sin_base.SISTEMA_V2`) no cambian.
+
+DI-CO27. **El texto cita lo medido con la página tal como funciona** (6/10, pedido por Daniel). Hecho: las cifras de
+    DI-CO23 y DI-CO25 (72 % y 17 de 17 con Sonnet; 69 % y 10 de 11 con Luna) se midieron dándole al modelo el
+    texto original de cada encuesta, pero la página primero reformula. Medido con la reformulación
+    (`NIVEL_ACUERDO_REDACCION_RESULTS.md` parte A; `LUNA_PAGINA_RESULTS.md` parte 2): con Luna reformulando y
+    estimando, en las 90 de las 95 guardadas que quedan como pregunta nueva, acierta el lado el 63 % y, al
+    decir «probablemente», 3 de 4. La franja de la página pasa de «7 de cada 10» a «6 de cada 10».
 """
 
 from __future__ import annotations
@@ -270,8 +277,9 @@ H_ESTIMACION = 23.4
 LLAMADA_TITULO = {"sí": "Probablemente sí", "no": "Probablemente no", "dividida": "Dividida"}
 ESTIMACION_TEXTO = ("Es una estimación, no una medición: sale de lo que la gente respondió de verdad a {n} preguntas "
                     "parecidas que sí se midieron, que eligió un modelo de lenguaje (aparecen debajo, con su resultado). "
-                    "En una prueba con 95 preguntas reales que no se habían usado para armarla, acertó si la mayoría "
-                    "estaba de acuerdo en el 69 % de los casos, y de las 11 veces que dijo «probablemente» acertó 10.")   # DI-CO25
+                    "En una prueba con 90 preguntas reales que no se habían usado para armarla, pasadas por esta misma "
+                    "página (reformuladas y estimadas), acertó si la mayoría estaba de acuerdo en el 63 % de los casos, "
+                    "y de las 4 veces que dijo «probablemente» acertó 3.")   # DI-CO27
 ESTIMACION_DIVIDIDA = (" El rango cruza el 50 %: con lo que hay medido no se puede decir de qué lado queda la "
                        "mayoría.")
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
