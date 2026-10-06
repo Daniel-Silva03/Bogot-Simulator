@@ -19,15 +19,17 @@ DI-BL10. **El texto de la página sale de la etiqueta del diccionario**, sin el 
     instrucciones al encuestador y con la subpregunta dentro de la frase (`texto`).
 DI-BL11. **La edad va en los grupos de cada encuesta** (18-25, 26-40, 41-55, 56+), no en los de la
     población, y `cortes_edad` lo dice. CC355801 no trae edad: va sin ese grupo.
-DI-BL13. **El año de CC873501 es un supuesto: 2022.** Hecho: ni la base ni el diccionario traen fecha. Supuesto,
-    por el contenido: pregunta por la gestión de Duque (presidente hasta agosto de 2022), por la Coalición de
-    la Experiencia y por candidatos a 2022, y por el carné de vacunación. Es de finales de 2021 o
-    comienzos de 2022. Daniel puede confirmarlo con el CNC.
+DI-BL13. **El año de CC873501 es 2022.** Hecho: ni la base ni el diccionario traen fecha. ~~Supuesto, por el
+    contenido…~~ Daniel lo confirmó el 6/10 («El año de CC873501 es 2022»).
 DI-BL14. **Nueve textos van escritos a mano** (`TEXTO_MANUAL`). Hecho: en el diccionario, tres etiquetas de
     CC355801 están cortadas y terminan en un resto de formato («colF8», «F8.2»); otras traen dos signos de
     apertura («¿Dígame por favor ¿está…»), una errata («continué») o el nombre en mayúsculas. Se escriben
     como en el cuestionario, sin cambiar el sentido. En P5_SEM_3 se completa «no ingresen más migrantes»:
     es un supuesto razonable, y la etiqueta lo deja cortado.
+DI-BL15. **En este lote basta con 200 respuestas válidas, no 300** (enmienda 1 de §15, 6/10, pedida por Daniel
+    **después de ver** que la regla dejaba fuera las 6 preguntas del paro). Se marca `bajo_300` en las que
+    quedan entre 200 y 299. Su margen es más ancho (unos ±6 puntos). Es un cambio posterior a ver los datos y
+    queda dicho así. La otra condición de estructura (un solo código válido) sigue igual.
 DI-BL12. **Sin localidad:** se pasa una serie vacía a `banco_lote3._calcular`, así que `localidad` sale
     vacía y no hay pares claros de localidades.
 """
@@ -72,8 +74,9 @@ PREGUNTAS = {
     "CC873501": ("CC873501_SEMANA11_BaseCodigos.xlsx", "CC873501_SEMANA11_DiccionariodeDatos.xlsx",
                  [("P3", "si_no"), ("P4", "si_no"), ("P19", "aprueba"), ("P28", "acuerdo2"), ("P29", "acuerdo2"), ("P30", "acuerdo2")]),
 }
-#: DI-BL13: CC873501 no trae fecha ni en la base ni en el diccionario.
+#: DI-BL13: CC873501 no trae fecha ni en la base ni en el diccionario; Daniel confirmó 2022.
 ANIO_SUPUESTO = {"CC873501": 2022}
+MIN_LOTE6 = 200                                                  # DI-BL15
 EDAD = {"1": "18-25", "2": "26-40", "3": "41-55", "4": "56+"}
 
 
@@ -200,6 +203,8 @@ def reales(sorteo: pd.DataFrame, d: Path | None = None) -> dict:
         if (s.conjunto == "practica").any():
             r = b3._calcular(s, *base_estudio(est, d))
             for v in r.values():
+                if v["excluida"] and v["excluida"].startswith(f"menos de {br.MIN_VALIDAS}") and v["n"] >= MIN_LOTE6:
+                    v["excluida"], v["bajo_300"] = None, True                     # DI-BL15
                 v["cortes_edad"] = "18-25, 26-40, 41-55, 56+ (los de la encuesta)" if est != "CC355801" else "sin edad"
             out.update(r)
     return out

@@ -503,7 +503,7 @@ cosas del armado se declaran antes de sortear:
 - **Nueve textos van escritos a mano** (DI-BL14). Tres etiquetas del diccionario están cortadas y otras traen
   erratas; el sentido no cambia.
 - **El año de CC873501 es un supuesto, 2022** (DI-BL13). No trae fecha en ningún lado, y por su contenido es de
-  finales de 2021 o comienzos de 2022.
+  finales de 2021 o comienzos de 2022. **Confirmado por Daniel el 6/10: 2022.**
 
 **Sorteo.** Regla 3 de DI-BA5, por familia, con la semilla **20261010**: la mitad de las familias, redondeando hacia
 arriba, al guardado.
@@ -545,4 +545,16 @@ porcentaje es de unos ±5 a ±6 puntos. Es más ancho que en la EDP (13.000) o l
 - **Los resultados no se suben al repositorio.** D21 no dice si los agregados de estas encuestas pueden ir a GitHub.
   Quedan en `data/processed/banco/`, ignorados, y viajan con `empacar_traslado.py`.
 - **Con el lote 6, el banco suma 475 preguntas.**
+
+### 15.2 Enmienda 1 del lote 6 (6/10/2026, después de ver los resultados de práctica)
+
+**Daniel pidió incluir las preguntas con menos de 300 respuestas válidas.** La regla de estructura de todos los lotes
+(DI-BR5) dejaba fuera las 6 de práctica del paro, con entre 242 y 258 respuestas.
+- **En el lote 6, el mínimo baja a 200 respuestas válidas** (DI-BL15). Las que quedan entre 200 y 299 se marcan
+  `bajo_300`.
+- **Es un cambio posterior a ver qué quedaba fuera, y queda dicho así.** No se miró ningún porcentaje para decidirlo.
+  Las 6 tienen un margen de unos ±6 puntos, más ancho que el resto del banco.
+- **La regla de 300 sigue igual en los lotes 1 a 5.**
+- **El guardado** del lote 6 se calculará con el mismo mínimo de 200.
+- **Resultado:** quedan las 30 de práctica utilizables, con entre 242 y 408 respuestas válidas y 130 pares claros.
 
