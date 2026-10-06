@@ -134,6 +134,8 @@ data/**
 !data/processed/banco/sorteo_lote5.csv
 !data/processed/banco/reales_practica_lote5.json
 !data/processed/banco/reales_guardado_lote5.json
+!data/processed/banco/sorteo_lote6.csv
+!data/processed/banco/reales_practica_lote6.json
 !data/processed/practica_puente/
 !data/processed/practica_puente/actual.json
 !data/processed/practica_puente/afectados.json

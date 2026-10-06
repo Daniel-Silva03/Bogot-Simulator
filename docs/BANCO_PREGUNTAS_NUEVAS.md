@@ -449,3 +449,78 @@ práctica.
   74 a 95 en el guardado.
 - **Las candidatas de D19 no cambian solas:** siguen siendo las 92 validadas. Usar estas nuevas como
   candidatas es otra configuración, que necesita su propia prueba pre-registrada.
+
+## 15. Sexto lote: encuestas políticas del CNC, nivel 1 de D21 (pre-registro, 6/10, antes de sortear)
+
+**Fuente.** Cuatro encuestas del CNC para Semana (`DATA_INVENTORY.md` §16; carpeta de `BSS_CNC_POLITICA_DIR`). Son
+nacionales; **solo se usan los encuestados de Bogotá** (`DANE` = 11001), con su factor de expansión (`factor`):
+
+| Estudio | Fecha | En Bogotá | Lo que entra |
+|---|---|---|---|
+| CC355801 | feb 2021 | 384 | migración: afirmaciones y medidas (preguntas 1, 2, 4 y 5) |
+| CC871401 | may 2021 | 256 | el paro nacional (preguntas 9 a 12, 14, 19, 20 y 24) |
+| CC871801 | jun 2021 | 260 | el paro (13, 16 y 17); aprobación de Iván Duque (23) |
+| CC873501 | 2021-22 | 411 | el país y la seguridad de la ciudad por buen camino (3 y 4); aprobación de Duque (19); aborto y vacunación (28 a 30) |
+
+Los cinco estudios de 2022 y 2026 no entran: lo suyo es intención de voto (nivel 2). CC891901 trae dos preguntas sobre
+Venezuela que no entran, porque su texto depende de una pregunta anterior («¿eso puede ser positivo…?»).
+
+**Lo que se miró antes de escribir esto:** la estructura de las bases y los diccionarios (preguntas, categorías y
+conteo de encuestados de Bogotá). **Ningún porcentaje.**
+
+**Las preguntas.** Entran las de una escala con un lado favorable claro y texto propio:
+- **acuerdo de 1 a 5** (1 Totalmente de acuerdo … 5 Totalmente en desacuerdo); favorable: 1 y 2;
+- **acuerdo/desacuerdo** de dos opciones; favorable: 1, acuerdo;
+- **sí/no**; favorable: 1, sí;
+- **aprueba/desaprueba**; favorable: 1, aprueba;
+- **«no sabe»:** el 9 (NS/NR), como en los demás lotes.
+
+**No entran:**
+- **la intención de voto y lo electoral:** la probabilidad de votar, los candidatos, las coaliciones, y la propuesta de
+  un candidato (CC873501 P26). Es el nivel 2 de D21.
+- **la imagen de personajes y de funcionarios** (CC871401 T22, CC871801 T9 y T11, CC873501 P17): se acerca a lo
+  electoral y queda con el nivel 2, bajo revisión jurídica.
+- **las preguntas abiertas** (D21);
+- **lo que no es opinión:**
+  - si tiene contacto con migrantes;
+  - si vivió fuera del país;
+  - si alguien en su hogar se vacunó;
+  - si participa en política en redes;
+  - las autorizaciones y los filtros.
+- **las que repiten el catálogo** (regla 3 de §12):
+  - CC873501 P2, «¿su ciudad va por buen camino?», es `AG1`;
+  - CC871801 P1 y CC873501 P1, «¿aprueba el desempeño del alcalde de su ciudad?», son `GG3`.
+
+**Familias:** la pregunta numerada de cada estudio, como en los lotes 2, 3 y 5. Las subpreguntas de una misma
+pregunta (1.A a 1.G; 24.1 a 24.16) son una familia.
+
+**Texto en la página:** el del diccionario, sin el número, sin las instrucciones al encuestador («LEA», «(E: …)»,
+«R.U.») y con la subpregunta dentro de la frase. Por ejemplo: «¿Cree que la presencia de la Fiscalía General de la
+Nación es importante para la solución del paro?».
+
+**Quedan 64 preguntas en 22 familias** (`python src/experiments/banco_lote6.py --tabla`, que no lee datos). Dos
+cosas del armado se declaran antes de sortear:
+- **Nueve textos van escritos a mano** (DI-BL14). Tres etiquetas del diccionario están cortadas y otras traen
+  erratas; el sentido no cambia.
+- **El año de CC873501 es un supuesto, 2022** (DI-BL13). No trae fecha en ningún lado, y por su contenido es de
+  finales de 2021 o comienzos de 2022.
+
+**Sorteo.** Regla 3 de DI-BA5, por familia, con la semilla **20261010**: la mitad de las familias, redondeando hacia
+arriba, al guardado.
+
+**Resultados reales, solo de práctica.** Como en los demás lotes:
+- **Peso:** `factor`.
+- **Sexo:** `GENERO` (1 Hombres, 2 Mujeres).
+- **Estrato:** `ESTRATO`, en 1, 2, 3, 4 y 5-6; el 0 («sin estrato») no entra.
+- **Edad:** `EDAD` o `REDAD`, en los grupos de cada encuesta (18-25, 26-40, 41-55, 56 o más). No coinciden con los de la
+  población; se dice en `cortes_edad`. CC355801 no trae edad en la base.
+- **Localidad: no hay.** Estas preguntas no entran al mapa ni a la parte de localidades.
+- **Pares claros:** regla DI-BR5 y z > 1,96.
+
+**Un límite que se declara antes de sortear.** Con unos 250 a 410 encuestados de Bogotá por estudio, el margen de cada
+porcentaje es de unos ±5 a ±6 puntos. Es más ancho que en la EDP (13.000) o la Bienal (5.500).
+
+**Lo que este lote no cambia solo:** las candidatas de D19. Sumarlas es otra configuración, con su prueba pre-registrada.
+
+**Código:** `src/experiments/banco_lote6.py`, con pruebas en `tests/test_banco_lote6.py`.
+
