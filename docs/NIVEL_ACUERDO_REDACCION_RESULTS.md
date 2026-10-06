@@ -47,13 +47,55 @@ Contra el pre-registro `NIVEL_ACUERDO_REDACCION_SPECIFICATION.md` (commit `c791e
 - **El rango funciona como se diseñó:** 84 % de cobertura en las guardadas, para un rango del 80 %. Pero no es
   parejo: cubre el 96 % de las intermedias y el 68 % de las extremas. La página no lo dice.
 
-## Parte A — estabilidad ante la reformulación
+## Parte A — estabilidad ante la reformulación (6/10/2026, con Luna; enmiendas 1 y 2)
 
-~~**Pendiente.** Espera el sí de Daniel al gasto (~USD 2,7, con tope de USD 3,50) y la llamada de prueba.~~
+**Veredicto: la cifra de la página no se sostiene.** Con la reformulación que hace la página, Luna estima peor que
+con el texto original, y las tres condiciones de la regla fallan.
 
-**En pausa (5/10):** la primera corrida quedó incompleta. La cuenta se quedó sin saldo y 37 preguntas no se
-estimaron. No se evalúa; ver la enmienda 1 del pre-registro (§5).
-- **Gasto:** USD 1,51.
-- **Para retomar:**
-  - recargar la cuenta (lo que falta cuesta ~USD 0,9);
-  - correr `python src/experiments/nivel_acuerdo_redaccion.py`, que sigue desde la caché.
+**La corrida:**
+- reformulación con mimo, la de la página;
+- estimación con GPT-6 Luna, con h = 23,4 (D20, enmienda 2);
+- 84 de las 95 quedaron como `nueva` y las 84 tienen estimación. No hubo errores del servicio ni respuestas sin ids.
+- **Gasto de la parte A:** USD 1,61 en total. De eso, USD 1,51 es la primera corrida con Sonnet, incompleta y sin evaluar
+  (guardada como `A_sonnet_parcial`); unos USD 0,10 son las estimaciones con Luna.
+
+| En las 84 | Texto reformulado (la página) | Texto original | Regla |
+|---|---|---|---|
+| Error (EAM) | **16,2** | 14,0 | ≤ 14,0 + 1,5: **no cumple** |
+| Acierto del lado | **63 %** | 69 % | ≥ 69 % − 5: **no cumple** |
+| Decide (acierta) | 6 (5, 83 %) | 10 (9, 90 %) | ≥ 90 %: **no cumple** |
+| Real dentro del rango | 77 % | 79 % | |
+| …en las extremas (37) | **54 %** | 70 % | |
+| …en las intermedias (47) | 96 % | 85 % | |
+| Error, extremas / intermedias | 22,4 / 11,3 | 16,7 / 12,0 | |
+
+**Estabilidad:**
+- |S reformulada − S original| es de 7,3 puntos en promedio y pasa de 20 en 10 de las 84;
+- la llamada coincide en el 86 %;
+- en 53 de 84 la estimación reformulada queda más cerca del 50 %.
+
+**Predicciones:**
+
+| | Predicción | Resultado | |
+|---|---|---|---|
+| PA1 | \|ΔS\| medio ≥ 4 puntos | 7,3 | se cumple |
+| PA2 | La llamada coincide en ≥ 80 % | 86 % | se cumple |
+| PA3 | El EAM con reformulación es mayor | 16,2 > 14,0 | se cumple |
+| PA4 | La regla no se cumple | no se cumple | se cumple |
+| PA5 | ≥ 90 % quedan como `nueva` | 84 de 95 (88 %) | **falla** |
+
+**Dónde se pierde.**
+- **Las intermedias no empeoran:** el error baja de 12,0 a 11,3.
+- **Todo se pierde en las extremas:** el error sube de 16,7 a 22,4. La causa está en la reformulación, que a veces cambia el
+  sentido de la pregunta, y no en Luna. Los cinco cambios mayores:
+  - **invierte el sentido:** «da igual si se separan los residuos» pasa a «separar los residuos contribuye…» (de 23 a 61; real, 18);
+  - **convierte una idea general en un juicio sobre Bogotá:** «la democracia se relaciona con el desarrollo» pasa a «contribuye al
+    desarrollo económico de Bogotá» (de 70 a 43; real, 77);
+  - **añade «en Bogotá»,** o cambia «tomar espacios públicos» por «utilizar espacios públicos».
+
+**Qué dice el pre-registro (§2): no se sostiene.**
+1. Se propone a Daniel cambiar el texto de la página por las cifras medidas con la reformulación: 63 % del lado de la mayoría;
+   al decir «probablemente», 5 de 6.
+2. Se propone, como siguiente prueba pre-registrada, darle al modelo el texto que escribió la persona en lugar del reformulado.
+   La prueba de `LUNA_PAGINA` (parte 2) mide además si reformular con Luna cambia menos el sentido.
+
