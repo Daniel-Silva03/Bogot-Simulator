@@ -947,3 +947,42 @@ catálogo, con resultados reales de Bogotá por grupo y por localidad: el metro 
 Verde. Sirven para un pre-registro que mida lo que la validación del puente no pudo medir (si
 acierta el nivel y el orden de los grupos en una pregunta realmente nueva), con el aviso del método
 distinto.
+
+## 16. Encuestas políticas del CNC: Semana y Revista Cambio *(6/10/2026, D21)*
+
+**Régimen: D21, una excepción limitada a R10.**
+- **Pueden ir a una API, incluidos los modelos de lenguaje,** el texto de las preguntas de opinión y sus escalas.
+- **Nunca van** las respuestas individuales ni las preguntas abiertas.
+- **Los porcentajes agregados** se calculan en el equipo.
+- **Dónde viven:** fuera del repositorio, en la carpeta de `BSS_CNC_POLITICA_DIR` (en el PC del CNC, `Desktop\CNC_datos_nuevos`).
+  No se mezclan con los estudios de §12 ni con los resultados de §14.
+
+**La revisión (6/10/2026)** fue solo de estructura: nombres de columnas, filas y diccionarios, sin imprimir ningún valor.
+- **Ninguna base tiene columnas de datos personales.** No hay nombre, teléfono, dirección, documento ni coordenadas.
+- **Todas traen** factor de expansión (`factor` o `FACTOR`).
+- **Geografía:** solo municipio, sin localidad.
+
+| Estudio | Cliente | Fecha | Encuestados | En Bogotá | Lo político |
+|---|---|---|---|---|---|
+| CC355801 | Semana | feb 2021 | 2.283 | 384 | migración venezolana (afirmaciones de acuerdo) |
+| CC871401 | Semana | may 2021 | 2.001 | 256 | intención de voto presidencial 2022 y segundas vueltas; imagen de 50 personajes; paro nacional |
+| CC871801 | Semana | jun 2021 | 2.077 | 260 | intención de voto, segundas vueltas, imagen de personajes y funcionarios, el paro |
+| CC873501 | Semana | 2021-22 («Semana 11») | 4.093 | 411 | probabilidad de votar, intención de voto, segundas vueltas, expresidentes |
+| CC875701 | Semana | abr 2022 | 4.599 | 439 | intención de voto y segundas vueltas |
+| CC891901 | Revista Cambio | ene 2026 | 2.202 | 336 | probabilidad de votar, presidencial 2026, consultas del 8 de marzo |
+| CC892901 | Revista Cambio | 2026 | 3.684 | 545 | consultas interpartidistas, presidencial (base en CSV) |
+| CC893201 | Revista Cambio | 2026 | 2.157 | 285 | fórmulas presidenciales, segundas vueltas |
+| CC893401 | Revista Cambio | 2026 | 2.157 | 342 | fórmulas, «nunca votaría», segundas vueltas |
+| CC893701 | Revista Cambio | 2026 | 2.202 | 305 | fórmulas, «nunca votaría», segundas vueltas |
+
+**El anexo** `docs/anexos/inventario_cnc_politica.csv` trae cada pregunta (estudio, variable, tema y texto), unas 450.
+Los temas se asignaron por palabras clave y son aproximados:
+- unas 100 de intención de voto;
+- unas 90 de imagen de personajes;
+- el resto, sobre el paro de 2021, la migración, la aprobación del gobierno y los expresidentes.
+
+**Lo que no traen o no sirven:**
+- **Localidad,** así que no van al mapa.
+- **Preguntas abiertas,** como «¿qué políticos promueven el paro?»: quedan fuera por D21.
+- **Fechas exactas** de los estudios de Cambio de 2026: hay que leerlas de `FECHAINI` cuando se usen.
+

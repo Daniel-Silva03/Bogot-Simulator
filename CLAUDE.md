@@ -2,7 +2,8 @@
 
 Laboratorio de escenarios de opinión pública para Bogotá: una población sintética
 (agentes construidos cruzando encuestas públicas), un tablero interactivo y un motor
-de escenarios. **No es un predictor.** Proyecto de Daniel Silva en el Centro Nacional
+de escenarios. **No es un predictor**, salvo la intención de voto simulada que abre D21: esa se valida
+pre-registrada antes de mostrarse, y nunca se publica sin la revisión jurídica. Proyecto de Daniel Silva en el Centro Nacional
 de Consultoría (CNC).
 
 ## Antes de hacer nada
@@ -28,6 +29,13 @@ resultados de la Registraduría por mesa y municipio, más productos del CNC por
 municipio, **sin datos de personas**. Se pueden leer y usar. Viven fuera del repo, en
 la carpeta de `BSS_ELECTORAL_DIR`; nunca se copian al repo. Un archivo **nuevo** en esa
 carpeta no queda cubierto: revísalo primero por estructura, sin imprimir valores.
+
+**Encuestas políticas del CNC (D21, `docs/DATA_INVENTORY.md` §16).** Son 10 estudios para Semana y Revista
+Cambio (2021-2026), sin columnas de datos personales. Viven fuera del repo, en la carpeta de
+`BSS_CNC_POLITICA_DIR`; nunca se copian al repo.
+- Pueden ir a una API (incluidos los LLM) el texto de las preguntas de opinión y sus escalas.
+- Nunca van las respuestas individuales ni las preguntas abiertas.
+- Nada electoral (intención de voto medida o simulada) se muestra en la página antes de que lo revise el área jurídica del CNC.
 
 **Datos en general.** `data/raw/` nunca se sube: son microdatos públicos (DANE, Bogotá
 Cómo Vamos) que pesan GB y se regeneran desde la fuente. El `.gitignore` excluye `data/**`

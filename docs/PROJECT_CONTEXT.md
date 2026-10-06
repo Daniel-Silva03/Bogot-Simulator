@@ -1641,6 +1641,52 @@ preguntas guardadas acierta el lado el **63 %** y, al decir «probablemente», *
 en 90 guardadas (`TEXTO_PERSONA_RESULTS.md`), medido con el texto de la encuesta, que es el mejor caso. La página lo dice.
 DI-CO28.
 
+
+### D21 — Las encuestas políticas del CNC entran al proyecto, incluida la intención de voto
+
+**Fecha:** 6 de octubre de 2026
+**Decisión:** Entran al proyecto 10 encuestas del CNC con su diccionario. Son nacionales, de 2.000 a 4.600
+encuestados, con 256 a 545 en Bogotá y factor de expansión:
+- cinco para Semana, de 2021 y 2022;
+- cinco para Revista Cambio, de 2026.
+
+Viven fuera del repositorio, en la carpeta de `BSS_CNC_POLITICA_DIR` (en el PC del CNC,
+`Desktop\CNC_datos_nuevos`). Inventario en `DATA_INVENTORY.md` §16. Daniel y su jefe decidieron tres cosas:
+- **A. Qué puede ir a una API, incluidos los modelos de lenguaje:**
+  - **sí** el texto de las preguntas de opinión y sus escalas;
+  - **no** las respuestas individuales;
+  - **no** las preguntas abiertas;
+  - los porcentajes agregados se calculan en el equipo.
+  Es una excepción a R10 limitada a estos 10 estudios. R10 sigue igual para los estudios del CNC con datos de
+  personas (§12).
+- **B. La intención de voto entra en tres niveles:**
+  1. la opinión política (aprobación, imagen, el paro, la migración) como preguntas del banco;
+  2. la intención de voto como dato histórico medido, con fecha y fuente;
+  3. la simulación de la intención de voto ante una pregunta nueva.
+- **C. El inventario de preguntas** (textos, escalas y tamaños de muestra, sin ningún dato) se sube al repositorio.
+
+**Justificación:** el jefe de Daniel pidió incluir todo lo relacionado con política e intención de voto. La revisión
+de estructura (6/10, sin imprimir valores) no encontró columnas de datos personales, y todas las bases traen factor
+de expansión.
+
+**Condiciones, que son parte de la decisión:**
+1. **Nada electoral se muestra en la página (niveles 2 y 3) antes de que el área jurídica del CNC lo revise.** En
+   Colombia, la publicación de encuestas electorales está regulada, y una cifra simulada de intención de voto podría
+   quedar cubierta.
+2. **El nivel 3 se valida pre-registrado antes de usarse,** como todo lo demás. La prueba de la segunda vuelta de
+   2026 (`SEGUNDA_VUELTA_2026_SPECIFICATION.md`) sigue igual. Si estas encuestas se usan en ella, va como enmienda
+   fechada.
+3. **El nivel 3 cambia el propósito del proyecto.** Hasta aquí, «no es un predictor». Con D21, la intención de voto
+   simulada es la excepción, y donde se muestre debe decir que es una suposición, con su error medido.
+4. **Estas encuestas no sirven por localidad:** solo traen municipio. Valen para Bogotá en total, y por sexo, edad y
+   estrato.
+
+**Alternativas consideradas:** solo el nivel 1 (lo recomendado, junto con el 2); los niveles 1 y 2, sin simular. Daniel
+eligió los tres.
+
+**Estado:** **APPROVED** (Daniel, en conversación, 6 de octubre de 2026: «A sí, B sí, C sí» y, sobre el alcance de B,
+«los tres niveles»).
+
 ---
 
 # 40. DECISIONES ABIERTAS
