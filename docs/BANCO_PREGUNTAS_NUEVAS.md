@@ -524,3 +524,25 @@ porcentaje es de unos ±5 a ±6 puntos. Es más ancho que en la EDP (13.000) o l
 
 **Código:** `src/experiments/banco_lote6.py`, con pruebas en `tests/test_banco_lote6.py`.
 
+### 15.1 Sorteo y resultados de práctica del lote 6 (6/10)
+
+- **Sorteo** (commit `91288b6`, antes de calcular):
+  - **práctica:** 11 familias y 30 preguntas:
+    - migración, las preguntas 1, 2 y 4;
+    - el paro, CC871401 P11 y P19, y CC871801 P13, P16 y P17;
+    - CC873501 P3, P4 y P30.
+  - **guardado:** 11 familias y 34 preguntas:
+    - migración P5;
+    - el paro, CC871401 P9, P10, P12, P14, P20 y P24;
+    - la aprobación de Duque, CC871801 P23 y CC873501 P19;
+    - CC873501 P28 y P29.
+- **Resultados de práctica** (`reales_practica_lote6.json`): **6 de 30 quedan fuera por la regla de estructura**
+  (DI-BR5: menos de 300 respuestas válidas). Son todas las de CC871401 y CC871801, del paro: esas encuestas tienen 256 y
+  260 encuestados en Bogotá, y sus preguntas quedan entre 242 y 258 respuestas válidas.
+  - **Quedan 24 utilizables**, con entre 374 y 408 respuestas válidas y **88 pares claros**.
+  - **La regla no se cambia después de ver esto.** El guardado de esos dos estudios también quedará fuera cuando se
+    calcule: de las 34 guardadas, solo serán utilizables unas 12 (migración P5 y CC873501 P19, P28 y P29).
+- **Los resultados no se suben al repositorio.** D21 no dice si los agregados de estas encuestas pueden ir a GitHub.
+  Quedan en `data/processed/banco/`, ignorados, y viajan con `empacar_traslado.py`.
+- **Con el lote 6, el banco suma 475 preguntas.**
+
