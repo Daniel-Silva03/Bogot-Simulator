@@ -148,3 +148,9 @@ de candidatas, lleva la marca de caché. Una llamada con otra pregunta leyó 22.
 
 **El costo esperado** de la corrida «con su encuesta» (373 llamadas) baja a unos **USD 0,30 a 0,40**. Lo gastado hasta aquí,
 unos USD 0,024, cuenta dentro del tope de USD 1,50.
+
+## 11. Enmienda 3 (7/10/2026, antes de la corrida real): vuelven las dos versiones
+
+Con la caché (enmienda 2), Daniel decidió correr también «sin su encuesta», como decía el pre-registro original (§2 y §3).
+PV3 vuelve a evaluarse. En esa versión la lista de candidatas cambia por estudio, pero es la misma para todas las preguntas
+de un estudio, así que la caché también sirve. Costo esperado de las dos: unos USD 0,70. El tope sigue en USD 1,50.

@@ -48,7 +48,7 @@ from src.experiments import nivel_parecidas_b as nb       # noqa: E402
 
 MODELO = nlu.MODELO
 ORDEN = "candidatas"                                        # enmienda 1: DI-NB7, para bajar el costo
-VERSIONES = (("con_su_encuesta", False),)                   # enmienda 1: «sin su encuesta» queda fuera por costo
+VERSIONES = (("con_su_encuesta", False), ("sin_su_encuesta", True))   # enmienda 3: vuelven las dos (la caché bajó el costo)
 TOPE_USD = 1.50
 CACHE = ba.SALIDA / "cache_voto_simulado.json"
 SALIDA = ba.SALIDA / "voto_simulado.json"
