@@ -336,7 +336,13 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
   - Pero el promedio lo bajan los candidatos pequeños: con los de más del 15 %, el error es de unos 6 a 7 puntos.
   - Nada se muestra sin revisión jurídica.
   - Por el camino, la caché con punto de corte (DI-E11) bajó el costo por llamada un 80 %.
-  - **Siguiente:** la parte 2, contra la Registraduría, en el PC personal; y la revisión jurídica.
+  - ~~**Siguiente:** la parte 2, contra la Registraduría, en el PC personal; y la revisión jurídica.~~
+  - **Parte 2, contra la Registraduría** (`VOTO_REGISTRADURIA_RESULTS.md`, USD 0,024): se corrió en este PC con
+    `Desktop\CNC_datos`. En tres elecciones en Bogotá, la simulación se equivoca 4,2 puntos y la última encuesta 3,8, y las
+    dos aciertan al ganador.
+  - **La caché en la página no pasó su regla** (`CACHE_PAGINA_RESULTS.md`): al decidir acierta 13 de 15. La página sigue
+    sin caché.
+  - **Siguiente:** la revisión jurídica del nivel 3.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
