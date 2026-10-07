@@ -47,6 +47,12 @@ DI-NB6. **Si la respuesta trae varios JSON, vale el último que tenga ids válid
     93 respuestas en `cache_nivel_acuerdo`, 2 de 75 en `cache_nivel_acuerdo_validacion`, 0 de 116 en
     `cache_nivel_acuerdo_lote5` y 2 de 48 en `cache_nivel_redaccion`. Los resultados ya escritos de
     esos experimentos no se recalculan: se evaluaron con la lectura de su pre-registro.
+
+DI-NB7. **Variante del mensaje con las candidatas primero** (`orden="candidatas"`, 7/10, pedida por Daniel para bajar el
+    costo). La información es la misma; cambia el orden. La lista de candidatas, completa y en el mismo orden, va
+    al comienzo, y al final la pregunta nueva y las ids de su misma familia que no puede elegir. Como el comienzo
+    es idéntico en todas las llamadas, el proveedor (OpenAI) lo cobra desde su caché. Por defecto sigue el orden
+    de siempre: ningún experimento anterior cambia. La usa `VOTO_SIMULADO` desde su enmienda 1.
 """
 
 from __future__ import annotations
@@ -124,6 +130,19 @@ def _objetos(texto: str) -> list:
     return out
 
 
+def prompt_fijo(t: pd.DataFrame, i: int) -> tuple[str, list[str]]:
+    """DI-NB7: la misma información que `prompt`, con las candidatas primero y completas, para que el comienzo del
+    mensaje sea idéntico en todas las llamadas y el proveedor lo cobre desde su caché."""
+    q = t.iloc[i]
+    cand = t.drop(index=t.index[i]).sort_values("id")
+    lineas = [f"- {r.id} | {r.pregunta_pagina} | {forma(r.categorias, r.codigos_favorables)}" for r in cand.itertuples()]
+    misma = sorted(cand[cand.familia == q.familia].id)
+    u = ("CANDIDATAS (id | pregunta | escala):\n" + "\n".join(lineas) +
+         f"\n\nPREGUNTA NUEVA:\n{q.pregunta_pagina}\nEscala: {forma(q.categorias, q.codigos_favorables)}" +
+         (f"\nNo elijas estas candidatas, que son de la misma pregunta: {', '.join(misma)}" if misma else ""))
+    return u, cand[cand.familia != q.familia].id.tolist()
+
+
 def parsear(texto: str, validos: list[str]) -> Optional[list[str]]:
     """DI-NB3 y DI-NB6: los ids válidos elegidos, o None."""
     for o in reversed(_objetos(texto or "")):                               # DI-NB6: el último que sirve
@@ -157,9 +176,10 @@ def gastado(cache: e9.Cache) -> float:
     return e9.gasto_registrado(cache)["costo_usd"]
 
 
-def elegir(t: pd.DataFrame, i: int, llamar, cache: e9.Cache, modelo: str, tope: float) -> tuple[Optional[list[str]], int]:
-    """(ids elegidos o None, llamadas nuevas). Un reintento si la respuesta no sirve (§3)."""
-    u, validos = prompt(t, i)
+def elegir(t: pd.DataFrame, i: int, llamar, cache: e9.Cache, modelo: str, tope: float,
+           orden: str = "pregunta") -> tuple[Optional[list[str]], int]:
+    """(ids elegidos o None, llamadas nuevas). Un reintento si la respuesta no sirve (§3). `orden`: DI-NB7."""
+    u, validos = prompt_fijo(t, i) if orden == "candidatas" else prompt(t, i)
     nuevas = 0
     for rep, extra in ((0, ""), (1, "\n\nNOTA: tu respuesta anterior no traía ids válidos de la lista. Responde solo con el JSON pedido.")):
         k = e9.Cache.clave(modelo, TEMPERATURA, SISTEMA, u + extra, rep)

@@ -113,3 +113,23 @@ Los resultados de las encuestas del CNC, por D21:
 - **Código:** `src/experiments/voto_simulado.py`.
 - **Pruebas:** `tests/test_voto_simulado.py`.
 - **Resultados:** `VOTO_SIMULADO_RESULTS.md`.
+
+## 9. Enmienda 1 (7/10/2026, antes de la corrida real)
+
+**El costo.** La llamada de prueba costó USD 0,0031, no 0,0012. Las escalas de las preguntas de voto traen 15 a 25
+candidatos, y el mensaje mide unos 22.700 tokens. La corrida completa costaría unos USD 2,34, sobre el tope de USD 1,50.
+Daniel decidió dos cosas:
+1. **Solo se corre la versión «con su encuesta»,** la que decide la regla (§3). «Sin su encuesta» queda sin evaluar, y PV3
+   también.
+2. **El mensaje lleva las candidatas primero** (`nivel_parecidas_b` DI-NB7): la misma información, en otro orden. La
+   lista completa, igual en todas las llamadas, va al comienzo; al final, la pregunta nueva y las ids de su familia, que no
+   puede elegir. Así el proveedor cobra el comienzo desde su caché.
+   - **Es un cambio de método y queda dicho.** El modelo ve lo mismo, pero el orden puede cambiar algo lo que elige.
+
+**Lo que se vio antes de esta enmienda, y se declara.** La corrida en modo simulado (para probar el circuito) imprimió las
+dos referencias simples sobre el guardado real, que no dependen del modelo. «Sin su encuesta», el último dato del mismo
+candidato da un EAM de 11,4 y acierta quién va adelante en el 94 % de las 32 segundas vueltas. M0 da un EAM de 20,0. Las
+cifras de «con su encuesta» no se imprimieron. La regla y los umbrales no cambian.
+
+**El tope** sigue en USD 1,50, contando lo ya gastado. Antes de correr, tres llamadas de prueba con el orden nuevo, para
+medir el ahorro.

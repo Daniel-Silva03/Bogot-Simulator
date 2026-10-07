@@ -47,6 +47,8 @@ from src.experiments import nivel_acuerdo_validacion as nv  # noqa: E402
 from src.experiments import nivel_parecidas_b as nb       # noqa: E402
 
 MODELO = nlu.MODELO
+ORDEN = "candidatas"                                        # enmienda 1: DI-NB7, para bajar el costo
+VERSIONES = (("con_su_encuesta", False),)                   # enmienda 1: «sin su encuesta» queda fuera por costo
 TOPE_USD = 1.50
 CACHE = ba.SALIDA / "cache_voto_simulado.json"
 SALIDA = ba.SALIDA / "voto_simulado.json"
@@ -101,12 +103,12 @@ def opcion(fila) -> str:
 def estimar(objetivo: pd.DataFrame, cand: pd.DataFrame, llamar, cache, sin_su_encuesta: bool, solo=None) -> pd.DataFrame:
     """DI-VS1."""
     if not sin_su_encuesta:
-        return nv.elegir_todas(objetivo, cand, llamar, cache, TOPE_USD, solo=solo, modelo=MODELO)
+        return nv.elegir_todas(objetivo, cand, llamar, cache, TOPE_USD, solo=solo, modelo=MODELO, orden=ORDEN)
     partes = []
     for est in objetivo.id.map(estudio).unique():
         o = objetivo[objetivo.id.map(estudio) == est].reset_index(drop=True)
         c = cand[cand.id.map(estudio) != est].reset_index(drop=True)
-        partes.append(nv.elegir_todas(o, c, llamar, cache, TOPE_USD, solo=solo, modelo=MODELO))
+        partes.append(nv.elegir_todas(o, c, llamar, cache, TOPE_USD, solo=solo, modelo=MODELO, orden=ORDEN))
         if solo:
             break
     return pd.concat(partes, ignore_index=True)
@@ -201,12 +203,13 @@ def main() -> int:
         cache, llamar = e9.Cache(CACHE), e9.cliente_real(timeout=300)
     if a.prueba:
         antes = nb.gastado(cache)
-        estimar(guar, prac, llamar, cache, False, solo=1)
+        estimar(guar, prac, llamar, cache, False, solo=3)
         c = nb.gastado(cache) - antes
-        print(f"una llamada costó USD {c:.4f} → las ~746 costarían ~USD {746 * c:.2f} (tope USD {TOPE_USD})")
+        costos = [v.get("uso", {}).get("costo_usd") for v in list(cache.datos.values())[-3:]]
+        print(f"tres llamadas costaron USD {c:.4f} ({costos}) → las 373 de «con su encuesta» costarían ~USD {373 * c / 3:.2f}")
         return 0
     out = {}
-    for version, sin in (("con_su_encuesta", False), ("sin_su_encuesta", True)):
+    for version, sin in VERSIONES:
         pp = estimar(prac, prac, llamar, cache, sin)
         pg = estimar(guar, prac, llamar, cache, sin)
         out[version] = evaluar(version, pp, pg, prac, guar)
@@ -218,9 +221,9 @@ def main() -> int:
                   f"{m['adelante'] if m['adelante'] is None else round(m['adelante'], 2)} | probable {m['dice_probable']} "
                   f"(acierta {m['acierta_probable']})")
         print(f"  regla: {x['regla']}", flush=True)
-    c, s = out["con_su_encuesta"], out["sin_su_encuesta"]
+    c, s = out["con_su_encuesta"], out.get("sin_su_encuesta")
     pred = {"PV1": 4 <= c["simulacion"]["eam"] <= 8, "PV2": c["regla"]["cumple"],
-            "PV3": s["simulacion"]["eam"] >= c["simulacion"]["eam"] + 3,
+            "PV3": (s["simulacion"]["eam"] >= c["simulacion"]["eam"] + 3) if s else "no evaluada (enmienda 1)",
             "PV4": c["simulacion"]["adelante"] is not None and c["ultimo"]["adelante"] is not None
                    and c["simulacion"]["adelante"] - c["ultimo"]["adelante"] < 0.10}
     gasto = None if a.simulado else e9.gasto_registrado(cache)

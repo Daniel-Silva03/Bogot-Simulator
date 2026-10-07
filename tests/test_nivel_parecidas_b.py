@@ -53,6 +53,22 @@ def test_el_prompt_no_trae_resultados_ni_la_propia_familia():
     assert "1=Sí*; 2=No" in u and "No sabe" not in u                    # DI-NB1
 
 
+def test_con_las_candidatas_primero_el_comienzo_es_identico():
+    """DI-NB7: mismo comienzo en todas las llamadas; la propia familia no se puede elegir."""
+    import pandas as pd
+    cand = pd.DataFrame({"id": ["a1", "a2", "b1", "c1"], "familia": ["A", "A", "B", "C"],
+                         "pregunta_pagina": ["pa1", "pa2", "pb1", "pc1"],
+                         "categorias": ["1=Sí; 2=No"] * 4, "codigos_favorables": ["[1]"] * 4, "total": [1.0] * 4})
+    def t(fila):
+        return pd.concat([cand[cand.id == fila], cand], ignore_index=True)
+    u1, v1 = nb.prompt_fijo(t("a1"), 0)
+    u2, v2 = nb.prompt_fijo(t("b1"), 0)
+    corte = u1.index("PREGUNTA NUEVA")
+    assert u1[:corte] == u2[:corte] and u1.startswith("CANDIDATAS")
+    assert set(v1) == {"b1", "c1"} and set(v2) == {"a1", "a2", "c1"}
+    assert "No elijas estas candidatas, que son de la misma pregunta: a1, a2" in u1
+
+
 def test_el_parseo_limpia_ids():
     val = ["a", "b", "c", "d", "e", "f"]
     assert nb.parsear('```json\n{"ids": ["b", "b", "zz", "a"], "razon": "x"}\n```', val) == ["b", "a"]
