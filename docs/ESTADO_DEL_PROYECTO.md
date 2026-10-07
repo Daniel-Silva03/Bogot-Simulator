@@ -330,7 +330,13 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
   queda para el nivel 3.
 - **La estimación usa ahora 139 candidatas,** con las 30 del lote 6 (`NIVEL_ACUERDO_LOTE6_RESULTS.md`, DI-CO29).
 - **Los resultados agregados de estas encuestas no se suben a GitHub;** viajan con el traslado.
-- **Siguiente:** el pre-registro del nivel 3, simular la intención de voto.
+- ~~**Siguiente:** el pre-registro del nivel 3, simular la intención de voto.~~ **Nivel 3, parte 1 (7/10,
+  `VOTO_SIMULADO_RESULTS.md`, USD 0,41): cumple la regla.**
+  - Error de 3,7 con su encuesta y 4,3 sin ella; acierta quién va adelante en el 94 % de las segundas vueltas.
+  - Pero el promedio lo bajan los candidatos pequeños: con los de más del 15 %, el error es de unos 6 a 7 puntos.
+  - Nada se muestra sin revisión jurídica.
+  - Por el camino, la caché con punto de corte (DI-E11) bajó el costo por llamada un 80 %.
+  - **Siguiente:** la parte 2, contra la Registraduría, en el PC personal; y la revisión jurídica.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
