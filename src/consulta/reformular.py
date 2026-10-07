@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Callable, Optional
@@ -172,6 +173,156 @@ def evaluar(respuestas: list[Optional[dict]], prueba=PRUEBA) -> dict:
     regla = ("La reformulación entra a la página como está." if todos else
              "Se ajusta la instrucción, con enmienda fechada, y se valida con otras 24 preguntas nuevas.")
     return {"criterios": crit, "pasa": todos, "regla": regla}
+
+
+# --------------------------------------------------------------------------
+# Versión 2: el alcance «voto» (REFORMULACION_VOTO_SPECIFICATION.md, D21)
+
+ALCANCES_V2 = ("catalogo", "nueva", "voto", "fuera")
+TIPOS_VOTO = ("primera", "segunda", "nunca", "participacion")
+SISTEMA_V2 = (
+    "Ayudas a una página que simula cómo respondería la población de Bogotá preguntas de OPINIÓN, de APROBACIÓN "
+    "de un cambio en la ciudad o de INTENCIÓN DE VOTO PRESIDENCIAL. Te doy la pregunta que escribió una persona y el "
+    "CATÁLOGO de preguntas que la Encuesta de Percepción Ciudadana sí midió.\n"
+    "Clasifícala en uno de cuatro alcances:\n"
+    "- \"catalogo\": la pregunta ya está en el catálogo, aunque esté dicha con otras palabras. Da su código.\n"
+    "- \"nueva\": es de opinión o de aprobación de un cambio en Bogotá y no está en el catálogo. Reescríbela como "
+    "pregunta de encuesta: una sola idea, redacción neutral que no induzca la respuesta, en el contexto de Bogotá, y "
+    "una escala de 5 puntos con sus etiquetas de menor a mayor.\n"
+    "- \"voto\": es de intención de voto para PRESIDENTE de Colombia, vista en Bogotá: si votaría por un candidato "
+    "(tipo \"primera\"), quién ganaría una segunda vuelta entre dos candidatos (tipo \"segunda\"), si nunca votaría por "
+    "un candidato (tipo \"nunca\") o si piensa salir a votar (tipo \"participacion\"). Da el tipo, los candidatos "
+    "nombrados con nombre y apellido (uno; dos en segunda vuelta; ninguno en participación) y reescríbela en "
+    "\"reformulada\" como pregunta de encuesta neutral.\n"
+    "- \"fuera\": no se puede responder así: un dato o una cifra, el resultado nacional de una elección, consultas "
+    "interpartidistas, preferencia por izquierda, derecha o centro, elecciones que no son presidenciales (Congreso, "
+    "alcaldía, Concejo), lo que piensa una persona concreta, o información sensible de personas. Explica por qué y, si "
+    "existe, sugiere en \"reformulada\" una pregunta cercana que sí se pueda responder.\n"
+    "Responde SOLO con un JSON, sin texto alrededor:\n"
+    '{"alcance": "catalogo|nueva|voto|fuera", "codigo": "XX o null", "tipo": "primera|segunda|nunca|participacion o null", '
+    '"candidatos": ["..."], "reformulada": "...", "escala": ["...", "...", "...", "...", "..."], "razon": "una frase"}'
+)
+
+
+def parsear_v2(texto: Optional[str], catalogo: dict[str, dict]) -> Optional[dict]:
+    """La lectura de la versión 1, más el alcance «voto»: None si no cumple."""
+    d = e9._json_de(texto)
+    if not isinstance(d, dict):
+        return None
+    alcance = str(d.get("alcance", "")).strip().lower()
+    if alcance not in ALCANCES_V2:
+        return None
+    if alcance != "voto":
+        r = parsear(json.dumps(d, ensure_ascii=False), catalogo)
+        return {**r, "tipo": None, "candidatos": []} if r else None
+    tipo = str(d.get("tipo") or "").strip().lower()
+    cands = [str(c).strip() for c in (d.get("candidatos") or []) if str(c).strip()]
+    reformulada = str(d.get("reformulada") or "").strip()
+    n = {"primera": 1, "nunca": 1, "segunda": 2, "participacion": 0}.get(tipo)
+    if n is None or len(cands) != n or not 1 <= len(reformulada) <= MAX_CARACTERES:
+        return None
+    return {"alcance": "voto", "codigo": None, "tipo": tipo, "candidatos": cands, "reformulada": reformulada,
+            "escala": None, "razon": str(d.get("razon") or "").strip()}
+
+
+def reformular_v2(pregunta: str, catalogo: dict[str, dict], llamar: Llamar, cache: e9.Cache,
+                  modelo: str = MODELO) -> tuple[Optional[dict], str]:
+    texto, _ = e9.pedir(llamar, cache, modelo, TEMPERATURA, SISTEMA_V2, prompt(pregunta, catalogo), 0)
+    return parsear_v2(texto, catalogo), texto
+
+
+#: REFORMULACION_VOTO §2: (pregunta, alcance, código, tipo, candidatos esperados)
+PRUEBA_VOTO = tuple(
+    [(p, "voto", None, "primera", ["Abelardo de la Espriella"]) if p == "¿Va a ganar Abelardo las elecciones?"
+     else (p, a, c, None, None) for p, a, c in PRUEBA] + [
+        ("¿La gente votaría por Iván Cepeda para presidente?", "voto", None, "primera", ["Iván Cepeda"]),
+        ("¿Quién ganaría en Bogotá una segunda vuelta entre Iván Cepeda y Abelardo de la Espriella?", "voto", None,
+         "segunda", ["Iván Cepeda", "Abelardo de la Espriella"]),
+        ("¿Cuántos bogotanos votarían por Paloma Valencia?", "voto", None, "primera", ["Paloma Valencia"]),
+        ("Si la segunda vuelta fuera entre Sergio Fajardo e Iván Cepeda, ¿a quién apoyaría Bogotá?", "voto", None,
+         "segunda", ["Sergio Fajardo", "Iván Cepeda"]),
+        ("¿Qué tanta gente nunca votaría por Abelardo de la Espriella?", "voto", None, "nunca", ["Abelardo de la Espriella"]),
+        ("¿Los bogotanos piensan salir a votar en las presidenciales?", "voto", None, "participacion", []),
+        ("¿Votarían por Claudia López para presidente?", "voto", None, "primera", ["Claudia López"]),
+        ("¿Gustavo Petro le ganaría a Rodolfo Hernández en Bogotá?", "voto", None, "segunda",
+         ["Gustavo Petro", "Rodolfo Hernández"]),
+        ("¿La gente nunca votaría por Iván Cepeda?", "voto", None, "nunca", ["Iván Cepeda"]),
+        ("¿Cómo le iría a Miguel Uribe Londoño en Bogotá en primera vuelta?", "voto", None, "primera", ["Miguel Uribe"]),
+        ("¿Quién gana en Bogotá entre Paloma Valencia y Claudia López si llegan a segunda vuelta?", "voto", None,
+         "segunda", ["Paloma Valencia", "Claudia López"]),
+        ("¿Qué porcentaje de Bogotá votaría por Sergio Fajardo?", "voto", None, "primera", ["Sergio Fajardo"]),
+        ("¿Quién ganaría la consulta del Pacto Amplio?", "fuera", None, None, None),
+        ("¿Bogotá votaría por un candidato de izquierda o de derecha?", "fuera", None, None, None),
+        ("¿Por cuál partido van a votar para el Senado?", "fuera", None, None, None),
+        ("¿Por quién votarían para el Concejo de Bogotá?", "fuera", None, None, None),
+    ])
+
+
+def nombra(cands: list[str], esperado: str) -> bool:
+    """Un candidato esperado está si su primer nombre y su último apellido aparecen (sin tildes ni mayúsculas)."""
+    import unicodedata
+
+    def palabras(s: str) -> list[str]:
+        return re.findall(r"[a-z]+", unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower())
+    t = palabras(" ".join(cands))
+    e = [w for w in palabras(esperado) if w not in ("de", "la", "del", "los")]
+    return bool(e) and e[0] in t and e[-1] in t
+
+
+def evaluar_voto(respuestas: list[Optional[dict]], prueba=PRUEBA_VOTO) -> dict:
+    """REFORMULACION_VOTO §3."""
+    alc = [r["alcance"] if r else None for r in respuestas]
+    r1 = sum(a == e[1] for a, e in zip(alc, prueba))
+    r2 = sum(bool(r) and r["alcance"] == "catalogo" and r["codigo"] == e[2]
+             for r, e in zip(respuestas, prueba) if e[1] == "catalogo")
+    fue = [r for r, e in zip(respuestas, prueba) if e[1] == "fuera"]
+    r3 = sum(bool(r) and r["alcance"] == "fuera" for r in fue)
+    r3_cat = sum(bool(r) and r["alcance"] == "catalogo" for r in fue)
+    r4 = sum(r is not None for r in respuestas)
+    vot = [(r, e) for r, e in zip(respuestas, prueba) if e[1] == "voto"]
+    r5a = sum(bool(r) and r["alcance"] == "voto" for r, _ in vot)
+    r5b = sum(bool(r) and r["alcance"] == "voto" and r["tipo"] == e[3] and len(r["candidatos"]) == len(e[4])
+              and all(nombra(r["candidatos"], c) for c in e[4]) for r, e in vot)
+    r6 = sum(bool(r) and r["alcance"] == "voto" for r, e in zip(respuestas, prueba) if e[1] != "voto")
+    crit = {
+        "R1": {"umbral": f"alcance correcto en ≥ 36 de {len(prueba)}", "valor": r1, "se_cumple": r1 >= 36},
+        "R2": {"umbral": "código correcto en ≥ 6 de 8", "valor": r2, "se_cumple": r2 >= 6},
+        "R3": {"umbral": f"«fuera» en ≥ 8 de {len(fue)}, ninguna como catálogo", "valor": [r3, r3_cat],
+               "se_cumple": r3 >= 8 and r3_cat == 0},
+        "R4": {"umbral": f"válida en ≥ 39 de {len(prueba)}", "valor": r4, "se_cumple": r4 >= 39},
+        "R5": {"umbral": f"«voto» en ≥ 12 de {len(vot)}; tipo y candidatos en ≥ 11", "valor": [r5a, r5b],
+               "se_cumple": r5a >= 12 and r5b >= 11},
+        "R6": {"umbral": "ninguna que no es de voto como «voto»", "valor": r6, "se_cumple": r6 == 0},
+    }
+    return {"criterios": crit, "pasa": all(c["se_cumple"] for c in crit.values())}
+
+
+def validar_voto() -> int:
+    """REFORMULACION_VOTO: las 40 con la versión 2 y el modelo de la página (Luna)."""
+    from src.consulta import motor as mo
+    catalogo = cargar_catalogo()
+    salida = SALIDA / "voto"
+    cache = e9.Cache(salida / "cache.json")
+    llamar = e9.cliente_real()
+    respuestas = []
+    try:
+        for p, *_ in PRUEBA_VOTO:
+            respuestas.append(reformular_v2(p, catalogo, llamar, cache, mo.MODELO_PAGINA)[0])
+    except e9.Experimento9Error as e:
+        print(f"ERROR: {e}")
+        return 1
+    v = evaluar_voto(respuestas)
+    for (p, a, _, _, cs), r in zip(PRUEBA_VOTO, respuestas):
+        got = None if r is None else (r["alcance"], r.get("codigo"), r.get("tipo"), r.get("candidatos"))
+        marca = "" if r and r["alcance"] == a else "   <-- distinto"
+        print(f"{p[:70]:70} | esperado {a}{' ' + str(cs) if cs else ''} | obtuvo {got}{marca}")
+    for k, c in v["criterios"].items():
+        print(f"  {k} {'se cumple' if c['se_cumple'] else 'NO se cumple'} — {c['umbral']} (valor {c['valor']})")
+    print(f"pasa: {v['pasa']} | gasto USD {e9.gasto_registrado(cache)['costo_usd']:.4f}")
+    salida.mkdir(parents=True, exist_ok=True)
+    (salida / "resultado.json").write_text(json.dumps({"respuestas": respuestas, **v, "gasto": e9.gasto_registrado(cache)},
+                                                      ensure_ascii=False, indent=2), encoding="utf-8")
+    return 0
 
 
 def modelo_simulado(catalogo: dict[str, dict]) -> Llamar:

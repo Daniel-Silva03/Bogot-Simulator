@@ -107,6 +107,29 @@ def test_el_circuito_simulado_pasa_y_usa_la_cache():
         assert llamadas["n"] == 24
 
 
+def test_la_version_2_lee_el_voto_y_exige_sus_candidatos():
+    """REFORMULACION_VOTO §1."""
+    cat = rf.cargar_catalogo()
+    ok = rf.parsear_v2('{"alcance":"voto","tipo":"segunda","candidatos":["Iván Cepeda","Paloma Valencia"],'
+                       '"reformulada":"¿Por quién votaría en una segunda vuelta?"}', cat)
+    assert ok["alcance"] == "voto" and ok["tipo"] == "segunda" and len(ok["candidatos"]) == 2
+    assert rf.parsear_v2('{"alcance":"voto","tipo":"segunda","candidatos":["Iván Cepeda"],"reformulada":"¿x?"}', cat) is None
+    assert rf.parsear_v2('{"alcance":"voto","tipo":"consulta","candidatos":["X"],"reformulada":"¿x?"}', cat) is None
+    assert rf.parsear_v2('{"alcance":"fuera","codigo":null,"reformulada":"","razon":"x"}', cat)["alcance"] == "fuera"
+
+
+def test_la_prueba_de_voto_y_su_regla():
+    pv = rf.PRUEBA_VOTO
+    assert len(pv) == 40 and sum(x[1] == "voto" for x in pv) == 13 and sum(x[1] == "fuera" for x in pv) == 9
+    perfecto = [None if a == "fuera" and False else
+                {"alcance": a, "codigo": c, "tipo": t, "candidatos": cs or []} for _, a, c, t, cs in pv]
+    assert rf.evaluar_voto(perfecto)["pasa"]
+    un_falso = list(perfecto)
+    un_falso[0] = {**un_falso[0], "alcance": "voto", "tipo": "primera", "candidatos": ["X"]}   # una de opinión como voto
+    assert not rf.evaluar_voto(un_falso)["criterios"]["R6"]["se_cumple"]
+    assert rf.nombra(["Abelardo De La Espriella Otero"], "Abelardo de la Espriella")
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"Reformulación — {len(pruebas)} pruebas\n")
