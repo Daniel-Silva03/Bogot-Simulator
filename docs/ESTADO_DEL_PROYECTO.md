@@ -342,7 +342,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     dos aciertan al ganador.
   - **La caché en la página no pasó su regla** (`CACHE_PAGINA_RESULTS.md`): al decidir acierta 13 de 15. La página sigue
     sin caché.
-  - **Siguiente:** la revisión jurídica del nivel 3.
+  - ~~**Siguiente:** la revisión jurídica del nivel 3.~~ **Revisión jurídica aprobada (7/10, D21).**
+  - **La intención de voto está en la página** (7/10, `PAGINA_CONSULTA.md` §5.22, DI-CO30). La reformulación v3 la reconoce
+    sola (`REFORMULACION_VOTO_RESULTS.md`, 13 de 13). Muestra la estimación con ±7 puntos y las encuestas del CNC en que se
+    apoya, sin mapa. Las consultas y la tendencia quedan fuera.
+  - **Siguiente:** probarla con el modelo real.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

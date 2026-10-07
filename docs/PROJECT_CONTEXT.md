@@ -1700,6 +1700,15 @@ equipo y queda aprobado para que quede subido en la pagina»). Se cumple así la
 
 Cómo se lleva a la página va en `PAGINA_CONSULTA.md`.
 
+**Llevado a la página (7/10/2026, `PAGINA_CONSULTA.md` §5.22, DI-CO30).** Daniel eligió:
+- que la página reconozca sola las preguntas de voto. La reformulación versión 3 pasó su validación pre-registrada
+  (`REFORMULACION_VOTO_RESULTS.md`);
+- mostrar la estimación más las encuestas del CNC en que se apoya, con su fecha y su resultado en Bogotá, sin mapa;
+- dejar fuera las consultas interpartidistas y la tendencia.
+
+Se muestra solo la intención de voto **simulada**, con su error medido y la banda de suposición. La medida aparece únicamente
+como apoyo de cada estimación.
+
 ---
 
 # 40. DECISIONES ABIERTAS

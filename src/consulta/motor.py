@@ -240,6 +240,24 @@ DI-CO29. **Las candidatas pasan a 139: se suman las 30 de práctica del lote 6**
     encuesta, con la misma advertencia de DI-CO28, y la franja dice «unos 7 de cada 10». Los resultados del lote 6 no
     están en GitHub (D21): si faltan en este computador, se usan las 109 con un aviso en la terminal. Lo electoral
     (lote 7) nunca entra (`test_banco_lote7`).
+
+DI-CO30. **La intención de voto presidencial en Bogotá** (7/10, D21 con revisión jurídica aprobada).
+    Hechos:
+    - la reformulación versión 3 (`reformular.SISTEMA_V3`) reconoce las preguntas de voto y pasó su validación
+      (`REFORMULACION_VOTO_RESULTS.md`: 13 de 13);
+    - la estimación es la del nivel 3 (`VOTO_SIMULADO_RESULTS.md`: 3,7 puntos y 30 de 32 segundas vueltas; contra la
+      Registraduría, 4,2 puntos).
+    Decisiones:
+    - **Candidatas y modelo:** se estima con Luna, con las candidatas primero y la caché marcada (DI-NB7 y DI-E11),
+      como se validó. Las candidatas son las 373 del lote 7 (práctica y guardado), que se leen de los resultados
+      locales; si faltan, la página lo dice.
+    - **La pregunta:** se ancla a la encuesta más reciente («En mayo de 2026: …»).
+    - **Rango y segunda vuelta:** ±7,1 puntos. En una segunda vuelta se estima cada candidato por separado, y
+      «probablemente gana X» solo si la diferencia supera 16 puntos (h₂); si no, «Reñida».
+    - **Lo que no se muestra:** mapa ni grupos, porque las encuestas solo traen el total de Bogotá. Las consultas y la
+      tendencia no se responden: la reformulación las deja fuera.
+    Además, el cliente real marca la caché en «PREGUNTA NUEVA». En la estimación de opinión (orden de siempre) y en el
+    puente esa marca está al comienzo, así que no se parte nada (DI-E11).
 """
 
 from __future__ import annotations
@@ -301,6 +319,25 @@ ESTIMACION_TEXTO = ("Es una estimación, no una medición: sale de lo que la gen
                     "tuya puede acertar algo menos.")   # DI-CO29
 ESTIMACION_DIVIDIDA = (" El rango cruza el 50 %: con lo que hay medido no se puede decir de qué lado queda la "
                        "mayoría.")
+#: DI-CO30: la intención de voto (D21, nivel 3; VOTO_SIMULADO y VOTO_REGISTRADURIA).
+H_VOTO = 7.1                     # cuantil 80 % del error en la práctica del lote 7, «con su encuesta»
+H2_VOTO = 16.0                   # el de la diferencia entre dos candidatos de una segunda vuelta
+FECHA_VOTO = "mayo de 2026"      # la encuesta más reciente del banco electoral (CC893701, 16 al 22 de mayo)
+VOTO_TEXTOS = {
+    "primera": "En {f}: si las elecciones presidenciales fueran mañana, ¿votaría por {x}?",
+    "nunca": "En {f}: ¿nunca votaría por {x}?",
+    "segunda": "En {f}: en una segunda vuelta entre {a} y {b}, ¿votaría por {x}?",
+    "participacion": "En {f}: si las elecciones presidenciales fueran el próximo domingo, ¿votaría (definitiva o probablemente)?",
+}
+AVISO_VOTO = ("Esto es una suposición, no una encuesta ni un pronóstico: estima cómo respondería Bogotá a partir de lo que "
+              "contestaron de verdad los encuestados de Bogotá en encuestas del CNC, hasta mayo de 2026.")
+VOTO_TEXTO = ("Sale de lo que respondieron de verdad los encuestados de Bogotá en {n} preguntas de encuestas del CNC "
+              "(aparecen debajo, con su fecha y su resultado), que eligió un modelo de lenguaje. En una prueba con 215 "
+              "preguntas guardadas se equivocó en promedio 3,7 puntos (unos 6 a 7 en candidatos con más del 15 %) y acertó "
+              "quién iba adelante en 30 de 32 segundas vueltas. Contra los resultados de la Registraduría en Bogotá (2022 y "
+              "2026), se equivocó 4,2 puntos y acertó al ganador en las tres elecciones.")
+VOTO_SIN_MAPA = "La intención de voto no se muestra por localidad: las encuestas del CNC solo traen el total de Bogotá."
+VOTO_FUENTES = {"CNC para Semana": "Encuesta del CNC para Semana", "CNC para Revista Cambio": "Encuesta del CNC para Revista Cambio"}
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
 TONO_TITULO = "Así responden estos grupos en general"                       # DI-CO21
 TONO_TEXTO = ("Es contexto, no una respuesta a esta pregunta: es igual para toda pregunta nueva. Resume cómo "
@@ -525,7 +562,8 @@ class Motor:
         if not pregunta or not pregunta.strip():
             raise ConsultaError("La pregunta está vacía.")
         try:
-            r, _ = rf.reformular(pregunta[:500], self.catalogo, self.llamar, self.cache, self.modelo)
+            r, _ = rf.reformular_v2(pregunta[:500], self.catalogo, self.llamar, self.cache, self.modelo,
+                                    rf.SISTEMA_V3)                              # DI-CO30
         except (OSError, http.client.HTTPException) as e:                       # DI-CO24
             raise _servicio(e) from e
         if r is None:
@@ -619,6 +657,60 @@ class Motor:
                 "preguntas": [{"pregunta": r.pregunta_pagina, "fuente": r.fuente_txt, "porcentaje": round(float(r.total), 1)}
                               for r in elegidas.itertuples()]}
 
+    # ---------------------------------------------------------------- paso 2c: intención de voto (DI-CO30)
+    def _banco_voto(self) -> pd.DataFrame:
+        if getattr(self, "_voto", None) is None:
+            try:
+                from src.experiments import voto_registraduria as vr
+                self._voto = vr.preguntas()
+            except FileNotFoundError as e:
+                raise ConsultaError("En este computador faltan los resultados de las encuestas electorales del CNC "
+                                    "(se llevan con el traslado): no se puede estimar la intención de voto.") from e
+        return self._voto
+
+    def responder_voto(self, tipo: str, candidatos: list[str], pregunta: str) -> dict:
+        """DI-CO30: la intención de voto en Bogotá con el método del nivel 3 (D21)."""
+        from src.experiments import nivel_parecidas_b as nb
+        from src.experiments import voto_simulado as vs
+        if tipo not in VOTO_TEXTOS or len(candidatos) != {"primera": 1, "nunca": 1, "segunda": 2, "participacion": 0}[tipo]:
+            raise ConsultaError("La pregunta de voto no trae el tipo o los candidatos esperados.")
+        banco = self._banco_voto()
+        pool = banco[vs.COLS].reset_index(drop=True)
+        if tipo == "segunda":
+            a, b = candidatos
+            objetivos = [(VOTO_TEXTOS["segunda"].format(f=FECHA_VOTO, a=a, b=b, x=x), x) for x in (a, b)]
+        elif tipo == "participacion":
+            objetivos = [(VOTO_TEXTOS["participacion"].format(f=FECHA_VOTO), None)]
+        else:
+            objetivos = [(VOTO_TEXTOS[tipo].format(f=FECHA_VOTO, x=candidatos[0]), candidatos[0])]
+        estim = []
+        for texto, cand in objetivos:
+            obj = pd.DataFrame([{"id": "NUEVA", "familia": "NUEVA", "ambito": "Bogotá", "fuente": "", "pregunta_pagina": texto,
+                                 "categorias": "1=Sí; 2=No; 9=NS/NR", "codigos_favorables": "[1]", "total": np.nan,
+                                 "anio": 2026, "variable": ""}])
+            t = pd.concat([obj, pool], ignore_index=True)
+            try:
+                ids, _ = nb.elegir(t, 0, self.llamar, self.cache, MODELO_ESTIMACION, float("inf"), orden="candidatas")
+            except (OSError, http.client.HTTPException) as e:                   # DI-CO24
+                raise _servicio(e) from e
+            if not ids:
+                return {"tipo": "invalida", "mensaje": "No pude estimar esta pregunta de voto. Prueba a escribirla de otra forma."}
+            el = banco.set_index("id").loc[ids]
+            pct = float(el.total.mean())
+            estim.append({"candidato": cand, "porcentaje": round(pct, 1),
+                          "rango": [round(max(0.0, pct - H_VOTO), 1), round(min(100.0, pct + H_VOTO), 1)],
+                          "preguntas": [{"pregunta": r.pregunta_pagina, "porcentaje": round(float(r.total), 1),
+                                         "fuente": VOTO_FUENTES.get(r.fuente, r.fuente)} for r in el.itertuples()]})
+        llamada = None
+        if tipo == "segunda":
+            d = estim[0]["porcentaje"] - estim[1]["porcentaje"]
+            llamada = (f"Probablemente gana {estim[0]['candidato']}" if d > H2_VOTO else
+                       f"Probablemente gana {estim[1]['candidato']}" if d < -H2_VOTO else "Reñida")
+        n = len({p["pregunta"] for e in estim for p in e["preguntas"]})
+        return {"tipo": "voto", "subtipo": tipo, "suposicion": True, "aviso": AVISO_VOTO, "pregunta": pregunta.strip(),
+                "estimaciones": estim, "llamada": llamada, "rango_puntos": H_VOTO, "fecha_datos": FECHA_VOTO,
+                "texto": VOTO_TEXTO.format(n=n), "sin_mapa": VOTO_SIN_MAPA}
+
     def responder_nueva(self, pregunta: str, escala: list[str], original: Optional[str] = None) -> dict:
         """`original`: lo que escribió la persona; si viene, la estimación se hace con él (DI-CO28)."""
         if not pregunta or len(escala) != 5:
@@ -685,13 +777,19 @@ def informacion_general(agentes: Optional[pd.DataFrame] = None, donante: Optiona
 def cliente(simulado: bool = False):
     """(llamar, modelo). El simulado contesta la reformulación y el puente sin gasto."""
     if not simulado:
-        return e9.cliente_real(), MODELO_PAGINA                                  # DI-CO26
+        return e9.cliente_real(corte_cache="PREGUNTA NUEVA"), MODELO_PAGINA       # DI-CO26, DI-CO30 (DI-E11)
     cat = rf.cargar_catalogo()
     ref = rf.modelo_simulado(cat)
     cods = list(cat)
 
     def llamar(modelo, sistema, usuario, temp):
-        if sistema == rf.SISTEMA:
+        if sistema in (rf.SISTEMA, rf.SISTEMA_V3):
+            preg = usuario.split("\n")[1]
+            m = re.search(r"[Vv]ot\w* por ((?:[A-ZÁÉÍÓÚÑ][\wáéíóúñ]+ ?){2,4})", preg)       # DI-CO30: voto, sin gasto
+            if sistema == rf.SISTEMA_V3 and m:
+                x = m.group(1).strip()
+                return json.dumps({"alcance": "voto", "codigo": None, "tipo": "primera", "candidatos": [x],
+                                   "reformulada": f"¿Votaría por {x} para presidente?", "razon": "simulado"})
             return ref(modelo, sistema, usuario, temp)
         from src.experiments import nivel_parecidas_b as nb
         if sistema == nb.SISTEMA:                                               # DI-CO22: las tres primeras candidatas

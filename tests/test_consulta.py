@@ -319,6 +319,63 @@ def test_sin_grupo_de_educacion():
     assert "educacion" not in mo.GRUPOS and "educacion" not in M.responder_catalogo("VS8")["grupos"]
 
 
+# --- intención de voto (DI-CO30) -----------------------------------------------------
+
+def _hay_voto():
+    try:
+        M._banco_voto()
+    except mo.ConsultaError:
+        print("         (sin los resultados del lote 7 en esta máquina: se omite)")
+        return False
+    return True
+
+
+def test_la_reformulacion_de_la_pagina_es_la_version_3_y_reconoce_el_voto():
+    r = M.reformular("¿Cuántos bogotanos votarían por Iván Cepeda?")
+    assert r["alcance"] == "voto" and r["tipo"] == "primera" and r["candidatos"] == ["Iván Cepeda"] and r["escala"] is None
+    assert M.reformular("¿La gente se siente segura caminando por su barrio?")["alcance"] == "catalogo"
+
+
+def test_la_intencion_de_voto_trae_rango_encuestas_y_aviso_sin_mapa():
+    if not _hay_voto():
+        return
+    r = M.responder_voto("primera", ["Iván Cepeda"], "¿Votaría por Iván Cepeda?")
+    assert r["tipo"] == "voto" and r["suposicion"] and r["llamada"] is None and "localidad" in r["sin_mapa"]
+    assert "suposición" in r["aviso"] and "mayo de 2026" in r["aviso"]
+    (e,) = r["estimaciones"]
+    assert 1 <= len(e["preguntas"]) <= 5 and e["candidato"] == "Iván Cepeda"
+    assert abs(e["porcentaje"] - np.mean([q["porcentaje"] for q in e["preguntas"]])) < 0.1
+    assert abs(e["rango"][1] - e["rango"][0] - 2 * mo.H_VOTO) < 0.2 or 0 in e["rango"] or 100 in e["rango"]
+    assert all(q["pregunta"].startswith("En ") and q["fuente"].startswith("Encuesta del CNC") for q in e["preguntas"])
+    assert "localidades" not in r and "grupos" not in r                         # solo el total de Bogotá
+
+
+def test_la_segunda_vuelta_estima_a_los_dos_y_solo_llama_con_mas_de_16_puntos():
+    if not _hay_voto():
+        return
+    r = M.responder_voto("segunda", ["Iván Cepeda", "Paloma Valencia"], "¿Quién ganaría?")
+    a, b = r["estimaciones"]
+    assert [a["candidato"], b["candidato"]] == ["Iván Cepeda", "Paloma Valencia"]
+    d = a["porcentaje"] - b["porcentaje"]
+    assert (r["llamada"] == "Reñida") == (abs(d) <= mo.H2_VOTO)
+
+
+def test_un_voto_mal_formado_es_error():
+    for t, c in [("consulta", ["X"]), ("segunda", ["X"]), ("primera", [])]:
+        try:
+            M.responder_voto(t, c, "¿x?")
+        except mo.ConsultaError:
+            continue
+        raise AssertionError(t)
+
+
+def test_la_pagina_muestra_el_voto_sin_mapa():
+    html = (Path(__file__).resolve().parents[1] / "src" / "consulta" / "pagina.html").read_text(encoding="utf-8")
+    assert "r.alcance === 'voto'" in html and "Intención de voto · estimación" in html and "function mostrarVoto" in html
+    assert "estado.modo === 'nueva' || estado.modo === 'voto'" in html                # mapa apagado
+    assert "encuestas del CNC y su resultado real en Bogotá" in html
+
+
 # --- servidor y página -------------------------------------------------------------
 
 def _servidor():
@@ -351,6 +408,10 @@ def test_el_servidor_responde_las_tres_rutas_y_solo_en_localhost():
         assert s == 200 and d["tipo"] == "catalogo"
         s, d = _post(base + "/api/responder", {"pregunta": "¿x?", "escala": ["a", "b", "c", "d", "e"]})
         assert s == 200 and d["tipo"] == "nueva"
+        s, d = _post(base + "/api/reformular", {"pregunta": "¿Votaría por Paloma Valencia?"})
+        assert s == 200 and d["alcance"] == "voto"
+        s, d = _post(base + "/api/responder", {"voto": {"tipo": "consulta", "candidatos": ["X"], "reformulada": "¿x?"}})
+        assert s == 400
         assert _post(base + "/api/responder", {"codigo": "ZZ9"})[0] == 400
         assert _post(base + "/api/otra", {})[0] == 404
     finally:

@@ -583,7 +583,7 @@ function clasificar(r){
 }
 
 function pintar(){
-  svg.classList.toggle('apagado', estado.modo === 'nueva');
+  svg.classList.toggle('apagado', estado.modo === 'nueva' || estado.modo === 'voto');
   const visibles = estado.modo === 'catalogo' && estado.filtro && estado.filtro !== 'todas' ? clasificar(estado.resp)[estado.filtro] : null;
   URB.forEach(l => rutas[l.codigo].classList.toggle('atenuada', !!visibles && !visibles.includes(String(l.codigo))));
   const cls = estado.modo === 'catalogo' ? clasificar(estado.resp) : null;
@@ -599,7 +599,7 @@ function pintar(){
     }
   });
   leyenda(); seleccionar(estado.sel, true);
-  $('#velo').classList.toggle('oculto', estado.modo !== 'nueva');
+  $('#velo').classList.toggle('oculto', estado.modo !== 'nueva' && estado.modo !== 'voto');
   if (estado.modo === 'nueva') {
     /* estado sin mapa: qué pasa, por qué y qué se puede hacer; en el encabezado, no encima del mapa */
     $('#velo').innerHTML = `<b>Esta pregunta no se colorea por localidad</b>
@@ -607,13 +607,16 @@ function pintar(){
       tienen mapa: ábrelas desde «Para explorar».</span>
       <div class="acciones"><button class="btn btn-fantasma" data-ej="0">Ver una pregunta con mapa</button></div>`;
     $('#velo').querySelector('button').addEventListener('click', e => preguntar(D.ejemplos[+e.currentTarget.dataset.ej]));
+  } else if (estado.modo === 'voto') {
+    /* DI-CO30: las encuestas del CNC solo traen el total de Bogotá */
+    $('#velo').innerHTML = `<b>La intención de voto no se colorea por localidad</b><span>${esc(estado.resp.sin_mapa)}</span>`;
   }
   lado(visibles);
 }
 
 function leyenda(){
   const el = $('#leyenda');
-  el.classList.toggle('oculto', estado.modo === 'nueva');
+  el.classList.toggle('oculto', estado.modo === 'nueva' || estado.modo === 'voto');
   if (estado.modo === 'catalogo') {
     const c = clasificar(estado.resp);
     el.innerHTML = `<span class="ceja">Frente a la ciudad (${f2(estado.resp.ciudad.media)})</span>
@@ -632,6 +635,11 @@ function lado(visibles){
   const el = $('#lado');
   if (estado.modo === 'catalogo') return ranking(el, visibles);
   if (estado.modo === 'nueva') return explorar(el, estado.resp);
+  if (estado.modo === 'voto') {
+    el.innerHTML = `<h3>Localidad por localidad</h3>
+      <div class="vacio"><b>Sin tabla por localidad</b><span>${esc(estado.resp.sin_mapa)} El mapa muestra cuántos adultos viven en cada una.</span></div>`;
+    return;
+  }
   el.innerHTML = `<h3>Localidad por localidad</h3>
     <div class="vacio"><b>Haz una pregunta para llenar esta tabla</b>
       <span>Con una pregunta que la encuesta hizo, aquí aparece cada localidad con su promedio y su margen de error,
@@ -750,6 +758,7 @@ async function preguntar(texto){
     mostrarEntendida(r);
     if (r.alcance === 'catalogo') await responder({codigo:r.codigo});
     else if (r.alcance === 'nueva') await responder({pregunta:r.reformulada, escala:r.escala, original:q});   /* DI-CO28: se estima con lo escrito */
+    else if (r.alcance === 'voto') await responder({voto:{tipo:r.tipo, candidatos:r.candidatos, reformulada:r.reformulada}});   /* DI-CO30 */
     else { el.classList.add('oculto'); verResultado(); }
   } catch (e) { error(el, e.message); }
   finally { $('#enviar').disabled = false; }
@@ -758,7 +767,7 @@ async function preguntar(texto){
 function mostrarEntendida(r){
   const s = $('#sugerencia'); s.classList.remove('oculto');
   if (r.alcance === 'invalida') { s.innerHTML = `<p class="razon">${esc(r.mensaje)}</p>`; aparecer(s); return; }
-  const ins = {catalogo:['ins-cat','Ya medida en la encuesta'], nueva:['ins-nueva','Pregunta nueva · suposición'], fuera:['ins-fuera','Fuera de alcance']}[r.alcance];
+  const ins = {catalogo:['ins-cat','Ya medida en la encuesta'], nueva:['ins-nueva','Pregunta nueva · suposición'], voto:['ins-nueva','Intención de voto · estimación'], fuera:['ins-fuera','Fuera de alcance']}[r.alcance];
   if (r.alcance === 'fuera') {
     s.innerHTML = `<div class="fila-ref"><span class="insignia ${ins[0]}">${ins[1]}</span></div>
       <p class="propuesta">Esta pregunta no se puede suponer con la población.</p><p class="razon">${esc(r.razon || '')}</p>
@@ -770,7 +779,7 @@ function mostrarEntendida(r){
   const texto = r.alcance === 'catalogo' ? r.pregunta_catalogo : r.reformulada;
   s.innerHTML = `<div class="fila-ref"><span class="ceja">Así entendimos tu pregunta</span><span class="insignia ${ins[0]}">${ins[1]}</span></div>
     <p class="propuesta" id="entendida">${esc(texto)}</p>
-    <div class="escala-lista" aria-label="Escala de respuesta">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>
+    ${r.escala ? `<div class="escala-lista" aria-label="Escala de respuesta">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>` : ''}
     ${r.alcance === 'nueva' ? `<div class="acciones"><button class="btn btn-fantasma" id="editar" aria-expanded="false" aria-controls="edicion">Editar y volver a suponer</button></div>
       <div class="oculto" id="edicion"><label for="editada" class="ceja">Edita la pregunta</label><textarea id="editada" class="editable">${esc(r.reformulada)}</textarea>
       <div class="acciones" style="margin-top:8px"><button class="btn" id="resuponer">Volver a suponer</button></div></div>` : ''}`;
@@ -793,7 +802,7 @@ function verResultado(){
 }
 
 async function responder(cuerpo){
-  const el = $('#resultado'); cargando(el, cuerpo.codigo ? 'Consultando a la población…' : 'Buscando preguntas parecidas y consultando a la población…');
+  const el = $('#resultado'); cargando(el, cuerpo.codigo ? 'Consultando a la población…' : cuerpo.voto ? 'Buscando preguntas parecidas en las encuestas del CNC…' : 'Buscando preguntas parecidas y consultando a la población…');
   $('#enviar').disabled = true;
   try { const r = await api('/api/responder', cuerpo); if (r.tipo === 'invalida') return error(el, r.mensaje); mostrar(r); }
   catch (e) { error(el, e.message); }
@@ -808,6 +817,7 @@ const anios = a => a.length > 1 ? a[0] + '–' + a[a.length-1] : a[0];
 function mostrar(r){
   const el = $('#resultado'), gr = $('#grupos'); el.classList.remove('oculto'); gr.classList.remove('oculto');
   estado = { ...estado, modo:r.tipo, resp:r, filtro:'todas' };
+  if (r.tipo === 'voto') { mostrarVoto(el, r); gr.classList.add('oculto'); titulosMapa(); pintar(); verResultado(); [el, $('#lado')].forEach(aparecer); return; }
   if (r.tipo === 'catalogo') {
     const n = r.escala.length, c = clasificar(r);
     el.innerHTML = `<div class="resumen">
@@ -878,6 +888,36 @@ function mostrar(r){
   [el, $('#lado'), gr].forEach(aparecer);
 }
 
+/* DI-CO30 (D21, con revisión jurídica): la intención de voto. La estimación de cada candidato
+   con su rango, y debajo las encuestas del CNC en que se apoya, con su fecha y su resultado en
+   Bogotá. Sin mapa ni grupos: las encuestas solo traen el total de la ciudad. */
+const VOTO_LEE = {primera:x => `votaría por ${x}`, nunca:x => `nunca votaría por ${x}`, segunda:x => `votaría por ${x}`, participacion:() => 'votaría'};
+function mostrarVoto(el, r){
+  const seg = r.subtipo === 'segunda', vistas = new Set();
+  const apoyo = r.estimaciones.flatMap(e => e.preguntas).filter(q => !vistas.has(q.pregunta) && vistas.add(q.pregunta));
+  el.innerHTML = `<p class="intro">Intención de voto en Bogotá, estimada con <span class="mono">${apoyo.length}</span> preguntas de encuestas del CNC
+      hasta ${esc(r.fecha_datos)}. No es una encuesta nueva ni un pronóstico.</p>
+    <div class="estimacion panel">
+      <div class="est-cab">
+        <span class="ceja">Estimación · no es una medición</span>
+        ${r.llamada ? `<p class="est-titulo">${esc(r.llamada)}</p>` : ''}
+        ${r.estimaciones.map(e => { const de = Math.round(e.rango[0]), a = Math.round(e.rango[1]); return `
+          <p class="cifra-grande">${Math.round(e.porcentaje)} %</p>
+          <p class="lead-t">${esc(VOTO_LEE[r.subtipo](e.candidato))} · <span class="mono">entre ${de} % y ${a} %</span></p>`; }).join('')}
+      </div>
+      <div class="est-rango">
+        ${r.estimaciones.map(e => `${seg ? `<p class="nota" style="margin:8px 0 4px">${esc(e.candidato)}</p>` : ''}<div class="rango-est" role="img" aria-label="${esc(e.candidato || 'Participación')}: entre ${Math.round(e.rango[0])} y ${Math.round(e.rango[1])} por ciento${seg ? '; la línea marca el 50 %' : ''}">
+          <i style="left:${e.rango[0]}%;width:${e.rango[1]-e.rango[0]}%"></i>${seg ? '<em style="left:50%"></em>' : ''}<b style="left:${e.porcentaje}%"></b></div>`).join('')}
+        <div class="rango-etq"><span>0 %</span><span>${seg ? '50 % · la mitad' : ''}</span><span>100 %</span></div>
+        ${seg ? `<p class="nota">Se estima a cada candidato por separado, así que los dos no tienen por qué sumar 100 %. Solo se dice quién «probablemente gana» si la diferencia pasa de 16 puntos.</p>` : ''}
+        <p class="nota">${esc(r.texto)}</p>
+      </div></div>
+    <div class="apoyo"><span class="ceja">En qué se apoya la estimación · encuestas del CNC y su resultado real en Bogotá</span>
+      <div class="apoyo-rejilla">${apoyo.map(q => `<div class="dato-t"><span>${esc(q.pregunta)}</span>
+        <b>${Math.round(q.porcentaje)} %</b><span class="nota">respondió «sí» en Bogotá · ${esc(q.fuente)}</span></div>`).join('')}</div></div>
+    ${banda(r)}`;
+}
+
 /* D18 (DI-CO15): una pregunta relacionada se abre completa, como pregunta del catálogo */
 function verRelacionada(q){
   marcar(q.pregunta);
@@ -888,7 +928,7 @@ function verRelacionada(q){
 
 function titulosMapa(){
   if (estado.modo === 'catalogo') { $('#mapaTitulo').textContent = 'Cómo respondería cada localidad'; $('#mapaSub').textContent = estado.resp.pregunta; }
-  else if (estado.modo === 'nueva') { $('#mapaTitulo').textContent = 'Bogotá por localidades'; $('#mapaSub').textContent = estado.resp.pregunta; }
+  else if (estado.modo === 'nueva' || estado.modo === 'voto') { $('#mapaTitulo').textContent = 'Bogotá por localidades'; $('#mapaSub').textContent = estado.resp.pregunta; }
   else { $('#mapaTitulo').textContent = 'Bogotá por localidades'; $('#mapaSub').textContent = 'Información general. Toca una localidad. Sumapaz, rural y sin encuestados, queda fuera del mapa.'; }
 }
 

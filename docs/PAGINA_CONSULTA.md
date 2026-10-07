@@ -624,6 +624,48 @@ Semana, solo de Bogotá (migración, el paro de 2021, el rumbo del país, la vac
   - las de los lotes 6 y 7 y de las pruebas de la estimación;
   - la página cargó las 139 candidatas, todas con su fuente.
 
+## 5.22 La intención de voto entra a la página (7/10/2026, D21, DI-CO30)
+
+La pidió el CNC y la aprobó la revisión jurídica (D21). Daniel eligió cómo se muestra:
+- **Entrada:** la página reconoce sola las preguntas de voto. La reformulación pasa a la versión 3 (`SISTEMA_V3`), que
+  pasó su validación pre-registrada (`REFORMULACION_VOTO_RESULTS.md`: 13 de 13 de voto, ninguna de opinión como voto).
+- **Contenido:** la estimación más las encuestas en que se apoya, con su fecha y su resultado en Bogotá. Sin mapa.
+- **Fuera:** las consultas interpartidistas y la tendencia (izquierda o derecha), cuyo error en el nivel 3 fue de 11 a
+  23 puntos. La reformulación las deja «fuera», con su razón.
+
+**Qué responde:** la intención de voto **presidencial** en Bogotá, en cuatro formas: primera vuelta («¿votaría por X?»),
+segunda vuelta entre dos, «nunca votaría por X» y la probabilidad de votar.
+
+**Cómo estima:** con el método validado en el nivel 3 (`VOTO_SIMULADO_RESULTS.md`).
+- Luna elige de 1 a 5 de las 373 preguntas del lote 7, con las candidatas primero y la caché marcada; la estimación es el
+  promedio de su resultado real en Bogotá.
+- La pregunta se ancla a la encuesta más reciente: «En mayo de 2026: …».
+- **Rango:** ±7,1 puntos, el cuantil 80 % del error en la práctica.
+- **Segunda vuelta:** cada candidato se estima por separado, así que no tienen por qué sumar 100. Dice «Probablemente
+  gana X» solo si la diferencia pasa de 16 puntos; si no, «Reñida».
+
+**Qué muestra:**
+- la cifra y el rango de cada candidato, con la barra de rango (y la línea del 50 % en segunda vuelta);
+- el texto con el error medido: 3,7 puntos en 215 guardadas (6 a 7 en candidatos grandes), 30 de 32 segundas vueltas,
+  y 4,2 puntos contra la Registraduría, con el ganador acertado en 3 de 3;
+- «En qué se apoya la estimación»: cada encuesta del CNC elegida, con su fecha en el texto, su resultado en Bogotá y su
+  fuente (Semana o Revista Cambio);
+- la banda «es una suposición, no una encuesta ni un pronóstico».
+
+**Qué no muestra:** el mapa queda apagado con su explicación («las encuestas del CNC solo traen el total de Bogotá»), sin
+leyenda, sin tabla por localidad y sin grupos.
+
+**Los resultados del lote 7 no están en GitHub:** viajan con el traslado. Si faltan, la página dice que no puede estimar
+la intención de voto.
+
+**Verificado:**
+- las 28 pruebas de `tests/test_consulta.py` (5 nuevas: voto con su rango y sus encuestas, segunda vuelta y su umbral,
+  voto mal formado, la versión 3 en la página y la página sin mapa), las 9 de `test_reformular.py` y las 4 de
+  `test_banco_lote7.py`;
+- en el navegador, en modo simulado: primera y segunda vuelta, el mapa apagado, los grupos ocultos y sin errores en la
+  consola.
+- **Falta:** probarla con el modelo real.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

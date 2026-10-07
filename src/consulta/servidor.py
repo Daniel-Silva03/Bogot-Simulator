@@ -15,6 +15,7 @@ Rutas:
     POST /api/reformular   {"pregunta": "..."}                    → sugerencia (paso 1)
     POST /api/responder    {"codigo": "VS8"}                      → dato del catálogo
                            {"pregunta": "...", "escala": [5 etiquetas]} → puente
+                           {"voto": {"tipo", "candidatos", "reformulada"}} → intención de voto (DI-CO30)
 
 DECISIONES DE IMPLEMENTACIÓN
 ============================
@@ -118,6 +119,10 @@ def crear_servidor(motor: mo.Motor, pagina, puerto: int = PUERTO) -> ThreadingHT
                     elif self.path == "/api/responder":
                         if d.get("codigo"):
                             r = motor.responder_catalogo(str(d["codigo"]))
+                        elif isinstance(d.get("voto"), dict):                  # DI-CO30
+                            v = d["voto"]
+                            r = motor.responder_voto(str(v.get("tipo", "")), [str(x) for x in v.get("candidatos") or []][:2],
+                                                     str(v.get("reformulada", ""))[:300])
                         else:
                             r = motor.responder_nueva(str(d.get("pregunta", "")), [str(x) for x in d.get("escala") or []],
                                                       original=str(d.get("original") or "")[:500] or None)   # DI-CO28
