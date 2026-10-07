@@ -1692,6 +1692,14 @@ eligió los tres.
 **Estado:** **APPROVED** (Daniel, en conversación, 6 de octubre de 2026: «A sí, B sí, C sí» y, sobre el alcance de B,
 «los tres niveles»).
 
+**Actualización (7/10/2026): revisión jurídica aprobada.** Daniel informa que hizo la revisión jurídica con el equipo del
+CNC y que queda aprobado mostrar en la página la intención de voto, medida y simulada («ya hice la revision juridica con el
+equipo y queda aprobado para que quede subido en la pagina»). Se cumple así la condición 1. Antes, el nivel 3 se validó:
+- **contra las 215 guardadas del lote 7:** cumple la regla (`VOTO_SIMULADO_RESULTS.md`);
+- **contra la Registraduría:** 4,2 puntos de error en tres elecciones en Bogotá (`VOTO_REGISTRADURIA_RESULTS.md`).
+
+Cómo se lleva a la página va en `PAGINA_CONSULTA.md`.
+
 ---
 
 # 40. DECISIONES ABIERTAS
