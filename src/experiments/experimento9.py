@@ -893,9 +893,9 @@ def cliente_real(timeout: int = 90, extra: Optional[dict] = None, corte_cache: O
 
     def contenido(usuario: str):
         """DI-E11."""
-        if not corte_cache or corte_cache not in usuario:
+        i = usuario.find(corte_cache) if corte_cache else -1
+        if i <= 0:                      # sin marca, o al comienzo (el puente empieza así): no se parte
             return usuario
-        i = usuario.index(corte_cache)
         return [{"type": "text", "text": usuario[:i], "cache_control": {"type": "ephemeral"}},
                 {"type": "text", "text": usuario[i:]}]
 

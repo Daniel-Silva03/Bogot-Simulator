@@ -677,6 +677,17 @@ def test_el_corte_de_cache_parte_el_mensaje_y_marca_la_primera_parte():
     c = enviado["cuerpo"]["messages"][1]["content"]
     assert c[0] == {"type": "text", "text": "LISTA FIJA\n", "cache_control": {"type": "ephemeral"}}
     assert c[1] == {"type": "text", "text": "PREGUNTA nueva"} and r["uso"]["cached_tokens"] == 7
+    donante_llm._post = falso_post
+    os.environ["OPENROUTER_API_KEY"] = "clave-de-prueba"
+    try:
+        e9.cliente_real(corte_cache="PREGUNTA")("m", "s", "PREGUNTA al comienzo", 0.0)     # como el puente
+    finally:
+        donante_llm._post = viejo_post
+        if vieja_clave is None:
+            os.environ.pop("OPENROUTER_API_KEY")
+        else:
+            os.environ["OPENROUTER_API_KEY"] = vieja_clave
+    assert enviado["cuerpo"]["messages"][1]["content"] == "PREGUNTA al comienzo"
 
 
 def test_todo_simulado_sobre_los_datos_reales():
