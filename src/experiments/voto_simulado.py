@@ -200,7 +200,7 @@ def main() -> int:
     if a.simulado:
         cache, llamar = e9.Cache(Path(tempfile.gettempdir()) / "bss_voto_simulado.json"), nb.cliente_simulado(prac)
     else:
-        cache, llamar = e9.Cache(CACHE), e9.cliente_real(timeout=300)
+        cache, llamar = e9.Cache(CACHE), e9.cliente_real(timeout=300, corte_cache="PREGUNTA NUEVA")    # DI-E11
     if a.prueba:
         antes = nb.gastado(cache)
         estimar(guar, prac, llamar, cache, False, solo=3)

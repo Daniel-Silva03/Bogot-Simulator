@@ -133,3 +133,18 @@ cifras de «con su encuesta» no se imprimieron. La regla y los umbrales no camb
 
 **El tope** sigue en USD 1,50, contando lo ya gastado. Antes de correr, tres llamadas de prueba con el orden nuevo, para
 medir el ahorro.
+
+## 10. Enmienda 2 (7/10/2026, antes de la corrida real): la caché con punto de corte
+
+**Las candidatas primero (enmienda 1) no bastaron.** Tres llamadas de prueba costaron lo mismo que antes, unos USD 0,0031.
+Por qué, medido con llamadas directas (unos USD 0,011, fuera de la caché local):
+- **Sin marca,** el proveedor guarda el mensaje entero y solo acierta si se repite idéntico (USD 0,00067).
+- **Con preguntas distintas al final,** no lee nada, y además cobra la escritura en caché.
+- **La variante «batch» de Luna** respondió 404: no se atiende por esta vía.
+
+**El arreglo** (`experimento9` DI-E11): el mensaje se parte en dos en «PREGUNTA NUEVA», y la primera parte, la lista fija
+de candidatas, lleva la marca de caché. Una llamada con otra pregunta leyó 22.534 tokens de la caché y costó USD 0,00065.
+- **El texto que recibe el modelo es el mismo de la enmienda 1:** no cambia nada del método.
+
+**El costo esperado** de la corrida «con su encuesta» (373 llamadas) baja a unos **USD 0,30 a 0,40**. Lo gastado hasta aquí,
+unos USD 0,024, cuenta dentro del tope de USD 1,50.

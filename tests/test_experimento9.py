@@ -649,7 +649,34 @@ def test_el_cliente_real_pide_el_costo_y_lee_el_modelo_servido():
     assert enviado["cuerpo"]["model"] == e9.MODELO and enviado["url"].startswith("https://openrouter.ai")
     assert r["texto"] == '{"media": 2.4}' and r["modelo_servido"] == "xiaomi/mimo-v2.6-pro"
     assert r["uso"] == {"prompt_tokens": 120, "completion_tokens": 800,
-                        "reasoning_tokens": 780, "costo_usd": 0.0021}
+                        "reasoning_tokens": 780, "cached_tokens": None, "costo_usd": 0.0021}
+    assert enviado["cuerpo"]["messages"][1]["content"] == "u"                  # sin corte, como siempre
+
+
+def test_el_corte_de_cache_parte_el_mensaje_y_marca_la_primera_parte():
+    """DI-E11."""
+    import os
+    from src.experiments import donante_llm
+    enviado = {}
+
+    def falso_post(url, cuerpo, cabeceras, timeout=90):
+        enviado.update(cuerpo=cuerpo)
+        return {"choices": [{"message": {"content": "{}"}}],
+                "usage": {"prompt_tokens": 9, "prompt_tokens_details": {"cached_tokens": 7}, "cost": 0.0001}}
+    viejo_post, vieja_clave = donante_llm._post, os.environ.get("OPENROUTER_API_KEY")
+    donante_llm._post = falso_post
+    os.environ["OPENROUTER_API_KEY"] = "clave-de-prueba"
+    try:
+        r = e9.cliente_real(corte_cache="PREGUNTA")("m", "s", "LISTA FIJA\nPREGUNTA nueva", 0.0)
+    finally:
+        donante_llm._post = viejo_post
+        if vieja_clave is None:
+            os.environ.pop("OPENROUTER_API_KEY")
+        else:
+            os.environ["OPENROUTER_API_KEY"] = vieja_clave
+    c = enviado["cuerpo"]["messages"][1]["content"]
+    assert c[0] == {"type": "text", "text": "LISTA FIJA\n", "cache_control": {"type": "ephemeral"}}
+    assert c[1] == {"type": "text", "text": "PREGUNTA nueva"} and r["uso"]["cached_tokens"] == 7
 
 
 def test_todo_simulado_sobre_los_datos_reales():

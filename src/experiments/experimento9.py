@@ -94,6 +94,13 @@ DI-E10. **`--max-llamadas N` corta después de N llamadas nuevas.** Sirve para
     un piloto que mide el costo real antes de comprometer las 240. Lo que el
     piloto responde queda en la caché y la corrida completa lo reutiliza: no
     se paga dos veces. `evaluar` se niega a correr con brazos incompletos.
+
+DI-E11. **`corte_cache` parte el mensaje en dos y marca la caché en el corte** (7/10, pedido por Daniel para bajar el
+    costo). Hecho, medido con Luna en OpenRouter: sin marca, la caché del proveedor guarda el mensaje entero y solo
+    acierta si se repite idéntico. Con `cache_control` al final de la primera parte, una llamada con otra pregunta
+    al final leyó 22.534 de 22.730 tokens de la caché y costó USD 0,00065 en vez de 0,0032. El texto que recibe el
+    modelo es el mismo, y la clave de la caché local también, así que lo ya guardado se reutiliza. Por defecto no se
+    parte nada.
 """
 
 from __future__ import annotations
@@ -875,7 +882,7 @@ def modelo_simulado(semilla: int = 0) -> Llamar:
     return llamar
 
 
-def cliente_real(timeout: int = 90, extra: Optional[dict] = None) -> Llamar:
+def cliente_real(timeout: int = 90, extra: Optional[dict] = None, corte_cache: Optional[str] = None) -> Llamar:
     """`timeout` por intento, en segundos (2/10: los modelos que razonan pueden tardar más de 90).
     `extra` se agrega al cuerpo de cada petición (5/10: `{"reasoning": {"enabled": False}}`)."""
     clave = (os.environ.get("OPENROUTER_API_KEY") or "").strip()
@@ -884,12 +891,20 @@ def cliente_real(timeout: int = 90, extra: Optional[dict] = None) -> Llamar:
     from src.experiments import donante_llm
     base = os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1").strip().rstrip("/")
 
+    def contenido(usuario: str):
+        """DI-E11."""
+        if not corte_cache or corte_cache not in usuario:
+            return usuario
+        i = usuario.index(corte_cache)
+        return [{"type": "text", "text": usuario[:i], "cache_control": {"type": "ephemeral"}},
+                {"type": "text", "text": usuario[i:]}]
+
     def llamar(modelo, sistema, usuario, temp):
         r = donante_llm._post(
             f"{base}/chat/completions",
             {"model": modelo, "temperature": temp, **(extra or {}),
              "messages": [{"role": "system", "content": sistema},
-                          {"role": "user", "content": usuario}],
+                          {"role": "user", "content": contenido(usuario)}],
              "usage": {"include": True}},                  # DI-E9: costo por llamada
             {"authorization": f"Bearer {clave}"}, timeout=timeout)
         if not r.get("choices"):
@@ -898,12 +913,14 @@ def cliente_real(timeout: int = 90, extra: Optional[dict] = None) -> Llamar:
             raise Experimento9Error(f"OpenRouter no devolvió respuesta: {json.dumps(r.get('error', r), ensure_ascii=False)[:500]}")
         uso = r.get("usage") or {}
         detalle = uso.get("completion_tokens_details") or {}
+        entrada = uso.get("prompt_tokens_details") or {}
         return {"texto": r["choices"][0]["message"].get("content") or "",
                 "modelo_servido": r.get("model"), "proveedor": r.get("provider"),
                 "id_respuesta": r.get("id"),
                 "uso": {"prompt_tokens": uso.get("prompt_tokens"),
                         "completion_tokens": uso.get("completion_tokens"),
                         "reasoning_tokens": detalle.get("reasoning_tokens"),
+                        "cached_tokens": entrada.get("cached_tokens"),                     # DI-E11
                         "costo_usd": uso.get("cost")}}
     return llamar
 
