@@ -204,6 +204,19 @@ SISTEMA_V2 = (
 )
 
 
+#: Versión 3 (enmienda 1 de REFORMULACION_VOTO, 7/10): la 2 mandaba «fuera» el resultado de una elección y las
+#: cifras, y ahí cayeron «¿va a ganar X?» y «¿cuántos votarían por X?». Solo cambian esas dos líneas.
+SISTEMA_V3 = SISTEMA_V2.replace(
+    "un candidato (tipo \"nunca\") o si piensa salir a votar (tipo \"participacion\"). ",
+    "un candidato (tipo \"nunca\") o si piensa salir a votar (tipo \"participacion\"). También es \"voto\" preguntar "
+    "cuánta gente o qué porcentaje votaría (o nunca votaría) por un candidato, y si un candidato «va a ganar» o "
+    "«ganaría»: se responde como intención de voto en Bogotá, y así se dice en \"reformulada\". ").replace(
+    "- \"fuera\": no se puede responder así: un dato o una cifra, el resultado nacional de una elección, consultas ",
+    "- \"fuera\": no se puede responder así: un dato o una cifra que no es intención de voto (población, precios, "
+    "resultados oficiales ya publicados), consultas ")
+assert SISTEMA_V3 != SISTEMA_V2 and SISTEMA_V3.count("También es") == 1
+
+
 def parsear_v2(texto: Optional[str], catalogo: dict[str, dict]) -> Optional[dict]:
     """La lectura de la versión 1, más el alcance «voto»: None si no cumple."""
     d = e9._json_de(texto)
@@ -226,8 +239,8 @@ def parsear_v2(texto: Optional[str], catalogo: dict[str, dict]) -> Optional[dict
 
 
 def reformular_v2(pregunta: str, catalogo: dict[str, dict], llamar: Llamar, cache: e9.Cache,
-                  modelo: str = MODELO) -> tuple[Optional[dict], str]:
-    texto, _ = e9.pedir(llamar, cache, modelo, TEMPERATURA, SISTEMA_V2, prompt(pregunta, catalogo), 0)
+                  modelo: str = MODELO, sistema: str = SISTEMA_V2) -> tuple[Optional[dict], str]:
+    texto, _ = e9.pedir(llamar, cache, modelo, TEMPERATURA, sistema, prompt(pregunta, catalogo), 0)
     return parsear_v2(texto, catalogo), texto
 
 
@@ -256,6 +269,30 @@ PRUEBA_VOTO = tuple(
         ("¿Por cuál partido van a votar para el Senado?", "fuera", None, None, None),
         ("¿Por quién votarían para el Concejo de Bogotá?", "fuera", None, None, None),
     ])
+
+
+#: Enmienda 1 §2: las 24 originales (con «¿va a ganar Abelardo?» como voto) y 16 electorales NUEVAS.
+PRUEBA_VOTO_V3 = tuple([x for x in PRUEBA_VOTO[:24]] + [
+    ("¿Cuánta gente en Bogotá votaría por Abelardo de la Espriella?", "voto", None, "primera", ["Abelardo de la Espriella"]),
+    ("¿Va a ganar Iván Cepeda la presidencia?", "voto", None, "primera", ["Iván Cepeda"]),
+    ("¿Qué porcentaje de bogotanos nunca votaría por Paloma Valencia?", "voto", None, "nunca", ["Paloma Valencia"]),
+    ("Entre Claudia López e Iván Cepeda, ¿quién ganaría una segunda vuelta en Bogotá?", "voto", None, "segunda",
+     ["Claudia López", "Iván Cepeda"]),
+    ("¿Ganaría Sergio Fajardo una segunda vuelta contra Abelardo de la Espriella?", "voto", None, "segunda",
+     ["Sergio Fajardo", "Abelardo de la Espriella"]),
+    ("¿Cuántos votarían por Miguel Uribe Londoño?", "voto", None, "primera", ["Miguel Uribe"]),
+    ("¿La gente de Bogotá piensa ir a votar para presidente?", "voto", None, "participacion", []),
+    ("¿Paloma Valencia tiene opciones de ganar en Bogotá?", "voto", None, "primera", ["Paloma Valencia"]),
+    ("¿Hay mucha gente que jamás votaría por Claudia López?", "voto", None, "nunca", ["Claudia López"]),
+    ("¿Quién gana si la segunda vuelta es Abelardo de la Espriella contra Paloma Valencia?", "voto", None, "segunda",
+     ["Abelardo de la Espriella", "Paloma Valencia"]),
+    ("¿Votarían los bogotanos por Roy Barreras?", "voto", None, "primera", ["Roy Barreras"]),
+    ("¿Cuántos bogotanos apoyarían a Sergio Fajardo para presidente?", "voto", None, "primera", ["Sergio Fajardo"]),
+    ("¿Quién ganará la Gran Consulta por Colombia?", "fuera", None, None, None),
+    ("¿Qué partido sacará más curules en la Cámara?", "fuera", None, None, None),
+    ("¿Cuántos votos sacó Petro en 2022?", "fuera", None, None, None),
+    ("¿Bogotá es de centro o de derecha?", "fuera", None, None, None),
+])
 
 
 def nombra(cands: list[str], esperado: str) -> bool:
@@ -297,22 +334,23 @@ def evaluar_voto(respuestas: list[Optional[dict]], prueba=PRUEBA_VOTO) -> dict:
     return {"criterios": crit, "pasa": all(c["se_cumple"] for c in crit.values())}
 
 
-def validar_voto() -> int:
-    """REFORMULACION_VOTO: las 40 con la versión 2 y el modelo de la página (Luna)."""
+def validar_voto(version: int = 2) -> int:
+    """REFORMULACION_VOTO: las 40 con la versión 2 (o la 3 y sus preguntas nuevas, enmienda 1) y Luna."""
     from src.consulta import motor as mo
+    sistema, prueba = (SISTEMA_V3, PRUEBA_VOTO_V3) if version == 3 else (SISTEMA_V2, PRUEBA_VOTO)
     catalogo = cargar_catalogo()
-    salida = SALIDA / "voto"
+    salida = SALIDA / ("voto_v3" if version == 3 else "voto")
     cache = e9.Cache(salida / "cache.json")
     llamar = e9.cliente_real()
     respuestas = []
     try:
-        for p, *_ in PRUEBA_VOTO:
-            respuestas.append(reformular_v2(p, catalogo, llamar, cache, mo.MODELO_PAGINA)[0])
+        for p, *_ in prueba:
+            respuestas.append(reformular_v2(p, catalogo, llamar, cache, mo.MODELO_PAGINA, sistema)[0])
     except e9.Experimento9Error as e:
         print(f"ERROR: {e}")
         return 1
-    v = evaluar_voto(respuestas)
-    for (p, a, _, _, cs), r in zip(PRUEBA_VOTO, respuestas):
+    v = evaluar_voto(respuestas, prueba)
+    for (p, a, _, _, cs), r in zip(prueba, respuestas):
         got = None if r is None else (r["alcance"], r.get("codigo"), r.get("tipo"), r.get("candidatos"))
         marca = "" if r and r["alcance"] == a else "   <-- distinto"
         print(f"{p[:70]:70} | esperado {a}{' ' + str(cs) if cs else ''} | obtuvo {got}{marca}")

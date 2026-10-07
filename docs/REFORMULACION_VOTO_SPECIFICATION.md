@@ -66,3 +66,22 @@ enmienda fechada y se valida con preguntas nuevas.
 - **Código:** `src/consulta/reformular.py` (`SISTEMA_V2`, `parsear_v2`, `PRUEBA_VOTO`, `evaluar_voto`, `--validar-voto`).
 - **Pruebas:** `tests/test_reformular.py`.
 - **Resultados:** `REFORMULACION_VOTO_RESULTS.md`.
+
+## 6. Enmienda 1 (7/10/2026, después de la primera validación): versión 3
+
+La versión 2 no cumplió R5: reconoció 11 de 13 preguntas de voto (`REFORMULACION_VOTO_RESULTS.md`). Las dos fallas vienen de
+la instrucción, que mandaba «fuera» el resultado de una elección y las cifras.
+
+**La versión 3 (`SISTEMA_V3`) cambia solo esas dos líneas:**
+- también es «voto» preguntar cuánta gente o qué porcentaje votaría, o nunca votaría, por un candidato;
+- también es «voto» preguntar si un candidato «va a ganar» o «ganaría». Se responde como intención de voto en Bogotá y así se
+  dice en la reformulada;
+- «fuera» queda para las cifras que no son intención de voto: población, precios, resultados oficiales ya publicados.
+
+**Se valida con preguntas nuevas, como pide §3** (`PRUEBA_VOTO_V3`):
+- **las 24 originales,** para ver que nada se rompa, con «¿va a ganar Abelardo?» como voto, que ahora sí corresponde;
+- **16 electorales nuevas:** 12 de voto, que incluyen las formas que fallaron («cuántos», «va a ganar», «qué porcentaje»), y 4
+  que deben quedar «fuera». Ninguna repite las 16 de la versión 2.
+
+**En total:** 8 del catálogo, 10 nuevas, 13 de voto y 9 «fuera». La regla (§3) no cambia. **Gasto:** unas 40 llamadas, ~USD
+0,04. Lo ya gastado (USD 0,037) cuenta dentro del tope de USD 0,15.
