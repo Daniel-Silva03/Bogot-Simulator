@@ -56,7 +56,7 @@ real.
 - **El ejemplo que motivó la prueba** (Cepeda contra De la Espriella, §1 del pre-registro) es un caso, no un patrón. En las
   32 segundas vueltas guardadas, darle más peso a lo reciente no acierta ninguna más.
 - **Promediar varias encuestas sí ayuda:** reduce el ruido de cada una, y eso pesa más que la cercanía en el tiempo.
-- **Queda lo que la página ya dice:** el «probablemente gana» se dice solo con más de 16 puntos de diferencia. En la
+- **Queda lo que la página ya dice:** el «probablemente gana» se dice solo con más de 16 puntos de diferencia. En las
   guardadas acertó 25 de 27 veces.
 
 ## 5. Un arreglo de la salida, sin efecto en el resultado
