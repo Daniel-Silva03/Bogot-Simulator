@@ -346,7 +346,8 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
   - **La intención de voto está en la página** (7/10, `PAGINA_CONSULTA.md` §5.22, DI-CO30). La reformulación v3 la reconoce
     sola (`REFORMULACION_VOTO_RESULTS.md`, 13 de 13). Muestra la estimación con ±7 puntos y las encuestas del CNC en que se
     apoya, sin mapa. Las consultas y la tendencia quedan fuera.
-  - **Siguiente:** probarla con el modelo real.
+  - ~~**Siguiente:** probarla con el modelo real.~~ **Probada con Luna (8/10):** Cepeda, 36 % (29–43 %), apoyado en sus dos
+    encuestas de 2026. De paso se corrigió un defecto de la caché del modo simulado (DI-CO31).
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

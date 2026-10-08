@@ -664,7 +664,11 @@ la intención de voto.
   `test_banco_lote7.py`;
 - en el navegador, en modo simulado: primera y segunda vuelta, el mapa apagado, los grupos ocultos y sin errores en la
   consola.
-- **Falta:** probarla con el modelo real.
+- ~~**Falta:** probarla con el modelo real.~~ **Con Luna (8/10):** «¿Cuántos bogotanos votarían por Iván Cepeda?» dio 36 %
+  (29–43 %), apoyado en las dos encuestas del CNC para Revista Cambio sobre Cepeda (30 % en enero de 2026 y 42 % en la de
+  2026 sin mes). Daniel: «muy buenos resultados».
+  - **Antes salió 2 %,** por un defecto de la caché: el modo simulado guardaba con el nombre de Luna. Se corrigió (DI-CO31).
+  - **Pendiente menor:** una encuesta aparece como «la encuesta de 2026» sin mes; el banco del lote 7 no lo trae.
 
 ## 6. Límites que la página dice
 
