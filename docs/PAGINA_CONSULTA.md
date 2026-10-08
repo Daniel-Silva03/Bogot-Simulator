@@ -752,6 +752,30 @@ su rango (±7,1).
 
 **Verificado:** las 30 pruebas de `tests/test_consulta.py`.
 
+## 5.27 Opciones de respuesta agrupadas y el gobierno que midió cada pregunta (8/10/2026, DI-CO36)
+
+**Lo pidió el jefe de Daniel:** poder leer, por ejemplo, la gestión del alcalde como «positiva o negativa».
+
+**Las opciones.** En una pregunta medida, «Cómo se reparte» tiene ahora un selector: las respuestas de la escala, o tres
+grupos con las mismas respuestas reales. Por ejemplo, en `GG3`:
+- **negativa:** muy mala o mala;
+- **neutral:** regular;
+- **positiva:** buena o muy buena.
+
+Los nombres «positiva» y «negativa» solo se usan si se sabe de qué lado está lo favorable (DI-CO18). Si no, como en la
+corrupción, se usan «lado bajo», «en el medio» y «lado alto». Las preguntas de dos respuestas no tienen selector.
+
+**El gobierno.** Ninguna pregunta de la EPC mide solo a Galán:
+- `GG3` (gestión del alcalde/sa) y `CV5` (2022-2023), y `GP1N_*` (2023), son del gobierno de Claudia López;
+- `MICE*` (2023-2024) mezcla los dos gobiernos.
+
+La página lo dice con un «Ojo», al reformular y en el resultado.
+
+**Lo que falta:** que la reformulación no mande «la gestión del alcalde Galán» a `GG3`. Eso cambia lo que ve el modelo:
+es la versión 5, con su pre-registro.
+
+**Verificado:** las 31 pruebas de `tests/test_consulta.py`. En el navegador, `GG3` con el selector y la nota, sin errores.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

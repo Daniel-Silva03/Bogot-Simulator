@@ -384,6 +384,19 @@ def test_el_simulado_nunca_guarda_con_el_nombre_de_un_modelo_real():
             m.responder_voto("primera", ["Iván Cepeda"], "¿x?")
         assert c.datos and all(v["modelo"] == e9.MODELO_SIMULADO for v in c.datos.values())
 
+def test_las_respuestas_se_agrupan_y_el_gobierno_dice_quien_era():
+    """DI-CO36."""
+    r = M.responder_catalogo("GG3")
+    assert [g["nombre"] for g in r["agrupada"]] == ["Negativa", "Neutral", "Positiva"]
+    assert sorted(i for g in r["agrupada"] for i in g["indices"]) == list(range(len(r["escala"])))
+    assert "Claudia López" in r["nota"] and "Galán" in r["nota"]
+    assert [g["nombre"] for g in mo.agrupar(M.catalogo["GG7"])] == ["Lado bajo", "En el medio", "Lado alto"]   # sin lado conocido
+    assert mo.agrupar(M.catalogo["AG1"]) is None and M.responder_catalogo("VS8")["nota"] is None
+    assert "mezcla los dos gobiernos" in mo.nota_gobierno("MICE1", [2023, 2024])
+    html = (Path(__file__).resolve().parents[1] / "src" / "consulta" / "pagina.html").read_text(encoding="utf-8")
+    assert "function reparto" in html and "data-vista" in html and ".filtro[data-f]" in html
+
+
 def test_una_segunda_vuelta_incompleta_dice_como_escribirla():
     """DI-CO35: no se reinterpreta, se explica."""
     m = mo.mensaje_voto_incompleto(json.dumps({"alcance": "voto", "tipo": "segunda", "candidatos": ["Iván Cepeda"],

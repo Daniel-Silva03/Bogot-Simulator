@@ -289,6 +289,16 @@ DI-CO35. **Cuando una pregunta de voto llega incompleta, la página dice cómo e
     y «¿Cepeda o De la Espriella?» como primera con dos. La lectura estricta (DI-RF2) las rechaza, y la página decía solo
     «No pude reformular esta pregunta». Quien insistía terminaba en la primera vuelta (36,6 %) y la comparaba con un
     resultado de segunda. Decisión: no se reinterpreta nada; el mensaje pide los dos candidatos con un ejemplo.
+
+DI-CO36. **Las opciones de respuesta se pueden agrupar, y las preguntas del gobierno dicen qué alcaldía midieron**
+    (8/10, a pedido del jefe de Daniel).
+    - **Agrupar:** en una pregunta medida, la página puede mostrar las mismas respuestas reales en tres grupos: negativa,
+      neutral y positiva (`agrupar`). Los nombres solo se ponen si se sabe de qué lado está lo favorable (DI-CO18). Si no,
+      se usan «lado bajo», «en el medio» y «lado alto». No cambia ningún dato.
+    - **El gobierno:** `GG3` y `CV5` (2022-2023) y `GP1N_*` (2023) son del gobierno de Claudia López. `MICE*` (2023-2024)
+      mezcla a López y a Galán. La página lo dice al lado de la pregunta (`nota_gobierno`). Hecho: ninguna pregunta de la
+      EPC mide solo a Galán.
+    - **Lo que ve el modelo no cambia todavía:** pasar la nota a la reformulación es la versión 5, con su validación.
 """
 
 from __future__ import annotations
@@ -486,6 +496,37 @@ def lado(f: dict) -> tuple[list, str]:
     return cods, f"{vis[sig]} o {vis[ext].lower()}"
 
 
+def agrupar(f: dict) -> Optional[list[dict]]:
+    """DI-CO36: las respuestas de la escala visible en tres grupos (abajo, medio, arriba), con su nombre. «Positiva» y
+    «Negativa» solo si se sabe de qué lado está lo favorable (DI-CO18); si no, «lado bajo» y «lado alto». None con menos
+    de tres respuestas."""
+    sus = [c for c in f["escala"] if not NO_SUSTANTIVA.search(str(f["etiquetas"][str(c)]))]
+    k = len(sus)
+    if k < 3:
+        return None
+    vis = escala_visible({**f, "escala": sus})
+    d = pu.direccion({**f, "escala": sus})
+    nombres = ({-1: ("Positiva", "Negativa"), 1: ("Negativa", "Positiva")}.get(d) or ("Lado bajo", "Lado alto"))
+    partes = [(nombres[0], [i for i in range(k) if i < (k - 1) / 2]),
+              ("Neutral" if d in (-1, 1) else "En el medio", [i for i in range(k) if i == (k - 1) / 2]),
+              (nombres[1], [i for i in range(k) if i > (k - 1) / 2])]
+    out = [{"nombre": n, "indices": ix, "etiquetas": [vis[i] for i in ix]} for n, ix in partes if ix]
+    return sorted(out, key=lambda g: {"Negativa": 0, "Lado bajo": 0, "Positiva": 2, "Lado alto": 2}.get(g["nombre"], 1))
+
+
+#: DI-CO36: qué gobierno midió cada pregunta sobre la Alcaldía (Claudia López, 2020-2023; Carlos Fernando Galán, 2024-).
+def nota_gobierno(codigo: str, anios: list[int]) -> Optional[str]:
+    if not (codigo in ("GG3", "CV5") or codigo.startswith(("GP1N_", "MICE"))):
+        return None
+    lopez, galan = [a for a in anios if a <= 2023], [a for a in anios if a >= 2024]
+    if lopez and galan:
+        return (f"Se midió en {_texto_anios(lopez)}, con la alcaldesa Claudia López, y en {_texto_anios(galan)}, con el "
+                f"alcalde Carlos Fernando Galán: mezcla los dos gobiernos.")
+    if lopez:
+        return f"Se midió en {_texto_anios(lopez)}, cuando la alcaldesa era Claudia López: no es sobre el gobierno de Galán."
+    return f"Se midió en {_texto_anios(galan)}, con el alcalde Carlos Fernando Galán."
+
+
 def vista(f: dict) -> dict:
     """DI-CO19: la pregunta como se muestra, sin las categorías que no son una opinión en su escala."""
     return {**f, "escala": [c for c in f["escala"] if not NO_SUSTANTIVA.search(str(f["etiquetas"][str(c)]))]}
@@ -635,6 +676,7 @@ class Motor:
         if r["alcance"] == "catalogo":
             f = self._vista[r["codigo"]]
             r["pregunta_catalogo"] = f["pregunta"].strip()
+            r["nota"] = nota_gobierno(r["codigo"], sorted(self.anios.get(r["codigo"], [2023])))   # DI-CO36
             r["escala"] = escala_visible(f)
         return r
 
@@ -685,6 +727,7 @@ class Motor:
                 "consultados": int(cubre.sum()),                                    # DI-CO9
                 "ciudad": ciudad,
                 "localidades": por_loc, "grupos": grupos, "anios": anios,
+                "nota": nota_gobierno(codigo, anios), "agrupada": agrupar(f),                  # DI-CO36
                 "encuestados_mediana_localidad": n_loc,
                 "fuente": (f"Dato medido en la EPC {_texto_anios(anios)}, reponderado por la población sintética; "
                            f"unas {n_loc} personas encuestadas por localidad.")}

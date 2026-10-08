@@ -779,6 +779,7 @@ function mostrarEntendida(r){
   const texto = r.alcance === 'catalogo' ? r.pregunta_catalogo : r.reformulada;
   s.innerHTML = `<div class="fila-ref"><span class="ceja">Así entendimos tu pregunta</span><span class="insignia ${ins[0]}">${ins[1]}</span></div>
     <p class="propuesta" id="entendida">${esc(texto)}</p>
+    ${r.nota ? `<p class="razon"><b>Ojo:</b> ${esc(r.nota)}</p>` : ''}
     ${r.escala ? `<div class="escala-lista" aria-label="Escala de respuesta">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>` : ''}
     ${r.alcance === 'nueva' ? `<div class="acciones"><button class="btn btn-fantasma" id="editar" aria-expanded="false" aria-controls="edicion">Editar y volver a suponer</button></div>
       <div class="oculto" id="edicion"><label for="editada" class="ceja">Edita la pregunta</label><textarea id="editada" class="editable">${esc(r.reformulada)}</textarea>
@@ -827,11 +828,14 @@ function mostrar(r){
         <p class="lead-t">respondería «${esc(r.ciudad.etiqueta_alto.toLowerCase())}»</p>
         ${fuera(r.ciudad) ? `<p class="nota">Sin contar al ${fuera(r.ciudad)} % que no respondió, no sabía o no tenía opinión: las cifras y el mapa son de quienes sí.</p>` : ''}
         <p class="nota">Consulté a ${fmt(r.consultados)} personas sintéticas${r.anios.length === 1 ? ` (las que heredan a alguien encuestado en ${r.anios[0]})` : ''}.</p>
+        ${r.nota ? `<p class="nota"><b>Ojo:</b> ${esc(r.nota)}</p>` : ''}
       </div>
       <div class="panel">
         <span class="ceja">Cómo se reparte</span>
-        <div class="dist" role="img" aria-label="Distribución de respuestas: ${r.escala.map((e,i) => `${esc(e)} ${pct(r.ciudad.distribucion[i])}`).join(', ')}">${r.ciudad.distribucion.map((d,i)=>`<div style="flex:${d};background:${color(i/(n-1))}"></div>`).join('')}</div>
-        <div class="dist-leyenda">${r.escala.map((e,i)=>`<i style="background:${color(i/(n-1))}" aria-hidden="true"></i><span>${esc(e)}</span><b>${pct(r.ciudad.distribucion[i])}</b>`).join('')}</div>
+        ${r.agrupada ? `<div class="filtros" role="group" aria-label="Opciones de respuesta">
+          <button class="filtro" data-vista="todas" aria-pressed="${estado.vista !== 'grupos'}">Las ${n} respuestas</button>
+          <button class="filtro" data-vista="grupos" aria-pressed="${estado.vista === 'grupos'}">${r.agrupada.map(g => esc(g.nombre)).join(' · ')}</button></div>` : ''}
+        <div id="reparto">${reparto(r)}</div>
       </div>
       <div class="panel">
         <span class="ceja">Las ${c.todas.length} localidades frente a la ciudad</span>
@@ -880,12 +884,28 @@ function mostrar(r){
       <p class="nota">Barras: qué tan más (claro) o menos (oscuro) favorable que el promedio de la ciudad suele responder cada grupo, en desviaciones estándar; la línea del centro es el promedio.</p>
       <p class="nota">${esc(r.fuente)}</p>`;
   }
-  el.querySelectorAll('.filtro').forEach(b => b.addEventListener('click', () => {
-    el.querySelectorAll('.filtro').forEach(x => x.setAttribute('aria-pressed', x === b));
+  el.querySelectorAll('.filtro[data-f]').forEach(b => b.addEventListener('click', () => {
+    el.querySelectorAll('.filtro[data-f]').forEach(x => x.setAttribute('aria-pressed', x === b));
     estado.filtro = b.dataset.f; pintar();
+  }));
+  /* DI-CO36: las mismas respuestas reales, en sus opciones o agrupadas */
+  el.querySelectorAll('.filtro[data-vista]').forEach(b => b.addEventListener('click', () => {
+    el.querySelectorAll('.filtro[data-vista]').forEach(x => x.setAttribute('aria-pressed', x === b));
+    estado.vista = b.dataset.vista; $('#reparto').innerHTML = reparto(r);
   }));
   titulosMapa(); pintar(); verResultado();
   [el, $('#lado'), gr].forEach(aparecer);
+}
+
+/* DI-CO36: el reparto de la ciudad, con las respuestas de la escala o agrupadas (negativa · neutral · positiva). */
+function reparto(r){
+  const n = r.escala.length, d = r.ciudad.distribucion;
+  const filas = estado.vista === 'grupos' && r.agrupada
+    ? r.agrupada.map(g => ({etq: `${g.nombre} (${g.etiquetas.map(e => e.toLowerCase()).join(' o ')})`,
+        v: g.indices.reduce((s, i) => s + d[i], 0), c: color(g.indices.reduce((s, i) => s + i, 0) / g.indices.length / (n-1))}))
+    : r.escala.map((e, i) => ({etq: e, v: d[i], c: color(i/(n-1))}));
+  return `<div class="dist" role="img" aria-label="Distribución de respuestas: ${filas.map(f => `${esc(f.etq)} ${pct(f.v)}`).join(', ')}">${filas.map(f => `<div style="flex:${f.v};background:${f.c}"></div>`).join('')}</div>
+    <div class="dist-leyenda">${filas.map(f => `<i style="background:${f.c}" aria-hidden="true"></i><span>${esc(f.etq)}</span><b>${pct(f.v)}</b>`).join('')}</div>`;
 }
 
 /* DI-CO30 (D21, con revisión jurídica): la intención de voto. La estimación de cada candidato
