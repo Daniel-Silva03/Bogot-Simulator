@@ -151,7 +151,8 @@ def test_una_pregunta_nueva_trae_la_estimacion_validada():
     def llamar(modelo, sistema, usuario, temp):
         vistos.append(modelo)
         return LLAMAR(modelo, sistema, usuario, temp)
-    m = mo.Motor(llamar, MODELO, donante=M.donante, agentes=M.agentes, catalogo=M.catalogo,
+    # un motor que se presenta como real (DI-CO31), con las respuestas del simulado y su caché temporal
+    m = mo.Motor(llamar, mo.MODELO_PAGINA, donante=M.donante, agentes=M.agentes, catalogo=M.catalogo,
                  cache=e9.Cache(Path(_tmp.name) / "est.json"))
     r = m.responder_nueva("¿Qué tan de acuerdo está con V?", ["a", "b", "c", "d", "e"])
     e = r["estimacion"]
@@ -359,6 +360,17 @@ def test_la_segunda_vuelta_estima_a_los_dos_y_solo_llama_con_mas_de_16_puntos():
     d = a["porcentaje"] - b["porcentaje"]
     assert (r["llamada"] == "Reñida") == (abs(d) <= mo.H2_VOTO)
 
+
+def test_el_simulado_nunca_guarda_con_el_nombre_de_un_modelo_real():
+    """DI-CO31: una prueba en --simulado no puede quedar como respuesta de Luna en la caché."""
+    with tempfile.TemporaryDirectory() as tmp:
+        c = e9.Cache(Path(tmp) / "c.json")
+        m = mo.Motor(LLAMAR, MODELO, donante=M.donante, anios=M.anios, agentes=M.agentes, cache=c)
+        assert m.modelo_est == e9.MODELO_SIMULADO
+        m.responder_nueva("¿Estaría de acuerdo con más ciclorrutas?", ["a", "b", "c", "d", "e"])
+        if _hay_voto():
+            m.responder_voto("primera", ["Iván Cepeda"], "¿x?")
+        assert c.datos and all(v["modelo"] == e9.MODELO_SIMULADO for v in c.datos.values())
 
 def test_un_voto_mal_formado_es_error():
     for t, c in [("consulta", ["X"]), ("segunda", ["X"]), ("primera", [])]:

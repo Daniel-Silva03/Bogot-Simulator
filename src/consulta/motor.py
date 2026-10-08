@@ -256,7 +256,15 @@ DI-CO30. **La intención de voto presidencial en Bogotá** (7/10, D21 con revisi
       «probablemente gana X» solo si la diferencia supera 16 puntos (h₂); si no, «Reñida».
     - **Lo que no se muestra:** mapa ni grupos, porque las encuestas solo traen el total de Bogotá. Las consultas y la
       tendencia no se responden: la reformulación las deja fuera.
-    Además, el cliente real marca la caché en «PREGUNTA NUEVA». En la estimación de opinión (orden de siempre) y en el
+    Además, el cliente real marca la caché en «PREGUNTA NUEVA».
+
+DI-CO31. **El simulado no escribe en la caché con el nombre de un modelo real** (8/10, defecto hallado al probar con Luna).
+    Hecho: la estimación (DI-CO22 y DI-CO30) pasaba siempre `MODELO_ESTIMACION`, también con el cliente simulado. Así, una
+    prueba en `--simulado` guardaba «las tres primeras candidatas» bajo la clave de Luna (antes, de Sonnet), y la página
+    real la reutilizaba. Así se vio con «¿Votaría por Iván Cepeda?»: dio 2 %, apoyado en Robledo, Ramírez y Barreras.
+    Decisión: con el cliente simulado, la estimación usa `e9.MODELO_SIMULADO`. Se borraron de `data/processed/consulta/
+    cache.json` las 8 entradas simuladas con nombre de modelo real (3 de Luna, todas de voto; 5 de Sonnet, ya en desuso),
+    con respaldo en `cache.json.bak-di-co31`. Ninguna estimación de opinión con Luna estaba afectada. En la estimación de opinión (orden de siempre) y en el
     puente esa marca está al comienzo, así que no se parte nada (DI-E11).
 """
 
@@ -511,6 +519,8 @@ class Motor:
         self.loc = self.agentes.cod_loc.to_numpy()
         self.grupos = _grupos(self.agentes)
         self.cache = cache if cache is not None else e9.Cache(CACHE)
+        # DI-CO31: con el cliente simulado, la estimación se guarda con el nombre del simulado, nunca con el de Luna
+        self.modelo_est = e9.MODELO_SIMULADO if modelo == e9.MODELO_SIMULADO else MODELO_ESTIMACION
         col = {c.upper(): c for c in self.donante.columns}
         self._x = {v: pd.to_numeric(self.donante[col[str(f["codigo"]).upper()]], errors="coerce").to_numpy(float)
                    for v, f in self.catalogo.items()}
@@ -639,7 +649,7 @@ class Motor:
         cols = ["id", "familia", "pregunta_pagina", "categorias", "codigos_favorables", "total"]
         t = pd.concat([nueva, c[cols]], ignore_index=True)
         try:
-            ids, _ = nb.elegir(t, 0, self.llamar, self.cache, MODELO_ESTIMACION, float("inf"))
+            ids, _ = nb.elegir(t, 0, self.llamar, self.cache, self.modelo_est, float("inf"))
         except (OSError, http.client.HTTPException) as e:                       # DI-CO24
             raise _servicio(e) from e
         except Exception as e:                                                  # noqa: BLE001 — se cae al texto de DI-CO20
@@ -690,7 +700,7 @@ class Motor:
                                  "anio": 2026, "variable": ""}])
             t = pd.concat([obj, pool], ignore_index=True)
             try:
-                ids, _ = nb.elegir(t, 0, self.llamar, self.cache, MODELO_ESTIMACION, float("inf"), orden="candidatas")
+                ids, _ = nb.elegir(t, 0, self.llamar, self.cache, self.modelo_est, float("inf"), orden="candidatas")
             except (OSError, http.client.HTTPException) as e:                   # DI-CO24
                 raise _servicio(e) from e
             if not ids:
