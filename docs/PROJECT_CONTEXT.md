@@ -1709,6 +1709,10 @@ Cómo se lleva a la página va en `PAGINA_CONSULTA.md`.
 Se muestra solo la intención de voto **simulada**, con su error medido y la banda de suposición. La medida aparece únicamente
 como apoyo de cada estimación.
 
+**Los grupos (8/10/2026).** Daniel confirma que la aprobación jurídica cubre también la intención de voto por sexo, edad y
+estrato («sí, la aprobación jurídica cubre los grupos»). Antes de mostrarlos se validan con su pre-registro
+(`VOTO_GRUPOS_SPECIFICATION.md`).
+
 ---
 
 # 40. DECISIONES ABIERTAS
