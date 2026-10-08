@@ -332,14 +332,18 @@ def _hay_voto():
     return True
 
 
-def test_la_reformulacion_de_la_pagina_es_la_version_4_y_reconoce_el_voto():
-    """DI-CO30 y DI-CO32."""
+def test_la_reformulacion_de_la_pagina_es_la_version_5_y_reconoce_el_voto():
+    """DI-CO30, DI-CO32 y DI-CO37."""
     vistos = []
-    m = mo.Motor(lambda mod, s, u, t: vistos.append(s) or LLAMAR(mod, s, u, t), MODELO, donante=M.donante, anios=M.anios,
-                 agentes=M.agentes, cache=e9.Cache(Path(_tmp.name) / "v4.json"))
+    mensajes = []
+    m = mo.Motor(lambda mod, s, u, t: vistos.append(s) or mensajes.append(u) or LLAMAR(mod, s, u, t), MODELO,
+                 donante=M.donante, anios=M.anios, agentes=M.agentes, cache=e9.Cache(Path(_tmp.name) / "v5.json"))
     m.reformular("¿Qué tan orgullosos se sienten de Bogotá?")
     from src.consulta import reformular as rf
-    assert vistos == [rf.SISTEMA_V4]
+    assert vistos == [rf.SISTEMA_V5]
+    gg3 = [l for l in mensajes[0].split("\n") if l.startswith("GG3 |")][0]
+    assert "[Se midió en 2022 y 2023, cuando la alcaldesa era Claudia López" in gg3                  # DI-CO37
+    assert "[" not in [l for l in mensajes[0].split("\n") if l.startswith("VS8 |")][0]
     r = M.reformular("¿Cuántos bogotanos votarían por Iván Cepeda?")
     assert r["alcance"] == "voto" and r["tipo"] == "primera" and r["candidatos"] == ["Iván Cepeda"] and r["escala"] is None
     assert M.reformular("¿La gente se siente segura caminando por su barrio?")["alcance"] == "catalogo"

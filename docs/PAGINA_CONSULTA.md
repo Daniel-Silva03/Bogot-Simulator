@@ -771,8 +771,9 @@ corrupción, se usan «lado bajo», «en el medio» y «lado alto». Las pregunt
 
 La página lo dice con un «Ojo», al reformular y en el resultado.
 
-**Lo que falta:** que la reformulación no mande «la gestión del alcalde Galán» a `GG3`. Eso cambia lo que ve el modelo:
-es la versión 5, con su pre-registro.
+~~**Lo que falta:** que la reformulación no mande «la gestión del alcalde Galán» a `GG3`. Eso cambia lo que ve el modelo:
+es la versión 5, con su pre-registro.~~ **Hecho** (8/10, DI-CO37, `REFORMULACION_GOBIERNO_RESULTS.md`, USD 0,065). La
+versión 5 pasó las 12 condiciones: las 4 preguntas de Galán son nuevas, y las 3 de Claudia López van a su código.
 
 **Verificado:** las 31 pruebas de `tests/test_consulta.py`. En el navegador, `GG3` con el selector y la nota, sin errores.
 

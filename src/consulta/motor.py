@@ -298,7 +298,13 @@ DI-CO36. **Las opciones de respuesta se pueden agrupar, y las preguntas del gobi
     - **El gobierno:** `GG3` y `CV5` (2022-2023) y `GP1N_*` (2023) son del gobierno de Claudia López. `MICE*` (2023-2024)
       mezcla a López y a Galán. La página lo dice al lado de la pregunta (`nota_gobierno`). Hecho: ninguna pregunta de la
       EPC mide solo a Galán.
-    - **Lo que ve el modelo no cambia todavía:** pasar la nota a la reformulación es la versión 5, con su validación.
+    - ~~**Lo que ve el modelo no cambia todavía:** pasar la nota a la reformulación es la versión 5, con su validación.~~
+      Ya pasó (DI-CO37).
+
+DI-CO37. **La reformulación pasa a la versión 5** (8/10, `REFORMULACION_GOBIERNO_RESULTS.md`). El catálogo que ve el
+    modelo lleva entre corchetes el gobierno que midió cada pregunta (`nota_gobierno`), y la instrucción dice que, si se
+    nombra a otro gobernante, la pregunta es nueva. Pasó su validación: 12 de 12 condiciones, con las 4 de Galán como
+    nuevas y las 3 de Claudia López en su código.
 """
 
 from __future__ import annotations
@@ -666,8 +672,10 @@ class Motor:
         if not pregunta or not pregunta.strip():
             raise ConsultaError("La pregunta está vacía.")
         try:
+            notas = {k: n for k in self.catalogo
+                     if (n := nota_gobierno(k, sorted(self.anios.get(k, [2023]))))}  # DI-CO37
             r, texto = rf.reformular_v2(pregunta[:500], self.catalogo, self.llamar, self.cache, self.modelo,
-                                        rf.SISTEMA_V4)                          # DI-CO30, DI-CO32
+                                        rf.SISTEMA_V5, notas)                   # DI-CO30, DI-CO32, DI-CO37
         except (OSError, http.client.HTTPException) as e:                       # DI-CO24
             raise _servicio(e) from e
         if r is None:
@@ -904,10 +912,10 @@ def cliente(simulado: bool = False):
     cods = list(cat)
 
     def llamar(modelo, sistema, usuario, temp):
-        if sistema in (rf.SISTEMA, rf.SISTEMA_V3, rf.SISTEMA_V4):
+        if sistema in (rf.SISTEMA, rf.SISTEMA_V3, rf.SISTEMA_V4, rf.SISTEMA_V5):
             preg = usuario.split("\n")[1]
             m = re.search(r"[Vv]ot\w* por ((?:[A-ZÁÉÍÓÚÑ][\wáéíóúñ]+ ?){2,4})", preg)       # DI-CO30: voto, sin gasto
-            if sistema in (rf.SISTEMA_V3, rf.SISTEMA_V4) and m:
+            if sistema in (rf.SISTEMA_V3, rf.SISTEMA_V4, rf.SISTEMA_V5) and m:
                 x = m.group(1).strip()
                 return json.dumps({"alcance": "voto", "codigo": None, "tipo": "primera", "candidatos": [x],
                                    "reformulada": f"¿Votaría por {x} para presidente?", "razon": "simulado"})
