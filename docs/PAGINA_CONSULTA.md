@@ -683,6 +683,24 @@ la intención de voto.
     **Se probó y no pasó** (`VOTO_PESO_FECHA_RESULTS.md`): en general, el promedio simple se equivoca menos. La página no
     cambia.
 
+## 5.23 La reformulación pasa a la versión 4 (8/10/2026, DI-CO32)
+
+**El defecto.** La versión 3 mandaba a «nueva» «¿La gente se siente segura caminando por su barrio?», que la encuesta mide
+como `VS8`. La página estimaba con preguntas parecidas lo que ya estaba medido, y no mostraba el dato real con su mapa.
+
+**El arreglo.** La versión 4 agrega una frase a la instrucción: un matiz que no cambia lo medido sigue siendo del catálogo.
+
+**Su validación pre-registrada** (`REFORMULACION_MATIZ_RESULTS.md`, USD 0,052):
+- las 40 de la versión 3, todas bien, incluida la del barrio;
+- 7 de 8 preguntas nuevas con matiz, al catálogo con su código;
+- ninguna de 6 preguntas cercanas pero distintas, al catálogo. Ese es el error que más engaña.
+
+**Lo que sigue pasando:** el modelo es conservador con los matices. «¿Qué tan seguros se sienten cuando andan por las
+calles?» quedó como nueva, no como `VS10`. Así la página estima en vez de mostrar como medido algo que quizá no lo es.
+
+**Verificado:** las 29 pruebas de `tests/test_consulta.py`, que ahora comprueban que la página usa la versión 4, y las 11
+de `test_reformular.py`.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

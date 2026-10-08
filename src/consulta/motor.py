@@ -256,7 +256,8 @@ DI-CO30. **La intención de voto presidencial en Bogotá** (7/10, D21 con revisi
       «probablemente gana X» solo si la diferencia supera 16 puntos (h₂); si no, «Reñida».
     - **Lo que no se muestra:** mapa ni grupos, porque las encuestas solo traen el total de Bogotá. Las consultas y la
       tendencia no se responden: la reformulación las deja fuera.
-    Además, el cliente real marca la caché en «PREGUNTA NUEVA».
+    Además, el cliente real marca la caché en «PREGUNTA NUEVA». En la estimación de opinión (orden de siempre) y en el
+    puente esa marca está al comienzo, así que no se parte nada (DI-E11).
 
 DI-CO31. **El simulado no escribe en la caché con el nombre de un modelo real** (8/10, defecto hallado al probar con Luna).
     Hecho: la estimación (DI-CO22 y DI-CO30) pasaba siempre `MODELO_ESTIMACION`, también con el cliente simulado. Así, una
@@ -264,8 +265,12 @@ DI-CO31. **El simulado no escribe en la caché con el nombre de un modelo real**
     real la reutilizaba. Así se vio con «¿Votaría por Iván Cepeda?»: dio 2 %, apoyado en Robledo, Ramírez y Barreras.
     Decisión: con el cliente simulado, la estimación usa `e9.MODELO_SIMULADO`. Se borraron de `data/processed/consulta/
     cache.json` las 8 entradas simuladas con nombre de modelo real (3 de Luna, todas de voto; 5 de Sonnet, ya en desuso),
-    con respaldo en `cache.json.bak-di-co31`. Ninguna estimación de opinión con Luna estaba afectada. En la estimación de opinión (orden de siempre) y en el
-    puente esa marca está al comienzo, así que no se parte nada (DI-E11).
+    con respaldo en `cache.json.bak-di-co31`. Ninguna estimación de opinión con Luna estaba afectada.
+
+DI-CO32. **La reformulación pasa a la versión 4** (8/10, `REFORMULACION_MATIZ_RESULTS.md`). Hecho: la versión 3
+    mandaba a «nueva» «¿se siente segura caminando por su barrio?», que es VS8 con un matiz, y la página estimaba lo que
+    ya estaba medido. La 4 agrega una frase: un matiz que no cambia lo medido sigue siendo del catálogo. Pasó su
+    validación pre-registrada: las 40 de la versión 3, 7 de 8 con matiz, y ninguna de 6 cercanas al catálogo.
 """
 
 from __future__ import annotations
@@ -573,7 +578,7 @@ class Motor:
             raise ConsultaError("La pregunta está vacía.")
         try:
             r, _ = rf.reformular_v2(pregunta[:500], self.catalogo, self.llamar, self.cache, self.modelo,
-                                    rf.SISTEMA_V3)                              # DI-CO30
+                                    rf.SISTEMA_V4)                              # DI-CO30, DI-CO32
         except (OSError, http.client.HTTPException) as e:                       # DI-CO24
             raise _servicio(e) from e
         if r is None:
@@ -793,10 +798,10 @@ def cliente(simulado: bool = False):
     cods = list(cat)
 
     def llamar(modelo, sistema, usuario, temp):
-        if sistema in (rf.SISTEMA, rf.SISTEMA_V3):
+        if sistema in (rf.SISTEMA, rf.SISTEMA_V3, rf.SISTEMA_V4):
             preg = usuario.split("\n")[1]
             m = re.search(r"[Vv]ot\w* por ((?:[A-ZÁÉÍÓÚÑ][\wáéíóúñ]+ ?){2,4})", preg)       # DI-CO30: voto, sin gasto
-            if sistema == rf.SISTEMA_V3 and m:
+            if sistema in (rf.SISTEMA_V3, rf.SISTEMA_V4) and m:
                 x = m.group(1).strip()
                 return json.dumps({"alcance": "voto", "codigo": None, "tipo": "primera", "candidatos": [x],
                                    "reformulada": f"¿Votaría por {x} para presidente?", "razon": "simulado"})

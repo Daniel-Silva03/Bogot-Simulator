@@ -331,7 +331,14 @@ def _hay_voto():
     return True
 
 
-def test_la_reformulacion_de_la_pagina_es_la_version_3_y_reconoce_el_voto():
+def test_la_reformulacion_de_la_pagina_es_la_version_4_y_reconoce_el_voto():
+    """DI-CO30 y DI-CO32."""
+    vistos = []
+    m = mo.Motor(lambda mod, s, u, t: vistos.append(s) or LLAMAR(mod, s, u, t), MODELO, donante=M.donante, anios=M.anios,
+                 agentes=M.agentes, cache=e9.Cache(Path(_tmp.name) / "v4.json"))
+    m.reformular("¿Qué tan orgullosos se sienten de Bogotá?")
+    from src.consulta import reformular as rf
+    assert vistos == [rf.SISTEMA_V4]
     r = M.reformular("¿Cuántos bogotanos votarían por Iván Cepeda?")
     assert r["alcance"] == "voto" and r["tipo"] == "primera" and r["candidatos"] == ["Iván Cepeda"] and r["escala"] is None
     assert M.reformular("¿La gente se siente segura caminando por su barrio?")["alcance"] == "catalogo"
