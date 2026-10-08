@@ -348,8 +348,9 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     apoya, sin mapa. Las consultas y la tendencia quedan fuera.
   - ~~**Siguiente:** probarla con el modelo real.~~ **Probada con Luna (8/10):** Cepeda, 36 % (29–43 %), apoyado en sus dos
     encuestas de 2026. De paso se corrigió un defecto de la caché del modo simulado (DI-CO31).
-  - **Pre-registrado (8/10): el peso por fecha** (`VOTO_PESO_FECHA_SPECIFICATION.md`). La estimación pesaría más las
-    encuestas cercanas en el tiempo, con las mismas elecciones de Luna. No tiene gasto.
+  - **El peso por fecha no pasó (8/10, `VOTO_PESO_FECHA_RESULTS.md`, USD 0).** La práctica eligió τ = ∞, el promedio
+    simple, así que la página sigue igual. En las guardadas, ninguna τ finita mejora (4,0 contra 3,7) ni acierta más
+    segundas vueltas (30 de 32).
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

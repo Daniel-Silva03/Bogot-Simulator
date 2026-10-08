@@ -153,7 +153,7 @@ def evaluar() -> dict:
         x = prac.merge(pp[t], on="id")
         eam_p[t] = float((x.S - x.total).abs().mean())
     tau = elegir_tau(eam_p)
-    out = {"eam_practica": {str(t): v for t, v in eam_p.items()}, "tau": tau}
+    out = {"eam_practica": {str(t): v for t, v in eam_p.items()}, "tau_elegida": tau}   # no «tau»: lo usan las medidas
     for nombre, t in (("tau", tau), ("inf", math.inf)):
         x = prac.merge(pp[t], on="id")
         h = float(np.quantile((x.S - x.total).abs(), 0.8))
@@ -200,7 +200,7 @@ def main() -> int:
               f"{sum(len(v) for v in r['registraduria'].values())} candidatos de la Registraduría")
         return 0
     out = evaluar()
-    print("EAM en la práctica por τ:", {k: round(v, 2) for k, v in out["eam_practica"].items()}, "→ τ* =", out["tau"])
+    print("EAM en la práctica por τ:", {k: round(v, 2) for k, v in out["eam_practica"].items()}, "→ τ* =", out["tau_elegida"])
     for n in ("tau", "inf"):
         m = out[n]
         print(f"  {n:4}: h {m['h']:.1f} h2 {m['h2']:.1f} | EAM {m['eam']:.2f} (2021-22 {m['eam_2021_2022']:.2f}, "

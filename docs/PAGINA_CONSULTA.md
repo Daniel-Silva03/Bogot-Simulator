@@ -680,6 +680,8 @@ la intención de voto.
     47,8 contra 43,5, mucho más cerrada, y el «probablemente gana» (16,5 puntos, apenas sobre el umbral de 16) lo sostienen
     las más viejas. Darle más peso a la más reciente es un cambio de método. Antes de llevarlo a la página habría que
     pre-registrarlo y validarlo contra las 215 guardadas y la Registraduría.
+    **Se probó y no pasó** (`VOTO_PESO_FECHA_RESULTS.md`): en general, el promedio simple se equivoca menos. La página no
+    cambia.
 
 ## 6. Límites que la página dice
 
