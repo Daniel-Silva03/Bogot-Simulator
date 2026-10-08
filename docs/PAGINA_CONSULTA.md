@@ -716,6 +716,24 @@ estrecho cuando las elegidas coinciden no se sostuvo: esa coincidencia no predic
 
 **Verificado:** las 29 pruebas de `tests/test_consulta.py` y las 7 de `test_rango_variable.py`.
 
+## 5.25 La intención de voto por edad (8/10/2026, D21, DI-CO34)
+
+**Qué muestra:** bajo la estimación de voto, un panel «Por edad · estimación, ±9,5 puntos». Tiene una barra por candidato
+para 18 a 24 años, 25 a 54 y 55 o más. La nota dice el error medido, que 2021-2022 cortan la edad un año después, y que por
+sexo y por estrato no se muestra.
+
+**Por qué solo la edad** (`VOTO_GRUPOS_RESULTS.md`, pre-registrada, USD 0):
+- **edad:** se equivoca 4,8 puntos contra 6,2 de poner el total, y acierta el sentido entre jóvenes y mayores en 66 de 71;
+- **estrato:** acierta el sentido en 96 %, pero no bajó el error lo suficiente (0,93 contra 0,9);
+- **sexo:** no aporta.
+
+**Cómo se calcula:** con las mismas preguntas que eligió Luna para el total, la media de cada grupo de edad. No hay
+llamadas nuevas.
+
+**Verificado:**
+- las 29 pruebas de `tests/test_consulta.py`, con la edad, su rango y el texto;
+- la página, en simulado y con Luna: sin errores en la consola ni scroll horizontal. Daniel la revisó y la aprobó.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

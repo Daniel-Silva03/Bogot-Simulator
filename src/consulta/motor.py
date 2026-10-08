@@ -277,6 +277,12 @@ DI-CO33. **El rango de la estimación depende de cuántas preguntas eligió Luna
     acierta 12, con una cobertura del 79 %. Decisión: ±23,9 con una elegida, ±22,9 con dos y ±21,7 con tres o más, el
     cuantil 80 % del error de cada grupo en la práctica de Luna. La estimación no cambia.
     Lo que no sirvió: que las elegidas coincidan entre sí no predice el error (Spearman 0,00 en la práctica).
+
+DI-CO34. **La intención de voto por edad** (8/10, `VOTO_GRUPOS_RESULTS.md`; D21 cubre los grupos). Hecho: con las
+    mismas elegidas, la edad se equivoca 4,8 puntos contra 6,2 de poner el total, y acierta el sentido entre jóvenes y
+    mayores en 66 de 71. Sexo y estrato no pasaron R1 y no se muestran. Decisión: cada estimación de voto trae tres
+    grupos de edad (DI-VG1) con ±9,5; la página los rotula con los cortes de 2026 y dice que 2021-2022 cortan un año
+    después. El banco de edad sale de los resultados locales del lote 7, como el total.
 """
 
 from __future__ import annotations
@@ -357,6 +363,14 @@ VOTO_TEXTO = ("Sale de lo que respondieron de verdad los encuestados de Bogotá 
               "preguntas guardadas se equivocó en promedio 3,7 puntos (unos 6 a 7 en candidatos con más del 15 %) y acertó "
               "quién iba adelante en 30 de 32 segundas vueltas. Contra los resultados de la Registraduría en Bogotá (2022 y "
               "2026), se equivocó 4,2 puntos y acertó al ganador en las tres elecciones.")
+#: DI-CO34: la intención de voto por edad (VOTO_GRUPOS). Sexo y estrato no pasaron su prueba y no se muestran.
+H_VOTO_EDAD = 9.5                # cuantil 80 % del error por grupo de edad en la práctica del lote 7
+VOTO_EDAD = {"joven": "18 a 24 años", "media": "25 a 54 años", "mayor": "55 años o más"}
+VOTO_EDAD_TEXTO = ("Por edad, cada cifra sale de lo que respondió ese grupo de edad en las mismas encuestas. En una prueba "
+                   "con 215 preguntas guardadas se equivocó en promedio 4,8 puntos, y acertó de qué lado iba la diferencia "
+                   "entre jóvenes y mayores en 66 de 71 casos. Las encuestas de 2021 y 2022 cortan la edad un año después "
+                   "(18 a 25, 56 o más). Por sexo y por estrato no se muestra: en la prueba no dijeron más que el total "
+                   "de Bogotá.")
 VOTO_SIN_MAPA = "La intención de voto no se muestra por localidad: las encuestas del CNC solo traen el total de Bogotá."
 VOTO_FUENTES = {"CNC para Semana": "Encuesta del CNC para Semana", "CNC para Revista Cambio": "Encuesta del CNC para Revista Cambio"}
 #: DI-CO14: el rótulo y la explicación del tono general por grupo.
@@ -687,6 +701,11 @@ class Motor:
             try:
                 from src.experiments import voto_registraduria as vr
                 self._voto = vr.preguntas()
+                from src.experiments import banco_lote7 as b7
+                from src.experiments import voto_grupos as vg
+                from src.experiments import voto_simulado as vs
+                reales = {**json.loads(b7.REALES.read_text(encoding="utf-8")), **json.loads(vs.REALES_G7.read_text(encoding="utf-8"))}
+                self._voto_edad = {i: vg.gruesos(reales[i])["edad"] for i in self._voto.id}      # DI-CO34
             except FileNotFoundError as e:
                 raise ConsultaError("En este computador faltan los resultados de las encuestas electorales del CNC "
                                     "(se llevan con el traslado): no se puede estimar la intención de voto.") from e
@@ -721,7 +740,14 @@ class Motor:
                 return {"tipo": "invalida", "mensaje": "No pude estimar esta pregunta de voto. Prueba a escribirla de otra forma."}
             el = banco.set_index("id").loc[ids]
             pct = float(el.total.mean())
-            estim.append({"candidato": cand, "porcentaje": round(pct, 1),
+            edad = {}
+            for g in VOTO_EDAD:                                                  # DI-CO34, DI-VG3
+                v = [self._voto_edad[i][g][0] for i in ids if g in self._voto_edad[i]]
+                if v:
+                    m = float(np.mean(v))
+                    edad[g] = {"porcentaje": round(m, 1),
+                               "rango": [round(max(0.0, m - H_VOTO_EDAD), 1), round(min(100.0, m + H_VOTO_EDAD), 1)]}
+            estim.append({"candidato": cand, "porcentaje": round(pct, 1), "edad": edad,
                           "rango": [round(max(0.0, pct - H_VOTO), 1), round(min(100.0, pct + H_VOTO), 1)],
                           "preguntas": [{"pregunta": r.pregunta_pagina, "porcentaje": round(float(r.total), 1),
                                          "fuente": VOTO_FUENTES.get(r.fuente, r.fuente)} for r in el.itertuples()]})
@@ -733,7 +759,8 @@ class Motor:
         n = len({p["pregunta"] for e in estim for p in e["preguntas"]})
         return {"tipo": "voto", "subtipo": tipo, "suposicion": True, "aviso": AVISO_VOTO, "pregunta": pregunta.strip(),
                 "estimaciones": estim, "llamada": llamada, "rango_puntos": H_VOTO, "fecha_datos": FECHA_VOTO,
-                "texto": VOTO_TEXTO.format(n=n), "sin_mapa": VOTO_SIN_MAPA}
+                "texto": VOTO_TEXTO.format(n=n), "sin_mapa": VOTO_SIN_MAPA,
+                "edad_grupos": VOTO_EDAD, "edad_texto": VOTO_EDAD_TEXTO, "edad_rango": H_VOTO_EDAD}
 
     def responder_nueva(self, pregunta: str, escala: list[str], original: Optional[str] = None) -> dict:
         """`original`: lo que escribió la persona; si viene, la estimación se hace con él (DI-CO28)."""

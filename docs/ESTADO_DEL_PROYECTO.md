@@ -359,7 +359,8 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
   - **La intención de voto por grupos (8/10, `VOTO_GRUPOS_RESULTS.md`, USD 0): pasa solo la edad.** Error 4,8 contra 6,2
     del total, y el sentido acertado en 93 %. El estrato acierta el sentido en 96 %, pero no baja el error lo suficiente
     (0,93 contra 0,9), y el sexo no aporta.
-    - **Siguiente:** el diseño de la edad en la página, para que Daniel lo revise antes de publicarlo.
+    - ~~**Siguiente:** el diseño de la edad en la página.~~ **En la página** (8/10, `PAGINA_CONSULTA.md` §5.25, DI-CO34),
+      revisada por Daniel.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).

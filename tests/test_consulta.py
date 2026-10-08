@@ -357,6 +357,10 @@ def test_la_intencion_de_voto_trae_rango_encuestas_y_aviso_sin_mapa():
     assert abs(e["rango"][1] - e["rango"][0] - 2 * mo.H_VOTO) < 0.2 or 0 in e["rango"] or 100 in e["rango"]
     assert all(q["pregunta"].startswith("En ") and q["fuente"].startswith("Encuesta del CNC") for q in e["preguntas"])
     assert "localidades" not in r and "grupos" not in r                         # solo el total de Bogotá
+    assert set(e["edad"]) <= set(mo.VOTO_EDAD) and e["edad"] and mo.H_VOTO_EDAD == 9.5          # DI-CO34
+    for g in e["edad"].values():
+        assert abs(g["rango"][1] - min(100, g["porcentaje"] + 9.5)) < 0.06
+    assert "estrato" in r["edad_texto"] and "sexo" in r["edad_texto"]                          # dice por qué no van
 
 
 def test_la_segunda_vuelta_estima_a_los_dos_y_solo_llama_con_mas_de_16_puntos():
@@ -394,6 +398,7 @@ def test_la_pagina_muestra_el_voto_sin_mapa():
     assert "r.alcance === 'voto'" in html and "Intención de voto · estimación" in html and "function mostrarVoto" in html
     assert "estado.modo === 'nueva' || estado.modo === 'voto'" in html                # mapa apagado
     assert "encuestas del CNC y su resultado real en Bogotá" in html
+    assert "function edadVoto" in html and "${edadVoto(r)}" in html                              # DI-CO34
 
 
 # --- servidor y página -------------------------------------------------------------

@@ -912,10 +912,22 @@ function mostrarVoto(el, r){
         ${seg ? `<p class="nota">Se estima a cada candidato por separado, así que los dos no tienen por qué sumar 100 %. Solo se dice quién «probablemente gana» si la diferencia pasa de 16 puntos.</p>` : ''}
         <p class="nota">${esc(r.texto)}</p>
       </div></div>
+    ${edadVoto(r)}
     <div class="apoyo"><span class="ceja">En qué se apoya la estimación · encuestas del CNC y su resultado real en Bogotá</span>
       <div class="apoyo-rejilla">${apoyo.map(q => `<div class="dato-t"><span>${esc(q.pregunta)}</span>
         <b>${Math.round(q.porcentaje)} %</b><span class="nota">respondió «sí» en Bogotá · ${esc(q.fuente)}</span></div>`).join('')}</div></div>
     ${banda(r)}`;
+}
+
+/* DI-CO34: la intención de voto por edad, con su rango. Sexo y estrato no pasaron su prueba: el texto lo dice. */
+function edadVoto(r){
+  const con = r.estimaciones.filter(e => e.edad && Object.keys(e.edad).length);
+  if (!con.length) return '';
+  return `<div class="panel" style="margin-top:12px"><span class="ceja">Por edad · estimación, ±${String(r.edad_rango).replace('.', ',')} puntos</span>
+    <div class="grupos">${con.map(e => `<div class="grupo"><h4>${esc(VOTO_LEE[r.subtipo](e.candidato))}</h4>${Object.entries(r.edad_grupos)
+      .filter(([g]) => e.edad[g]).map(([g, nombre]) => { const x = e.edad[g]; return `
+      <div class="barra-g"><span>${esc(nombre)}</span><span class="pista" role="img" aria-label="${esc(nombre)}: ${Math.round(x.porcentaje)} %, entre ${Math.round(x.rango[0])} y ${Math.round(x.rango[1])} %"><i style="left:0;width:${x.porcentaje}%;background:var(--ceja)"></i></span><span class="v">${Math.round(x.porcentaje)} %</span></div>`; }).join('')}</div>`).join('')}</div>
+    <p class="nota">${esc(r.edad_texto)}</p></div>`;
 }
 
 /* D18 (DI-CO15): una pregunta relacionada se abre completa, como pregunta del catálogo */
