@@ -271,6 +271,12 @@ DI-CO32. **La reformulación pasa a la versión 4** (8/10, `REFORMULACION_MATIZ_
     mandaba a «nueva» «¿se siente segura caminando por su barrio?», que es VS8 con un matiz, y la página estimaba lo que
     ya estaba medido. La 4 agrega una frase: un matiz que no cambia lo medido sigue siendo del catálogo. Pasó su
     validación pre-registrada: las 40 de la versión 3, 7 de 8 con matiz, y ninguna de 6 cercanas al catálogo.
+
+DI-CO33. **El rango de la estimación depende de cuántas preguntas eligió Luna** (8/10, `RANGO_VARIABLE_RESULTS.md`).
+    Hecho: con el ±23,4 fijo, la página decidía en 11 de las 129 guardadas y acertaba 10. Con la forma F1 decide en 13 y
+    acierta 12, con una cobertura del 79 %. Decisión: ±23,9 con una elegida, ±22,9 con dos y ±21,7 con tres o más, el
+    cuantil 80 % del error de cada grupo en la práctica de Luna. La estimación no cambia.
+    Lo que no sirvió: que las elegidas coincidan entre sí no predice el error (Spearman 0,00 en la práctica).
 """
 
 from __future__ import annotations
@@ -322,12 +328,14 @@ RESPUESTA_NUEVA = {
 MODELO_PAGINA = "openai/gpt-6-luna"
 MODELO_ESTIMACION = "openai/gpt-6-luna"                    # DI-CO25 (D20); antes, anthropic/claude-sonnet-5.5
 #: DI-CO25: el rango de Luna, cuantil 80 % de su error en las 92 de práctica (NIVEL_ACUERDO_LUNA_RESULTS.md).
-H_ESTIMACION = 23.4
+H_ESTIMACION = 23.4                                         # DI-CO25: el fijo; queda como referencia
+#: DI-CO33: el rango según cuántas preguntas eligió Luna (RANGO_VARIABLE, forma F1), redondeado a un decimal.
+H_ESTIMACION_K = {1: 23.9, 2: 22.9, 3: 21.7}                 # 3 = tres o más
 LLAMADA_TITULO = {"sí": "Probablemente sí", "no": "Probablemente no", "dividida": "Dividida"}
 ESTIMACION_TEXTO = ("Es una estimación, no una medición: sale de lo que la gente respondió de verdad a {n} preguntas "
                     "parecidas que sí se midieron, que eligió un modelo de lenguaje (aparecen debajo, con su resultado). "
                     "En una prueba con 129 preguntas reales que no se habían usado para armarla, acertó si la mayoría "
-                    "estaba de acuerdo en el 71 % de los casos, y de las 11 veces que dijo «probablemente» acertó 10. "
+                    "estaba de acuerdo en el 71 % de los casos, y de las 13 veces que dijo «probablemente» acertó 12. "
                     "Esa prueba usó el texto original de cada encuesta, más claro que una pregunta escrita aquí: con la "
                     "tuya puede acertar algo menos.")   # DI-CO29
 ESTIMACION_DIVIDIDA = (" El rango cruza el 50 %: con lo que hay medido no se puede decir de qué lado queda la "
@@ -664,8 +672,9 @@ class Motor:
             return None
         elegidas = c.set_index("id").loc[ids]
         pct = float(elegidas.total.mean())
-        lo, hi = max(0.0, pct - H_ESTIMACION), min(100.0, pct + H_ESTIMACION)          # DI-CO25
-        llam = str(na.llamada(np.array([pct]), np.array([H_ESTIMACION]))[0])
+        h = H_ESTIMACION_K[min(len(ids), 3)]                                           # DI-CO33
+        lo, hi = max(0.0, pct - h), min(100.0, pct + h)
+        llam = str(na.llamada(np.array([pct]), np.array([h]))[0])
         return {"porcentaje": round(pct, 1), "rango": [round(lo, 1), round(hi, 1)], "llamada": llam,
                 "titulo": LLAMADA_TITULO[llam],
                 "texto": ESTIMACION_TEXTO.format(n=len(ids)) + (ESTIMACION_DIVIDIDA if llam == "dividida" else ""),

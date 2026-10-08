@@ -701,6 +701,21 @@ calles?» quedó como nueva, no como `VS10`. Así la página estima en vez de mo
 **Verificado:** las 29 pruebas de `tests/test_consulta.py`, que ahora comprueban que la página usa la versión 4, y las 11
 de `test_reformular.py`.
 
+## 5.24 El rango de la estimación depende de cuántas preguntas eligió Luna (8/10/2026, DI-CO33)
+
+**Antes:** ±23,4 fijo. **Ahora:** ±23,9 con una pregunta elegida, ±22,9 con dos y ±21,7 con tres o más.
+
+**Validado** en `RANGO_VARIABLE_RESULTS.md`, con pre-registro y sin gasto. En las 129 guardadas, la página decide en 13 en
+vez de 11 y acierta 12, con una cobertura del 79 %.
+
+**El texto de la estimación** cita ahora «de las 13 veces que dijo "probablemente" acertó 12». El 71 % del lado no
+cambia, porque la estimación es la misma.
+
+**Lo que no cambia:** la página sigue diciendo «dividida» en 9 de cada 10 preguntas nuevas. La idea de un rango más
+estrecho cuando las elegidas coinciden no se sostuvo: esa coincidencia no predice el error.
+
+**Verificado:** las 29 pruebas de `tests/test_consulta.py` y las 7 de `test_rango_variable.py`.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

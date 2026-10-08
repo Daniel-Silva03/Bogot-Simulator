@@ -145,7 +145,7 @@ def test_las_preguntas_relacionadas_traen_lo_que_la_gente_respondio():
 
 
 def test_una_pregunta_nueva_trae_la_estimacion_validada():
-    """DI-CO22, DI-CO25 y DI-CO29: Luna, las 139 candidatas y el rango fijo de ±23,4."""
+    """DI-CO22, DI-CO25, DI-CO29 y DI-CO33: Luna, las 139 candidatas y el rango según cuántas eligió."""
     vistos = []
 
     def llamar(modelo, sistema, usuario, temp):
@@ -161,10 +161,11 @@ def test_una_pregunta_nueva_trae_la_estimacion_validada():
     assert len(m._candidatas) == n and mo.MODELO_ESTIMACION in vistos
     assert m._candidatas.fuente_txt.notna().all() and m._candidatas.id.str.startswith('EDP25_').sum() == 17
     assert 0 <= e["rango"][0] <= e["porcentaje"] <= e["rango"][1] <= 100
-    assert mo.MODELO_ESTIMACION == "openai/gpt-6-luna" and mo.H_ESTIMACION == 23.4                 # DI-CO25
+    assert mo.MODELO_ESTIMACION == "openai/gpt-6-luna" and mo.H_ESTIMACION_K == {1: 23.9, 2: 22.9, 3: 21.7}   # DI-CO33
     assert mo.MODELO_PAGINA == "openai/gpt-6-luna"                                                 # DI-CO26
-    assert abs(e["rango"][1] - min(100, e["porcentaje"] + mo.H_ESTIMACION)) < 0.06 and e["preguntas"]
-    assert "71 %" in e["texto"] and "acertó 10" in e["texto"] and "texto original" in e["texto"]    # DI-CO29
+    h = mo.H_ESTIMACION_K[min(len(e["preguntas"]), 3)]
+    assert abs(e["rango"][1] - min(100, e["porcentaje"] + h)) < 0.06 and e["preguntas"]
+    assert "71 %" in e["texto"] and "acertó 12" in e["texto"] and "texto original" in e["texto"]    # DI-CO29
     lado = "sí" if e["rango"][0] > 50 else ("no" if e["rango"][1] < 50 else "dividida")
     assert e["llamada"] == lado and e["titulo"] == mo.LLAMADA_TITULO[lado] and "estimación, no una medición" in e["texto"]
     html = sv.construir_pagina(mo.informacion_general(M.agentes, M.donante), True)

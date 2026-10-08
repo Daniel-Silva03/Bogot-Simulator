@@ -353,8 +353,9 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     segundas vueltas (30 de 32).
   - **La reformulación pasa a la versión 4 (8/10, `REFORMULACION_MATIZ_RESULTS.md`, USD 0,052).** Reconoce una pregunta
     del catálogo dicha con un matiz («caminando por su barrio» → `VS8`) y no manda al catálogo las que son distintas.
-  - **Pre-registrado (8/10): el rango variable en la estimación de opinión** (`RANGO_VARIABLE_SPECIFICATION.md`, USD 0).
-    El rango dependería de cuánto coinciden las preguntas elegidas, en vez del ±23,4 fijo.
+  - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
+    eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
+    coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
 **Traslado a la oficina (1/10):** `docs/TRASLADO.md`; `requirements.txt` completo (faltaban scipy y
 openpyxl), `revisar_datos.py` revisa ya lo de la página, y `empacar_traslado.py` lleva lo que no
 va a GitHub (cachés, poblaciones; ~4 MB).
