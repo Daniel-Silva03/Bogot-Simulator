@@ -58,7 +58,8 @@ def test_la_tabla_con_los_diccionarios():
         return
     t = b7.tabla()
     assert t.id.is_unique and (t.ambito == "Bogotá").all() and t.tema.str.startswith("electoral").all()
-    assert t.pregunta_pagina.str.match(r"^En ").all() and not t.pregunta_pagina.str.contains(r"<|\(E:|por por|la Pacto", regex=True).any()
+    assert t.pregunta_pagina.str.match(r"^(En|A|Entre) ").all() and not t.pregunta_pagina.str.contains("la encuesta de 20").any()   # DI-BL19
+    assert t.pregunta_pagina.str.match(r"^[^:,]*20\d\d[,:]").all() and not t.pregunta_pagina.str.contains(r"<|\(E:|por por|la Pacto", regex=True).any()
     f1 = t[t.id.str.endswith("_votaria")]
     assert len(f1) == 7 and all(json.loads(x) == [1, 2] for x in f1.codigos_favorables)
 

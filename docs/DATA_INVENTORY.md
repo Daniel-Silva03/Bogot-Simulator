@@ -967,7 +967,7 @@ distinto.
 | CC355801 | Semana | feb 2021 | 2.283 | 384 | migración venezolana (afirmaciones de acuerdo) |
 | CC871401 | Semana | may 2021 | 2.001 | 256 | intención de voto presidencial 2022 y segundas vueltas; imagen de 50 personajes; paro nacional |
 | CC871801 | Semana | jun 2021 | 2.077 | 260 | intención de voto, segundas vueltas, imagen de personajes y funcionarios, el paro |
-| CC873501 | Semana | 2021-22 («Semana 11») | 4.093 | 411 | probabilidad de votar, intención de voto, segundas vueltas, expresidentes |
+| CC873501 | Semana | finales de 2021 («Semana 11»; DI-BL13, 8/10) | 4.093 | 411 | probabilidad de votar, intención de voto, segundas vueltas, expresidentes |
 | CC875701 | Semana | abr 2022 | 4.599 | 439 | intención de voto y segundas vueltas |
 | CC891901 | Revista Cambio | ene 2026 | 2.202 | 336 | probabilidad de votar, presidencial 2026, consultas del 8 de marzo |
 | CC892901 | Revista Cambio | 2026 | 3.684 | 545 | consultas interpartidistas, presidencial (base en CSV) |

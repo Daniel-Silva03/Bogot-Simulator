@@ -59,7 +59,7 @@ def test_la_tabla_con_los_diccionarios():
     t = b6.tabla()
     assert len(t) == 64 and t.familia.nunique() == 22 and t.id.is_unique
     assert not t.pregunta_pagina.str.contains(r"F8|REEMPLAZAR|\(E:|<|¿.*¿", regex=True).any()
-    assert set(t.anio) == {2021, 2022} and (t.ambito == "Bogotá").all()
+    assert set(t.anio) == {2021} and (t.ambito == "Bogotá").all()      # DI-BL13: CC873501, finales de 2021 (8/10)
     assert all(json.loads(f) in ([1], [1, 2]) for f in t.codigos_favorables)
 
 

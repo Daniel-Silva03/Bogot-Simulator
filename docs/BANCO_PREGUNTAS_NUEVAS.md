@@ -503,7 +503,12 @@ cosas del armado se declaran antes de sortear:
 - **Nueve textos van escritos a mano** (DI-BL14). Tres etiquetas del diccionario están cortadas y otras traen
   erratas; el sentido no cambia.
 - **El año de CC873501 es un supuesto, 2022** (DI-BL13). No trae fecha en ningún lado, y por su contenido es de
-  finales de 2021 o comienzos de 2022. **Confirmado por Daniel el 6/10: 2022.**
+  finales de 2021 o comienzos de 2022. ~~**Confirmado por Daniel el 6/10: 2022.**~~ **Corregido el 8/10: finales de 2021**
+  («corrige con finales del 2021»). El sorteo no cambia, porque va por familia. En `sorteo_lote6.csv` y `sorteo_lote7.csv`
+  solo cambian el año y el texto («A finales de 2021: …»). Las pruebas del lote 6 y del nivel 3 se corrieron con 2022.
+- **Los estudios de 2026 llevan su mes en el texto** (DI-BL19, corregido el 8/10). Antes decían «En la encuesta de 2026».
+  - **Leídos de la base:** CC893401, abril; CC893701, mayo.
+  - **Supuestos por el contenido:** CC892901, «a comienzos de 2026», y CC893201, «entre marzo y abril de 2026».
 
 **Sorteo.** Regla 3 de DI-BA5, por familia, con la semilla **20261010**: la mitad de las familias, redondeando hacia
 arriba, al guardado.

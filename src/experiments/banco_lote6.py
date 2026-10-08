@@ -19,8 +19,11 @@ DI-BL10. **El texto de la página sale de la etiqueta del diccionario**, sin el 
     instrucciones al encuestador y con la subpregunta dentro de la frase (`texto`).
 DI-BL11. **La edad va en los grupos de cada encuesta** (18-25, 26-40, 41-55, 56+), no en los de la
     población, y `cortes_edad` lo dice. ~~CC355801 no trae edad: va sin ese grupo.~~ Sí la trae (DI-BL16).
-DI-BL13. **El año de CC873501 es 2022.** Hecho: ni la base ni el diccionario traen fecha. ~~Supuesto, por el
-    contenido…~~ Daniel lo confirmó el 6/10 («El año de CC873501 es 2022»).
+DI-BL13. ~~**El año de CC873501 es 2022.**~~ **CC873501 es de finales de 2021.** Hecho: ni la base ni el diccionario
+    traen fecha. ~~Supuesto, por el contenido…~~ ~~Daniel lo confirmó el 6/10 («El año de CC873501 es 2022»).~~
+    Corrección (8/10): el contenido («en marzo del próximo año serán las consultas») la pone a finales de 2021, y Daniel lo
+    confirmó («corrige con finales del 2021»). Los lotes 6 y 7 y sus pruebas pre-registradas se corrieron con 2022; solo
+    cambian el año y el texto, no el sorteo (que va por familia) ni los resultados.
 DI-BL14. **Nueve textos van escritos a mano** (`TEXTO_MANUAL`). Hecho: en el diccionario, tres etiquetas de
     CC355801 están cortadas y terminan en un resto de formato («colF8», «F8.2»); otras traen dos signos de
     apertura («¿Dígame por favor ¿está…»), una errata («continué») o el nombre en mayúsculas. Se escriben
@@ -77,8 +80,8 @@ PREGUNTAS = {
     "CC873501": ("CC873501_SEMANA11_BaseCodigos.xlsx", "CC873501_SEMANA11_DiccionariodeDatos.xlsx",
                  [("P3", "si_no"), ("P4", "si_no"), ("P19", "aprueba"), ("P28", "acuerdo2"), ("P29", "acuerdo2"), ("P30", "acuerdo2")]),
 }
-#: DI-BL13: CC873501 no trae fecha ni en la base ni en el diccionario; Daniel confirmó 2022.
-ANIO_SUPUESTO = {"CC873501": 2022}
+#: DI-BL13: CC873501 no trae fecha ni en la base ni en el diccionario; finales de 2021 (corregido el 8/10).
+ANIO_SUPUESTO = {"CC873501": 2021}
 MIN_LOTE6 = 200                                                  # DI-BL15
 EDAD_RANGO = {"1": "18-34", "2": "35-54", "3": "55+"}                    # DI-BL16: CC355801; el 4 (NR) no entra
 EDAD = {"1": "18-25", "2": "26-40", "3": "41-55", "4": "56+"}

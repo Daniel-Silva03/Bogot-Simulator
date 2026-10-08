@@ -20,8 +20,15 @@ DI-BL17. **Una pregunta del banco por cada opción con nombre** (candidato, fór
     sola pregunta: favorable, «definitivamente» o «probablemente» sí.
 DI-BL18. **Las etiquetas de valor** salen de la sección «Valor/Etiqueta» del diccionario, en la hoja que la
     tenga: en los estudios de 2026 está en una segunda hoja (`Valores_variable`).
-DI-BL19. **La fecha del texto** sale del nombre del estudio («mayo de 2021») o, si no lo trae, solo el año.
+DI-BL19. **La fecha del texto** sale del nombre del estudio («mayo de 2021») ~~o, si no lo trae, solo el año~~.
     El texto empieza siempre por la fecha, porque la intención de voto depende del momento.
+    Corrección (8/10, a pedido de Daniel): «En la encuesta de 2026» no decía cuándo, y en la página se veía igual una
+    encuesta de febrero que una de mayo. Ahora cada estudio lleva su fecha (`voto_registraduria.FECHAS`, DI-VR1):
+    - **leídas de la base:** CC893401, abril de 2026; CC893701, mayo de 2026;
+    - **supuestas por el contenido:** CC892901, «a comienzos de 2026» (antes de las consultas del 8 de marzo);
+      CC893201, «entre marzo y abril de 2026» (ya hay fórmulas, antes de CC893401);
+    - **CC873501:** «a finales de 2021» (DI-BL13).
+    Las pruebas pre-registradas se corrieron con el texto anterior; el sorteo no cambia (va por familia).
 DI-BL21. **El factor de expansión del CSV (CC892901) viene con coma decimal** («1,23»). Hecho: leído como número
     salía vacío y las 31 preguntas de práctica quedaban con 0 respuestas válidas. Se cambia la coma por punto
     antes de convertirlo. Es un arreglo de lectura, no del diseño.
@@ -62,7 +69,7 @@ ESTUDIOS = {
     "CC871801": ("CC871801_SEM_JUN1621_BaseCodigos.xlsx", "CC871801_SEM_JUN1621_DiccionariodeDatos.xlsx",
                  "CNC para Semana", "junio de 2021", {"P2": "primera", **{v: "segunda" for v in _seg(3, 8)}}),
     "CC873501": ("CC873501_SEMANA11_BaseCodigos.xlsx", "CC873501_SEMANA11_DiccionariodeDatos.xlsx",
-                 "CNC para Semana", "2022", {"F1": "f1", "P5": "primera", **{v: "segunda" for v in _seg(6, 16)},
+                 "CNC para Semana", "A finales de 2021", {"F1": "f1", "P5": "primera", **{v: "segunda" for v in _seg(6, 16)},
                                              "P20": "consulta", "P25": "tendencia"}),
     "CC875701": ("CC875701_SEMANA_Abril2022_BaseCodigos.xlsx", "CC875701_SEMANA_Abril2022_DiccionariodeDatos.xlsx",
                  "CNC para Semana", "abril de 2022", {"F1": "f1", "P1": "primera_votantes", **{v: "segunda" for v in _seg(2, 5)}}),
@@ -71,14 +78,14 @@ ESTUDIOS = {
                                                               "P5": "consulta_pacto", **{v: "escenario" for v in _seg(6, 9)},
                                                               **{v: "segunda" for v in _seg(12, 19)}}),
     "CC892901": ("CC892901_BASE_REVISTA_CAMBIO.csv", "CC892901_DICCIONARIO_BASE_REVISTA_CAMBIO.xlsx",
-                 "CNC para Revista Cambio", "2026", {"F1": "f1_marzo", "P1": "precandidato", "P1_CONSULTA": "consulta",
+                 "CNC para Revista Cambio", "A comienzos de 2026", {"F1": "f1_marzo", "P1": "precandidato", "P1_CONSULTA": "consulta",
                                                      "P2": "primera", "P3": "nunca", **{v: "segunda" for v in _seg(5, 12)}}),
     "CC893201": ("CC893201_POLITICA_REVISTA_CAMBIO_CODIGOS.xlsx", "CC893201_DICCIONARIO_BASE_POLITICA_CAMBIO_RADICAL.xlsx",
-                 "CNC para Revista Cambio", "2026", {"F1": "f1", "P1": "formula", **{v: "segunda" for v in _seg(7, 14)}}),
+                 "CNC para Revista Cambio", "Entre marzo y abril de 2026", {"F1": "f1", "P1": "formula", **{v: "segunda" for v in _seg(7, 14)}}),
     "CC893401": ("CC893401_POLITICA_REVISTA_CAMBIO_CODIGOS.xlsx", "CC893401_DICCIONARIO_POLITICA_REVISTA_CAMBIO.xlsx",
-                 "CNC para Revista Cambio", "2026", {"F1": "f1", "P1": "formula", "P2": "nunca_formula", **{v: "segunda" for v in _seg(5, 12)}}),
+                 "CNC para Revista Cambio", "abril de 2026", {"F1": "f1", "P1": "formula", "P2": "nunca_formula", **{v: "segunda" for v in _seg(5, 12)}}),
     "CC893701": ("CC893701_BASE_POLITICA_REVISTA_CAMBIO_CODIGOS.xlsx", "CC893701_DICCIONARIO_BASE_POLITICA_REVISTA_CAMBIO.xlsx",
-                 "CNC para Revista Cambio", "2026", {"F1": "f1", "P1": "formula", "P2": "nunca_formula", **{v: "segunda" for v in _seg(5, 8)}}),
+                 "CNC para Revista Cambio", "mayo de 2026", {"F1": "f1", "P1": "formula", "P2": "nunca_formula", **{v: "segunda" for v in _seg(5, 8)}}),
 }
 EDAD4 = {"1": "18-25", "2": "26-40", "3": "41-55", "4": "56+"}
 EDAD5 = {"1": "18-24", "2": "25-34", "3": "35-44", "4": "45-54", "5": "55+"}
@@ -121,7 +128,7 @@ def limpia_opcion(s: str) -> str:
 
 
 def texto(tipo: str, fecha: str, op: str, ops: list[str]) -> str:
-    f = f"En {fecha}" if not fecha.isdigit() else f"En la encuesta de {fecha}"
+    f = fecha if fecha[:1].isupper() else f"En {fecha}"                   # DI-BL19: «A finales de 2021», «En mayo de 2026»
     return {
         "f1": f"{f}: si las elecciones presidenciales fueran el próximo domingo, ¿votaría (definitiva o probablemente)?",
         "f1_marzo": f"{f}: ¿votaría (definitiva o probablemente) en las elecciones de Congreso y las consultas del 8 de marzo?",

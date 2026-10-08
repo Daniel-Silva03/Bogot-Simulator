@@ -16,7 +16,7 @@ DECISIONES DE IMPLEMENTACIÓN
 DI-VR1. **El orden de las encuestas** (para «anteriores» y «la más reciente») es el de `FECHAS`. Hechos: las fechas de
     campo leídas de las bases (CC871401, CC871801, CC891901, CC893401 y CC893701) y los nombres de los archivos
     (CC875701, abril de 2022). Supuestos, por el contenido: CC873501 es de finales de 2021 («en marzo del próximo año
-    serán las consultas»); CC892901 es anterior al 8 de marzo de 2026, y CC893201 queda entre marzo y abril de 2026,
+    serán las consultas»; Daniel lo confirmó el 8/10); CC892901 es anterior al 8 de marzo de 2026, y CC893201 queda entre marzo y abril de 2026,
     antes de CC893401.
 DI-VR2. **Un nombre de opción nombra a un candidato** si trae su primer nombre y el primer apellido que no es partícula
     («de», «la», «del», «los»), sin tildes, mayúsculas ni puntuación. En 2022 el apellido sale de la columna
