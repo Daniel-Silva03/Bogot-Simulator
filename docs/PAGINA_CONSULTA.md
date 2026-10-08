@@ -670,6 +670,16 @@ la intención de voto.
   - **Antes salió 2 %,** por un defecto de la caché: el modo simulado guardaba con el nombre de Luna. Se corrigió (DI-CO31).
   - ~~**Pendiente menor:** una encuesta aparece como «la encuesta de 2026» sin mes; el banco del lote 7 no lo trae.~~
     Corregido (8/10, DI-BL19): cada estudio lleva su fecha. Esa era CC892901, «a comienzos de 2026».
+- **Las otras formas, con Luna (8/10, con las fechas nuevas):**
+  - **Primera vuelta,** Cepeda: 36,6 % (29,5–43,8). Ahora se apoya solo en la más reciente, la fórmula de mayo de 2026.
+  - **Segunda vuelta,** Cepeda contra De la Espriella: 53,6 % contra 37,1 %, «Probablemente gana Iván Cepeda». Se apoya en las
+    cinco encuestas de enero a mayo de 2026.
+  - **«Nunca votaría por Paloma Valencia»:** 13,1 % (6,0–20,2), con tres encuestas de 2026.
+  - **«¿Quién va a ganar la consulta de la izquierda?»:** fuera de alcance, con su razón. Es lo esperado.
+  - **Debilidad vista:** la estimación promedia por igual encuestas de enero y de mayo. En la segunda vuelta, la de mayo da
+    47,8 contra 43,5, mucho más cerrada, y el «probablemente gana» (16,5 puntos, apenas sobre el umbral de 16) lo sostienen
+    las más viejas. Darle más peso a la más reciente es un cambio de método. Antes de llevarlo a la página habría que
+    pre-registrarlo y validarlo contra las 215 guardadas y la Registraduría.
 
 ## 6. Límites que la página dice
 
