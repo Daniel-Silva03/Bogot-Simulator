@@ -734,6 +734,24 @@ llamadas nuevas.
 - las 29 pruebas de `tests/test_consulta.py`, con la edad, su rango y el texto;
 - la página, en simulado y con Luna: sin errores en la consola ni scroll horizontal. Daniel la revisó y la aprobó.
 
+## 5.26 Una pregunta de voto incompleta dice cómo escribirla (8/10/2026, DI-CO35)
+
+**Lo que se vio en la demo** con el jefe de Daniel: no logró preguntar por Cepeda en segunda vuelta.
+- «¿En una segunda vuelta, votaría por Iván Cepeda?» sale como segunda vuelta con un solo candidato.
+- «¿Cepeda o De la Espriella?» sale como primera vuelta con dos.
+
+La lectura estricta las rechaza, y la página solo decía «No pude reformular». Lo que sí respondía era la primera vuelta
+(36,6 %), que se comparó con un resultado de segunda (52 %).
+
+**Ahora** el mensaje pide los dos candidatos, con un ejemplo hecho con el candidato que se nombró. No se reinterpreta
+nada: la clasificación validada no cambia.
+
+**Para comparar con la Registraduría:** la segunda vuelta Cepeda contra De la Espriella da 53,6 % contra 37,1 %. Sobre los
+votos por los dos, como cuenta la Registraduría, son 59 % para Cepeda, unos 7 puntos por encima del 52 %, en el borde de
+su rango (±7,1).
+
+**Verificado:** las 30 pruebas de `tests/test_consulta.py`.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

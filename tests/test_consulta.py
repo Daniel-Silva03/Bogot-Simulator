@@ -384,6 +384,24 @@ def test_el_simulado_nunca_guarda_con_el_nombre_de_un_modelo_real():
             m.responder_voto("primera", ["Iván Cepeda"], "¿x?")
         assert c.datos and all(v["modelo"] == e9.MODELO_SIMULADO for v in c.datos.values())
 
+def test_una_segunda_vuelta_incompleta_dice_como_escribirla():
+    """DI-CO35: no se reinterpreta, se explica."""
+    m = mo.mensaje_voto_incompleto(json.dumps({"alcance": "voto", "tipo": "segunda", "candidatos": ["Iván Cepeda"],
+                                               "reformulada": "¿x?"}))
+    assert "nombra a los dos candidatos" in m and "entre Iván Cepeda y Abelardo de la Espriella" in m
+    m = mo.mensaje_voto_incompleto(json.dumps({"alcance": "voto", "tipo": "primera",
+                                               "candidatos": ["Iván Cepeda", "Abelardo de la Espriella"], "reformulada": "¿x?"}))
+    assert "segunda vuelta entre Iván Cepeda y Abelardo de la Espriella" in m and "votarían por Iván Cepeda" in m
+    assert mo.mensaje_voto_incompleto(json.dumps({"alcance": "nueva"})) is None and mo.mensaje_voto_incompleto("no es json") is None
+
+    def uno_solo(modelo, sistema, usuario, temp):
+        return json.dumps({"alcance": "voto", "tipo": "segunda", "candidatos": ["Iván Cepeda"], "reformulada": "¿x?"})
+    m2 = mo.Motor(uno_solo, MODELO, donante=M.donante, anios=M.anios, agentes=M.agentes,
+                  cache=e9.Cache(Path(_tmp.name) / "inc.json"))
+    r = m2.reformular("¿En una segunda vuelta, votaría usted por Iván Cepeda?")
+    assert r["alcance"] == "invalida" and "nombra a los dos candidatos" in r["mensaje"]
+
+
 def test_un_voto_mal_formado_es_error():
     for t, c in [("consulta", ["X"]), ("segunda", ["X"]), ("primera", [])]:
         try:

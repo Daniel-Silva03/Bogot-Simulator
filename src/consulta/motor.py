@@ -283,6 +283,12 @@ DI-CO34. **La intención de voto por edad** (8/10, `VOTO_GRUPOS_RESULTS.md`; D21
     mayores en 66 de 71. Sexo y estrato no pasaron R1 y no se muestran. Decisión: cada estimación de voto trae tres
     grupos de edad (DI-VG1) con ±9,5; la página los rotula con los cortes de 2026 y dice que 2021-2022 cortan un año
     después. El banco de edad sale de los resultados locales del lote 7, como el total.
+
+DI-CO35. **Cuando una pregunta de voto llega incompleta, la página dice cómo escribirla** (8/10, visto en la demo con el
+    jefe de Daniel). Hecho: «¿En una segunda vuelta, votaría por Iván Cepeda?» sale como segunda vuelta con un candidato,
+    y «¿Cepeda o De la Espriella?» como primera con dos. La lectura estricta (DI-RF2) las rechaza, y la página decía solo
+    «No pude reformular esta pregunta». Quien insistía terminaba en la primera vuelta (36,6 %) y la comparaba con un
+    resultado de segunda. Decisión: no se reinterpreta nada; el mensaje pide los dos candidatos con un ejemplo.
 """
 
 from __future__ import annotations
@@ -379,6 +385,26 @@ TONO_TEXTO = ("Es contexto, no una respuesta a esta pregunta: es igual para toda
               "responde cada grupo, en promedio, las {n} preguntas de la encuesta con un lado favorable claro. En "
               "las pruebas con preguntas reales que la encuesta no hizo, no sirvió para anticipar qué grupos "
               "estarían más de acuerdo.")
+
+
+def mensaje_voto_incompleto(texto: Optional[str]) -> Optional[str]:
+    """DI-CO35: si la reformulación reconoció voto pero no trae los candidatos que su tipo pide, qué decirle a la persona.
+    No repara nada (DI-RF2): solo explica cómo escribirla."""
+    d = e9._json_de(texto)
+    if not isinstance(d, dict) or str(d.get("alcance", "")).strip().lower() != "voto":
+        return None
+    cands = [str(c).strip() for c in (d.get("candidatos") or []) if str(c).strip()]
+    tipo = str(d.get("tipo") or "").strip().lower()
+    x = cands[0] if cands else "Iván Cepeda"
+    otro = "Abelardo de la Espriella" if "espriella" not in x.lower() else "Iván Cepeda"
+    if tipo == "segunda" and len(cands) < 2:
+        return (f"Para una segunda vuelta, nombra a los dos candidatos. Por ejemplo: «¿Quién ganaría en Bogotá una segunda "
+                f"vuelta entre {x} y {otro}?»")
+    if len(cands) >= 2:
+        return (f"Si es una segunda vuelta entre dos candidatos, dilo así: «¿Quién ganaría en Bogotá una segunda vuelta entre "
+                f"{cands[0]} y {cands[1]}?». Si es la primera vuelta, pregunta por uno: «¿Cuántos bogotanos votarían por "
+                f"{cands[0]}?»")
+    return None
 
 
 class ConsultaError(RuntimeError):
@@ -599,12 +625,13 @@ class Motor:
         if not pregunta or not pregunta.strip():
             raise ConsultaError("La pregunta está vacía.")
         try:
-            r, _ = rf.reformular_v2(pregunta[:500], self.catalogo, self.llamar, self.cache, self.modelo,
-                                    rf.SISTEMA_V4)                              # DI-CO30, DI-CO32
+            r, texto = rf.reformular_v2(pregunta[:500], self.catalogo, self.llamar, self.cache, self.modelo,
+                                        rf.SISTEMA_V4)                          # DI-CO30, DI-CO32
         except (OSError, http.client.HTTPException) as e:                       # DI-CO24
             raise _servicio(e) from e
         if r is None:
-            return {"alcance": "invalida", "mensaje": "No pude reformular esta pregunta. Prueba a escribirla de otra forma."}
+            return {"alcance": "invalida", "mensaje": mensaje_voto_incompleto(texto) or
+                    "No pude reformular esta pregunta. Prueba a escribirla de otra forma."}
         if r["alcance"] == "catalogo":
             f = self._vista[r["codigo"]]
             r["pregunta_catalogo"] = f["pregunta"].strip()

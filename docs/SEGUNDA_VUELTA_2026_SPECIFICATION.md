@@ -38,6 +38,12 @@ que usa lo que se sabía el 1 de junio con una regla ingenua, y se mide dónde d
   Daniel que las dos reglas de §4 predecirían ganadores distintos en varias
   localidades. Al calcularlas, **coinciden en las 20**. Por eso lo que decide (§6) no
   es contar ganadores por localidad, sino el margen y el ganador de la ciudad.
+- **Declaración del 8/10/2026, antes de correr la prueba:** en una demostración, el jefe de Daniel dijo que **Cepeda sacó
+  52 % en Bogotá** en la segunda vuelta. Así, el total de la ciudad se conoce antes de abrir el escrutinio.
+  - **Si es la proporción sobre los votos por los dos,** P1 («Abelardo gana Bogotá», Cepeda 47,3 %) ya está decidida y
+    falla. Se reportará así.
+  - **Por localidad, nada se sabe todavía.** P2 (el margen en las 20 localidades) sigue siendo una prueba.
+  - **La regla de §7 no cambia.**
 
 ---
 
