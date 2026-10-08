@@ -156,6 +156,31 @@ def test_la_regla_del_matiz():
     assert not rf.evaluar_matiz(dos_fallan)["criterios"]["R7"]["se_cumple"]
 
 
+def test_la_version_5_lleva_el_gobierno_y_su_prueba_es_la_del_documento():
+    """REFORMULACION_GOBIERNO §1 y §2."""
+    cat = rf.cargar_catalogo()
+    assert rf.prompt("¿x?", cat) == rf.prompt("¿x?", cat, None)                        # sin notas, el de siempre
+    u = rf.prompt("¿x?", cat, {"GG3": "Se midió en 2022 y 2023"})
+    assert "GG3 | ¿Usted cómo califica la gestión del alcalde/sa? [Se midió en 2022 y 2023] |" in u
+    assert rf.SISTEMA_V5.replace(" Algunas preguntas del catálogo dicen entre corchetes qué gobierno midieron: si la persona "
+                                 "nombra a otro gobernante, no es esa pregunta, es \"nueva\".", "") == rf.SISTEMA_V4
+    doc = (Path(__file__).resolve().parents[1] / "docs" / "REFORMULACION_GOBIERNO_SPECIFICATION.md").read_text(encoding="utf-8")
+    assert len(rf.PRUEBA_GOBIERNO) == 8
+    for p, _, c in rf.PRUEBA_GOBIERNO:
+        assert p in doc, p
+        assert c is None or (c in cat and f"`{c}`" in doc)
+
+
+def test_la_regla_del_gobierno():
+    perfecto = [{"alcance": a, "codigo": c} for _, a, c in rf.PRUEBA_GOBIERNO]
+    assert rf.evaluar_gobierno(perfecto)["pasa"]
+    galan_a_gg3 = list(perfecto)
+    galan_a_gg3[0] = {"alcance": "catalogo", "codigo": "GG3"}
+    assert not rf.evaluar_gobierno(galan_a_gg3)["criterios"]["R10"]["se_cumple"]
+    sin_concejo = perfecto[:-1] + [{"alcance": "nueva", "codigo": None}]
+    assert not rf.evaluar_gobierno(sin_concejo)["criterios"]["R12"]["se_cumple"]
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"Reformulación — {len(pruebas)} pruebas\n")

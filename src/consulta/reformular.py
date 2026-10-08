@@ -79,13 +79,15 @@ def cargar_catalogo(ruta: Path = CATALOGO) -> dict[str, dict]:
     return {c["variable"]: c for c in json.loads(ruta.read_text(encoding="utf-8"))["dentro"]}
 
 
-def _ficha(f: dict) -> str:
+def _ficha(f: dict, nota: Optional[str] = None) -> str:
     etq = "; ".join(f"{k}={v}" for k, v in f["etiquetas"].items() if int(k) in f["escala"])
-    return f'{f["variable"]} | {f["pregunta"]} | {etq}'
+    return f'{f["variable"]} | {f["pregunta"]}{f" [{nota}]" if nota else ""} | {etq}'
 
 
-def prompt(pregunta: str, catalogo: dict[str, dict]) -> str:
-    cat = "\n".join(_ficha(f) for f in catalogo.values())
+def prompt(pregunta: str, catalogo: dict[str, dict], notas: Optional[dict[str, str]] = None) -> str:
+    """`notas` (versión 5): el gobierno que midió cada pregunta, entre corchetes. Sin notas, el prompt de siempre."""
+    notas = notas or {}
+    cat = "\n".join(_ficha(f, notas.get(f["variable"])) for f in catalogo.values())
     return f"PREGUNTA DE LA PERSONA:\n{pregunta.strip()}\n\nCATÁLOGO:\n{cat}"
 
 
@@ -227,6 +229,14 @@ SISTEMA_V4 = SISTEMA_V3.replace(
     "el tema, el lugar o lo que se evalúa, es \"nueva\".\n")
 assert SISTEMA_V4 != SISTEMA_V3 and SISTEMA_V4.count("solo agrega un matiz") == 1
 
+#: Versión 5 (REFORMULACION_GOBIERNO, 8/10): la EPC no mide a Galán, y «la gestión del alcalde Galán» no puede ir a
+#: `GG3`, que es de Claudia López. El catálogo lleva el gobierno entre corchetes (`notas`) y se agrega una frase.
+SISTEMA_V5 = SISTEMA_V4.replace(
+    "Si cambia el tema, el lugar o lo que se evalúa, es \"nueva\".\n",
+    "Si cambia el tema, el lugar o lo que se evalúa, es \"nueva\". Algunas preguntas del catálogo dicen entre corchetes "
+    "qué gobierno midieron: si la persona nombra a otro gobernante, no es esa pregunta, es \"nueva\".\n")
+assert SISTEMA_V5 != SISTEMA_V4 and SISTEMA_V5.count("entre corchetes") == 1
+
 
 def parsear_v2(texto: Optional[str], catalogo: dict[str, dict]) -> Optional[dict]:
     """La lectura de la versión 1, más el alcance «voto»: None si no cumple."""
@@ -250,8 +260,9 @@ def parsear_v2(texto: Optional[str], catalogo: dict[str, dict]) -> Optional[dict
 
 
 def reformular_v2(pregunta: str, catalogo: dict[str, dict], llamar: Llamar, cache: e9.Cache,
-                  modelo: str = MODELO, sistema: str = SISTEMA_V2) -> tuple[Optional[dict], str]:
-    texto, _ = e9.pedir(llamar, cache, modelo, TEMPERATURA, sistema, prompt(pregunta, catalogo), 0)
+                  modelo: str = MODELO, sistema: str = SISTEMA_V2,
+                  notas: Optional[dict[str, str]] = None) -> tuple[Optional[dict], str]:
+    texto, _ = e9.pedir(llamar, cache, modelo, TEMPERATURA, sistema, prompt(pregunta, catalogo, notas), 0)
     return parsear_v2(texto, catalogo), texto
 
 
@@ -326,6 +337,48 @@ PRUEBA_MATIZ = (
 )
 
 
+#: REFORMULACION_GOBIERNO §2: 8 preguntas nuevas. Cuatro sobre Galán (deben ser «nuevas»: la EPC no lo mide), tres
+#: sobre Claudia López (deben ir a su código) y una de control sobre el Concejo.
+PRUEBA_GOBIERNO = (
+    ("¿Cómo califica la gente la gestión del alcalde Galán?", "nueva", None),
+    ("¿Aprueban los bogotanos la gestión de Carlos Fernando Galán?", "nueva", None),
+    ("¿Qué tan satisfechos están con cómo la alcaldía de Galán invierte la plata de la ciudad?", "nueva", None),
+    ("¿Cómo evalúan la gestión de Galán en seguridad?", "nueva", None),
+    ("¿Cómo calificaba la gente la gestión de la alcaldesa Claudia López?", "catalogo", "GG3"),
+    ("¿Qué tan satisfechos estaban con cómo la alcaldía de Claudia López invertía los recursos?", "catalogo", "CV5"),
+    ("¿Cómo evaluaron la gestión de Claudia López en seguridad en su último año?", "catalogo", "GP1N_8"),
+    ("¿Cómo califican la gestión del Concejo de Bogotá?", "catalogo", "CC5A"),
+)
+
+
+def evaluar_gobierno(respuestas: list[Optional[dict]], prueba=PRUEBA_GOBIERNO) -> dict:
+    """REFORMULACION_GOBIERNO §3, R10 a R12."""
+    gal = [r for r, (p, *_) in zip(respuestas, prueba) if "Galán" in p]
+    r10_cat = sum(bool(r) and r["alcance"] == "catalogo" for r in gal)
+    r10 = sum(bool(r) and r["alcance"] == "nueva" for r in gal)
+    lop = [(r, e) for r, e in zip(respuestas, prueba) if "Claudia López" in e[0]]
+    r11 = sum(bool(r) and r["alcance"] == "catalogo" and r["codigo"] == e[2] for r, e in lop)
+    con = respuestas[-1]
+    r12 = bool(con) and con["alcance"] == "catalogo" and con["codigo"] == "CC5A"
+    crit = {"R10": {"umbral": f"ninguna de las {len(gal)} de Galán como catálogo; «nueva» en ≥ 3", "valor": [r10_cat, r10],
+                    "se_cumple": r10_cat == 0 and r10 >= 3},
+            "R11": {"umbral": f"las de Claudia López con su código en ≥ 2 de {len(lop)}", "valor": r11, "se_cumple": r11 >= 2},
+            "R12": {"umbral": "el Concejo → CC5A", "valor": r12, "se_cumple": r12}}
+    return {"criterios": crit, "pasa": all(c["se_cumple"] for c in crit.values())}
+
+
+def notas_gobierno() -> dict[str, str]:
+    """Las notas de la página (motor, DI-CO36), para la versión 5."""
+    from src.consulta import motor as mo
+    anios = mo.cargar_anios()
+    out = {}
+    for k in cargar_catalogo():
+        n = mo.nota_gobierno(k, sorted(anios.get(k, [2023])))
+        if n:
+            out[k] = n
+    return out
+
+
 def evaluar_matiz(respuestas: list[Optional[dict]], prueba=PRUEBA_MATIZ) -> dict:
     """REFORMULACION_MATIZ §3, R7 y R8."""
     cat = [(r, e) for r, e in zip(respuestas, prueba) if e[1] == "catalogo"]
@@ -382,25 +435,29 @@ def validar_voto(version: int = 2) -> int:
     """REFORMULACION_VOTO: las 40 con la versión 2 (o la 3 y sus preguntas nuevas, enmienda 1) y Luna. Con la versión 4
     (REFORMULACION_MATIZ), las 40 de la 3 más las 14 de `PRUEBA_MATIZ`."""
     from src.consulta import motor as mo
-    sistema, prueba = {2: (SISTEMA_V2, PRUEBA_VOTO), 3: (SISTEMA_V3, PRUEBA_VOTO_V3),
-                       4: (SISTEMA_V4, PRUEBA_VOTO_V3 + tuple((p, a, c, None, None) for p, a, c in PRUEBA_MATIZ))}[version]
+    matiz = PRUEBA_VOTO_V3 + tuple((p, a, c, None, None) for p, a, c in PRUEBA_MATIZ)
+    sistema, prueba = {2: (SISTEMA_V2, PRUEBA_VOTO), 3: (SISTEMA_V3, PRUEBA_VOTO_V3), 4: (SISTEMA_V4, matiz),
+                       5: (SISTEMA_V5, matiz + tuple((p, a, c, None, None) for p, a, c in PRUEBA_GOBIERNO))}[version]
+    notas = notas_gobierno() if version == 5 else None
     catalogo = cargar_catalogo()
-    salida = SALIDA / {2: "voto", 3: "voto_v3", 4: "matiz_v4"}[version]
+    salida = SALIDA / {2: "voto", 3: "voto_v3", 4: "matiz_v4", 5: "gobierno_v5"}[version]
     cache = e9.Cache(salida / "cache.json")
     llamar = e9.cliente_real()
     respuestas = []
     try:
         for p, *_ in prueba:
-            respuestas.append(reformular_v2(p, catalogo, llamar, cache, mo.MODELO_PAGINA, sistema)[0])
+            respuestas.append(reformular_v2(p, catalogo, llamar, cache, mo.MODELO_PAGINA, sistema, notas)[0])
     except e9.Experimento9Error as e:
         print(f"ERROR: {e}")
         return 1
     v = evaluar_voto(respuestas[:40], prueba[:40])
-    if version == 4:
-        m = evaluar_matiz(respuestas[40:])
+    if version >= 4:
+        m = evaluar_matiz(respuestas[40:54])
         vs8 = respuestas[0] is not None and respuestas[0]["alcance"] == "catalogo" and respuestas[0]["codigo"] == "VS8"
         v = {"criterios": {**v["criterios"], **m["criterios"],
                            "R9": {"umbral": "«caminando por su barrio» → VS8", "valor": vs8, "se_cumple": vs8}}}
+        if version == 5:
+            v["criterios"].update(evaluar_gobierno(respuestas[54:])["criterios"])
         v["pasa"] = all(c["se_cumple"] for c in v["criterios"].values())
     for (p, a, _, _, cs), r in zip(prueba, respuestas):
         got = None if r is None else (r["alcance"], r.get("codigo"), r.get("tipo"), r.get("candidatos"))
