@@ -216,6 +216,17 @@ SISTEMA_V3 = SISTEMA_V2.replace(
     "resultados oficiales ya publicados), consultas ")
 assert SISTEMA_V3 != SISTEMA_V2 and SISTEMA_V3.count("También es") == 1
 
+#: Versión 4 (REFORMULACION_MATIZ, 8/10): la 3 mandaba a «nueva» «¿se siente segura caminando por su barrio?», que es
+#: VS8 con un matiz. Solo se agrega una frase al alcance «catalogo»; el ejemplo es a propósito uno que no está en la
+#: prueba.
+SISTEMA_V4 = SISTEMA_V3.replace(
+    "- \"catalogo\": la pregunta ya está en el catálogo, aunque esté dicha con otras palabras. Da su código.\n",
+    "- \"catalogo\": la pregunta ya está en el catálogo, aunque esté dicha con otras palabras. Da su código. También es "
+    "\"catalogo\" si solo agrega un matiz que no cambia lo que se mide, como un momento o una actividad cotidiana dentro "
+    "del mismo tema (por ejemplo, «el agua que le llega a la casa» es la satisfacción con el servicio de agua). Si cambia "
+    "el tema, el lugar o lo que se evalúa, es \"nueva\".\n")
+assert SISTEMA_V4 != SISTEMA_V3 and SISTEMA_V4.count("solo agrega un matiz") == 1
+
 
 def parsear_v2(texto: Optional[str], catalogo: dict[str, dict]) -> Optional[dict]:
     """La lectura de la versión 1, más el alcance «voto»: None si no cumple."""
@@ -295,6 +306,39 @@ PRUEBA_VOTO_V3 = tuple([x for x in PRUEBA_VOTO[:24]] + [
 ])
 
 
+#: REFORMULACION_MATIZ §2: 14 preguntas nuevas. Ocho con un matiz que no cambia lo medido (deben ir al catálogo con su
+#: código) y seis cercanas pero distintas (deben ser «nuevas»: ir al catálogo sería mostrar el dato de otra pregunta).
+PRUEBA_MATIZ = (
+    ("¿Qué tan seguros se sienten los bogotanos cuando andan por las calles de la ciudad?", "catalogo", "VS10"),
+    ("¿La gente está contenta con la casa o el apartamento donde vive?", "catalogo", "VS7"),
+    ("¿Qué tan satisfechos están con el servicio de luz en las noches?", "catalogo", "SP3"),
+    ("¿Les funciona bien el internet que tienen en la casa?", "catalogo", "SP6"),
+    ("¿Qué opinan del ruido que se oye en Bogotá durante el día?", "catalogo", "MA3_3"),
+    ("¿Los bogotanos se consideran pobres hoy en día?", "catalogo", "CO4"),
+    ("¿Qué tan probable creen que es que castiguen a alguien por no pagar sus impuestos?", "catalogo", "RC5_6"),
+    ("¿Cómo ven la economía de Bogotá para los próximos años?", "catalogo", "CO1_2"),
+    ("¿Qué tan seguros se sienten dentro de TransMilenio?", "nueva", None),
+    ("¿Están satisfechos con lo que pagan en la factura del agua?", "nueva", None),
+    ("¿Cómo califican el trabajo de la policía en su barrio?", "nueva", None),
+    ("¿Les gusta el alumbrado navideño de la ciudad?", "nueva", None),
+    ("¿Qué tan satisfechos están con la seguridad en los colegios?", "nueva", None),
+    ("¿Qué tan satisfechos están con los parques para perros?", "nueva", None),
+)
+
+
+def evaluar_matiz(respuestas: list[Optional[dict]], prueba=PRUEBA_MATIZ) -> dict:
+    """REFORMULACION_MATIZ §3, R7 y R8."""
+    cat = [(r, e) for r, e in zip(respuestas, prueba) if e[1] == "catalogo"]
+    r7 = sum(bool(r) and r["alcance"] == "catalogo" and r["codigo"] == e[2] for r, e in cat)
+    nue = [r for r, e in zip(respuestas, prueba) if e[1] == "nueva"]
+    r8_cat = sum(bool(r) and r["alcance"] == "catalogo" for r in nue)
+    r8 = sum(bool(r) and r["alcance"] == "nueva" for r in nue)
+    crit = {"R7": {"umbral": f"catálogo con su código en ≥ 7 de {len(cat)}", "valor": r7, "se_cumple": r7 >= 7},
+            "R8": {"umbral": f"ninguna de las {len(nue)} cercanas como catálogo; «nueva» en ≥ 5", "valor": [r8_cat, r8],
+                   "se_cumple": r8_cat == 0 and r8 >= 5}}
+    return {"criterios": crit, "pasa": all(c["se_cumple"] for c in crit.values())}
+
+
 def nombra(cands: list[str], esperado: str) -> bool:
     """Un candidato esperado está si su primer nombre y su último apellido aparecen (sin tildes ni mayúsculas)."""
     import unicodedata
@@ -335,11 +379,13 @@ def evaluar_voto(respuestas: list[Optional[dict]], prueba=PRUEBA_VOTO) -> dict:
 
 
 def validar_voto(version: int = 2) -> int:
-    """REFORMULACION_VOTO: las 40 con la versión 2 (o la 3 y sus preguntas nuevas, enmienda 1) y Luna."""
+    """REFORMULACION_VOTO: las 40 con la versión 2 (o la 3 y sus preguntas nuevas, enmienda 1) y Luna. Con la versión 4
+    (REFORMULACION_MATIZ), las 40 de la 3 más las 14 de `PRUEBA_MATIZ`."""
     from src.consulta import motor as mo
-    sistema, prueba = (SISTEMA_V3, PRUEBA_VOTO_V3) if version == 3 else (SISTEMA_V2, PRUEBA_VOTO)
+    sistema, prueba = {2: (SISTEMA_V2, PRUEBA_VOTO), 3: (SISTEMA_V3, PRUEBA_VOTO_V3),
+                       4: (SISTEMA_V4, PRUEBA_VOTO_V3 + tuple((p, a, c, None, None) for p, a, c in PRUEBA_MATIZ))}[version]
     catalogo = cargar_catalogo()
-    salida = SALIDA / ("voto_v3" if version == 3 else "voto")
+    salida = SALIDA / {2: "voto", 3: "voto_v3", 4: "matiz_v4"}[version]
     cache = e9.Cache(salida / "cache.json")
     llamar = e9.cliente_real()
     respuestas = []
@@ -349,7 +395,13 @@ def validar_voto(version: int = 2) -> int:
     except e9.Experimento9Error as e:
         print(f"ERROR: {e}")
         return 1
-    v = evaluar_voto(respuestas, prueba)
+    v = evaluar_voto(respuestas[:40], prueba[:40])
+    if version == 4:
+        m = evaluar_matiz(respuestas[40:])
+        vs8 = respuestas[0] is not None and respuestas[0]["alcance"] == "catalogo" and respuestas[0]["codigo"] == "VS8"
+        v = {"criterios": {**v["criterios"], **m["criterios"],
+                           "R9": {"umbral": "«caminando por su barrio» → VS8", "valor": vs8, "se_cumple": vs8}}}
+        v["pasa"] = all(c["se_cumple"] for c in v["criterios"].values())
     for (p, a, _, _, cs), r in zip(prueba, respuestas):
         got = None if r is None else (r["alcance"], r.get("codigo"), r.get("tipo"), r.get("candidatos"))
         marca = "" if r and r["alcance"] == a else "   <-- distinto"

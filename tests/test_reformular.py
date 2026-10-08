@@ -130,6 +130,32 @@ def test_la_prueba_de_voto_y_su_regla():
     assert rf.nombra(["Abelardo De La Espriella Otero"], "Abelardo de la Espriella")
 
 
+def test_la_version_4_solo_agrega_el_matiz_y_su_prueba_es_la_del_documento():
+    """REFORMULACION_MATIZ §1 y §2."""
+    assert rf.SISTEMA_V4.replace(rf.SISTEMA_V3, "") != "" and len(rf.SISTEMA_V4) > len(rf.SISTEMA_V3)
+    i = rf.SISTEMA_V4.index("También es \"catalogo\"")
+    assert rf.SISTEMA_V4[:i].rstrip() in rf.SISTEMA_V3 and rf.SISTEMA_V4.replace(rf.SISTEMA_V4[i:].split("\n")[0], "").replace(
+        "Da su código. \n", "Da su código.\n") == rf.SISTEMA_V3 and "caminando" not in rf.SISTEMA_V4         # el ejemplo no es de la prueba
+    doc = (Path(__file__).resolve().parents[1] / "docs" / "REFORMULACION_MATIZ_SPECIFICATION.md").read_text(encoding="utf-8")
+    cat = rf.cargar_catalogo()
+    assert len(rf.PRUEBA_MATIZ) == 14 and sum(a == "catalogo" for _, a, _ in rf.PRUEBA_MATIZ) == 8
+    for p, _, c in rf.PRUEBA_MATIZ:
+        assert p in doc, p
+        assert c is None or (c in cat and f"`{c}`" in doc)
+    assert not {p for p, *_ in rf.PRUEBA_MATIZ} & {p for p, *_ in rf.PRUEBA_VOTO_V3}
+
+
+def test_la_regla_del_matiz():
+    perfecto = [{"alcance": a, "codigo": c} for _, a, c in rf.PRUEBA_MATIZ]
+    assert rf.evaluar_matiz(perfecto)["pasa"]
+    una_cercana_al_catalogo = list(perfecto)
+    una_cercana_al_catalogo[8] = {"alcance": "catalogo", "codigo": "VS10"}            # TransMilenio como VS10
+    assert not rf.evaluar_matiz(una_cercana_al_catalogo)["criterios"]["R8"]["se_cumple"]
+    dos_fallan = list(perfecto)
+    dos_fallan[0] = dos_fallan[1] = {"alcance": "nueva", "codigo": None}
+    assert not rf.evaluar_matiz(dos_fallan)["criterios"]["R7"]["se_cumple"]
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"Reformulación — {len(pruebas)} pruebas\n")
