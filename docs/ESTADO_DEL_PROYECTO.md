@@ -368,6 +368,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     de 2025: Medellín 79 % → dijo 50; Bogotá 42 % → 45; Cali 30 % → 51. A todos les da «la mitad», y a Cali la cifra más
     alta. No sirve para porcentajes. **Siguiente, si se quiere seguir:** agentes con perfiles de residentes, entrevistados
     antes de cerrar la simulación.
+  - **MiroFish con residentes de Bogotá, entrevistados (9/10, `MIROFISH_RESIDENTES_RESULTS.md`, USD 0,15): no pasa.** Error
+    30,8 contra 17,2 de decir 50 % para todo. Luna se sale del personaje y se niega a opinar: 10 de 11 «no tengo
+    información» sobre Galán. Con lo medido, el simulador ordena las cinco preguntas de la EPC 2025 (Spearman 0,70, error
+    15,1). **MiroFish queda para explorar narrativas, no para cifras.**
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
