@@ -44,6 +44,10 @@ DI-MF8. **Más tiempo de espera** (9/10, prueba de residentes). Hecho: con la se
     dos veces a los 10 minutos. Repetida aparte, la llamada funcionó, pero tardó 299 segundos (4.237 tokens, a unos 14 por
     segundo), y MiroFish la intenta dos veces sin límite de largo. Decisión: la ontología espera hasta 30 minutos, y cada
     entrevista hasta 15 dentro de MiroFish y 20 en el script.
+DI-MF9. **El cliente de MiroFish corta a los 10 minutos** (9/10). Hecho: su cliente de OpenAI usa los valores por omisión
+    (600 segundos y 2 reintentos), y MiroFish hace 2 intentos. Con Luna lenta, cada intento se corta y se vuelve a pedir, y
+    OpenRouter cobra la respuesta aunque nadie la reciba. Decisión: en la instalación local (fuera del repositorio),
+    `app/utils/llm_client.py` lee `LLM_TIMEOUT` y `LLM_MAX_RETRIES`; aquí van 1800 y 0. El modelo no cambia.
 """
 
 from __future__ import annotations
@@ -242,7 +246,7 @@ def _subir_semilla(texto: str, nombre: str, requerimiento: str = REQUERIMIENTO) 
     partes.append(f"--{limite}--\r\n".encode())
     req = urllib.request.Request(BASE + "/api/graph/ontology/generate", data=b"".join(partes), method="POST",
                                  headers={"Content-Type": f"multipart/form-data; boundary={limite}"})
-    with urllib.request.urlopen(req, timeout=1800) as r:                       # DI-MF8: Luna puede tardar
+    with urllib.request.urlopen(req, timeout=4200) as r:                       # DI-MF8, DI-MF9: dos intentos de 30 min
         d = json.loads(r.read())
     if not d.get("success", True):
         raise MiroFishError(f"ontología: {d.get('error')}")
@@ -285,6 +289,7 @@ def arrancar_backend(salida: Path = SALIDA) -> subprocess.Popen:
     env = {**os.environ, "LLM_API_KEY": os.environ["OPENROUTER_API_KEY"], "LLM_BASE_URL": "https://openrouter.ai/api/v1",
            "LLM_MODEL_NAME": MODELO, "FLASK_HOST": "127.0.0.1", "FLASK_PORT": "5001",
            "OASIS_DEFAULT_MAX_ROUNDS": str(MAX_RONDAS), "PYTHONIOENCODING": "utf-8", "UV_PYTHON_DOWNLOADS": "never",
+           "LLM_TIMEOUT": "1800", "LLM_MAX_RETRIES": "0",                               # DI-MF9
            "PATH": str(MIROFISH / "herramientas" / "venv_uv" / "Scripts") + os.pathsep + os.environ["PATH"]}
     salida.mkdir(parents=True, exist_ok=True)
     log = open(salida / "backend.log", "w", encoding="utf-8")
