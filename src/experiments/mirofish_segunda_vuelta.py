@@ -9,6 +9,7 @@ de la EPC.
 Uso:
     python src/experiments/mirofish_segunda_vuelta.py --saldo      # cuánto lleva gastado la clave (no gasta)
     python src/experiments/mirofish_segunda_vuelta.py              # la corrida (tope USD 1)
+    python src/experiments/mirofish_segunda_vuelta.py --caso galan # la segunda prueba (MIROFISH_GALAN)
 
 Variables de entorno: `OPENROUTER_API_KEY` (la del simulador, decisión de Daniel), `ZEP_API_KEY` y, opcional,
 `BSS_MIROFISH_DIR` (por omisión, `Desktop\\MiroFish`).
@@ -29,6 +30,8 @@ DI-MF4. **Dos arreglos tras la primera corrida (9/10).** Hecho: al terminar las 
     pararon (`simulacion_terminada`) y se cierra con `/stop`, que el informe exige; (2) el informe se sigue y se guarda por
     el `report_id` que devuelve su propia petición. En esa corrida, el informe válido es `report_d8133f7341eb`, copiado a
     mano a `informe.md`.
+DI-MF5. **Un mismo script para las dos pruebas** (`--caso`): cada una con su semilla, su petición y su carpeta. La
+    segunda vuelta sigue igual, por omisión.
 """
 
 from __future__ import annotations
@@ -57,6 +60,15 @@ REQUERIMIENTO = (
     "presidencial de Colombia del 21 de junio de 2026, entre Iván Cepeda y Abelardo de la Espriella. Al final, estima "
     "qué porcentaje de los votos por los dos candidatos obtendrá cada uno en Bogotá: da una sola cifra para cada uno, "
     "que sumen 100, y explica en qué te basas.")
+#: MIROFISH_GALAN §2: la segunda prueba.
+SEMILLA_GALAN = RAIZ / "docs" / "anexos" / "mirofish_semilla_galan.md"
+REQUERIMIENTO_GALAN = (
+    "Simula la conversación pública de los bogotanos adultos sobre la gestión del alcalde Carlos Fernando Galán en el "
+    "segundo semestre de 2025. Al final, estima qué porcentaje de los bogotanos adultos aprueba la gestión del alcalde: "
+    "da una sola cifra, y explica en qué te basas.")
+#: DI-MF5: cada prueba con su semilla, su petición y su carpeta.
+CASOS = {"segunda_vuelta": (SEMILLA, REQUERIMIENTO, SALIDA, "BSS segunda vuelta 2026"),
+         "galan": (SEMILLA_GALAN, REQUERIMIENTO_GALAN, RAIZ / "data" / "processed" / "mirofish" / "galan", "BSS Galán 2025")}
 
 
 class MiroFishError(RuntimeError):
@@ -87,11 +99,11 @@ def _api(metodo: str, ruta: str, cuerpo: dict | None = None) -> dict:
     return d.get("data", d)
 
 
-def _subir_semilla(texto: str, nombre: str) -> dict:
+def _subir_semilla(texto: str, nombre: str, requerimiento: str = REQUERIMIENTO) -> dict:
     """POST multipart a /api/graph/ontology/generate, con el documento y el requerimiento."""
     limite = "----bss" + str(int(time.time()))
     partes = []
-    for k, v in (("simulation_requirement", REQUERIMIENTO), ("project_name", nombre)):
+    for k, v in (("simulation_requirement", requerimiento), ("project_name", nombre)):
         partes.append(f'--{limite}\r\nContent-Disposition: form-data; name="{k}"\r\n\r\n{v}\r\n'.encode())
     partes.append(f'--{limite}\r\nContent-Disposition: form-data; name="files"; filename="semilla.md"\r\n'
                   f'Content-Type: text/markdown\r\n\r\n'.encode() + texto.encode() + b"\r\n")
@@ -131,14 +143,14 @@ def simulacion_terminada(d: dict) -> bool:
     return (d.get("current_round") or 0) > 0 and not d.get("twitter_running") and not d.get("reddit_running")
 
 
-def arrancar_backend() -> subprocess.Popen:
+def arrancar_backend(salida: Path = SALIDA) -> subprocess.Popen:
     """DI-MF2."""
     env = {**os.environ, "LLM_API_KEY": os.environ["OPENROUTER_API_KEY"], "LLM_BASE_URL": "https://openrouter.ai/api/v1",
            "LLM_MODEL_NAME": MODELO, "FLASK_HOST": "127.0.0.1", "FLASK_PORT": "5001",
            "OASIS_DEFAULT_MAX_ROUNDS": str(MAX_RONDAS), "PYTHONIOENCODING": "utf-8", "UV_PYTHON_DOWNLOADS": "never",
            "PATH": str(MIROFISH / "herramientas" / "venv_uv" / "Scripts") + os.pathsep + os.environ["PATH"]}
-    SALIDA.mkdir(parents=True, exist_ok=True)
-    log = open(SALIDA / "backend.log", "w", encoding="utf-8")
+    salida.mkdir(parents=True, exist_ok=True)
+    log = open(salida / "backend.log", "w", encoding="utf-8")
     uv = str(MIROFISH / "herramientas" / "venv_uv" / "Scripts" / "uv.exe")       # Popen no usa el PATH de env
     p = subprocess.Popen([uv, "run", "--python", "3.12", "python", "run.py"], cwd=MIROFISH / "codigo" / "backend",
                          env=env, stdout=log, stderr=subprocess.STDOUT)
@@ -152,13 +164,14 @@ def arrancar_backend() -> subprocess.Popen:
     raise MiroFishError("el backend de MiroFish no arrancó: ver backend.log")
 
 
-def correr() -> dict:
+def correr(caso: str = "segunda_vuelta") -> dict:
+    semilla, requerimiento, salida, nombre = CASOS[caso]
     inicio = usado_usd()
     print(f"uso de la clave al empezar: USD {inicio:.4f}", flush=True)
-    back = arrancar_backend()
-    reg = {"inicio_usd": inicio}
+    back = arrancar_backend(salida)
+    reg = {"caso": caso, "inicio_usd": inicio}
     try:
-        p = _subir_semilla(SEMILLA.read_text(encoding="utf-8"), "BSS segunda vuelta 2026")
+        p = _subir_semilla(semilla.read_text(encoding="utf-8"), nombre, requerimiento)
         reg["project_id"] = p["project_id"]
         print("1/5 ontología lista", flush=True)
         t = _api("POST", "/api/graph/build", {"project_id": reg["project_id"]})
@@ -182,12 +195,12 @@ def correr() -> dict:
         _esperar(lambda: _api("GET", f"/api/report/{reg['report_id']}/progress"),
                  lambda d: _estado_tarea(d), inicio)
         rep = _api("GET", f"/api/report/{reg['report_id']}")
-        (SALIDA / "informe.md").write_text(rep.get("markdown_content") or json.dumps(rep, ensure_ascii=False, indent=1),
+        (salida / "informe.md").write_text(rep.get("markdown_content") or json.dumps(rep, ensure_ascii=False, indent=1),
                                            encoding="utf-8")
-        print("5/5 informe guardado en data/processed/mirofish/segunda_vuelta/informe.md", flush=True)
+        print(f"5/5 informe guardado en {salida.relative_to(RAIZ)}/informe.md", flush=True)
     finally:
         reg["gasto_usd"] = round(usado_usd() - inicio, 4)
-        (SALIDA / "registro.json").write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
+        (salida / "registro.json").write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
         # DI-MF4: `uv` lanza el backend como hijo; terminate() cierra solo a `uv`
         subprocess.run(["taskkill", "/PID", str(back.pid), "/T", "/F"], capture_output=True)
         print(f"gasto de la corrida: USD {reg['gasto_usd']}", flush=True)
@@ -197,6 +210,7 @@ def correr() -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--saldo", action="store_true")
+    ap.add_argument("--caso", choices=sorted(CASOS), default="segunda_vuelta")
     a = ap.parse_args()
     if a.saldo:
         print(f"uso acumulado de la clave: USD {usado_usd():.4f}")
@@ -205,7 +219,7 @@ def main() -> int:
         if not os.environ.get(k):
             print(f"falta la variable de entorno {k}")
             return 1
-    correr()
+    correr(a.caso)
     return 0
 
 

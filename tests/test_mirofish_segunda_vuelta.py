@@ -58,6 +58,17 @@ def test_la_simulacion_termina_cuando_paran_las_dos_redes():
     assert mf.simulacion_terminada({"runner_status": "stopped"})
 
 
+def test_la_semilla_de_galan_no_trae_la_cifra_ni_encuestas():
+    """MIROFISH_GALAN §2 y §5."""
+    s = mf.SEMILLA_GALAN.read_text(encoding="utf-8")
+    assert "racionamiento" in s and "TransMilenio" in s
+    assert not re.search(r"26 ?%|aprobaci[oó]n de|imagen favorable|Invamer|Cómo Vamos|percepci[oó]n ciudadana", s, re.I)
+    assert s.count("CNC") == 1                                                # solo la aclaración
+    assert set(mf.CASOS) == {"segunda_vuelta", "galan"} and mf.CASOS["segunda_vuelta"][1] == mf.REQUERIMIENTO
+    doc = (Path(__file__).resolve().parents[1] / "docs" / "MIROFISH_GALAN_SPECIFICATION.md").read_text(encoding="utf-8")
+    assert "--caso galan" in doc and "**26 %**" in doc
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"MiroFish — {len(pruebas)} pruebas\n")
