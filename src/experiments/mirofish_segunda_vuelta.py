@@ -40,6 +40,10 @@ DI-MF7. **Una caída de internet no debe perder nada** (9/10, prueba de discrimi
     Medellín generaba su informe. La consulta del saldo falló, el script murió sin guardar el registro, y el lazo de las
     tres ciudades siguió con saldo inválido. Decisión: la consulta del saldo reintenta cinco veces, cada 30 segundos; al
     terminar, primero se guarda el registro y se cierra MiroFish, y el gasto se agrega si la red responde.
+DI-MF8. **Más tiempo de espera** (9/10, prueba de residentes). Hecho: con la semilla de residentes, la ontología se trabó
+    dos veces a los 10 minutos. Repetida aparte, la llamada funcionó, pero tardó 299 segundos (4.237 tokens, a unos 14 por
+    segundo), y MiroFish la intenta dos veces sin límite de largo. Decisión: la ontología espera hasta 30 minutos, y cada
+    entrevista hasta 15 dentro de MiroFish y 20 en el script.
 """
 
 from __future__ import annotations
@@ -151,7 +155,7 @@ def entrevistar(sim: str, salida: Path, inicio: float) -> dict:
         if excede(inicio, usado_usd()):
             raise MiroFishError(f"se pasó del tope de USD {TOPE_USD} antes de preguntar «{clave}»")
         d = _api("POST", "/api/simulation/interview/all", {"simulation_id": sim, "prompt": PREFIJO_ENTREVISTA + pregunta,
-                                                            "platform": "reddit", "timeout": 300})
+                                                            "platform": "reddit", "timeout": 900}, espera=1200)  # DI-MF8
         res = (d.get("result") or {}).get("results") or {}
         crudo[clave] = {nombre.get(int(v.get("agent_id", -1)), str(k)): v.get("response", "") for k, v in res.items()}
         resultado[clave] = {n: leer_si_no(t) for n, t in crudo[clave].items()}
@@ -217,10 +221,10 @@ def excede(inicio: float, ahora: float, tope: float = TOPE_USD) -> bool:
 
 
 # ---------------------------------------------------------------- API de MiroFish
-def _api(metodo: str, ruta: str, cuerpo: dict | None = None) -> dict:
+def _api(metodo: str, ruta: str, cuerpo: dict | None = None, espera: int = 600) -> dict:
     datos = json.dumps(cuerpo).encode() if cuerpo is not None else None
     req = urllib.request.Request(BASE + ruta, data=datos, method=metodo, headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=600) as r:
+    with urllib.request.urlopen(req, timeout=espera) as r:
         d = json.loads(r.read())
     if not d.get("success", True):
         raise MiroFishError(f"{ruta}: {d.get('error')}")
@@ -238,7 +242,7 @@ def _subir_semilla(texto: str, nombre: str, requerimiento: str = REQUERIMIENTO) 
     partes.append(f"--{limite}--\r\n".encode())
     req = urllib.request.Request(BASE + "/api/graph/ontology/generate", data=b"".join(partes), method="POST",
                                  headers={"Content-Type": f"multipart/form-data; boundary={limite}"})
-    with urllib.request.urlopen(req, timeout=600) as r:
+    with urllib.request.urlopen(req, timeout=1800) as r:                       # DI-MF8: Luna puede tardar
         d = json.loads(r.read())
     if not d.get("success", True):
         raise MiroFishError(f"ontología: {d.get('error')}")
