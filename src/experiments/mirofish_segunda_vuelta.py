@@ -76,6 +76,22 @@ CASOS = {"segunda_vuelta": (SEMILLA, REQUERIMIENTO, SALIDA, "BSS segunda vuelta 
          "galan": (SEMILLA_GALAN, REQUERIMIENTO_GALAN, RAIZ / "data" / "processed" / "mirofish" / "galan", "BSS Galán 2025")}
 
 
+def requerimiento_alcalde(ciudad: str, alcalde: str) -> str:
+    """MIROFISH_DISCRIMINACION §2: la misma petición para las tres ciudades."""
+    return (f"Simula la conversación pública de los habitantes adultos de {ciudad} sobre la gestión del alcalde {alcalde} "
+            f"en el primer semestre de 2025. Al final, estima qué porcentaje de los adultos de {ciudad} aprueba la gestión "
+            f"del alcalde: da una sola cifra, y explica en qué te basas.")
+
+
+_DISC = RAIZ / "data" / "processed" / "mirofish" / "discriminacion"
+#: MIROFISH_DISCRIMINACION §2: ciudad, alcalde, semilla. Bogotá reusa la semilla de Galán.
+ALCALDES = {"medellin": ("Medellín", "Federico Gutiérrez", RAIZ / "docs" / "anexos" / "mirofish_semilla_medellin.md"),
+            "bogota": ("Bogotá", "Carlos Fernando Galán", SEMILLA_GALAN),
+            "cali": ("Cali", "Alejandro Éder", RAIZ / "docs" / "anexos" / "mirofish_semilla_cali.md")}
+for _k, (_c, _a, _s) in ALCALDES.items():
+    CASOS[f"alcalde_{_k}"] = (_s, requerimiento_alcalde(_c, _a), _DISC / _k, f"BSS aprobación {_c} 2025")
+
+
 class MiroFishError(RuntimeError):
     pass
 

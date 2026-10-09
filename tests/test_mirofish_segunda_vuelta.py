@@ -64,9 +64,24 @@ def test_la_semilla_de_galan_no_trae_la_cifra_ni_encuestas():
     assert "racionamiento" in s and "TransMilenio" in s
     assert not re.search(r"26 ?%|aprobaci[oó]n de|imagen favorable|Invamer|Cómo Vamos|percepci[oó]n ciudadana", s, re.I)
     assert s.count("CNC") == 1                                                # solo la aclaración
-    assert set(mf.CASOS) == {"segunda_vuelta", "galan"} and mf.CASOS["segunda_vuelta"][1] == mf.REQUERIMIENTO
+    assert {"segunda_vuelta", "galan"} <= set(mf.CASOS) and mf.CASOS["segunda_vuelta"][1] == mf.REQUERIMIENTO
     doc = (Path(__file__).resolve().parents[1] / "docs" / "MIROFISH_GALAN_SPECIFICATION.md").read_text(encoding="utf-8")
     assert "--caso galan" in doc and "**26 %**" in doc
+
+
+def test_las_tres_ciudades_tienen_la_misma_peticion_y_semillas_sin_cifras():
+    """MIROFISH_DISCRIMINACION §2."""
+    assert {f"alcalde_{k}" for k in mf.ALCALDES} <= set(mf.CASOS)
+    pedidos = [mf.CASOS[f"alcalde_{k}"][1] for k in mf.ALCALDES]
+    plantilla = {p.replace(c, "X").replace(a, "Y") for p, (c, a, _) in zip(pedidos, mf.ALCALDES.values())}
+    assert len(plantilla) == 1                                                # la misma, salvo ciudad y alcalde
+    for k, (c, a, s) in mf.ALCALDES.items():
+        t = s.read_text(encoding="utf-8")
+        assert a.split()[-1] in t, k
+        assert t.count("CNC") == 1, k
+        t = re.sub(r"\*Resumen.*?\*", "", t, flags=re.S)                     # sin la aclaración inicial
+        assert not re.search(r"\d+(,\d+)? ?% de (los )?votos|aprobaci[oó]n de|Invamer|Guarumo|encuesta", t, re.I), k
+        assert not re.search(r"\b(79|42|30|73,36|73) ?%", t), k
 
 
 if __name__ == "__main__":
