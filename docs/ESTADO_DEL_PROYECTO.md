@@ -360,6 +360,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     fuera del repositorio. Dio Cepeda 53 % en Bogotá; el real fue 53,6 % sobre los dos. Pero la cifra no salió de la
     simulación: sus agentes eran actores del documento, no votantes, y el informe reescaló la primera vuelta. Pasa a la
     segunda prueba, la percepción de Galán.
+  - **MiroFish ante la aprobación de Galán (9/10, `MIROFISH_GALAN_RESULTS.md`, USD 0,05): no pasa.** Dio 46 %; el real
+    (EPC 2025 de Bogotá Cómo Vamos) fue 26 %. El simulador dio 47,3 % («dividida», rango 25,6 a 69,0). La aprobación de
+    Claudia López en la EPC anterior (33,1 %) se equivocó menos que los dos. MiroFish queda para explorar narrativas, no
+    para dar cifras: sus agentes son instituciones, no residentes.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

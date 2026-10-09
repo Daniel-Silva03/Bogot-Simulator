@@ -32,6 +32,10 @@ DI-MF4. **Dos arreglos tras la primera corrida (9/10).** Hecho: al terminar las 
     mano a `informe.md`.
 DI-MF5. **Un mismo script para las dos pruebas** (`--caso`): cada una con su semilla, su petición y su carpeta. La
     segunda vuelta sigue igual, por omisión.
+DI-MF6. **El avance del informe puede no existir todavía** (9/10, prueba de Galán). Hecho: justo después de pedir el
+    informe, `/progress` respondió 404; el script lo tomó como error, cerró MiroFish y el informe quedó a medias. La
+    simulación ya estaba guardada. Decisión: al esperar, un 404 cuenta como «todavía no»; y `--informe SIM` rehace solo el
+    informe de una simulación terminada, sin repetirla.
 """
 
 from __future__ import annotations
@@ -42,6 +46,7 @@ import os
 import subprocess
 import sys
 import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -119,8 +124,13 @@ def _subir_semilla(texto: str, nombre: str, requerimiento: str = REQUERIMIENTO) 
 
 def _esperar(consulta, terminado, inicio: float, al_exceder=None) -> dict:
     while True:
-        d = consulta()
-        if terminado(d):
+        try:
+            d = consulta()
+        except urllib.error.HTTPError as e:                                    # DI-MF6: aún no existe
+            if e.code != 404:
+                raise
+            d = {}
+        if d and terminado(d):
             return d
         if excede(inicio, usado_usd()):
             if al_exceder:
@@ -190,14 +200,37 @@ def correr(caso: str = "segunda_vuelta") -> dict:
             _api("POST", "/api/simulation/stop", {"simulation_id": sim})
         reg["simulacion"] = {k: fin.get(k) for k in ("runner_status", "current_round", "total_rounds", "total_actions_count")}
         print(f"4/5 simulación: {reg['simulacion']}", flush=True)
-        t = _api("POST", "/api/report/generate", {"simulation_id": sim})
-        reg["report_id"] = t["report_id"]                                       # DI-MF4: este informe, no otro
-        _esperar(lambda: _api("GET", f"/api/report/{reg['report_id']}/progress"),
-                 lambda d: _estado_tarea(d), inicio)
-        rep = _api("GET", f"/api/report/{reg['report_id']}")
-        (salida / "informe.md").write_text(rep.get("markdown_content") or json.dumps(rep, ensure_ascii=False, indent=1),
-                                           encoding="utf-8")
-        print(f"5/5 informe guardado en {salida.relative_to(RAIZ)}/informe.md", flush=True)
+        reg["report_id"] = generar_informe(sim, salida, inicio)
+    finally:
+        reg["gasto_usd"] = round(usado_usd() - inicio, 4)
+        (salida / "registro.json").write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
+        # DI-MF4: `uv` lanza el backend como hijo; terminate() cierra solo a `uv`
+        subprocess.run(["taskkill", "/PID", str(back.pid), "/T", "/F"], capture_output=True)
+        print(f"gasto de la corrida: USD {reg['gasto_usd']}", flush=True)
+    return reg
+
+
+def generar_informe(sim: str, salida: Path, inicio: float, rehacer: bool = False) -> str:
+    """El informe de una simulación terminada, guardado por su propio `report_id` (DI-MF4, DI-MF6)."""
+    t = _api("POST", "/api/report/generate", {"simulation_id": sim, "force_regenerate": rehacer})
+    rid = t["report_id"]
+    _esperar(lambda: _api("GET", f"/api/report/{rid}/progress"), _estado_tarea, inicio)
+    rep = _api("GET", f"/api/report/{rid}")
+    (salida / "informe.md").write_text(rep.get("markdown_content") or json.dumps(rep, ensure_ascii=False, indent=1),
+                                       encoding="utf-8")
+    print(f"5/5 informe {rid} guardado en {salida.relative_to(RAIZ)}/informe.md", flush=True)
+    return rid
+
+
+def solo_informe(caso: str, sim: str) -> dict:
+    """DI-MF6: rehace el informe de una simulación ya corrida, sin repetirla."""
+    salida = CASOS[caso][2]
+    inicio = usado_usd()
+    print(f"uso de la clave al empezar: USD {inicio:.4f}", flush=True)
+    back = arrancar_backend(salida)
+    reg = {"caso": caso, "simulation_id": sim, "solo_informe": True, "inicio_usd": inicio}
+    try:
+        reg["report_id"] = generar_informe(sim, salida, inicio, rehacer=True)
     finally:
         reg["gasto_usd"] = round(usado_usd() - inicio, 4)
         (salida / "registro.json").write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -211,6 +244,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--saldo", action="store_true")
     ap.add_argument("--caso", choices=sorted(CASOS), default="segunda_vuelta")
+    ap.add_argument("--informe", metavar="SIMULATION_ID", help="solo rehacer el informe de esa simulación (DI-MF6)")
     a = ap.parse_args()
     if a.saldo:
         print(f"uso acumulado de la clave: USD {usado_usd():.4f}")
@@ -219,7 +253,10 @@ def main() -> int:
         if not os.environ.get(k):
             print(f"falta la variable de entorno {k}")
             return 1
-    correr(a.caso)
+    if a.informe:
+        solo_informe(a.caso, a.informe)
+    else:
+        correr(a.caso)
     return 0
 
 
