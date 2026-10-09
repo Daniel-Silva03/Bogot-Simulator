@@ -48,6 +48,9 @@ DI-MF9. **El cliente de MiroFish corta a los 10 minutos** (9/10). Hecho: su clie
     (600 segundos y 2 reintentos), y MiroFish hace 2 intentos. Con Luna lenta, cada intento se corta y se vuelve a pedir, y
     OpenRouter cobra la respuesta aunque nadie la reciba. Decisión: en la instalación local (fuera del repositorio),
     `app/utils/llm_client.py` lee `LLM_TIMEOUT` y `LLM_MAX_RETRIES`; aquí van 1800 y 0. El modelo no cambia.
+DI-MF10. **La ontología lleva un tope de largo** (9/10). Hecho: MiroFish la pide sin límite (`max_tokens=None`), y así Luna
+    no terminó en 30 minutos. La misma llamada con 12.000 tokens terminó en 5 minutos, con 4.237 tokens. Decisión: en la
+    instalación local, `ontology_generator.py` lee `ONTOLOGY_MAX_TOKENS`; aquí va 16.000.
 """
 
 from __future__ import annotations
@@ -290,6 +293,7 @@ def arrancar_backend(salida: Path = SALIDA) -> subprocess.Popen:
            "LLM_MODEL_NAME": MODELO, "FLASK_HOST": "127.0.0.1", "FLASK_PORT": "5001",
            "OASIS_DEFAULT_MAX_ROUNDS": str(MAX_RONDAS), "PYTHONIOENCODING": "utf-8", "UV_PYTHON_DOWNLOADS": "never",
            "LLM_TIMEOUT": "1800", "LLM_MAX_RETRIES": "0",                               # DI-MF9
+           "ONTOLOGY_MAX_TOKENS": "16000",                                              # DI-MF10
            "PATH": str(MIROFISH / "herramientas" / "venv_uv" / "Scripts") + os.pathsep + os.environ["PATH"]}
     salida.mkdir(parents=True, exist_ok=True)
     log = open(salida / "backend.log", "w", encoding="utf-8")
