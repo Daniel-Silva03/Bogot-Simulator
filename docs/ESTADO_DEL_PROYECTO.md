@@ -356,6 +356,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
   - **Versión 5 (8/10, `REFORMULACION_GOBIERNO_RESULTS.md`, USD 0,065):** no confunde a Galán con Claudia López. La EPC no
     mide a Galán, y la página dice qué gobierno midió cada pregunta. Además, las respuestas medidas se pueden ver como
     negativa, neutral y positiva (DI-CO36). Lo pidió el jefe de Daniel.
+  - **MiroFish ante la segunda vuelta 2026 (9/10, `MIROFISH_SEGUNDA_VUELTA_RESULTS.md`, USD 0,06).** Instalado en local,
+    fuera del repositorio. Dio Cepeda 53 % en Bogotá; el real fue 53,6 % sobre los dos. Pero la cifra no salió de la
+    simulación: sus agentes eran actores del documento, no votantes, y el informe reescaló la primera vuelta. Pasa a la
+    segunda prueba, la percepción de Galán.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

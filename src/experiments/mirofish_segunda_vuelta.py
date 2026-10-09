@@ -23,6 +23,12 @@ DI-MF1. **El tope de gasto** se controla con el uso de la clave en OpenRouter (`
 DI-MF2. **El backend de MiroFish se arranca desde aquí,** solo en 127.0.0.1 (por omisión escucha en 0.0.0.0), con la
     configuración por variables de entorno: sin archivo `.env` y sin escribir claves en disco.
 DI-MF3. **Las rondas se cortan en `MAX_RONDAS`** al iniciar la simulación (`max_rounds`).
+DI-MF4. **Dos arreglos tras la primera corrida (9/10).** Hecho: al terminar las rondas, MiroFish deja la simulación abierta
+    esperando entrevistas, y su estado sigue en «running»; el script esperaba «completed» y se quedó trabado. Luego, al
+    pedir el informe por simulación, guardó una versión vieja. Decisión: (1) la simulación termina cuando las dos redes
+    pararon (`simulacion_terminada`) y se cierra con `/stop`, que el informe exige; (2) el informe se sigue y se guarda por
+    el `report_id` que devuelve su propia petición. En esa corrida, el informe válido es `report_d8133f7341eb`, copiado a
+    mano a `informe.md`.
 """
 
 from __future__ import annotations
@@ -118,6 +124,13 @@ def _estado_tarea(d: dict) -> bool:
     return s == "completed"
 
 
+def simulacion_terminada(d: dict) -> bool:
+    """DI-MF4: terminada si el estado es final o si las dos redes ya pararon con alguna ronda hecha."""
+    if d.get("runner_status") in ("completed", "stopped", "failed"):
+        return True
+    return (d.get("current_round") or 0) > 0 and not d.get("twitter_running") and not d.get("reddit_running")
+
+
 def arrancar_backend() -> subprocess.Popen:
     """DI-MF2."""
     env = {**os.environ, "LLM_API_KEY": os.environ["OPENROUTER_API_KEY"], "LLM_BASE_URL": "https://openrouter.ai/api/v1",
@@ -126,7 +139,8 @@ def arrancar_backend() -> subprocess.Popen:
            "PATH": str(MIROFISH / "herramientas" / "venv_uv" / "Scripts") + os.pathsep + os.environ["PATH"]}
     SALIDA.mkdir(parents=True, exist_ok=True)
     log = open(SALIDA / "backend.log", "w", encoding="utf-8")
-    p = subprocess.Popen(["uv", "run", "--python", "3.12", "python", "run.py"], cwd=MIROFISH / "codigo" / "backend",
+    uv = str(MIROFISH / "herramientas" / "venv_uv" / "Scripts" / "uv.exe")       # Popen no usa el PATH de env
+    p = subprocess.Popen([uv, "run", "--python", "3.12", "python", "run.py"], cwd=MIROFISH / "codigo" / "backend",
                          env=env, stdout=log, stderr=subprocess.STDOUT)
     for _ in range(60):
         try:
@@ -157,16 +171,17 @@ def correr() -> dict:
                  lambda d: _estado_tarea(d) or bool(d.get("already_prepared")), inicio)
         print("3/5 agentes y configuración listos", flush=True)
         _api("POST", "/api/simulation/start", {"simulation_id": sim, "platform": "parallel", "max_rounds": MAX_RONDAS})
-        fin = _esperar(lambda: _api("GET", f"/api/simulation/{sim}/run-status"),
-                       lambda d: d.get("runner_status") in ("completed", "stopped", "failed"), inicio,
+        fin = _esperar(lambda: _api("GET", f"/api/simulation/{sim}/run-status"), simulacion_terminada, inicio,
                        al_exceder=lambda: _api("POST", "/api/simulation/stop", {"simulation_id": sim}))
+        if fin.get("runner_status") == "running":                               # DI-MF4: queda esperando entrevistas
+            _api("POST", "/api/simulation/stop", {"simulation_id": sim})
         reg["simulacion"] = {k: fin.get(k) for k in ("runner_status", "current_round", "total_rounds", "total_actions_count")}
         print(f"4/5 simulación: {reg['simulacion']}", flush=True)
         t = _api("POST", "/api/report/generate", {"simulation_id": sim})
-        _esperar(lambda: _api("POST", "/api/report/generate/status", {"task_id": t.get("task_id"), "simulation_id": sim}),
-                 _estado_tarea, inicio)
-        rep = _api("GET", f"/api/report/by-simulation/{sim}")
-        reg["report_id"] = rep.get("report_id")
+        reg["report_id"] = t["report_id"]                                       # DI-MF4: este informe, no otro
+        _esperar(lambda: _api("GET", f"/api/report/{reg['report_id']}/progress"),
+                 lambda d: _estado_tarea(d), inicio)
+        rep = _api("GET", f"/api/report/{reg['report_id']}")
         (SALIDA / "informe.md").write_text(rep.get("markdown_content") or json.dumps(rep, ensure_ascii=False, indent=1),
                                            encoding="utf-8")
         print("5/5 informe guardado en data/processed/mirofish/segunda_vuelta/informe.md", flush=True)

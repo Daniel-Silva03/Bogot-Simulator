@@ -48,6 +48,16 @@ def test_el_backend_solo_escucha_en_localhost_y_sin_archivo_de_claves():
     assert '"FLASK_HOST": "127.0.0.1"' in src and '".env"' not in src and mf.BASE.startswith("http://127.0.0.1")
 
 
+def test_la_simulacion_termina_cuando_paran_las_dos_redes():
+    """DI-MF4: MiroFish deja la simulación en «running», esperando entrevistas."""
+    assert mf.simulacion_terminada({"runner_status": "running", "current_round": 10, "twitter_running": False,
+                                    "reddit_running": False})
+    assert not mf.simulacion_terminada({"runner_status": "running", "current_round": 4, "twitter_running": True,
+                                        "reddit_running": False})
+    assert not mf.simulacion_terminada({"runner_status": "starting", "current_round": 0})
+    assert mf.simulacion_terminada({"runner_status": "stopped"})
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"MiroFish — {len(pruebas)} pruebas\n")
