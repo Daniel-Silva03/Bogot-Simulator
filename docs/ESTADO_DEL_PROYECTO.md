@@ -364,6 +364,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     (EPC 2025 de Bogotá Cómo Vamos) fue 26 %. El simulador dio 47,3 % («dividida», rango 25,6 a 69,0). La aprobación de
     Claudia López en la EPC anterior (33,1 %) se equivocó menos que los dos. MiroFish queda para explorar narrativas, no
     para dar cifras: sus agentes son instituciones, no residentes.
+  - **MiroFish no distingue entre alcaldes (9/10, `MIROFISH_DISCRIMINACION_RESULTS.md`, USD 0,13).** Contra Invamer de junio
+    de 2025: Medellín 79 % → dijo 50; Bogotá 42 % → 45; Cali 30 % → 51. A todos les da «la mitad», y a Cali la cifra más
+    alta. No sirve para porcentajes. **Siguiente, si se quiere seguir:** agentes con perfiles de residentes, entrevistados
+    antes de cerrar la simulación.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
