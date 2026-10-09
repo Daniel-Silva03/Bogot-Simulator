@@ -36,6 +36,10 @@ DI-MF6. **El avance del informe puede no existir todavía** (9/10, prueba de Gal
     informe, `/progress` respondió 404; el script lo tomó como error, cerró MiroFish y el informe quedó a medias. La
     simulación ya estaba guardada. Decisión: al esperar, un 404 cuenta como «todavía no»; y `--informe SIM` rehace solo el
     informe de una simulación terminada, sin repetirla.
+DI-MF7. **Una caída de internet no debe perder nada** (9/10, prueba de discriminación). Hecho: la red se cayó mientras
+    Medellín generaba su informe. La consulta del saldo falló, el script murió sin guardar el registro, y el lazo de las
+    tres ciudades siguió con saldo inválido. Decisión: la consulta del saldo reintenta cinco veces, cada 30 segundos; al
+    terminar, primero se guarda el registro y se cierra MiroFish, y el gasto se agrega si la red responde.
 """
 
 from __future__ import annotations
@@ -101,8 +105,14 @@ def usado_usd() -> float:
     """Lo gastado por la clave según OpenRouter. No hace ninguna llamada al modelo."""
     req = urllib.request.Request("https://openrouter.ai/api/v1/key",
                                  headers={"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return float(json.loads(r.read())["data"]["usage"])
+    for intento in range(5):                                                    # DI-MF7: la red puede fallar un rato
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return float(json.loads(r.read())["data"]["usage"])
+        except OSError:
+            if intento == 4:
+                raise
+            time.sleep(30)
 
 
 def excede(inicio: float, ahora: float, tope: float = TOPE_USD) -> bool:
@@ -190,6 +200,20 @@ def arrancar_backend(salida: Path = SALIDA) -> subprocess.Popen:
     raise MiroFishError("el backend de MiroFish no arrancó: ver backend.log")
 
 
+def cerrar(back: subprocess.Popen, reg: dict, salida: Path, inicio: float) -> None:
+    """DI-MF7: primero se guarda el registro y se cierra MiroFish; el gasto, si la red responde."""
+    archivo = salida / "registro.json"
+    archivo.write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
+    # DI-MF4: `uv` lanza el backend como hijo; terminate() cierra solo a `uv`
+    subprocess.run(["taskkill", "/PID", str(back.pid), "/T", "/F"], capture_output=True)
+    try:
+        reg["gasto_usd"] = round(usado_usd() - inicio, 4)
+    except OSError:
+        reg["gasto_usd"] = None
+    archivo.write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"gasto de la corrida: USD {reg['gasto_usd']}", flush=True)
+
+
 def correr(caso: str = "segunda_vuelta") -> dict:
     semilla, requerimiento, salida, nombre = CASOS[caso]
     inicio = usado_usd()
@@ -218,11 +242,7 @@ def correr(caso: str = "segunda_vuelta") -> dict:
         print(f"4/5 simulación: {reg['simulacion']}", flush=True)
         reg["report_id"] = generar_informe(sim, salida, inicio)
     finally:
-        reg["gasto_usd"] = round(usado_usd() - inicio, 4)
-        (salida / "registro.json").write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
-        # DI-MF4: `uv` lanza el backend como hijo; terminate() cierra solo a `uv`
-        subprocess.run(["taskkill", "/PID", str(back.pid), "/T", "/F"], capture_output=True)
-        print(f"gasto de la corrida: USD {reg['gasto_usd']}", flush=True)
+        cerrar(back, reg, salida, inicio)
     return reg
 
 
@@ -248,11 +268,7 @@ def solo_informe(caso: str, sim: str) -> dict:
     try:
         reg["report_id"] = generar_informe(sim, salida, inicio, rehacer=True)
     finally:
-        reg["gasto_usd"] = round(usado_usd() - inicio, 4)
-        (salida / "registro.json").write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
-        # DI-MF4: `uv` lanza el backend como hijo; terminate() cierra solo a `uv`
-        subprocess.run(["taskkill", "/PID", str(back.pid), "/T", "/F"], capture_output=True)
-        print(f"gasto de la corrida: USD {reg['gasto_usd']}", flush=True)
+        cerrar(back, reg, salida, inicio)
     return reg
 
 
