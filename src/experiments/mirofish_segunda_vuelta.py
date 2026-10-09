@@ -188,7 +188,8 @@ def correr() -> dict:
     finally:
         reg["gasto_usd"] = round(usado_usd() - inicio, 4)
         (SALIDA / "registro.json").write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
-        back.terminate()
+        # DI-MF4: `uv` lanza el backend como hijo; terminate() cierra solo a `uv`
+        subprocess.run(["taskkill", "/PID", str(back.pid), "/T", "/F"], capture_output=True)
         print(f"gasto de la corrida: USD {reg['gasto_usd']}", flush=True)
     return reg
 
