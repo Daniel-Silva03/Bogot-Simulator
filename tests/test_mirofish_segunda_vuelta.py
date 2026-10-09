@@ -84,6 +84,35 @@ def test_las_tres_ciudades_tienen_la_misma_peticion_y_semillas_sin_cifras():
         assert not re.search(r"\b(79|42|30|73,36|73) ?%", t), k
 
 
+def test_las_respuestas_de_los_residentes_se_leen_y_se_ponderan_por_estrato():
+    """MIROFISH_RESIDENTES §3."""
+    assert mf.leer_si_no("SÍ, porque…") == "si" and mf.leer_si_no("**No.** Me robaron") == "no"
+    assert mf.leer_si_no("Sí") == "si" and mf.leer_si_no("Depende") is None and mf.leer_si_no("Nosotros sí") is None
+    todos_si = {n: "si" for n in mf.RESIDENTES}
+    assert mf.porcentaje_residentes(todos_si) == 100.0
+    solo_altos = {n: ("si" if mf.RESIDENTES[n] == "4-6" else "no") for n in mf.RESIDENTES}
+    assert abs(mf.porcentaje_residentes(solo_altos) - 100 * 16.3 / (48.9 + 34.7 + 16.3)) < 0.1      # pesa su estrato
+    pocos = dict(list(todos_si.items())[:8])
+    assert mf.porcentaje_residentes(pocos) is None                             # menos de 9: no cuenta
+    con_institucion = {**todos_si, "Carlos Fernando Galán": "no"}
+    assert mf.porcentaje_residentes(con_institucion) == 100.0                 # solo los residentes
+
+
+def test_la_semilla_de_residentes_no_trae_opiniones_ni_cifras():
+    """MIROFISH_RESIDENTES §2."""
+    s = mf.SEMILLA_RESIDENTES.read_text(encoding="utf-8")
+    assert all(n in s for n in mf.RESIDENTES) and len(mf.RESIDENTES) == 12
+    n_nivel = {k: sum(v == k for v in mf.RESIDENTES.values()) for k in mf.PESO_NIVEL}
+    assert n_nivel == {"1-2": 6, "3": 4, "4-6": 2}
+    tabla = s[s.index("## Doce residentes"):s.index("## El alcalde")]
+    assert not re.search(r"aprueb|desaprueb|satisfech|orgullos|insegur|víctima|critic|apoy|opina", tabla, re.I)
+    sin_descuento = s.replace("un descuento del 15 %", "")                    # el paquete de TransMilenio, no una encuesta
+    assert not re.search(r"\b(61|57|59|26|15) ?%", sin_descuento) and s.count("CNC") == 1
+    doc = (Path(__file__).resolve().parents[1] / "docs" / "MIROFISH_RESIDENTES_SPECIFICATION.md").read_text(encoding="utf-8")
+    for clave, pregunta, real in mf.PREGUNTAS_RESIDENTES:
+        assert pregunta in doc and f"{real:.0f} %" in doc, clave
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"MiroFish — {len(pruebas)} pruebas\n")

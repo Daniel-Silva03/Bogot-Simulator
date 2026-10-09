@@ -47,11 +47,14 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import time
+import unicodedata
 import urllib.error
 import urllib.request
+from typing import Optional
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[2]
@@ -94,6 +97,100 @@ ALCALDES = {"medellin": ("Medellín", "Federico Gutiérrez", RAIZ / "docs" / "an
             "cali": ("Cali", "Alejandro Éder", RAIZ / "docs" / "anexos" / "mirofish_semilla_cali.md")}
 for _k, (_c, _a, _s) in ALCALDES.items():
     CASOS[f"alcalde_{_k}"] = (_s, requerimiento_alcalde(_c, _a), _DISC / _k, f"BSS aprobación {_c} 2025")
+
+# ---------------------------------------------------------------- MIROFISH_RESIDENTES
+SEMILLA_RESIDENTES = RAIZ / "docs" / "anexos" / "mirofish_semilla_bogota_residentes.md"
+#: §2: los doce residentes de la semilla y su nivel de estrato.
+RESIDENTES = {"Marlene Rodríguez": "1-2", "Jhon Fredy Castillo": "1-2", "Luz Dary Peña": "1-2",
+              "Andrés Felipe Gómez": "1-2", "Yuliana Moreno": "1-2", "Wilson Ramírez": "1-2",
+              "Patricia Vargas": "3", "Carlos Alberto Ruiz": "3", "Daniela Suárez": "3", "Hernando Quintero": "3",
+              "Camila Restrepo": "4-6", "Jorge Eduardo Salazar": "4-6"}
+#: §2: la población adulta de Bogotá por nivel de estrato (población sintética, Multipropósito 2021).
+PESO_NIVEL = {"1-2": 48.9, "3": 34.7, "4-6": 16.3}
+#: §2: (clave, pregunta, resultado de la EPC 2025). Cada una se responde con «sí» o «no».
+PREGUNTAS_RESIDENTES = (
+    ("satisfaccion", "¿Está usted satisfecho(a) con Bogotá como un lugar para vivir?", 61.0),
+    ("orgullo", "¿Se siente usted orgulloso(a) de Bogotá?", 57.0),
+    ("buen_camino", "¿Cree usted que las cosas en Bogotá van por buen camino?", 59.0),
+    ("aprobacion", "¿Aprueba usted la gestión del alcalde Carlos Fernando Galán?", 26.0),
+    ("victima", "Durante el último año, ¿fue usted víctima de algún delito en Bogotá?", 15.0),
+)
+PREFIJO_ENTREVISTA = "Responda empezando con una sola palabra, SÍ o NO, y después una frase corta que explique por qué. "
+REQUERIMIENTO_RESIDENTES = (
+    "Simula la conversación pública de los habitantes adultos de Bogotá sobre la vida en la ciudad y la gestión del "
+    "alcalde Carlos Fernando Galán en el segundo semestre de 2025.")
+CASOS["bogota_residentes"] = (SEMILLA_RESIDENTES, REQUERIMIENTO_RESIDENTES,
+                              RAIZ / "data" / "processed" / "mirofish" / "residentes", "BSS residentes de Bogotá 2025")
+
+
+def leer_si_no(texto: str) -> Optional[str]:
+    """§3: «sí» o «no» según la primera palabra de la respuesta; None si no empieza por ninguna."""
+    m = re.match(r"\W*(s[ií]|no)\b", unicodedata.normalize("NFC", texto or "").strip().lower())
+    return None if not m else ("si" if m.group(1).startswith("s") else "no")
+
+
+def porcentaje_residentes(respuestas: dict[str, Optional[str]]) -> Optional[float]:
+    """§3: % de «sí» entre los residentes que respondieron, ponderado por estrato. None si responden menos de 9."""
+    ok = {n: r for n, r in respuestas.items() if n in RESIDENTES and r in ("si", "no")}
+    if len(ok) < 9:
+        return None
+    pesos = {}
+    for nivel, total in PESO_NIVEL.items():
+        en_nivel = [n for n in ok if RESIDENTES[n] == nivel]
+        for n in en_nivel:
+            pesos[n] = total / len(en_nivel)
+    return round(100 * sum(pesos[n] for n in ok if ok[n] == "si") / sum(pesos.values()), 1)
+
+
+def entrevistar(sim: str, salida: Path, inicio: float) -> dict:
+    """§2: las cinco preguntas a todos los agentes, con la simulación todavía abierta, solo en Reddit."""
+    perfiles = _api("GET", f"/api/simulation/{sim}/profiles?platform=reddit")["profiles"]
+    nombre = {int(p["user_id"]): p.get("name", "") for p in perfiles}
+    crudo, resultado = {}, {}
+    for clave, pregunta, _ in PREGUNTAS_RESIDENTES:
+        if excede(inicio, usado_usd()):
+            raise MiroFishError(f"se pasó del tope de USD {TOPE_USD} antes de preguntar «{clave}»")
+        d = _api("POST", "/api/simulation/interview/all", {"simulation_id": sim, "prompt": PREFIJO_ENTREVISTA + pregunta,
+                                                            "platform": "reddit", "timeout": 300})
+        res = (d.get("result") or {}).get("results") or {}
+        crudo[clave] = {nombre.get(int(v.get("agent_id", -1)), str(k)): v.get("response", "") for k, v in res.items()}
+        resultado[clave] = {n: leer_si_no(t) for n, t in crudo[clave].items()}
+        print(f"   entrevista «{clave}»: {len(res)} respuestas", flush=True)
+    (salida / "entrevistas.json").write_text(json.dumps({"agentes": nombre, "respuestas": crudo}, ensure_ascii=False,
+                                                        indent=1), encoding="utf-8")
+    return {c: porcentaje_residentes(r) for c, r in resultado.items()} | {
+        "residentes_encontrados": sorted(set(nombre.values()) & set(RESIDENTES))}
+
+
+def correr_entrevistas(caso: str = "bogota_residentes") -> dict:
+    """§2: la simulación, y antes de cerrarla, las entrevistas. Sin informe."""
+    semilla, requerimiento, salida, nombre = CASOS[caso]
+    inicio = usado_usd()
+    print(f"uso de la clave al empezar: USD {inicio:.4f}", flush=True)
+    back = arrancar_backend(salida)
+    reg = {"caso": caso, "inicio_usd": inicio}
+    try:
+        p = _subir_semilla(semilla.read_text(encoding="utf-8"), nombre, requerimiento)
+        reg["project_id"] = p["project_id"]
+        t = _api("POST", "/api/graph/build", {"project_id": reg["project_id"]})
+        _esperar(lambda: _api("GET", f"/api/graph/task/{t['task_id']}"), _estado_tarea, inicio)
+        s = _api("POST", "/api/simulation/create", {"project_id": reg["project_id"]})
+        sim = reg["simulation_id"] = s["simulation_id"]
+        t = _api("POST", "/api/simulation/prepare", {"simulation_id": sim})
+        _esperar(lambda: _api("POST", "/api/simulation/prepare/status", {"task_id": t.get("task_id"), "simulation_id": sim}),
+                 lambda d: _estado_tarea(d) or bool(d.get("already_prepared")), inicio)
+        print("1-3/4 grafo, agentes y configuración listos", flush=True)
+        _api("POST", "/api/simulation/start", {"simulation_id": sim, "platform": "parallel", "max_rounds": MAX_RONDAS})
+        fin = _esperar(lambda: _api("GET", f"/api/simulation/{sim}/run-status"), simulacion_terminada, inicio,
+                       al_exceder=lambda: _api("POST", "/api/simulation/stop", {"simulation_id": sim}))
+        reg["simulacion"] = {k: fin.get(k) for k in ("runner_status", "current_round", "total_actions_count")}
+        print(f"4/4 simulación: {reg['simulacion']}; ahora las entrevistas", flush=True)
+        reg["porcentajes"] = entrevistar(sim, salida, inicio)
+        print(f"porcentajes: {reg['porcentajes']}", flush=True)
+        _api("POST", "/api/simulation/stop", {"simulation_id": sim})
+    finally:
+        cerrar(back, reg, salida, inicio)
+    return reg
 
 
 class MiroFishError(RuntimeError):
@@ -287,6 +384,8 @@ def main() -> int:
             return 1
     if a.informe:
         solo_informe(a.caso, a.informe)
+    elif a.caso == "bogota_residentes":                                         # MIROFISH_RESIDENTES: sin informe
+        correr_entrevistas(a.caso)
     else:
         correr(a.caso)
     return 0
