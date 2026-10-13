@@ -65,6 +65,14 @@ def test_la_variante_b_usa_la_demografia_de_bogota_y_cuenta_sin_ponderar():
     assert tt.porcentaje_simple({**{str(i): "no" for i in range(20)}, "x": None}) == 0.0
 
 
+def test_se_recupera_el_texto_que_la_primera_corrida_unio_con_espacios():
+    """DI-TT5."""
+    assert tt.desespaciar("N O ,   p o r q u e   e l   t r a n s p o r t e .") == "NO, porque el transporte."
+    assert tt.desespaciar("Sí, aunque hay problemas") == "Sí, aunque hay problemas"         # el texto normal no cambia
+    assert tt.texto_de("SÍ, claro") == "SÍ, claro" and tt.texto_de(["SÍ.", "Me gusta"]) == "SÍ. Me gusta"
+    assert mf.leer_si_no(tt.desespaciar("S Í .   A u n q u e")) == "si"
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"TinyTroupe — {len(pruebas)} pruebas\n")

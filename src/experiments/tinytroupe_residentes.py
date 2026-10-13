@@ -23,6 +23,11 @@ DI-TT4. **Dos arreglos antes de la primera corrida completa** (13/10). Hecho: (1
     TinyTroupe importa `IPython` al crear cada persona; se instaló. (2) La fábrica de la variante B se cortaba por largo
     con `MAX_COMPLETION_TOKENS=4000` (unos USD 0,005 en intentos). Se sube a 16.000. El pre-registro no fijaba esa cifra, y
     el modelo no cambia.
+DI-TT5. **Un error mío al juntar lo que dijo cada agente** (13/10, primera corrida completa). Hecho: TinyTroupe devolvió
+    cada respuesta como un texto, y el código lo trató como una lista y unió sus letras con espacios («N O ,   p o r
+    q u e…»). Ninguna empezaba por un «sí» o un «no» legible, y las cinco preguntas quedaron sin cifra. Lo que dijeron se
+    guardó completo. Decisión: `texto_de` toma el texto tal cual, y `desespaciar` recupera el de esa corrida, sin volver a
+    llamar al modelo. No cambia ninguna respuesta, solo cómo se lee.
 """
 
 from __future__ import annotations
@@ -67,6 +72,21 @@ ENABLE_REGENERATION=False
 """
 
 
+def texto_de(habla) -> str:
+    """DI-TT5: lo que dijo el agente. TinyTroupe puede devolver un texto o una lista de textos."""
+    if isinstance(habla, str):
+        return habla
+    return " ".join(str(x) for x in (habla or []))
+
+
+def desespaciar(t: str) -> str:
+    """DI-TT5: deshace el error de la primera corrida, que unió las letras con espacios («N O ,   p o r…»)."""
+    muestra = t[:21]
+    if len(muestra) < 5 or any(c != " " for c in muestra[1::2]):          # una letra, un espacio, una letra…
+        return t
+    return " ".join(p.replace(" ", "") for p in t.split("   "))
+
+
 def perfiles() -> list[dict]:
     """DI-TT1: los residentes de la tabla de la semilla."""
     s = mf.SEMILLA_RESIDENTES.read_text(encoding="utf-8")
@@ -107,7 +127,7 @@ def correr() -> dict:
         for clave, pregunta, _ in mf.PREGUNTAS_RESIDENTES:
             a.listen_and_act(mf.PREFIJO_ENTREVISTA + pregunta)
             habla = a.pop_actions_and_get_contents_for("TALK", only_last_action=False) or []
-            crudo[clave][p["nombre"]] = " ".join(str(x) for x in habla)
+            crudo[clave][p["nombre"]] = texto_de(habla)                       # DI-TT5
         print(f"   {p['nombre']}: listo (gastado USD {mf.usado_usd() - inicio:.4f})", flush=True)
     SALIDA.mkdir(parents=True, exist_ok=True)
     (SALIDA / "respuestas.json").write_text(json.dumps(crudo, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -169,7 +189,7 @@ def correr_b() -> dict:
         for clave, pregunta, _ in mf.PREGUNTAS_RESIDENTES:
             a.listen_and_act(mf.PREFIJO_ENTREVISTA + pregunta)
             habla = a.pop_actions_and_get_contents_for("TALK", only_last_action=False) or []
-            crudo[clave][a.name] = " ".join(str(x) for x in habla)
+            crudo[clave][a.name] = texto_de(habla)                            # DI-TT5
         print(f"   {a.name}: listo (gastado USD {mf.usado_usd() - inicio:.4f})", flush=True)
     (salida / "respuestas.json").write_text(json.dumps(crudo, ensure_ascii=False, indent=1), encoding="utf-8")
     porc = {c: porcentaje_simple({n: mf.leer_si_no(t) for n, t in r.items()}) for c, r in crudo.items()}
