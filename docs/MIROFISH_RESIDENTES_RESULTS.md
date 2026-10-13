@@ -91,3 +91,27 @@ Algunos ejemplos, textuales:
 
   Los cambios están en la instalación local de MiroFish y se activan por variables de entorno.
 - **El modelo no cambió.** El quinto intento corrió completo.
+
+## Corrección (13/10/2026): la cifra real de «buen camino» es 48,2 %, no 59 %
+
+Al verificar la EPC 2025 contra sus microdatos (`DATA_INVENTORY.md` §13.10), la pregunta «¿las cosas en Bogotá van por buen
+camino o por mal camino?» (`GOB_1`) da **48,2 %**. Es el «optimismo sobre el rumbo» que reportó la prensa. El 59 % que se
+usó aquí, tomado de la misma nota de El Tiempo, no corresponde a esta pregunta. Las otras cuatro cifras sí coinciden con
+los microdatos.
+
+**Recalculado con las cinco cifras de los microdatos** (61,4; 56,6; 48,2; 26,4; 14,6):
+
+| | Error medio | Spearman |
+|---|---|---|
+| Simulador | 12,9 (antes 15,1) | 0,90 (antes 0,70) |
+| MiroFish con residentes | 28,7 (antes 30,8) | 0,78 (antes 0,45) |
+| TinyTroupe A | 25,2 (antes 27,2) | 0,87 (antes 0,62) |
+| TinyTroupe B | 27,1 (antes 29,1) | 0,78 (antes 0,45) |
+| 50 % para todo | 15,8 (antes 17,2) | — |
+
+**Qué cambia en la regla:**
+- **R1 (Spearman ≥ 0,7)** pasa a cumplirse en las herramientas. El orden de las cinco preguntas se parece más al real que
+  lo que decía la cifra equivocada.
+- **R3 (error menor que decir 50 % para todo)** sigue sin cumplirse, y por mucho.
+
+**El veredicto no cambia: no pasan.** Lo de arriba no se borra (§45).

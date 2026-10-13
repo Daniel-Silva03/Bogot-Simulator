@@ -741,6 +741,49 @@ Reglas operativas adoptadas por este proyecto, que valen mientras `data/raw/cnc/
 
 ---
 
+### 13.10 La EPC 2025, verificada contra su formulario *(13/10/2026)*
+
+Lo que faltaba en §13.9. `src/population/verificar_epc2025.py` lee el formulario
+(`EPC2025_Formulario.pdf`). Para cada pregunta del catálogo compara el texto, las opciones y los códigos con los de
+2023, y revisa que los datos no traigan códigos que el formulario no nombre. Lo que no coincide exacto se decide a mano,
+con su razón (`REVISION_MANUAL`). Salida en `data/processed/epc_armonizado/verificacion_2025.csv`.
+
+| De las 102 preguntas del catálogo | |
+|---|---|
+| No existen en 2025 | 58 |
+| Coinciden exacto con el formulario | 14 |
+| Entran por revisión manual | 26 |
+| No entran | 4 |
+
+**Por qué entran las 26:**
+- servicios públicos, ambiente, cultura y movilidad: la misma escala de satisfacción, y 2025 rotula también los puntos
+  intermedios;
+- economía y cultura ciudadana: las mismas puntas;
+- victimización y conocimiento de BCV: el mismo sí/no.
+
+**Cinco son del gobierno de turno:** `GG3` (alcalde), `CC5A` (Concejo) y `MICE1` a `MICE3` (garantías de la Alcaldía). Se
+juntarán solo 2024 y 2025, los dos años de Galán (DI-AR5).
+
+**Las 4 que no entran:**
+- `RC5_6`, `RC5_16` y `RC5_17`, la probabilidad de sanción: las puntas cambiaron de «Baja / Alta» a «Nada probable /
+  Totalmente probable»;
+- `CV5`, la inversión de recursos: el punto 4 pasó de «Satisfecho» a «Algo satisfecho».
+
+**Comprobación con lo publicado.** Con el factor de 2025 (`Factor1`, 60 valores distintos), los datos reproducen el
+informe de BCV:
+
+| | Publicado | Datos |
+|---|---|---|
+| orgullo | 57 % | 56,6 % |
+| satisfacción | 61 % | 61,4 % |
+| gestión del alcalde, sin «no sabe» | 26 % | 26,4 % |
+| víctima de delito | 15 % | 14,6 % |
+| buen camino (`GOB_1`) | — | 48,2 % |
+
+El 48,2 % de `GOB_1` es el «optimismo sobre el rumbo» que reporta la prensa (48 %). El «59 % cree que Bogotá va por buen
+camino» de la misma nota **no es esta pregunta**. Se usó por error en las pruebas de MiroFish y TinyTroupe, y se corrigió
+allí.
+
 ## 14. Resultados electorales entregados por el CNC *(29/09/2026)*
 
 **Régimen: D16, no R10.** Sin datos de personas; se pueden leer con un LLM y usar en el
