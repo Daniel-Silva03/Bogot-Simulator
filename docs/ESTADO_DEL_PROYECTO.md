@@ -376,6 +376,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     MiroFish, sus residentes sí opinan, pero en bloque: orgullo 100 %, buen camino 0 % a 9 % (real 59 %). Error 27,2 con 12
     residentes y 29,1 con 24 generados por su fábrica, contra 15,1 del simulador. **Las herramientas de personas
     sintéticas quedan descartadas para cifras de opinión.**
+  - **La EPC 2025 entra al simulador (13/10).** Paso 1 hecho: verificada contra su formulario (`DATA_INVENTORY.md` §13.10),
+    40 preguntas se pueden juntar, y los datos reproducen lo publicado por BCV. Paso 2, pre-registrado:
+    `POBLACION_EPC2022_2025_SPECIFICATION.md`, con ~330 personas por localidad y la gestión de Galán como dato medido
+    (2024-2025).
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
