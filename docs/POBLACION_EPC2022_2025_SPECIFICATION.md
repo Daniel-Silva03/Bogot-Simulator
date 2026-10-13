@@ -110,3 +110,30 @@ microdatos (§13.10); aquí se repite con los donantes de la población.
 3. **La verificación de §5,** anotada aquí.
 4. **La página:** el motor apunta a la población nueva; notas y textos de §4; la validación de la reformulación de §4,
    con su gasto (unos USD 0,06) y su visto bueno.
+
+---
+
+## Enmienda 1 (13/10/2026, antes de construirla): sin las evaluaciones del gobierno de Claudia López
+
+**Lo pidió Daniel:** la gestión de López, que terminó en 2023, no le aporta al jefe. Hoy además es un riesgo: una pregunta
+sobre «el alcalde» podía llegar al dato de López (lo corrigió la reformulación versión 5, DI-CO37).
+
+**Qué sale de la población 2022-2025** (catálogo y donantes):
+- `GG3` y `CC5A` (gestión del alcalde/sa y del Concejo, 2022-2023);
+- `CV5` (inversión de los recursos públicos, 2022-2023). Su versión de 2025 no pasó la verificación, así que la inversión
+  **desaparece del todo** de esta población;
+- `MICE1` a `MICE3` de 2023 (garantías del gobierno de la ciudad). §3.1 ya las dejaba solo en 2023;
+- `GP1N_1` a `GP1N_17` (17 evaluaciones por tema de «el último año del actual gobierno», solo 2023).
+
+Son **23 preguntas**. El catálogo pasa de 107 a **84**: las 79 que quedan y las 5 de Galán (§3.2), que no cambian.
+
+**Lo que no cambia:**
+- **No se borra ningún dato.** Siguen en los archivos de BCV, en `epc_armonizado/items.csv` (las 102) y en las poblaciones
+  2023 y 2022-2024.
+- **Las 139 candidatas de la estimación (DI-CO29)** no se tocan: ese conjunto se validó así.
+- La verificación (§5) y las predicciones PP1 a PP4 (§6), ahora sobre las 84.
+
+**Lo que esto le añade a la validación de la reformulación (§4):** sin las preguntas de López en el catálogo, una pregunta
+sobre López no puede responderse con las de Galán. La prueba de §4 lleva también las preguntas sobre López de la versión 5,
+y pasa solo si ninguna termina en `GG3_GALAN` ni en las demás de Galán. Lo que se espera de cada una se escribe en esa prueba
+antes de correrla.
