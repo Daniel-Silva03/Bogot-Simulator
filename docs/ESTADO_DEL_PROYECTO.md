@@ -390,6 +390,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       reformulación pasa 12 de 12: Galán va a sus preguntas medidas y López queda como «nueva». La aprobación de Galán
       sale de un dato medido: 33,9 % (real 2025: 26,4 %; antes, la estimación daba 47,3 %). En las cinco de la EPC 2025, el
       error medio baja de 12,9 a 8,3 (PP4, no es a ciegas). Falta que Daniel revise la página.
+    - **Peso por año reciente: no pasa (13/10, USD 0, `PESO_ANIO_RECIENTE_RESULTS.md`).** Adivinando 2025 con la
+      población 2022-2024, la media vida de un año baja el error de la ciudad de 4,43 a 4,06. Es menos de 0,5, así que
+      la página sigue juntando los años igual. En cinco preguntas 2025 se movió más de lo que ningún peso alcanza (buen
+      camino, hambre, victimización). Pendiente, según el pre-registro y con visto bueno: la cifra de Galán por año.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
