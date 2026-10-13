@@ -167,7 +167,7 @@ gestión de Galán sin «no sabe» 26,4 % y víctima 14,6 %. Son **exactamente**
 | PP1 | ≤ 10 % de pares fuera del margen | 2,0 % | se cumple |
 | PP2 | mediana por localidad entre 300 y 360 | 312 | se cumple |
 | PP3 | ningún año supera el 40 % en una localidad | 36,9 % como máximo | se cumple |
-| PP4 | error de la página en las 5 de la EPC 2025 menor que 12,9 | pendiente: se mide con la página apuntando a esta población (§7.4) | — |
+| PP4 | error de la página en las 5 de la EPC 2025 menor que 12,9 | 8,3 (`REFORMULACION_2025_RESULTS.md` §2); no es a ciegas | se cumple |
 
 **Lo que se esperaba distinto:** «~330 por localidad» (§1) quedó en 312: 2025 encuestó menos en algunas localidades.
 La Candelaria no gana donantes, como se previó.

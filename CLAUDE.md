@@ -76,7 +76,7 @@ resultó falso no se borra:** se anota la corrección al lado (§45).
 
 | Carpeta | Qué hay |
 |---|---|
-| `src/population/` | población sintética: receptor Multipropósito 2021, donantes ECP y EPC, hot-deck (`matching.py`, desempate DI-M1), muestreo PPS (`muestreo.py`); la de la página es `poblacion_epc_olas.py` (EPC 2022-2024) |
+| `src/population/` | población sintética: receptor Multipropósito 2021, donantes ECP y EPC, hot-deck (`matching.py`, desempate DI-M1), muestreo PPS (`muestreo.py`); la de la página es `poblacion_epc_olas.py --con-2025` (EPC 2022-2025) |
 | `src/opinion/` | modelos de opinión; `forzamiento_categorico.py` es el **ladeo categórico**, el forzamiento que usa todo |
 | `src/scenarios/` | motor de escenarios (YAML → informe HTML); ejemplos en `config/escenarios/` |
 | `src/experiments/` | experimentos 3 a 8 y A08 (`a08_paso0.py`, `a08_paso0b.py`); `donante_llm.py` llama a OpenRouter con caché |

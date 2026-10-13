@@ -365,7 +365,7 @@ footer .marca{margin-bottom:16px}
     <div class="escena">
       <div class="cifras">
         <div class="cifra"><b>19.000</b><span>personas sintéticas</span></div>
-        <div class="cifra"><b>4.522</b><span>bogotanos reales encuestados entre 2022 y 2024</span></div>
+        <div class="cifra"><b>6.042</b><span>bogotanos reales encuestados entre 2022 y 2025</span></div>
         <div class="cifra"><b>19</b><span>localidades con datos</span></div>
       </div>
       <svg class="puntos" id="puntos" viewBox="0 0 760 170" aria-hidden="true"></svg>
@@ -443,18 +443,18 @@ footer .marca{margin-bottom:16px}
   <div class="envoltura">
     <div class="cabeza"><span class="ceja">Qué hay detrás</span><h2>Lo que sostiene cada respuesta, y lo que no puede decir</h2></div>
     <div class="rejilla-3">
-      <article class="tarjeta"><h3>La población</h3><p>Cada una de las 19.000 personas sintéticas (Sumapaz no tiene encuestados) hereda a un bogotano real de la Encuesta de Percepción Ciudadana 2022, 2023 o 2024 (Bogotá Cómo Vamos), de su misma localidad y parecido en sexo, edad y estrato. Las proporciones de la ciudad salen de la Encuesta Multipropósito 2021 del DANE.</p></article>
+      <article class="tarjeta"><h3>La población</h3><p>Cada una de las 19.000 personas sintéticas (Sumapaz no tiene encuestados) hereda a un bogotano real de la Encuesta de Percepción Ciudadana 2022, 2023, 2024 o 2025 (Bogotá Cómo Vamos), de su misma localidad y parecido en sexo, edad y estrato. Las proporciones de la ciudad salen de la Encuesta Multipropósito 2021 del DANE.</p></article>
       <article class="tarjeta"><h3>El puente</h3><p>Para una pregunta nueva, un modelo de lenguaje elige qué preguntas medidas se relacionan y en qué sentido; cada persona responde con sus propias respuestas reales. Con preguntas escondidas de la misma encuesta, ordenó bien a las personas pero no a las localidades. Con preguntas reales que la encuesta no hizo, no acertó qué grupos estaban más de acuerdo. Por eso hoy solo elige qué preguntas mostrar: no fija ninguna cifra ni contesta por nadie.</p></article>
       <article class="tarjeta"><h3>Los límites</h3><ul>
         <li>No predice ni reemplaza una encuesta.</li>
-        <li>Opina como Bogotá entre 2022 y 2024, promediada. Cada respuesta dice de qué años sale; algunas preguntas solo se hicieron en 2023.</li>
-        <li>Unas 250 personas encuestadas por localidad en la mayoría de las preguntas (unas 80 en las que solo se hicieron en 2023): el mapa tiene márgenes anchos.</li>
+        <li>Opina como Bogotá entre 2022 y 2025, promediada. Cada respuesta dice de qué años sale; algunas preguntas solo se hicieron en 2023, y las del gobierno de Galán, en 2024 y 2025.</li>
+        <li>Unas 310 personas encuestadas por localidad en las preguntas de los cuatro años, menos en las demás (unas 80 en las que solo se hicieron en 2023): el mapa tiene márgenes anchos.</li>
         <li>Sumapaz no tiene encuestados.</li>
         <li>En una pregunta nueva, la cifra es una estimación con un rango de unos ±23 puntos.</li></ul></article>
     </div>
     <div class="cabeza" style="margin:56px 0 0"><h2 style="font-size:28px;letter-spacing:-.56px">Hecho con datos públicos</h2></div>
     <div class="fuentes">
-      <div class="fuente">Bogotá Cómo Vamos<small>Encuesta de Percepción Ciudadana 2022-2024</small></div>
+      <div class="fuente">Bogotá Cómo Vamos<small>Encuesta de Percepción Ciudadana 2022-2025</small></div>
       <div class="fuente">DANE<small>Encuesta Multipropósito 2021</small></div>
       <div class="fuente">DANE · SDP<small>Proyecciones de población</small></div>
       <div class="fuente">Catastro Distrital<small>Geometría de localidades</small></div>
@@ -466,7 +466,7 @@ footer .marca{margin-bottom:16px}
 </main>
 <footer><div class="envoltura">
   <div class="marca"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="#485346"/><circle cx="9" cy="10" r="2" fill="#7fee64"/><circle cx="17" cy="10" r="2" fill="#ddffdc"/><circle cx="13" cy="17" r="2" fill="#ddffdc"/></svg>Bogotá Sintética</div>
-  Centro Nacional de Consultoría. Datos: Encuesta de Percepción Ciudadana 2022, 2023 y 2024 (Bogotá Cómo Vamos), Encuesta Multipropósito 2021 y proyecciones de población (DANE-SDP), geometría de localidades (Catastro Distrital), mapa base © colaboradores de OpenStreetMap (ODbL). Todo lo que muestra esta página es una suposición de una población sintética, no una medición.
+  Centro Nacional de Consultoría. Datos: Encuesta de Percepción Ciudadana 2022, 2023, 2024 y 2025 (Bogotá Cómo Vamos), Encuesta Multipropósito 2021 y proyecciones de población (DANE-SDP), geometría de localidades (Catastro Distrital), mapa base © colaboradores de OpenStreetMap (ODbL). Todo lo que muestra esta página es una suposición de una población sintética, no una medición.
 </div></footer>
 
 <script id="datos" type="application/json">/*__DATOS__*/</script>
@@ -697,7 +697,7 @@ function seleccionar(cod, suave){
   const g = G[cod]; if (!g) return;
   let filas = `<dt>Adultos</dt><dd>${fmt(g.adultos)}</dd>
     <dt>Estrato medio</dt><dd>${g.estrato_medio ? f1(g.estrato_medio) : '—'}</dd>
-    <dt>Encuestados (EPC 2022-2024)</dt><dd>${fmt(g.encuestados)}</dd>`;
+    <dt>Encuestados (EPC 2022-2025)</dt><dd>${fmt(g.encuestados)}</dd>`;
   let extra = '';
   if (estado.modo === 'catalogo') {
     const v = estado.resp.localidades[cod];

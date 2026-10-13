@@ -384,8 +384,12 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       evaluaciones del gobierno de Claudia López (los datos no se borran). 6.042 donantes, mediana 312 por localidad,
       84 preguntas (79 y 5 de Galán). Pasa la verificación: 2,0 % de pares fuera del margen. Los donantes de 2025
       reproducen exacto las cifras de BCV. PP1 a PP3 se cumplen.
-    - **Siguiente (paso 4):** la página apunta a la población nueva, con la validación de la reformulación (§4 y
-      enmienda 1, unos USD 0,06, con visto bueno) y PP4.
+    - ~~**Siguiente (paso 4):** la página apunta a la población nueva, con la validación de la reformulación (§4 y
+      enmienda 1, unos USD 0,06, con visto bueno) y PP4.~~ **Paso 4 hecho (13/10, USD 0,053, DI-CO38,
+      `REFORMULACION_2025_RESULTS.md`).** La página usa la población 2022-2025 y su catálogo de 84 preguntas. La
+      reformulación pasa 12 de 12: Galán va a sus preguntas medidas y López queda como «nueva». La aprobación de Galán
+      sale de un dato medido: 33,9 % (real 2025: 26,4 %; antes, la estimación daba 47,3 %). En las cinco de la EPC 2025, el
+      error medio baja de 12,9 a 8,3 (PP4, no es a ciegas). Falta que Daniel revise la página.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

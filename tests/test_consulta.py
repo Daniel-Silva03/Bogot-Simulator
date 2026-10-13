@@ -2,7 +2,7 @@
 tests/test_consulta.py
 
 Pruebas de la consulta de punta a punta (src/consulta/motor.py y servidor.py), con
-el modelo simulado: ninguna llama a la API. Usan la población EPC 2022-2024 si está en
+el modelo simulado: ninguna llama a la API. Usan la población EPC 2022-2025 si está en
 esta máquina.
 Se ejecuta directo:  python tests/test_consulta.py
 """
@@ -35,7 +35,7 @@ if HAY:
 
 def check(nombre, cuerpo):
     if not HAY:
-        print(f"  --     {nombre} (sin la población EPC 2022-2024 en esta máquina)")
+        print(f"  --     {nombre} (sin la población EPC 2022-2025 en esta máquina)")
         return
     try:
         cuerpo()
@@ -65,8 +65,8 @@ def test_el_margen_de_una_localidad_es_el_de_la_encuesta():
 
 
 def test_no_sabe_no_entra_a_la_media():
-    """GG3 tiene no respuesta: la media de cada localidad tiene que caer en la escala."""
-    r = M.responder_catalogo("GG3")
+    """GG3_GALAN tiene no respuesta: la media de cada localidad tiene que caer en la escala."""
+    r = M.responder_catalogo("GG3_GALAN")
     assert all(1 <= v["media"] <= 5 for v in r["localidades"].values())
     assert r["ciudad"]["respondieron"] < 1
 
@@ -250,11 +250,11 @@ def test_una_pregunta_vacia_o_un_codigo_inexistente_son_error():
 
 
 def test_cada_pregunta_responde_con_los_donantes_de_sus_anios():
-    """DI-CO6: VS8 junta tres años; GG3 solo 2022-2023 (DI-AR5)."""
-    tres, dos = M.responder_catalogo("VS8"), M.responder_catalogo("GG3")
-    assert tres["anios"] == [2022, 2023, 2024] and dos["anios"] == [2022, 2023]
-    assert tres["encuestados_mediana_localidad"] > 200 > dos["encuestados_mediana_localidad"] > 100
-    assert "2022, 2023 y 2024" in tres["fuente"]
+    """DI-CO6 y DI-CO38: VS8 junta cuatro años; GG3_GALAN solo 2024-2025 (DI-AR5, DI-PO6)."""
+    cuatro, dos = M.responder_catalogo("VS8"), M.responder_catalogo("GG3_GALAN")
+    assert cuatro["anios"] == [2022, 2023, 2024, 2025] and dos["anios"] == [2024, 2025]
+    assert cuatro["encuestados_mediana_localidad"] > 280 > 200 > dos["encuestados_mediana_localidad"] > 100
+    assert "2022, 2023, 2024 y 2025" in cuatro["fuente"]
     solo = [v for v, a in M.anios.items() if a == [2023]][0]
     r = M.responder_catalogo(solo)
     assert r["anios"] == [2023] and r["encuestados_mediana_localidad"] < 120 and r["ciudad"]["respondieron"] > 0.5
@@ -341,8 +341,11 @@ def test_la_reformulacion_de_la_pagina_es_la_version_5_y_reconoce_el_voto():
     m.reformular("¿Qué tan orgullosos se sienten de Bogotá?")
     from src.consulta import reformular as rf
     assert vistos == [rf.SISTEMA_V5]
-    gg3 = [l for l in mensajes[0].split("\n") if l.startswith("GG3 |")][0]
-    assert "[Se midió en 2022 y 2023, cuando la alcaldesa era Claudia López" in gg3                  # DI-CO37
+    lineas = mensajes[0].split("\n")
+    gg3 = [l for l in lineas if l.startswith("GG3_GALAN |")][0]
+    assert "[Se midió en 2024 y 2025, con el alcalde Carlos Fernando Galán" in gg3                    # DI-CO38
+    assert not any(l.startswith(("GG3 |", "CV5 |", "GP1N_", "MICE1 |")) for l in lineas)              # sin López
+    assert "Concejo de 2024-2027" in [l for l in lineas if l.startswith("CC5A_GALAN |")][0]
     assert "[" not in [l for l in mensajes[0].split("\n") if l.startswith("VS8 |")][0]
     r = M.reformular("¿Cuántos bogotanos votarían por Iván Cepeda?")
     assert r["alcance"] == "voto" and r["tipo"] == "primera" and r["candidatos"] == ["Iván Cepeda"] and r["escala"] is None
@@ -390,10 +393,11 @@ def test_el_simulado_nunca_guarda_con_el_nombre_de_un_modelo_real():
 
 def test_las_respuestas_se_agrupan_y_el_gobierno_dice_quien_era():
     """DI-CO36."""
-    r = M.responder_catalogo("GG3")
+    r = M.responder_catalogo("GG3_GALAN")
     assert [g["nombre"] for g in r["agrupada"]] == ["Negativa", "Neutral", "Positiva"]
     assert sorted(i for g in r["agrupada"] for i in g["indices"]) == list(range(len(r["escala"])))
-    assert "Claudia López" in r["nota"] and "Galán" in r["nota"]
+    assert "Galán" in r["nota"] and "Claudia López" not in r["nota"]                           # DI-CO38
+    assert "Claudia López" in mo.nota_gobierno("GG3", [2022, 2023])            # la rama de la población 2022-2024
     assert [g["nombre"] for g in mo.agrupar(M.catalogo["GG7"])] == ["Lado bajo", "En el medio", "Lado alto"]   # sin lado conocido
     assert mo.agrupar(M.catalogo["AG1"]) is None and M.responder_catalogo("VS8")["nota"] is None
     assert "mezcla los dos gobiernos" in mo.nota_gobierno("MICE1", [2023, 2024])

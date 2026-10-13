@@ -181,6 +181,22 @@ def test_la_regla_del_gobierno():
     assert not rf.evaluar_gobierno(sin_concejo)["criterios"]["R12"]["se_cumple"]
 
 
+def test_la_regla_del_gobierno_con_el_catalogo_2025():
+    """REFORMULACION_2025 §3: López nunca a un código de Galán."""
+    perfecto = [{"alcance": a, "codigo": c} for _, a, c in rf.PRUEBA_GOBIERNO_2025]
+    assert rf.evaluar_gobierno_2025(perfecto)["pasa"]
+    lopez_a_galan = list(perfecto)
+    lopez_a_galan[5] = {"alcance": "catalogo", "codigo": "GG3_GALAN"}
+    assert not rf.evaluar_gobierno_2025(lopez_a_galan)["criterios"]["R11"]["se_cumple"]
+    inversion = list(perfecto)
+    inversion[3] = {"alcance": "catalogo", "codigo": "MICE2_GALAN"}
+    assert not rf.evaluar_gobierno_2025(inversion)["criterios"]["R10"]["se_cumple"]
+    assert rf.CAMBIO_ESPERADO_2025 == {"¿Cómo califica la gente la gestión del alcalde?": "GG3_GALAN"}
+    doc = (Path(__file__).resolve().parents[1] / "docs" / "REFORMULACION_2025_SPECIFICATION.md").read_text(encoding="utf-8")
+    for p, _, c in rf.PRUEBA_GOBIERNO_2025:
+        assert p in doc and (c is None or f"`{c}`" in doc), p
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"Reformulación — {len(pruebas)} pruebas\n")

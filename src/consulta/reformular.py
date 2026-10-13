@@ -43,6 +43,8 @@ from src.experiments import experimento9 as e9            # noqa: E402
 
 SALIDA = RAIZ / "data" / "processed" / "reformulacion"
 CATALOGO = RAIZ / "data" / "processed" / "poblacion_epc2023" / "catalogo.json"
+#: REFORMULACION_2025: el catálogo de la población 2022-2025 (84 preguntas, sin López, con Galán)
+CATALOGO_2025 = RAIZ / "data" / "processed" / "poblacion_epc2022_2025" / "catalogo.json"
 MODELO = e9.MODELO
 TEMPERATURA = 0.0
 ALCANCES = ("catalogo", "nueva", "fuera")
@@ -367,12 +369,49 @@ def evaluar_gobierno(respuestas: list[Optional[dict]], prueba=PRUEBA_GOBIERNO) -
     return {"criterios": crit, "pasa": all(c["se_cumple"] for c in crit.values())}
 
 
-def notas_gobierno() -> dict[str, str]:
-    """Las notas de la página (motor, DI-CO36), para la versión 5."""
+#: REFORMULACION_2025 §2: las 9 del gobierno con el catálogo 2022-2025.
+PRUEBA_GOBIERNO_2025 = (
+    ("¿Cómo califica la gente la gestión del alcalde Galán?", "catalogo", "GG3_GALAN"),
+    ("¿Aprueban los bogotanos la gestión de Carlos Fernando Galán?", "catalogo", "GG3_GALAN"),
+    ("¿Cree la gente que el gobierno de Galán abre espacios de participación ciudadana?", "catalogo", "MICE3_GALAN"),
+    ("¿Qué tan satisfechos están con cómo la alcaldía de Galán invierte la plata de la ciudad?", "nueva", None),
+    ("¿Cómo evalúan la gestión de Galán en seguridad?", "nueva", None),
+    ("¿Cómo calificaba la gente la gestión de la alcaldesa Claudia López?", "nueva", None),
+    ("¿Qué tan satisfechos estaban con cómo la alcaldía de Claudia López invertía los recursos?", "nueva", None),
+    ("¿Cómo evaluaron la gestión de Claudia López en seguridad en su último año?", "nueva", None),
+    ("¿Cómo califican la gestión del Concejo de Bogotá?", "catalogo", "CC5A_GALAN"),
+)
+#: REFORMULACION_2025 §2: la única de las 54 cuyo código cambia (GG3 era de López).
+CAMBIO_ESPERADO_2025 = {"¿Cómo califica la gente la gestión del alcalde?": "GG3_GALAN"}
+
+
+def evaluar_gobierno_2025(respuestas: list[Optional[dict]], prueba=PRUEBA_GOBIERNO_2025) -> dict:
+    """REFORMULACION_2025 §3, R10 a R12."""
+    par = list(zip(respuestas, prueba))
+    med = [(r, e) for r, e in par[:3]]
+    r10a = sum(bool(r) and r["alcance"] == "catalogo" and r["codigo"] == e[2] for r, e in med)
+    r10b = sum(bool(r) and r["alcance"] == "catalogo" for r, _ in par[3:5])
+    lop = [r for r, _ in par[5:8]]
+    r11a = sum(bool(r) and str(r.get("codigo") or "").endswith("_GALAN") for r in lop)
+    r11b = sum(bool(r) and r["alcance"] == "nueva" for r in lop)
+    con = respuestas[8]
+    r12 = bool(con) and con["alcance"] == "catalogo" and con["codigo"] == "CC5A_GALAN"
+    crit = {"R10": {"umbral": "G1-G3 con su código en ≥ 2 de 3; G4 y G5 ninguna como catálogo", "valor": [r10a, r10b],
+                    "se_cumple": r10a >= 2 and r10b == 0},
+            "R11": {"umbral": "López: ninguna en un código de Galán; «nueva» en ≥ 2 de 3", "valor": [r11a, r11b],
+                    "se_cumple": r11a == 0 and r11b >= 2},
+            "R12": {"umbral": "el Concejo → CC5A_GALAN", "valor": r12, "se_cumple": r12}}
+    return {"criterios": crit, "pasa": all(c["se_cumple"] for c in crit.values())}
+
+
+def notas_gobierno(catalogo: Optional[dict] = None) -> dict[str, str]:
+    """Las notas de la página (motor, DI-CO36), para la versión 5. Con un catálogo que trae sus años (el de la
+    población 2022-2025), los de cada pregunta; si no, los de la página."""
     from src.consulta import motor as mo
-    anios = mo.cargar_anios()
+    catalogo = catalogo if catalogo is not None else cargar_catalogo()
+    anios = mo.cargar_anios() if not all("anios" in f for f in catalogo.values()) else         {k: f["anios"] for k, f in catalogo.items()}
     out = {}
-    for k in cargar_catalogo():
+    for k in catalogo:
         n = mo.nota_gobierno(k, sorted(anios.get(k, [2023])))
         if n:
             out[k] = n
@@ -463,6 +502,44 @@ def validar_voto(version: int = 2) -> int:
         got = None if r is None else (r["alcance"], r.get("codigo"), r.get("tipo"), r.get("candidatos"))
         marca = "" if r and r["alcance"] == a else "   <-- distinto"
         print(f"{p[:70]:70} | esperado {a}{' ' + str(cs) if cs else ''} | obtuvo {got}{marca}")
+    for k, c in v["criterios"].items():
+        print(f"  {k} {'se cumple' if c['se_cumple'] else 'NO se cumple'} — {c['umbral']} (valor {c['valor']})")
+    print(f"pasa: {v['pasa']} | gasto USD {e9.gasto_registrado(cache)['costo_usd']:.4f}")
+    salida.mkdir(parents=True, exist_ok=True)
+    (salida / "resultado.json").write_text(json.dumps({"respuestas": respuestas, **v, "gasto": e9.gasto_registrado(cache)},
+                                                      ensure_ascii=False, indent=2), encoding="utf-8")
+    return 0
+
+
+def validar_2025() -> int:
+    """REFORMULACION_2025: la versión 5 con el catálogo 2022-2025, en las 54 de la versión 5 y las 9 nuevas del gobierno."""
+    from src.consulta import motor as mo
+    base = PRUEBA_VOTO_V3 + tuple((p, a, c, None, None) for p, a, c in PRUEBA_MATIZ)
+    base = tuple((p, a, CAMBIO_ESPERADO_2025.get(p, c), t, cs) for p, a, c, t, cs in base)
+    prueba = base + tuple((p, a, c, None, None) for p, a, c in PRUEBA_GOBIERNO_2025)
+    catalogo = cargar_catalogo(CATALOGO_2025)
+    notas = notas_gobierno(catalogo)
+    salida = SALIDA / "catalogo_2025"
+    cache = e9.Cache(salida / "cache.json")
+    llamar = e9.cliente_real()
+    respuestas = []
+    try:
+        for p, *_ in prueba:
+            respuestas.append(reformular_v2(p, catalogo, llamar, cache, mo.MODELO_PAGINA, SISTEMA_V5, notas)[0])
+    except e9.Experimento9Error as e:
+        print(f"ERROR: {e}")
+        return 1
+    v = evaluar_voto(respuestas[:40], base[:40])
+    m = evaluar_matiz(respuestas[40:54])
+    vs8 = respuestas[0] is not None and respuestas[0]["alcance"] == "catalogo" and respuestas[0]["codigo"] == "VS8"
+    crit = {**v["criterios"], **m["criterios"], "R9": {"umbral": "«caminando por su barrio» → VS8", "valor": vs8,
+                                                       "se_cumple": vs8},
+            **evaluar_gobierno_2025(respuestas[54:])["criterios"]}
+    v = {"criterios": crit, "pasa": all(c["se_cumple"] for c in crit.values())}
+    for (p, a, c, _, cs), r in zip(prueba, respuestas):
+        got = None if r is None else (r["alcance"], r.get("codigo"), r.get("tipo"), r.get("candidatos"))
+        marca = "" if r and r["alcance"] == a and (a != "catalogo" or r.get("codigo") == c) else "   <-- distinto"
+        print(f"{p[:70]:70} | esperado {a}{' ' + str(c) if c else ''}{' ' + str(cs) if cs else ''} | obtuvo {got}{marca}")
     for k, c in v["criterios"].items():
         print(f"  {k} {'se cumple' if c['se_cumple'] else 'NO se cumple'} — {c['umbral']} (valor {c['valor']})")
     print(f"pasa: {v['pasa']} | gasto USD {e9.gasto_registrado(cache)['costo_usd']:.4f}")

@@ -3,7 +3,7 @@
 **La página nueva del proyecto (D17): cualquiera le hace una pregunta de opinión a la población sintética y ve cómo respondería, en total, por grupos y, cuando hay con qué, por localidad. Todo rotulado como suposición.**
 
 Proyecto: Bogotá Social Simulator
-Versión: 0.3 (población 2022-2024, 30/09/2026; §5.5)
+Versión: 0.4 (población 2022-2025, 13/10/2026; §5.28)
 Fecha: 30 de septiembre de 2026
 Código: `src/consulta/` (`motor.py`, `servidor.py`, `pagina.html`, `reformular.py`) · Pruebas: `tests/test_consulta.py` (8), `tests/test_reformular.py` (7)
 Reemplaza, como cara del proyecto, al tablero de `src/viz/` (que se conserva, sin cambios)
@@ -22,9 +22,9 @@ python src/consulta/servidor.py              # http://127.0.0.1:8765
 python src/consulta/servidor.py --simulado   # sin clave ni gasto, para mirar la página
 ```
 
-Necesita la población EPC 2022-2024 construida (`python src/population/poblacion_epc_olas.py`,
+Necesita la población EPC 2022-2025 construida (`python src/population/poblacion_epc_olas.py --con-2025`,
 que a su vez usa `poblacion_epc.py` y la armonización) y el microdato de la EPC en su ruta
-(`BSS_EPC_DIR`). *Hasta el 30/09 usaba la población 2023; ver §5.5.*
+(`BSS_EPC_DIR`). *Hasta el 30/09 usaba la población 2023 (§5.5), y hasta el 13/10 la 2022-2024 (§5.28).*
 
 **Gasto:** una pregunta del catálogo cuesta una llamada (la reformulación, unos USD 0,003);
 una nueva, dos (reformulación y puente, unos USD 0,006). ~~Más la estimación con Sonnet (~USD 0,024).~~ Más la
@@ -777,10 +777,34 @@ versión 5 pasó las 12 condiciones: las 4 preguntas de Galán son nuevas, y las
 
 **Verificado:** las 31 pruebas de `tests/test_consulta.py`. En el navegador, `GG3` con el selector y la nota, sin errores.
 
+## 5.28 La población 2022-2025 (13/10/2026, DI-CO38)
+
+**Qué cambió:**
+- **La población:** la 2022-2025 (`POBLACION_EPC2022_2025_SPECIFICATION.md`): 6.042 encuestados, unos 312 por localidad
+  en las preguntas de los cuatro años.
+- **El catálogo:** 84 preguntas. Salen las 23 del gobierno de Claudia López (lo pidió Daniel; los datos no se borran) y
+  entran 5 de Galán, medidas en 2024 y 2025: gestión del alcalde (`GG3_GALAN`), del Concejo y las tres de garantías.
+- **Las notas:** las de Galán dicen «Se midió en 2024 y 2025, con el alcalde Carlos Fernando Galán». La del Concejo dice
+  que es el de 2024-2027. Ya no hay notas de López, porque sus preguntas no están.
+- **Los textos:** 6.042 encuestados entre 2022 y 2025; «opina como Bogotá entre 2022 y 2025»; unas 310 personas por
+  localidad; el aviso de cada respuesta y el pie citan la EPC 2025.
+
+**Por qué:** hoy, «¿aprueban la gestión de Galán?» sale de un dato medido (33,9 %), no de una estimación (47,3 %). El real de
+2025 es 26,4 %.
+
+**Verificado:**
+- La reformulación con este catálogo pasó su validación pre-registrada: 12 de 12 (`REFORMULACION_2025_RESULTS.md`).
+  Galán va a sus preguntas y López queda como «nueva».
+- PP4: en las cinco preguntas de la EPC 2025, el error medio baja de 12,9 a 8,3.
+- Las 31 pruebas de `tests/test_consulta.py` y las 14 de `tests/test_reformular.py`.
+
+**El límite que se suma:** `GG3_GALAN` tiene unas 117 personas por localidad (2 años), así que su mapa tiene márgenes
+anchos.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por
-localidad~~ opina como Bogotá entre 2022 y 2024 (v0.3); unas 250 personas por localidad en
+localidad~~ ~~opina como Bogotá entre 2022 y 2024 (v0.3); unas 250 personas~~ opina como Bogotá entre 2022 y 2025 (v0.4); unas 310 personas por localidad en
 las preguntas que se juntan, y 80 en las que solo tiene 2023, dan márgenes anchos (la
 confiabilidad de las medias por localidad es baja, `PUENTE_RESULTS.md` §4); Sumapaz no tiene
 encuestados; ~~el nivel de una pregunta nueva lo propone el modelo y se puede cambiar~~ ~~una

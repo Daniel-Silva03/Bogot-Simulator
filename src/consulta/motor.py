@@ -5,7 +5,7 @@ La consulta de punta a punta (D17): de la pregunta que alguien escribe a la
 respuesta que ve en la página. Une las tres piezas validadas:
 
     reformulación (`reformular.py`, 24 de 24)
-        ├─ catálogo → el dato medido: población EPC 2022-2024, por ciudad, grupo y localidad
+        ├─ catálogo → el dato medido: población EPC 2022-2025, por ciudad, grupo y localidad
         ├─ nueva    → (D18) el tono general por grupo, rotulado como tal, y las
         │             preguntas medidas que el puente relaciona, con su dato real;
         │             SIN nivel y SIN mapa por localidad
@@ -305,6 +305,13 @@ DI-CO37. **La reformulación pasa a la versión 5** (8/10, `REFORMULACION_GOBIER
     modelo lleva entre corchetes el gobierno que midió cada pregunta (`nota_gobierno`), y la instrucción dice que, si se
     nombra a otro gobernante, la pregunta es nueva. Pasó su validación: 12 de 12 condiciones, con las 4 de Galán como
     nuevas y las 3 de Claudia López en su código.
+
+DI-CO38. **La página usa la población 2022-2025** (13/10, `POBLACION_EPC2022_2025_SPECIFICATION.md` y
+    `REFORMULACION_2025_RESULTS.md`). Cambia DI-CO6: la población (`POBLACION`) y el catálogo que ve el modelo, que pasa
+    a ser el de esa población (84 preguntas: sin las 23 del gobierno de Claudia López, con las 5 de Galán). La
+    instrucción sigue siendo la versión 5. La reformulación con este catálogo pasó su validación: 12 de 12, con Galán en
+    sus preguntas y López como «nueva». Las de Galán llevan su nota (`nota_gobierno`); la del Concejo dice que es el de
+    2024-2027. Las ramas de López en `nota_gobierno` se quedan, para la población 2022-2024.
 """
 
 from __future__ import annotations
@@ -327,7 +334,7 @@ from src.consulta import reformular as rf                  # noqa: E402
 from src.experiments import experimento9 as e9            # noqa: E402
 from src.experiments import puente as pu                  # noqa: E402
 
-POBLACION = RAIZ / "data" / "processed" / "poblacion_epc2022_2024"
+POBLACION = RAIZ / "data" / "processed" / "poblacion_epc2022_2025"                    # DI-CO38
 MARGINAL = RAIZ / "data" / "external" / "marginal_localidad_18mas.csv"
 CACHE = RAIZ / "data" / "processed" / "consulta" / "cache.json"
 N_BOOT = 200
@@ -340,7 +347,7 @@ GRUPOS = {
     "sexo": {"titulo": "Sexo", "orden": ["Mujeres", "Hombres"]},
 }
 AVISO = ("Esto es una suposición, no una medición: muestra cómo respondería una población sintética "
-         "construida con la Encuesta de Percepción Ciudadana 2022, 2023 y 2024 de Bogotá Cómo Vamos.")
+         "construida con la Encuesta de Percepción Ciudadana 2022, 2023, 2024 y 2025 de Bogotá Cómo Vamos.")
 
 
 #: DI-CO20: lo primero que dice una pregunta nueva es que no se puede responder.
@@ -522,7 +529,10 @@ def agrupar(f: dict) -> Optional[list[dict]]:
 
 #: DI-CO36: qué gobierno midió cada pregunta sobre la Alcaldía (Claudia López, 2020-2023; Carlos Fernando Galán, 2024-).
 def nota_gobierno(codigo: str, anios: list[int]) -> Optional[str]:
-    if not (codigo in ("GG3", "CV5") or codigo.startswith(("GP1N_", "MICE"))):
+    if codigo == "CC5A_GALAN":                                                                    # DI-CO38
+        return (f"Se midió en {_texto_anios(anios)}: es el Concejo de 2024-2027, durante la alcaldía de Carlos Fernando "
+                f"Galán.")
+    if not (codigo in ("GG3", "CV5") or codigo.startswith(("GP1N_", "MICE")) or codigo.endswith("_GALAN")):
         return None
     lopez, galan = [a for a in anios if a <= 2023], [a for a in anios if a >= 2024]
     if lopez and galan:
@@ -607,7 +617,7 @@ class Motor:
                  agentes: Optional[pd.DataFrame] = None, catalogo: Optional[dict] = None,
                  cache: Optional[e9.Cache] = None, anios: Optional[dict] = None):
         self.llamar, self.modelo = llamar, modelo
-        self.catalogo = catalogo if catalogo is not None else rf.cargar_catalogo()
+        self.catalogo = catalogo if catalogo is not None else rf.cargar_catalogo(POBLACION / "catalogo.json")  # DI-CO38
         self._vista = {v: vista(f) for v, f in self.catalogo.items()}         # DI-CO19
         self._candidatas = _candidatas_estimacion()                              # DI-CO22
         self.donante = donante if donante is not None else cargar_donantes()
@@ -889,7 +899,7 @@ class Motor:
 
 def informacion_general(agentes: Optional[pd.DataFrame] = None, donante: Optional[pd.DataFrame] = None) -> dict:
     """Por localidad: nombre, adultos (proyección oficial), estrato medio de la población y
-    cuántas personas de la EPC 2022-2024 viven ahí. Nada de opinión."""
+    cuántas personas de la EPC 2022-2025 viven ahí. Nada de opinión."""
     ag = agentes if agentes is not None else pd.read_parquet(POBLACION / "agentes.parquet")
     don = donante if donante is not None else cargar_donantes()
     m = pd.read_csv(MARGINAL).set_index("COD_LOC")
@@ -907,7 +917,7 @@ def cliente(simulado: bool = False):
     """(llamar, modelo). El simulado contesta la reformulación y el puente sin gasto."""
     if not simulado:
         return e9.cliente_real(corte_cache="PREGUNTA NUEVA"), MODELO_PAGINA       # DI-CO26, DI-CO30 (DI-E11)
-    cat = rf.cargar_catalogo()
+    cat = rf.cargar_catalogo(POBLACION / "catalogo.json")
     ref = rf.modelo_simulado(cat)
     cods = list(cat)
 
