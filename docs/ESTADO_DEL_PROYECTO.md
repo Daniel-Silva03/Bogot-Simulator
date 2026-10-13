@@ -393,7 +393,7 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     - **Peso por año reciente: no pasa (13/10, USD 0, `PESO_ANIO_RECIENTE_RESULTS.md`).** Adivinando 2025 con la
       población 2022-2024, la media vida de un año baja el error de la ciudad de 4,43 a 4,06. Es menos de 0,5, así que
       la página sigue juntando los años igual. En cinco preguntas 2025 se movió más de lo que ningún peso alcanza (buen
-      camino, hambre, victimización). Pendiente, según el pre-registro y con visto bueno: la cifra de Galán por año.
+      camino, hambre, victimización). La cifra de Galán por año, que proponía el pre-registro, no se hace: Daniel la descartó.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

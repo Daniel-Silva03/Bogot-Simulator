@@ -52,3 +52,7 @@ cambio brusco: si la opinión se mueve, la página lo ve cuando entra la encuest
 
 **Lo que sigue según el pre-registro (§3):** la cifra de Galán se acompaña con lo que dijo cada año. Es un cambio en la
 página, y espera el visto bueno de Daniel.
+
+**Decisión de Daniel (13/10/2026), después de ver los resultados:** no se muestra la cifra de Galán por año. Lo que interesa
+es lo que opina la población sintética, no la serie de cada encuesta. Lo que decía §3 del pre-registro no se hace, y la
+página queda como está: con la regla A.
