@@ -801,6 +801,10 @@ versión 5 pasó las 12 condiciones: las 4 preguntas de Galán son nuevas, y las
 **El límite que se suma:** `GG3_GALAN` tiene unas 117 personas por localidad (2 años), así que su mapa tiene márgenes
 anchos.
 
+**Después (13/10, a pedido de Daniel):** al reformular una pregunta del catálogo ya no sale la insignia «Ya medida en la
+encuesta». Se quedan las de pregunta nueva, voto y fuera de alcance, el rótulo «Dato medido · EPC …» del resultado y la
+tarjeta de «Cómo funciona».
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

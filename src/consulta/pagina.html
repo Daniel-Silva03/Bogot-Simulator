@@ -777,7 +777,7 @@ function mostrarEntendida(r){
     aparecer(s); return;
   }
   const texto = r.alcance === 'catalogo' ? r.pregunta_catalogo : r.reformulada;
-  s.innerHTML = `<div class="fila-ref"><span class="ceja">Así entendimos tu pregunta</span><span class="insignia ${ins[0]}">${ins[1]}</span></div>
+  s.innerHTML = `<div class="fila-ref"><span class="ceja">Así entendimos tu pregunta</span>${r.alcance === 'catalogo' ? '' : `<span class="insignia ${ins[0]}">${ins[1]}</span>`}</div>
     <p class="propuesta" id="entendida">${esc(texto)}</p>
     ${r.nota ? `<p class="razon"><b>Ojo:</b> ${esc(r.nota)}</p>` : ''}
     ${r.escala ? `<div class="escala-lista" aria-label="Escala de respuesta">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>` : ''}
