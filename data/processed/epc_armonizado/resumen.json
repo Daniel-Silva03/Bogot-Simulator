@@ -1,9 +1,10 @@
 {
  "preguntas_catalogo": 102,
  "por_numero_de_olas": {
-  "1": 28,
-  "2": 29,
-  "3": 45
+  "1": 31,
+  "2": 13,
+  "3": 36,
+  "4": 22
  },
  "motivos_de_exclusion": {
   "2022": {
@@ -13,22 +14,25 @@
    "otra escala (1-6)": 1
   },
   "2024": {
-   "mismas etiquetas": 53,
+   "mismas etiquetas": 50,
    "no está en el archivo": 33,
    "otras etiquetas": 13,
-   "otra administración (DI-AR5)": 3
+   "otra administración (DI-AR5)": 6
   },
   "2025": {
    "no está en el archivo": 58,
-   "sin etiquetas: no se puede verificar": 44
+   "formulario: entra (revisión manual)": 21,
+   "formulario: coincide": 14,
+   "otra administración (DI-AR5)": 5,
+   "formulario: no entra (revisión manual)": 4
   }
  },
  "con_2_o_mas_olas": {
-  "preguntas": 74,
-  "conf_2023_mediana": 0.192,
-  "conf_junto_mediana": 0.37,
-  "conf_2023_sb_mediana": 0.322,
-  "conf_junto_sb_mediana": 0.54,
+  "preguntas": 71,
+  "conf_2023_mediana": 0.235,
+  "conf_junto_mediana": 0.379,
+  "conf_2023_sb_mediana": 0.38,
+  "conf_junto_sb_mediana": 0.55,
   "n_loc_mediana": 251.0
  }
 }

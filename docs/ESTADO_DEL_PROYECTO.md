@@ -380,6 +380,12 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     40 preguntas se pueden juntar, y los datos reproducen lo publicado por BCV. Paso 2, pre-registrado:
     `POBLACION_EPC2022_2025_SPECIFICATION.md`, con ~330 personas por localidad y la gestión de Galán como dato medido
     (2024-2025).
+    - **Paso 3, construida (13/10, USD 0, §8 de su especificación).** Enmienda 1, a pedido de Daniel: sin las 23
+      evaluaciones del gobierno de Claudia López (los datos no se borran). 6.042 donantes, mediana 312 por localidad,
+      84 preguntas (79 y 5 de Galán). Pasa la verificación: 2,0 % de pares fuera del margen. Los donantes de 2025
+      reproducen exacto las cifras de BCV. PP1 a PP3 se cumplen.
+    - **Siguiente (paso 4):** la página apunta a la población nueva, con la validación de la reformulación (§4 y
+      enmienda 1, unos USD 0,06, con visto bueno) y PP4.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

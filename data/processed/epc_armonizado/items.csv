@@ -1,103 +1,103 @@
 variable,nombre,anios,olas,motivo_2022,motivo_2024,motivo_2025,n_2023,n_junto,localidades,n_loc_mediana_junto,n_loc_min_junto,conf_2023,conf_junto,conf_2023_sb,conf_junto_sb
-AG1,Optimismo sobre Bogotá,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.053,0.538,0.101,0.7
-AG2,Orgullo de Bogotá,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.291,0.396,0.451,0.567
-CV1,Satisfacción con Bogotá,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.138,0.389,0.242,0.56
-CO2,Situación económica del hogar,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.254,0.554,0.405,0.713
-CO4,Autopercepción de pobreza,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.28,0.485,0.437,0.653
-CO1_1,Facilidad para encontrar empleo,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.304,0.517,0.467,0.682
-CO1_2,Optimismo sobre el futuro de la economía,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.347,0.143,0.516,0.25
-CO1_3,Facilidad para emprender,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,-0.003,-0.171,-0.005,-0.412
-AL1,Hambre,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.292,0.688,0.452,0.815
-SA22A,Estado de salud física,2023 2024,2,otras etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1498,3017,19,160.0,56,0.33,0.381,0.497,0.552
-SA22B,Estado de salud mental,2023 2024,2,otras etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1495,3016,19,160.0,56,0.129,-0.114,0.229,-0.257
-SP1,Satisfacción con acueducto,2023 2022,2,mismas etiquetas,otras etiquetas,sin etiquetas: no se puede verificar,1495,2991,19,162.0,57,0.523,0.39,0.687,0.561
-SP2,Satisfacción con alcantarillado,2023 2022,2,mismas etiquetas,otras etiquetas,sin etiquetas: no se puede verificar,1496,2987,19,161.0,58,0.398,0.433,0.57,0.605
-SP3,Satisfacción con energía,2023 2022,2,mismas etiquetas,otras etiquetas,sin etiquetas: no se puede verificar,1498,2994,19,163.0,58,0.365,0.275,0.535,0.432
-SP4,Satisfacción con aseo y basura,2023 2022,2,mismas etiquetas,otras etiquetas,sin etiquetas: no se puede verificar,1501,2999,19,163.0,58,0.348,0.437,0.516,0.609
-SP5,Satisfacción con gas domiciliario,2023 2022,2,mismas etiquetas,otras etiquetas,sin etiquetas: no se puede verificar,1464,2895,19,147.0,49,0.279,-0.123,0.437,-0.279
-SP6,Satisfacción con internet,2023 2022,2,mismas etiquetas,otras etiquetas,sin etiquetas: no se puede verificar,1351,2664,19,156.0,46,0.238,0.667,0.385,0.8
-VS7,Satisfacción con vivienda,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.207,0.322,0.342,0.487
-VS8,Percepción de seguridad en el barrio,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.48,0.701,0.649,0.824
-VS10,Percepción de seguridad en la ciudad,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.133,0.385,0.235,0.556
-VS15,Victimización,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,-0.065,0.202,-0.139,0.336
-VS18,Probabilidad de que un delito sea sancionado,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1488,1488,19,79.0,28,0.282,0.282,0.44,0.44
-MICE1,Percepción de transparencia,2023 2024,2,otras etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,3022,19,160.0,56,0.226,0.463,0.368,0.633
-MICE2,Percepción de la respuesta a solicitudes ciudadanas,2023 2024,2,otras etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,3022,19,160.0,56,-0.049,0.176,-0.103,0.299
-MICE3,Percepción sobre la generación de espacios de participación,2023 2024,2,otras etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,3022,19,160.0,56,-0.127,0.34,-0.292,0.508
-RC3_0,Respeto por la vida,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.079,0.53,0.147,0.692
-RC3_1,Respeto y cuidado de espacios y bienes públicos,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.007,0.483,0.014,0.651
-RC3_2,Respeto por normas de tránsito,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.081,0.241,0.149,0.389
-RC3_3,Respeto por normas ambientales,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.017,0.455,0.034,0.625
-RC4_1,Respeto por las personas mayores,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.228,0.409,0.372,0.581
-RC4_2,Respeto por los niños y niñas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.18,0.369,0.306,0.539
-RC4_3,Respeto por las personas con discapacidad,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.091,0.155,0.167,0.269
-RC4_4,Respeto por los desplazados por la violencia,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.253,0.34,0.404,0.508
-RC4_5,Respeto por los reinsertados o desmovilizados,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.146,0.309,0.255,0.472
-RC4_6,Respeto por la población migrante,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,-0.111,0.102,-0.25,0.186
-RC4_7,Respeto por las mujeres,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.221,0.295,0.362,0.456
-RC4_8,Respeto por personas de diversa orientación sexual,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.244,0.369,0.392,0.539
-RC4_9,Respeto por personas de diversidad étnica,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,-0.01,0.2,-0.02,0.333
-RC4_12,Respeto por los vecinos,2023 2024,2,no está en el archivo,mismas etiquetas,no está en el archivo,1501,3022,19,160.0,56,0.274,0.214,0.43,0.353
-RC5_1,Probabilidad de sanción por violar una norma de construcción,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.181,0.181,0.307,0.307
-RC5_4,Probabilidad de sanción por conectarse ilegalmente a servicios públicos,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.091,0.091,0.167,0.167
-RC5_6,Probabilidad de sanción por no pagar impuestos,2023,1,no está en el archivo,no está en el archivo,sin etiquetas: no se puede verificar,1501,1501,19,80.0,28,-0.155,-0.155,-0.367,-0.367
-RC5_7,Probabilidad de sanción por agredir a otra persona,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,-0.023,-0.023,-0.047,-0.047
-RC5_16,Probabilidad de sanción por poner música a alto volumen,2023,1,no está en el archivo,no está en el archivo,sin etiquetas: no se puede verificar,1501,1501,19,80.0,28,0.51,0.51,0.676,0.676
-RC5_17,Probabilidad de sanción por portar armas blancas,2023,1,no está en el archivo,no está en el archivo,sin etiquetas: no se puede verificar,1501,1501,19,80.0,28,0.192,0.192,0.322,0.322
-RC5_30,Probabilidad de sanción por no recoger los excrementos de su mascota,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.426,0.426,0.597,0.597
-RC5_31,Probabilidad de sanción por lavar vehículos en la vía pública,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.322,0.322,0.487,0.487
-CR2,Oferta cultural,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.223,0.47,0.365,0.639
-CR4,Oferta recreativa y deportiva,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.568,0.629,0.725,0.772
-MV4,Satisfacción con su modo de transporte,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.185,0.613,0.313,0.76
-MV2,Tiempos de desplazamiento,2023 2024,2,otras etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,3022,19,160.0,56,0.381,0.318,0.552,0.482
-MV13_1,Satisfacción con semáforos,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.44,0.45,0.611,0.621
-MV13_2,Satisfacción con cebras,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,-0.183,0.098,-0.449,0.178
-MV13_3,Satisfacción con agentes de tránsito,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,-0.064,0.114,-0.137,0.204
-MV13_4,Satisfacción con campañas educativas de tránsito,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,-0.227,0.436,-0.586,0.608
-MV13_5,Satisfacción con control de normas de tránsito,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,-0.052,0.174,-0.109,0.296
-MV13_6,Satisfacción con atención de siniestros,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,-0.28,-0.019,-0.779,-0.04
-MV13_7,Satisfacción con paraderos,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.09,0.532,0.166,0.695
-MV13_8,Satisfacción con cultura ciudadana en las vías,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.181,0.228,0.307,0.371
-MV13_9,Satisfacción con puentes peatonales,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.216,0.334,0.355,0.501
-MV13_10,Satisfacción con bicicarriles,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4512,19,251.0,86,0.273,0.418,0.428,0.589
-MV13_11,Satisfacción con andenes,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.272,0.549,0.428,0.709
-MV150,Optimismo frente al metro,2023 2024,2,otra escala (1-6),mismas etiquetas,sin etiquetas: no se puede verificar,1501,3022,19,160.0,56,0.169,0.163,0.289,0.28
-EP1B_1,Plazas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.187,0.455,0.314,0.625
-EP1B_2,Escenarios deportivos,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.058,0.605,0.11,0.754
-EP1B_3,Parques,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,0.271,0.552,0.427,0.711
-EP1B_4,Baños públicos,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4509,19,250.0,86,-0.176,0.608,-0.427,0.756
-EP1B_5,Canecas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.498,0.683,0.665,0.811
-EP1B_6,Zonas verdes,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,0.384,0.565,0.555,0.722
-EP1B_7,Bancas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.507,0.684,0.673,0.812
-EP1B_8,Luminarias públicas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.147,0.205,0.256,0.34
-MA3_1,Calidad del aire,2023 2022,2,mismas etiquetas,otras etiquetas,sin etiquetas: no se puede verificar,1501,3001,19,163.0,58,0.16,0.213,0.276,0.351
-MA3_2,"Calidad del agua (ríos, quebradas, humedales…)",2023 2022,2,mismas etiquetas,otras etiquetas,sin etiquetas: no se puede verificar,1501,3001,19,163.0,58,0.474,0.617,0.643,0.763
-MA3_3,Nivel de ruido,2023 2022,2,mismas etiquetas,otras etiquetas,sin etiquetas: no se puede verificar,1501,3001,19,163.0,58,0.049,-0.0,0.093,-0.001
-MA3_4,Cantidad de árboles,2023 2022,2,mismas etiquetas,otras etiquetas,no está en el archivo,1501,3001,19,163.0,58,0.253,0.334,0.403,0.501
-MA3_5,Contaminación visual,2023 2022,2,mismas etiquetas,otras etiquetas,no está en el archivo,1501,3001,19,163.0,58,-0.115,0.199,-0.26,0.333
-MA3_6,Manejo de basuras,2023 2022,2,mismas etiquetas,otras etiquetas,no está en el archivo,1501,3001,19,163.0,58,0.197,0.408,0.329,0.579
-MA3_7,Manejo de escombros,2023 2022,2,mismas etiquetas,otras etiquetas,no está en el archivo,1501,3001,19,163.0,58,0.247,0.329,0.397,0.495
-GP1N_1,Desempeño en pobreza y vulnerabilidad,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.135,0.135,0.239,0.239
-GP1N_2,Desempeño en igualdad de oportunidades,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,-0.023,-0.023,-0.047,-0.047
-GP1N_3,Desempeño en educación,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.018,0.018,0.035,0.035
-GP1N_4,Desempeño en salud,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.162,0.162,0.279,0.279
-GP1N_5,Desempeño en cultura  ,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.12,0.12,0.214,0.214
-GP1N_6,Desempeño en recreación y deporte,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.157,0.157,0.272,0.272
-GP1N_7,Desempeño en empleo,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.077,0.077,0.144,0.144
-GP1N_8,Desempeño en seguridad y convivencia,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.181,0.181,0.306,0.306
-GP1N_9,Desempeño en vivienda,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.36,0.36,0.53,0.53
-GP1N_10,Desempeño en servicios públicos,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.007,0.007,0.014,0.014
-GP1N_11,Desempeño en movilidad y transporte,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.042,0.042,0.081,0.081
-GP1N_12,Desempeño en espacio Público,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.006,0.006,0.011,0.011
-GP1N_13,Desempeño en medio ambiente,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.2,0.2,0.333,0.333
-GP1N_14,Desempeño en comportamiento ciudadano y cultura,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.216,0.216,0.356,0.356
-GP1N_15,Desempeño en gestión pública,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,-0.026,-0.026,-0.054,-0.054
-GP1N_16,Desempeño en migración,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.081,0.081,0.149,0.149
-GP1N_17,Desempeño en ruralidad,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.222,0.222,0.363,0.363
-GG3,Percepción de la gestión del alcalde/sa,2023 2022,2,mismas etiquetas,otra administración (DI-AR5),sin etiquetas: no se puede verificar,1264,2539,19,131.0,51,0.15,0.23,0.261,0.374
-CV5,Percepción de la inversión de recursos públicos,2023 2022,2,mismas etiquetas,otra administración (DI-AR5),sin etiquetas: no se puede verificar,1417,2844,19,151.0,57,0.136,0.153,0.24,0.266
-GG7,Percepción de la corrupción,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.135,-0.149,0.237,-0.351
-CC2,Imagen del Concejo,2023,1,otras etiquetas,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.095,0.095,0.173,0.173
-CC5A,Percepción de la gestión del Concejo,2023 2022,2,mismas etiquetas,otra administración (DI-AR5),sin etiquetas: no se puede verificar,1291,2413,19,130.0,51,0.145,-0.071,0.253,-0.153
-CC9,Conocimiento de BCV,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,sin etiquetas: no se puede verificar,1501,4522,19,251.0,86,0.416,0.371,0.588,0.542
-PE_EL1,Votación,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.495,0.495,0.662,0.662
+AG1,Optimismo sobre Bogotá,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.074,0.394,0.138,0.566
+AG2,Orgullo de Bogotá,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.363,0.46,0.532,0.63
+CV1,Satisfacción con Bogotá,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.21,0.363,0.348,0.532
+CO2,Situación económica del hogar,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.319,0.616,0.484,0.762
+CO4,Autopercepción de pobreza,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.244,0.632,0.392,0.775
+CO1_1,Facilidad para encontrar empleo,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,6042,18,315.0,155,0.357,0.489,0.526,0.657
+CO1_2,Optimismo sobre el futuro de la economía,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,6042,18,315.0,155,0.4,0.373,0.571,0.543
+CO1_3,Facilidad para emprender,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,6042,18,315.0,155,-0.048,0.301,-0.1,0.462
+AL1,Hambre,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.352,0.735,0.521,0.847
+SA22A,Estado de salud física,2023 2024 2025,3,otras etiquetas,mismas etiquetas,formulario: coincide,1498,4514,18,226.5,117,0.344,0.304,0.512,0.466
+SA22B,Estado de salud mental,2023 2024 2025,3,otras etiquetas,mismas etiquetas,formulario: coincide,1495,4510,18,226.5,117,0.143,0.183,0.25,0.31
+SP1,Satisfacción con acueducto,2023 2022 2025,3,mismas etiquetas,otras etiquetas,formulario: entra (revisión manual),1495,4506,18,231.0,121,0.586,0.64,0.739,0.78
+SP2,Satisfacción con alcantarillado,2023 2022 2025,3,mismas etiquetas,otras etiquetas,formulario: entra (revisión manual),1496,4506,18,230.5,121,0.49,0.664,0.658,0.798
+SP3,Satisfacción con energía,2023 2022 2025,3,mismas etiquetas,otras etiquetas,formulario: entra (revisión manual),1498,4513,18,231.0,121,0.394,0.55,0.565,0.71
+SP4,Satisfacción con aseo y basura,2023 2022 2025,3,mismas etiquetas,otras etiquetas,formulario: entra (revisión manual),1501,4519,18,231.0,121,0.344,0.55,0.512,0.709
+SP5,Satisfacción con gas domiciliario,2023 2022 2025,3,mismas etiquetas,otras etiquetas,formulario: entra (revisión manual),1464,4376,18,221.0,115,0.286,0.328,0.444,0.494
+SP6,Satisfacción con internet,2023 2022 2025,3,mismas etiquetas,otras etiquetas,formulario: entra (revisión manual),1351,4039,18,219.0,109,0.243,0.68,0.391,0.81
+VS7,Satisfacción con vivienda,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.158,0.339,0.273,0.507
+VS8,Percepción de seguridad en el barrio,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.511,0.834,0.676,0.91
+VS10,Percepción de seguridad en la ciudad,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.178,0.493,0.302,0.661
+VS15,Victimización,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,6042,18,315.0,155,0.021,0.379,0.04,0.55
+VS18,Probabilidad de que un delito sea sancionado,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1488,1488,19,79.0,28,0.281,0.281,0.438,0.438
+MICE1,Percepción de transparencia,2023,1,otras etiquetas,otra administración (DI-AR5),otra administración (DI-AR5),1501,1501,19,80.0,28,0.222,0.222,0.364,0.364
+MICE2,Percepción de la respuesta a solicitudes ciudadanas,2023,1,otras etiquetas,otra administración (DI-AR5),otra administración (DI-AR5),1501,1501,19,80.0,28,-0.074,-0.074,-0.161,-0.161
+MICE3,Percepción sobre la generación de espacios de participación,2023,1,otras etiquetas,otra administración (DI-AR5),otra administración (DI-AR5),1501,1501,19,80.0,28,-0.128,-0.128,-0.293,-0.293
+RC3_0,Respeto por la vida,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.046,0.525,0.088,0.688
+RC3_1,Respeto y cuidado de espacios y bienes públicos,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,6024,18,315.0,155,0.02,0.447,0.04,0.618
+RC3_2,Respeto por normas de tránsito,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,6015,18,314.5,153,0.139,0.352,0.244,0.521
+RC3_3,Respeto por normas ambientales,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,6019,18,314.5,154,0.024,0.548,0.047,0.708
+RC4_1,Respeto por las personas mayores,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.245,0.434,0.394,0.606
+RC4_2,Respeto por los niños y niñas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.179,0.391,0.304,0.562
+RC4_3,Respeto por las personas con discapacidad,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.079,0.117,0.147,0.209
+RC4_4,Respeto por los desplazados por la violencia,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.235,0.332,0.38,0.499
+RC4_5,Respeto por los reinsertados o desmovilizados,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.114,0.327,0.205,0.493
+RC4_6,Respeto por la población migrante,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,-0.087,0.114,-0.191,0.204
+RC4_7,Respeto por las mujeres,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.242,0.305,0.389,0.467
+RC4_8,Respeto por personas de diversa orientación sexual,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.242,0.337,0.39,0.504
+RC4_9,Respeto por personas de diversidad étnica,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,-0.086,0.232,-0.188,0.377
+RC4_12,Respeto por los vecinos,2023 2024,2,no está en el archivo,mismas etiquetas,no está en el archivo,1501,3022,19,160.0,56,0.267,0.172,0.421,0.294
+RC5_1,Probabilidad de sanción por violar una norma de construcción,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.187,0.187,0.314,0.314
+RC5_4,Probabilidad de sanción por conectarse ilegalmente a servicios públicos,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.111,0.111,0.2,0.2
+RC5_6,Probabilidad de sanción por no pagar impuestos,2023,1,no está en el archivo,no está en el archivo,formulario: no entra (revisión manual),1501,1501,19,80.0,28,-0.11,-0.11,-0.248,-0.248
+RC5_7,Probabilidad de sanción por agredir a otra persona,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.036,0.036,0.07,0.07
+RC5_16,Probabilidad de sanción por poner música a alto volumen,2023,1,no está en el archivo,no está en el archivo,formulario: no entra (revisión manual),1501,1501,19,80.0,28,0.537,0.537,0.699,0.699
+RC5_17,Probabilidad de sanción por portar armas blancas,2023,1,no está en el archivo,no está en el archivo,formulario: no entra (revisión manual),1501,1501,19,80.0,28,0.203,0.203,0.338,0.338
+RC5_30,Probabilidad de sanción por no recoger los excrementos de su mascota,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.432,0.432,0.604,0.604
+RC5_31,Probabilidad de sanción por lavar vehículos en la vía pública,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.314,0.314,0.478,0.478
+CR2,Oferta cultural,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,5754,18,298.5,146,0.336,0.623,0.503,0.768
+CR4,Oferta recreativa y deportiva,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,5788,18,301.5,145,0.594,0.682,0.745,0.811
+MV4,Satisfacción con su modo de transporte,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.261,0.774,0.414,0.873
+MV2,Tiempos de desplazamiento,2023 2024 2025,3,otras etiquetas,mismas etiquetas,formulario: coincide,1501,4542,18,227.0,118,0.386,0.341,0.557,0.508
+MV13_1,Satisfacción con semáforos,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.446,0.477,0.617,0.646
+MV13_2,Satisfacción con cebras,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,-0.194,0.066,-0.482,0.125
+MV13_3,Satisfacción con agentes de tránsito,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,-0.038,0.104,-0.08,0.189
+MV13_4,Satisfacción con campañas educativas de tránsito,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,-0.243,0.425,-0.643,0.597
+MV13_5,Satisfacción con control de normas de tránsito,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,-0.029,0.185,-0.059,0.312
+MV13_6,Satisfacción con atención de siniestros,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,-0.265,-0.037,-0.721,-0.077
+MV13_7,Satisfacción con paraderos,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.077,0.535,0.143,0.697
+MV13_8,Satisfacción con cultura ciudadana en las vías,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.198,0.236,0.33,0.382
+MV13_9,Satisfacción con puentes peatonales,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.257,0.334,0.409,0.501
+MV13_10,Satisfacción con bicicarriles,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,5821,18,302.5,146,0.326,0.564,0.492,0.721
+MV13_11,Satisfacción con andenes,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,6031,18,315.0,154,0.357,0.379,0.526,0.55
+MV150,Optimismo frente al metro,2023 2024 2025,3,otra escala (1-6),mismas etiquetas,formulario: coincide,1501,4542,18,227.0,118,0.256,0.569,0.408,0.725
+EP1B_1,Plazas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.179,0.45,0.304,0.621
+EP1B_2,Escenarios deportivos,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.039,0.626,0.075,0.77
+EP1B_3,Parques,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,0.269,0.557,0.424,0.716
+EP1B_4,Baños públicos,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4509,19,250.0,86,-0.159,0.624,-0.379,0.769
+EP1B_5,Canecas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.494,0.67,0.662,0.803
+EP1B_6,Zonas verdes,2023 2022,2,mismas etiquetas,no está en el archivo,no está en el archivo,1501,3001,19,163.0,58,0.403,0.567,0.575,0.724
+EP1B_7,Bancas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.493,0.688,0.661,0.815
+EP1B_8,Luminarias públicas,2023 2022 2024,3,mismas etiquetas,mismas etiquetas,no está en el archivo,1501,4522,19,251.0,86,0.18,0.242,0.305,0.389
+MA3_1,Calidad del aire,2023 2022 2025,3,mismas etiquetas,otras etiquetas,formulario: entra (revisión manual),1501,4508,18,230.5,121,0.153,0.306,0.266,0.469
+MA3_2,"Calidad del agua (ríos, quebradas, humedales…)",2023 2022 2025,3,mismas etiquetas,otras etiquetas,formulario: entra (revisión manual),1501,4338,18,220.5,110,0.48,0.698,0.649,0.822
+MA3_3,Nivel de ruido,2023 2022 2025,3,mismas etiquetas,otras etiquetas,formulario: entra (revisión manual),1501,4505,18,231.0,121,0.07,-0.091,0.131,-0.201
+MA3_4,Cantidad de árboles,2023 2022,2,mismas etiquetas,otras etiquetas,no está en el archivo,1501,3001,19,163.0,58,0.244,0.33,0.392,0.496
+MA3_5,Contaminación visual,2023 2022,2,mismas etiquetas,otras etiquetas,no está en el archivo,1501,3001,19,163.0,58,-0.099,0.176,-0.22,0.299
+MA3_6,Manejo de basuras,2023 2022,2,mismas etiquetas,otras etiquetas,no está en el archivo,1501,3001,19,163.0,58,0.238,0.393,0.384,0.565
+MA3_7,Manejo de escombros,2023 2022,2,mismas etiquetas,otras etiquetas,no está en el archivo,1501,3001,19,163.0,58,0.228,0.345,0.371,0.513
+GP1N_1,Desempeño en pobreza y vulnerabilidad,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.153,0.153,0.266,0.266
+GP1N_2,Desempeño en igualdad de oportunidades,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,-0.064,-0.064,-0.138,-0.138
+GP1N_3,Desempeño en educación,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.02,0.02,0.039,0.039
+GP1N_4,Desempeño en salud,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.13,0.13,0.23,0.23
+GP1N_5,Desempeño en cultura  ,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.15,0.15,0.262,0.262
+GP1N_6,Desempeño en recreación y deporte,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.163,0.163,0.281,0.281
+GP1N_7,Desempeño en empleo,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.04,0.04,0.076,0.076
+GP1N_8,Desempeño en seguridad y convivencia,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.133,0.133,0.235,0.235
+GP1N_9,Desempeño en vivienda,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.357,0.357,0.526,0.526
+GP1N_10,Desempeño en servicios públicos,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,-0.012,-0.012,-0.024,-0.024
+GP1N_11,Desempeño en movilidad y transporte,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.053,0.053,0.101,0.101
+GP1N_12,Desempeño en espacio Público,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,-0.001,-0.001,-0.003,-0.003
+GP1N_13,Desempeño en medio ambiente,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.171,0.171,0.293,0.293
+GP1N_14,Desempeño en comportamiento ciudadano y cultura,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.217,0.217,0.357,0.357
+GP1N_15,Desempeño en gestión pública,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,-0.005,-0.005,-0.009,-0.009
+GP1N_16,Desempeño en migración,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.087,0.087,0.16,0.16
+GP1N_17,Desempeño en ruralidad,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.256,0.256,0.407,0.407
+GG3,Percepción de la gestión del alcalde/sa,2023 2022,2,mismas etiquetas,otra administración (DI-AR5),otra administración (DI-AR5),1264,2539,19,131.0,51,0.152,0.203,0.264,0.337
+CV5,Percepción de la inversión de recursos públicos,2023 2022,2,mismas etiquetas,otra administración (DI-AR5),formulario: no entra (revisión manual),1417,2844,19,151.0,57,0.137,0.14,0.24,0.246
+GG7,Percepción de la corrupción,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: coincide,1501,6042,18,315.0,155,0.133,0.064,0.235,0.121
+CC2,Imagen del Concejo,2023,1,otras etiquetas,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.084,0.084,0.154,0.154
+CC5A,Percepción de la gestión del Concejo,2023 2022,2,mismas etiquetas,otra administración (DI-AR5),otra administración (DI-AR5),1291,2413,19,130.0,51,0.158,-0.082,0.273,-0.179
+CC9,Conocimiento de BCV,2023 2022 2024 2025,4,mismas etiquetas,mismas etiquetas,formulario: entra (revisión manual),1501,6042,18,315.0,155,0.431,0.341,0.603,0.509
+PE_EL1,Votación,2023,1,no está en el archivo,no está en el archivo,no está en el archivo,1501,1501,19,80.0,28,0.465,0.465,0.634,0.634

@@ -6,7 +6,8 @@ Población EPC 2022-2024: la misma de `poblacion_epc.py`, pero con los encuestad
 `docs/POBLACION_EPC2022_2024_SPECIFICATION.md`. La población 2023 no se toca.
 
 Uso:
-    python src/population/poblacion_epc_olas.py
+    python src/population/poblacion_epc_olas.py              # 2022-2024
+    python src/population/poblacion_epc_olas.py --con-2025   # 2022-2025 (DI-PO6)
 
 Escribe en `data/processed/poblacion_epc2022_2024/`:
     agentes.parquet    un agente por fila, con su donante (no se sube)
@@ -51,6 +52,17 @@ DI-PO5. **Los pesos se reescalan por ola × localidad**: dentro de cada localida
     Nariño), con los donantes repartidos por tercios. Lo que pesa cada localidad en
     la ciudad lo ponen los agentes (Multipropósito), no los donantes, así que esto
     no le quita nada a las cifras de la ciudad.
+
+DI-PO6. **La población 2022-2025 (`--con-2025`, `POBLACION_EPC2022_2025_SPECIFICATION.md`
+    y su enmienda 1)** sale del mismo código, con tres diferencias:
+    - **2025 como cuarta ola.** Demografía `DMO_*` y peso `Factor1` (`epc_bcv`); sin
+      manzana, así que cada persona es su conglomerado, como en 2022 (DI-PO3). Entra en
+      las preguntas que `armonizar_epc` junta con 2025 (DI-AR6).
+    - **Sin las 23 evaluaciones del gobierno de Claudia López** (`LOPEZ`, enmienda 1).
+      Sus datos no se borran: siguen en la población 2022-2024.
+    - **Cinco preguntas de Galán** (`GALAN`): la misma ficha que la de 2023 (las
+      etiquetas coinciden, DI-AR1 y DI-AR6), con los datos de 2024 y 2025. La columna
+      de cada año es la del inventario para la pregunta de 2023.
 """
 
 from __future__ import annotations
@@ -75,7 +87,17 @@ ARMONIZADO = RAIZ / "data" / "processed" / "epc_armonizado" / "items.csv"
 ANIOS = (2022, 2023, 2024)
 VARS_DISTANCIA = ["edad_tramo", "estrato"]                     # §2: sin educación
 VARS_DEMO = ("sexo", "edad_tramo", "estrato")
-MANZANA = {2023: "MANZANA", 2024: "MANZANA"}                    # DI-PO3: 2022 no la trae
+MANZANA = {2023: "MANZANA", 2024: "MANZANA"}                    # DI-PO3: 2022 y 2025 no la traen
+#: DI-PO6
+SALIDA_2025 = RAIZ / "data" / "processed" / "poblacion_epc2022_2025"
+ANIOS_2025 = (2022, 2023, 2024, 2025)
+LOPEZ = ("GG3", "CC5A", "CV5", "MICE1", "MICE2", "MICE3") + tuple(f"GP1N_{i}" for i in range(1, 18))
+GALAN = {"GG3_GALAN": ("GG3", "Percepción de la gestión del alcalde Carlos Fernando Galán"),
+         "CC5A_GALAN": ("CC5A", "Percepción de la gestión del Concejo de Bogotá (2024-2027)"),
+         "MICE1_GALAN": ("MICE1", "Percepción de transparencia del gobierno de Galán"),
+         "MICE2_GALAN": ("MICE2", "Percepción de la respuesta a solicitudes ciudadanas del gobierno de Galán"),
+         "MICE3_GALAN": ("MICE3", "Percepción sobre la generación de espacios de participación del gobierno de Galán")}
+ANIOS_GALAN = (2024, 2025)
 
 
 class PoblacionOlasError(RuntimeError):
@@ -114,11 +136,19 @@ def armonizar_donantes(olas: dict[int, pd.DataFrame], cat: list[dict], anios: di
     return don
 
 
-def cargar_olas() -> dict[int, pd.DataFrame]:
-    """Los tres años con demografía, peso reescalado (DI-PO4) y conglomerado (DI-PO3)."""
+def catalogo_2025(cat: list[dict], anios: dict[str, tuple]) -> tuple[list[dict], dict[str, tuple]]:
+    """DI-PO6: el catálogo sin las de López y con las de Galán, y los años de cada pregunta."""
+    por_var = {f["variable"]: f for f in cat}
+    nuevo = [f for f in cat if f["variable"] not in LOPEZ]
+    nuevo += [{**por_var[base], "variable": v, "codigo": v, "nombre": nombre} for v, (base, nombre) in GALAN.items()]
+    return nuevo, {**{v: a for v, a in anios.items() if v not in LOPEZ}, **{v: ANIOS_GALAN for v in GALAN}}
+
+
+def cargar_olas(anios: tuple[int, ...] = ANIOS) -> dict[int, pd.DataFrame]:
+    """Cada año con demografía, peso reescalado (DI-PO4) y conglomerado (DI-PO3)."""
     from src.population import armonizar_epc as ae
     olas = {}
-    for a in ANIOS:
+    for a in anios:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             base, ola = ae.cargar_ola(a)
@@ -161,17 +191,25 @@ def verificar_olas(agentes: pd.DataFrame, donantes: pd.DataFrame) -> dict:
 
 
 def main(argv=None) -> int:
+    con_2025 = "--con-2025" in (sys.argv[1:] if argv is None else argv)
     cat, fuera = pe.catalogo()
     anios = anios_por_pregunta()
+    salida, anios_olas = SALIDA, ANIOS
+    if con_2025:
+        cat, anios = catalogo_2025(cat, anios)
+        salida, anios_olas = SALIDA_2025, ANIOS_2025
     from src.population.armonizar_epc import INVENTARIO as INV_EPC
     inv = pd.read_csv(INV_EPC)
     inv = inv[inv.estado == "ok"].set_index(["variable", "anio"]).codigo
     por_var = {f["variable"]: f for f in cat}
 
     def codigo(v, a):
+        v = GALAN[v][0] if v in GALAN else v                                     # DI-PO6
         return str(por_var[v]["codigo"]).upper() if a == 2023 else str(inv.get((v, a))).upper()
 
-    donantes = armonizar_donantes(cargar_olas(), cat, anios, codigo)
+    if con_2025:
+        por_var.update({f["variable"]: f for f in pe.catalogo()[0] if f["variable"] in LOPEZ})
+    donantes = armonizar_donantes(cargar_olas(anios_olas), cat, anios, codigo)
     receptor = pe.cargar_receptor()
     agentes = pe.construir(pe.N_POR_LOCALIDAD, pe.SEMILLA, receptor, donantes, VARS_DISTANCIA)
     otra = pe.construir(pe.N_POR_LOCALIDAD, pe.SEMILLA, receptor, donantes, VARS_DISTANCIA)
@@ -179,14 +217,16 @@ def main(argv=None) -> int:
     ver.update(verificar_olas(agentes, donantes))
     ver["reproducible_misma_semilla"] = bool(agentes.equals(otra))
     cat_anios = [{**f, "anios": list(anios[f["variable"]])} for f in cat]
-    SALIDA.mkdir(parents=True, exist_ok=True)
-    agentes.to_parquet(SALIDA / "agentes.parquet", index=False)
-    donantes.to_parquet(SALIDA / "donantes.parquet", index=False)
-    (SALIDA / "catalogo.json").write_text(json.dumps({"dentro": cat_anios, "fuera": fuera}, ensure_ascii=False, indent=1), encoding="utf-8")
-    (SALIDA / "verificacion.json").write_text(json.dumps(ver, ensure_ascii=False, indent=1), encoding="utf-8")
-    (SALIDA / "metadata.json").write_text(json.dumps({
-        "generado": date.today().isoformat(), "especificacion": "docs/POBLACION_EPC2022_2024_SPECIFICATION.md",
-        "donante": "EPC 2022, 2023 y 2024 (Bogotá Cómo Vamos)", "receptor": "Multipropósito 2021",
+    salida.mkdir(parents=True, exist_ok=True)
+    agentes.to_parquet(salida / "agentes.parquet", index=False)
+    donantes.to_parquet(salida / "donantes.parquet", index=False)
+    (salida / "catalogo.json").write_text(json.dumps({"dentro": cat_anios, "fuera": fuera}, ensure_ascii=False, indent=1), encoding="utf-8")
+    (salida / "verificacion.json").write_text(json.dumps(ver, ensure_ascii=False, indent=1), encoding="utf-8")
+    (salida / "metadata.json").write_text(json.dumps({
+        "generado": date.today().isoformat(),
+        "especificacion": f"docs/POBLACION_EPC2022_{anios_olas[-1]}_SPECIFICATION.md",
+        "donante": f"EPC {', '.join(map(str, anios_olas[:-1]))} y {anios_olas[-1]} (Bogotá Cómo Vamos)",
+        "receptor": "Multipropósito 2021",
         "n_agentes": len(agentes), "n_donantes": len(donantes),
         "donantes_por_anio": {int(k): int(v) for k, v in donantes.anio.value_counts().sort_index().items()},
         "semilla": pe.SEMILLA, "vars_distancia": VARS_DISTANCIA,

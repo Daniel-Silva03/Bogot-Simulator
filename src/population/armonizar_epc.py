@@ -59,6 +59,15 @@ DI-AR5. **Una pregunta que evalúa al gobierno de turno no se junta entre
     2023. Las demás preguntas evalúan la ciudad o la propia vida, no a un
     gobierno, y se juntan en los tres años; el mapa que salga describe «Bogotá
     2022-2024».
+    *Corrección (13/10, `POBLACION_EPC2022_2025_SPECIFICATION.md` §3.1): las `MICE1` a
+    `MICE3` (garantías del gobierno de la ciudad) también evalúan al gobierno de turno y
+    juntaban 2023 (López) con 2024 (Galán). Pasan a solo 2023.*
+
+DI-AR6. **2025 entra según su verificación contra el formulario** (`verificar_epc2025.py`,
+    DATA_INVENTORY §13.10), no por las etiquetas del archivo, que no las trae: entra si
+    `verificacion_2025.csv` dice «coincide» o «entra (revisión manual)», y los códigos de
+    los datos caben en la escala. Lo demás de DI-AR1 y DI-AR5 sigue igual: las del
+    gobierno de turno de 2025 son de Galán y no se juntan con 2023.
 """
 
 from __future__ import annotations
@@ -84,7 +93,10 @@ INVENTARIO = RAIZ / "data" / "processed" / "epc_inventario" / "items.csv"
 BASE = 2023
 OTRAS = (2022, 2024, 2025)
 #: DI-AR5: evaluaciones del gobierno de turno -> años de la misma administración que 2023
-MISMA_ADMINISTRACION = {"GG3": (2022,), "CC5A": (2022,), "CV5": (2022,)}
+MISMA_ADMINISTRACION = {"GG3": (2022,), "CC5A": (2022,), "CV5": (2022,),
+                        "MICE1": (), "MICE2": (), "MICE3": ()}
+VERIFICACION_2025 = SALIDA / "verificacion_2025.csv"                  # DI-AR6
+ENTRA_2025 = ("coincide", "entra (revisión manual)")
 N_MITADES = 200
 SEMILLA = 20260930
 
@@ -135,6 +147,20 @@ def compatibilidad(ficha: dict, codigo: str | None, ola: dict, pregunta_2023: st
     return False, "sin etiquetas: no se puede verificar"        # DI-AR1
 
 
+def compatibilidad_2025(ficha: dict, codigo: str | None, ola: dict, verificacion: dict[str, str]) -> tuple[bool, str]:
+    """DI-AR6: 2025 según su verificación contra el formulario."""
+    if codigo is None or codigo.upper() not in ola["col"]:
+        return False, "no está en el archivo"
+    res = verificacion.get(ficha["variable"], "sin verificar")
+    if res not in ENTRA_2025:
+        return False, f"formulario: {res}"
+    presentes = set(pd.to_numeric(ola["datos"][ola["col"][codigo.upper()]], errors="coerce").dropna().astype(int))
+    fuera = presentes - set(ficha["escala"]) - {88, 89, 90, 97, 98, 99}
+    if fuera:
+        return False, "códigos fuera de la escala"
+    return True, f"formulario: {res}"
+
+
 def confiabilidad(x: np.ndarray, w: np.ndarray, loc: np.ndarray, locs: list[int], rng) -> float:
     """DI-AR3: mediana de la correlación entre medias por localidad de dos mitades."""
     rs = []
@@ -155,6 +181,8 @@ def armonizar() -> tuple[pd.DataFrame, dict]:
     dic = pd.read_excel(eb.resolver_dir_bcv() / "EPC Suprema.xlsx", "VARIABLES", header=1).set_index("VARIABLE_cod")
     cat, _ = pe.catalogo()
     olas = {a: cargar_ola(a) for a in (BASE,) + OTRAS}
+    v25 = pd.read_csv(VERIFICACION_2025)
+    ver25 = dict(zip(v25.variable, v25.resultado))
     rng = np.random.default_rng(SEMILLA)
     filas = []
     for f in cat:
@@ -164,7 +192,10 @@ def armonizar() -> tuple[pd.DataFrame, dict]:
             fila = inv[(inv.variable == v) & (inv.anio == a) & (inv.estado == "ok")]
             cod = str(fila.codigo.iloc[0]) if len(fila) else None
             preg_a = str(dic.loc[v, "PREGUNTA_tag"]) if v in dic.index else ""
-            compat[a] = compatibilidad(f, cod, olas[a][1], f["pregunta"], preg_a)
+            if a == 2025:
+                compat[a] = compatibilidad_2025(f, cod, olas[a][1], ver25)
+            else:
+                compat[a] = compatibilidad(f, cod, olas[a][1], f["pregunta"], preg_a)
             if compat[a][0] and v in MISMA_ADMINISTRACION and a not in MISMA_ADMINISTRACION[v]:
                 compat[a] = (False, "otra administración (DI-AR5)")
             compat[a] = (*compat[a], cod)

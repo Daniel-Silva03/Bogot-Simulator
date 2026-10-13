@@ -137,3 +137,37 @@ Son **23 preguntas**. El catálogo pasa de 107 a **84**: las 79 que quedan y las
 sobre López no puede responderse con las de Galán. La prueba de §4 lleva también las preguntas sobre López de la versión 5,
 y pasa solo si ninguna termina en `GG3_GALAN` ni en las demás de Galán. Lo que se espera de cada una se escribe en esa prueba
 antes de correrla.
+
+---
+
+## 8. Resultado de la construcción (13/10/2026), contra §5 y §6
+
+Construida con `python src/population/poblacion_epc_olas.py --con-2025` (DI-PO6), después de la enmienda 1. Salida en
+`data/processed/poblacion_epc2022_2025/` (sin subir). Sin gasto en API.
+
+**La armonización (DI-AR6):** 35 preguntas suman 2025. Son las 40 verificadas menos las 5 del gobierno de turno, que van
+a las de Galán. Fuera de 2025 solo cambian `MICE1` a `MICE3`, que pasan a solo 2023 (§3.1).
+
+| | 2022-2024 | **2022-2025** |
+|---|---|---|
+| Donantes | 4.522 | **6.042** (1.520 de 2025) |
+| Donantes por localidad | mediana 251; 86 a 456 | **mediana 312; 86 a 631**. La Candelaria sigue con 86 |
+| Preguntas | 102 | **84**: 79, y las 5 de Galán |
+| Demografía, peor diferencia (sexo / edad / estrato) | 2,9 / 3,5 / 2,1 puntos | **2,9 / 3,5 / 2,1 puntos** (no cambia: la ponen los agentes) |
+| Opinión fuera del margen del 95 % | 23 de 1.938 (1,2 %) | **32 de 1.596 (2,0 %)** |
+| Emparejamiento exacto | 98,2 % | **98,3 %**; por año del donante, 97,5 % a 99,7 % |
+| Mayor fracción de un año en una localidad | 38,6 % | **36,9 %** (La Candelaria, 2022) |
+| Reproducible con la misma semilla | sí | **sí** |
+
+**Las cifras de BCV con los donantes de 2025** (los pesos `Factor1` de la ciudad): orgullo 56,6 %, satisfacción 61,4 %,
+gestión de Galán sin «no sabe» 26,4 % y víctima 14,6 %. Son **exactamente** las de los microdatos (DATA_INVENTORY §13.10).
+
+| | Predicción | Resultado | |
+|---|---|---|---|
+| PP1 | ≤ 10 % de pares fuera del margen | 2,0 % | se cumple |
+| PP2 | mediana por localidad entre 300 y 360 | 312 | se cumple |
+| PP3 | ningún año supera el 40 % en una localidad | 36,9 % como máximo | se cumple |
+| PP4 | error de la página en las 5 de la EPC 2025 menor que 12,9 | pendiente: se mide con la página apuntando a esta población (§7.4) | — |
+
+**Lo que se esperaba distinto:** «~330 por localidad» (§1) quedó en 312: 2025 encuestó menos en algunas localidades.
+La Candelaria no gana donantes, como se previó.

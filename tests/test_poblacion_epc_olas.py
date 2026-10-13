@@ -120,11 +120,40 @@ def test_la_armonizacion_real_cubre_el_catalogo():
     a = po.anios_por_pregunta()
     assert len(a) == 102 and all(2023 in x for x in a.values())
     assert a["GG3"] == (2022, 2023)
+    assert a["MICE1"] == (2023,)                                    # corrección de DI-AR5: no junta a López con Galán
+    assert 2025 not in a["GG3"] and 2025 in a["AG2"]                # DI-AR6
+
+
+def test_el_catalogo_2025_quita_a_lopez_y_suma_a_galan():
+    """DI-PO6 y la enmienda 1 de su especificación."""
+    cat = [{"variable": v, "codigo": v, "nombre": v, "escala": [1, 2, 3, 4, 5], "etiquetas": {}}
+           for v in ("AG2", "GG3", "CC5A", "CV5", "MICE1", "MICE2", "MICE3", "GP1N_1", "GP1N_17")]
+    anios = {f["variable"]: (2023,) for f in cat}
+    nuevo, an = po.catalogo_2025(cat, anios)
+    assert len(po.LOPEZ) == 23 and len(po.GALAN) == 5
+    assert [f["variable"] for f in nuevo] == ["AG2"] + list(po.GALAN)
+    g = next(f for f in nuevo if f["variable"] == "GG3_GALAN")
+    assert g["codigo"] == "GG3_GALAN" and "Galán" in g["nombre"] and an["GG3_GALAN"] == (2024, 2025)
+    assert "GG3" not in an and an["AG2"] == (2023,)
+
+
+def test_la_2025_entra_solo_si_su_verificacion_lo_dice():
+    """DI-AR6: con los códigos de los datos dentro de la escala, sin contar los de «no sabe»."""
+    from src.population import armonizar_epc as ae
+    ficha = {"variable": "A", "escala": [1, 2, 3, 4, 5]}
+    ola = {"col": {"X": "x"}, "datos": pd.DataFrame({"x": [1, 5, 99]})}
+    assert ae.compatibilidad_2025(ficha, "X", ola, {"A": "coincide"})[0]
+    assert ae.compatibilidad_2025(ficha, "X", ola, {"A": "entra (revisión manual)"})[0]
+    assert not ae.compatibilidad_2025(ficha, "X", ola, {"A": "no entra (revisión manual)"})[0]
+    assert not ae.compatibilidad_2025(ficha, "X", ola, {})[0]
+    assert not ae.compatibilidad_2025(ficha, "Y", ola, {"A": "coincide"})[0]
+    raro = {"col": {"X": "x"}, "datos": pd.DataFrame({"x": [1, 7]})}
+    assert not ae.compatibilidad_2025(ficha, "X", raro, {"A": "coincide"})[0]
 
 
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
-    print(f"Población 2022-2024 — {len(pruebas)} pruebas\n")
+    print(f"Población por olas — {len(pruebas)} pruebas\n")
     for p in pruebas:
         check(p.__name__, p)
     print()
