@@ -1,0 +1,184 @@
+variable,pregunta_catalogo,codigo_2025,pregunta_2025,similitud_texto,forma,opciones_2025,coincide,a_revisar,codigos_datos_fuera_de_escala,resultado,razon_manual
+AG1,Las cosas en Bogotá ¿van por buen camino o por mal camino?,GOB_1,"Ahora quisiera saber si en su opinión, las cosas",0.17,una por línea,"{""1"": ""Buen camino"", ""2"": ""Mal camino""}",True,False,,coincide,
+AG2,¿Qué tan orgulloso(a) se siente de Bogotá?,GOB_2,"Usted personalmente, ¿qué tan orgulloso(a) se siente de",0.7,fila,"Nada orgulloso Poco orgulloso Ni orgulloso ni no orgulloso Orgulloso Muy orgulloso | [1, 2, 3, 4, 5]",True,False,,coincide,
+CV1, ¿Qué tan satisfecho(a) se siente usted con Bogotá como un lugar para vivir?,GOB_3,¿Qué tan satisfecho(a) se siente usted con,0.71,fila,".  
+Muy insatisfecho Algo insatisfecho Ni satisfecho ni insatisfecho Algo satisfecho Muy satisfecho | [1, 2, 3, 4, 5]",True,False,,coincide,
+CO2,"Durante el último año, la situación económica de su hogar…",HOG_1,"Durante el último año, la situación económica de su hogar …",1.0,fila,"Ha empeorado 
+mucho 
+Ha empeorado 
+algo Sigue igual Ha mejorado 
+algo 
+Ha mejorado 
+mucho | [1, 2, 3, 4, 5]",True,False,,coincide,
+CO4,¿Usted se considera pobre?,VUL_1,¿Podría decirme si usted se considera pobre?,0.73,una por línea,"{""1"": ""Sí"", ""2"": ""No""}",True,False,,coincide,
+CO1_1,¿En Bogotá es fácil encontrar trabajo?,ECO_1,En,0.11,fila,"es fácil 
+encontrar trabajo. | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),"mismas puntas, 1 Nada y 5 Totalmente; 2025 rotula los puntos intermedios"
+CO1_2,¿Se puede ser optimista sobre la situación futura de la economía de Bogotá?,ECO_2,Se puede ser optimista sobre la situación futura de la economía de,0.95,batería,"Nada Poco Algo Mucho Totalmente | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),"mismas puntas, 1 Nada y 5 Totalmente; 2025 rotula los puntos intermedios"
+CO1_3,¿En Bogotá es fácil emprender con éxito una actividad económica independiente?,ECO_3,En,0.05,fila,"es fácil 
+emprender con éxito una actividad económica 
+independiente. | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),"mismas puntas, 1 Nada y 5 Totalmente; 2025 rotula los puntos intermedios"
+AL1,"En las últimas cuatro semanas, ¿usted o algún miembro de su hogar tuvo que comer menos de tres comidas diarias porque no había suficientes alimentos ?",SAL_7,"En el último mes, ¿usted o algún miembro de su hogar tuvo que comer menos de tres comidas diarias porque no había suficientes alimentos?",0.94,una por línea,"{""1"": ""Sí"", ""2"": ""No""}",True,False,,coincide,
+SA22A," ¿Considera usted que durante el último año su estado de salud física ha sido bueno, regular o malo?",SAL_3,"¿Considera usted que durante el último año su estado de salud física ha sido bueno, regular o malo?",1.0,fila,"Malo Regular Bueno 
+No 
+sabe/No 
+responde | [1, 2, 3]",True,False,,coincide,
+SA22B," ¿Considera usted que durante el último año su estado de salud mental ha sido bueno, regular o malo?",SAL_4,¿Y cómo considera que fue su estado de salud mental?,0.58,fila,"Malo Regular Bueno 
+No 
+sabe/No 
+responde | [1, 2, 3]",True,False,,coincide,
+SP1,¿Qué tan satisfecho(a) está usted en general con el servicio de agua que recibe?,SER_1,Agua 1 2 3 4 5 90 PRIORITARIA | ANUAL | ALCANTARILLADO,0.16,no encontrada,,False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; 90 = no recibe el servicio
+SP2,¿Qué tan satisfecho(a) está usted en general con el servicio de alcantarillado que recibe?,SER_2,Alcantarillado 1 2 3 4 5 90 PRIORITARIA | ANUAL | ENERGÍA,0.3,no encontrada,,False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; 90 = no recibe el servicio
+SP3,¿Qué tan satisfecho(a) está usted en general con el servicio de energía que recibe?,SER_3,Energía eléctrica 1 2 3 4 5 90 PRIORITARIA | ANUAL | ASEO Y BASURAS,0.2,no encontrada,,False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; 90 = no recibe el servicio
+SP4,¿Qué tan satisfecho(a) está usted en general con el servicio de aseo y recolección de basuras que recibe?,SER_4,Aseo y recolección de basuras 1 2 3 4 5 90 PRIORITARIA | ANUAL | GAS,0.42,fila,"Aseo y recolección 
+de basuras | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; 90 = no recibe el servicio
+SP5,¿Qué tan satisfecho(a) está usted en general con el servicio de gas domiciliario que recibe?,SER_5,Gas domiciliario 1 2 3 4 5 90 PRIORITARIA | ANUAL | INTERNET,0.32,no encontrada,,False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; 90 = no recibe el servicio
+SP6,¿Qué tan satisfecho(a) está usted en general con el servicio de internet que recibe?,SER_6,Internet 1 2 3 4 5 90 ¿Qué tan satisfecho está con …?,0.46,no encontrada,,False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; 90 = no recibe el servicio
+VS7,¿Qué tan satisfecho se siente con la vivienda que habita?,,,,,,,,,sin código en 2025,
+VS8,¿Qué tan seguro se siente usted en su barrio?,SEG_2,¿Y qué tan seguro se siente en su barrio?,0.9,fila,"Nada seguro Algo inseguro Ni seguro ni 
+inseguro Algo seguro Muy seguro | [1, 2, 3, 4, 5]",True,False,,coincide,
+VS10,¿Qué tan seguro en general se siente usted en Bogotá?,SEG_1,"En una escala de 1 a 5, donde 1 es nada seguro(a) y 5 es muy seguro(a) ¿Qué tan seguro se siente en",0.39,fila,"Nada seguro Algo inseguro Ni seguro ni 
+inseguro Algo seguro Muy seguro | [1, 2, 3, 4, 5]",True,False,,coincide,
+VS15,"Durante el último año, ¿usted ha sido víctima de algún delito en Bogotá?",SEG_4,¿Ha sido víctima de algún DMC_1 en el último año?,0.56,una por línea,"{""1"": ""Sí"", ""2"": ""No [saltar al siguiente módulo]""}",False,True,,entra (revisión manual),"mismo sí/no; el formulario dice «víctima de algún DMC_1», un marcador que se rellena con «delito»"
+VS18,Usted considera que la probabilidad de que un delito sea sancionado en Bogotá es…,,,,,,,,,sin código en 2025,
+MICE1,El gobierno de su ciudad está adelantando acciones que contribuyen a la transparencia y la garantía del derecho de acceso a la información pública,GOB_8,El gobierno de,0.17,fila,"está adelantando acciones que contribuyen a la 
+transparencia de la información (garantía del 
+derecho de acceso a la información pública, 
+entrega de información en lenguaje claro, 
+publica información de contratación pública y 
+presupuesto en datos abiertos, entre otros). | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),"misma escala, pero evalúa al gobierno de turno: se junta solo 2024-2025 (Galán, DI-AR5); 1 Nada y 5 Totalmente, como en 2023"
+MICE2,"El gobierno de su ciudad atiende y responde de manera efectiva a las necesidades y solicitudes de la ciudadanía, realiza mejora de trámites y adecúa permanentemente los canales de servicio al ciudadano. ",GOB_10,El gobierno de su ciudad responde efectivamente a las necesidades y solicitudes de la ciudada nía (realiza mejora de trámites y adecúa permanentemente los canales de servicio al ciudadano). 1 2 3 4 5 90,0.93,fila,"El gobierno de su ciudad responde 
+efectivamente a las necesidades y solicitudes de 
+la ciudada nía (realiza mejora de trámites y 
+adecúa permanentemente los canales de 
+servicio al ciudadano). | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),"misma escala, pero evalúa al gobierno de turno: se junta solo 2024-2025 (Galán, DI-AR5); 1 Nada y 5 Totalmente, como en 2023"
+MICE3,"El gobierno de su ciudad genera espacios de interacción y diálogo con la ciudadanía, promueve la participación en la formulación de planes y políticas públicas, rinde cuentas y permite la petición de cuentas permanente sobre la gestión",GOB_9,"PARTICI (promueve la participación en la formulación de políticas y permite la petición de cuentas permanente sobre la gestión, entre otros). 1 2 3 4 5 90",0.65,fila,"PARTICI (promueve la participación 
+en la formulación de políticas  y permite la 
+petición de cuentas permanente sobre la gestión, 
+entre otros). | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),"misma escala, pero evalúa al gobierno de turno: se junta solo 2024-2025 (Galán, DI-AR5); 1 Nada y 5 Totalmente, como en 2023"
+RC3_0,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por la vida?,,,,,,,,,sin código en 2025,
+RC3_1,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al cuidado y respeto de los espacios públicos y bienes públicos?,CCC_2,Cuidado y uso de los espacios públicos: 1 2 3 4 5 90,0.42,fila,"Cuidado y uso de los espacios 
+públicos: | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),"mismas puntas, 1 Muy mal y 5 Muy bien; «cuidado y respeto» pasa a «cuidado y uso» de los espacios públicos"
+RC3_2,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto a las normas básicas de tránsito?,CCC_4,"Cumplimiento por las normas básicas de tránsito: 1 2 3 4 5 90 En una escala del 1 al 5, donde 1 es “nada probable” y 5 es “totalmente probable”, ¿Qué tan probable considera que sería recibir un castigo o amonestación por las autoridades si cometiera estas infracciones en",0.06,fila,"Cumplimiento por las normas básicas 
+de tránsito: | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),"mismas puntas, 1 Muy mal y 5 Muy bien; «respeto a» pasa a «cumplimiento por» las normas de tránsito"
+RC3_3,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto a las normas ambientales?,CCC_3,Respeto por las normas ambientales: 1 2 3 4 5 90,0.43,no encontrada,,False,True,,entra (revisión manual),"mismas puntas, 1 Muy mal y 5 Muy bien; mismo texto"
+RC4_1,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los adultos mayores (ancianos)?,,,,,,,,,sin código en 2025,
+RC4_2,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los niños y las niñas?,,,,,,,,,sin código en 2025,
+RC4_3,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al Respeto por las personas con discapacidad,,,,,,,,,sin código en 2025,
+RC4_4,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los desplazados por la violencia?,,,,,,,,,sin código en 2025,
+RC4_5,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los reinsertados o desmovilizados?,,,,,,,,,sin código en 2025,
+RC4_6,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por la población migrante?,,,,,,,,,sin código en 2025,
+RC4_7,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por las mujeres?,,,,,,,,,sin código en 2025,
+RC4_8,"¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por personas de diversa orientación sexual (gays, lesbianas, bisexuales y transgénero)?",,,,,,,,,sin código en 2025,
+RC4_9,"¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por las minorías étnicas, afrodescendientes, indígenas y rom o gitanos?",,,,,,,,,sin código en 2025,
+RC4_12,¿Cómo cree usted que se comportan los habitantes de Bogotá en general frente al respeto por los vecinos?,,,,,,,,,sin código en 2025,
+RC5_1,¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por violar una norma de construcción?,,,,,,,,,sin código en 2025,
+RC5_4,¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por conectarse ilegalmente a servicios públicos?,,,,,,,,,sin código en 2025,
+RC5_6,¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por no pagar impuestos?,CCC_19,No pagar impuestos: 1 2 3 4 5 90 PRIORITARIA | AÑOS 2 Y 4 | PROBABILIDAD DE SANCIÓN POR ENSUCIAR LA VÍA,0.47,no encontrada,,False,True,,no entra (revisión manual),cambiaron las puntas: de «Baja / Alta» a «Nada probable / Totalmente probable»
+RC5_7,¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por agredir a otra persona?,,,,,,,,,sin código en 2025,
+RC5_16,¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por poner música a alto volumen?,CCC_21,Poner música a alto volumen: 1 2 3 4 5 90 PRIORITARIA | AÑOS 2 Y 4 | PROBABILIDAD DE SANCIÓN POR INCUMPLIR CRÉDITOS,0.28,no encontrada,,False,True,,no entra (revisión manual),cambiaron las puntas: de «Baja / Alta» a «Nada probable / Totalmente probable»
+RC5_17,¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por portar armas blancas?,CCC_17,Portar armas blancas: 1 2 3 4 5 90 PRIORITARIA | AÑOS 2 Y 4 | PROBABILIDAD DE SANCIÓN POR DAÑAR ESPACIO PÚBLICO,0.22,no encontrada,,False,True,,no entra (revisión manual),cambiaron las puntas: de «Baja / Alta» a «Nada probable / Totalmente probable»
+RC5_30,¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por no recoger los excrementos de su mascota?,,,,,,,,,sin código en 2025,
+RC5_31,"¿Qué tan alta cree que es la probabilidad de ser castigado o amonestado por lavar carros, motos y otros bienes en la vía pública?",,,,,,,,,sin código en 2025,
+CR2,¿Qué tan satisfecho(a) está usted en general con la oferta cultural que hay en Bogotá?,CUL_2,Actividades culturales 1 2 3 4 5 90,0.3,no encontrada,,False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; «la oferta cultural que hay» pasa a «actividades culturales»
+CR4,¿Qué tan satisfecho(a) está usted en general con la oferta recreativa y deportiva que hay en Bogotá?,CUL_1,Actividades recreativas o deportivas 1 2 3 4 5 90,0.42,fila,"Actividades recreativas o 
+deportivas | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; «la oferta recreativa y deportiva» pasa a «actividades recreativas o deportivas»
+MV4,¿Qué tan satisfecho(a) está usted con el modo de transporte que utiliza principalmente? (todos los modos),MOV_4,¿Qué tan satisfecho(a) está con el medio de transporte que utiliza principalmente?,0.86,fila,"Muy 
+insatisfecho 
+Algo 
+insatisfecho 
+Ni satisfecho ni 
+insatisfecho 
+Algo 
+satisfecho Muy satisfecho | [1, 2, 3, 4, 5]",True,False,,coincide,
+MV2,"Usted percibe que, en general sus trayectos habituales en el último año, ¿toman el mismo tiempo, toman más tiempo, o toman menos tiempo que el año pasado?",MOV_1,"Usted percibe que, en general sus trayectos habituales en el último año, ¿toman el mismo tiempo, más tiempo, o menos tiempo que el año pasado?",0.96,fila,"Más tiempo  Lo mismo  Menos tiempo | [1, 2, 3]",True,False,,coincide,
+MV13_1,¿Qué tan insatisfecho(a) o satisfecho(a) está usted con el funcionamiento de semáforos?,,,,,,,,,sin código en 2025,
+MV13_2,¿Qué tan insatisfecho(a) o satisfecho(a) está usted con las cebras para paso peatonal?,,,,,,,,,sin código en 2025,
+MV13_3,¿Qué tan insatisfecho(a) o satisfecho(a) está usted con los agentes de tránsito?,,,,,,,,,sin código en 2025,
+MV13_4,¿Qué tan insatisfecho(a) o satisfecho(a) está usted con las campañas educativas de tránsito?,,,,,,,,,sin código en 2025,
+MV13_5,¿Qué tan insatisfecho(a) o satisfecho(a) está usted con el control al cumplimiento de normas de tránsito?,,,,,,,,,sin código en 2025,
+MV13_6,¿Qué tan insatisfecho(a) o satisfecho(a) está usted con la atención de siniestros viales?,,,,,,,,,sin código en 2025,
+MV13_7,¿Qué tan insatisfecho(a) o satisfecho(a) está usted con los paraderos en la ciudad?,,,,,,,,,sin código en 2025,
+MV13_8,¿Qué tan insatisfecho(a) o satisfecho(a) está usted con la cultura ciudadana en las vías?,,,,,,,,,sin código en 2025,
+MV13_9,¿Qué tan insatisfecho(a) o satisfecho(a) está usted con los puentes peatonales?,,,,,,,,,sin código en 2025,
+MV13_10,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los bicicarriles?,MOV_7,Estado de bicicarriles,0.41,batería,"Servicio Muy 
+insatisfecho 
+Algo 
+insatisfecho 
+Ni satisfecho ni 
+insatisfecho 
+Algo 
+satisfecho 
+Muy 
+satisfecho 
+No 
+sabe | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; «los bicicarriles» pasa a «estado de bicicarriles»
+MV13_11,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los andenes?,MOV_5,Estado de andenes 1 2 3 4 5 90,0.34,no encontrada,,False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios; «los andenes» pasa a «estado de andenes»
+MV150,"Sobre la posibilidad de que Bogotá tenga su primera línea del metro, usted se siente…",BOG_4,"En una escala de 1 a 5 donde 1 significa “Muy pesimista” y 5 “Muy optimista”, ¿qué tan optimista se siente frente a la construcción de la Primera Línea de Metro de Bogotá?",0.47,fila,"Muy pesimista Algo pesimista Ni pesimista ni 
+optimista Algo optimista Muy optimista | [1, 2, 3, 4, 5]",True,False,,coincide,
+EP1B_1,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las plazas/plazoletas?,,,,,,,,,sin código en 2025,
+EP1B_2,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los escenarios deportivos?,,,,,,,,,sin código en 2025,
+EP1B_3,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los parques?,,,,,,,,,sin código en 2025,
+EP1B_4,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los baños públicos?,,,,,,,,,sin código en 2025,
+EP1B_5,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las canecas?,,,,,,,,,sin código en 2025,
+EP1B_6,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las zonas verdes?,,,,,,,,,sin código en 2025,
+EP1B_7,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las bancas?,,,,,,,,,sin código en 2025,
+EP1B_8,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las luminarias públicas (alumbrado público)?,,,,,,,,,sin código en 2025,
+MA3_1,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con la calidad del aire?,AMB_1,Calidad del aire 1 2 3 4 5 90,0.36,no encontrada,,False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios
+MA3_2,"¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con la calidad del agua (ríos, quebradas, humedales, etc.)?",AMB_2,"Calidad del agua (ríos, quebradas, humedales, mares, ciénagas, bahías, caños, etc.) 1 2 3 4 5 90",0.51,fila,"Calidad del agua (ríos, 
+quebradas, humedales, mares, 
+ciénagas, bahías, caños, etc.) | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios
+MA3_3,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con el nivel de ruido de la ciudad?,AMB_3,Ruido de la ciudad 1 2 3 4 5 90,0.35,no encontrada,,False,True,,entra (revisión manual),misma escala de satisfacción 1-5; 2025 rotula también los puntos intermedios
+MA3_4,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con la cantidad de árboles en la ciudad?,,,,,,,,,sin código en 2025,
+MA3_5,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con la contaminación visual de la ciudad?,,,,,,,,,sin código en 2025,
+MA3_6,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con las basuras en las calles?,,,,,,,,,sin código en 2025,
+MA3_7,¿Qué tan insatisfecho(a) o satisfecho(a) estuvo usted con los escombros en las calles?,,,,,,,,,sin código en 2025,
+GP1N_1,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en pobreza y vulnerabilidad?",,,,,,,,,sin código en 2025,
+GP1N_2,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en igualdad de oportunidades (o equidad)?",,,,,,,,,sin código en 2025,
+GP1N_3,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en educación?",,,,,,,,,sin código en 2025,
+GP1N_4,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en salud?",,,,,,,,,sin código en 2025,
+GP1N_5,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en cultura (promoción y acceso a diferentes expresiones artísticas)?",,,,,,,,,sin código en 2025,
+GP1N_6,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en recreación y deporte?",,,,,,,,,sin código en 2025,
+GP1N_7,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en empleo?",,,,,,,,,sin código en 2025,
+GP1N_8,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en seguridad ciudadana y convivencia?",,,,,,,,,sin código en 2025,
+GP1N_9,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Vivienda?",,,,,,,,,sin código en 2025,
+GP1N_10,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Servicios públicos?",,,,,,,,,sin código en 2025,
+GP1N_11,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Movilidad y transporte?",,,,,,,,,sin código en 2025,
+GP1N_12,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Espacio público?",,,,,,,,,sin código en 2025,
+GP1N_13,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Medio ambiente?",,,,,,,,,sin código en 2025,
+GP1N_14,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Comportamiento ciudadano y cultura?",,,,,,,,,sin código en 2025,
+GP1N_15,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Gestión pública (eficiencia y transparencia)?",,,,,,,,,sin código en 2025,
+GP1N_16,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo lo evaluaría usted en Migración?",,,,,,,,,sin código en 2025,
+GP1N_17,"Teniendo en cuenta que este es el último año del actual gobierno de Bogotá, ¿cómo la evaluaría usted en Ruralidad?",,,,,,,,,sin código en 2025,
+GG3,¿Usted cómo califica la gestión del alcalde/sa?,GOB_5,Alcalde/sa,0.36,batería,"Gestión Muy mala 
+gestión 
+Mala 
+gestión 
+Regular 
+gestión 
+Buena 
+gestión 
+Muy buena 
+gestión 
+No lo conoce | [1, 2, 3, 4, 5]",False,True,,entra (revisión manual),"misma escala, pero evalúa al gobierno de turno: se junta solo 2024-2025 (Galán, DI-AR5)"
+CV5,¿Qué tan satisfecho está usted con la forma como la Alcaldía invierte los recursos públicos de la ciudad?,GES_2,¿Qué tan satisfecho está usted con la forma como la Alcaldía invierte los recursos públicos de,0.95,fila,"Muy 
+insatisfecho 
+Algo 
+insatisfecho 
+Ni satisfecho 
+ni 
+insatisfecho 
+Algo 
+satisfecho 
+Muy 
+satisfecho | [1, 2, 3, 4, 5]",False,True,,no entra (revisión manual),cambió la etiqueta del punto 4: «Satisfecho» pasa a «Algo satisfecho»
+GG7,¿Qué tanto cree usted que ha cambiado el nivel de corrupción en Bogotá durante el último año?,CON_1,"Usando las opciones de esta tarjeta, ¿qué tanto cree que ha cambiado el nivel de corrupción en",0.61,fila,"Ha disminuido 
+mucho 
+Ha disminuido 
+algo Sigue igual Ha aumentado 
+algo 
+Ha aumentado 
+mucho | [1, 2, 3, 4, 5]",True,False,,coincide,
+CC2,¿La imagen que usted tiene del Concejo de la ciudad es favorable o desfavorable?,,,,,,,,,sin código en 2025,
+CC5A,"¿Usted cómo califica, en términos generales, la gestión del Concejo de Bogotá?",GOB_6,Concejo de,0.24,no encontrada,,False,True,,entra (revisión manual),"misma escala, pero evalúa al gobierno de turno: se junta solo 2024-2025 (Galán, DI-AR5)"
+CC9,"¿Usted conoce, ha oído hablar, o ha visto algo del programa Bogotá Cómo Vamos?",GCV_1,"¿Usted conoce, ha oído hablar, o ha visto algo de",0.77,una por línea,"{""1"": ""Sí"", ""2"": ""No [Finalizar el cuestionario]""}",False,True,,entra (revisión manual),mismo sí/no
+PE_EL1,"Cuando en Colombia hay elecciones, usted:",,,,,,,,,sin código en 2025,
