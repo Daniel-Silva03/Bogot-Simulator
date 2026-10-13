@@ -83,3 +83,34 @@ Los resultados de la EPC 2025, del simulador y de MiroFish con residentes, inclu
 - **Código:** `src/experiments/tinytroupe_residentes.py`. Se corre con el Python de la instalación de TinyTroupe.
 - **Pruebas:** `tests/test_tinytroupe_residentes.py`.
 - **Resultados:** `TINYTROUPE_RESIDENTES_RESULTS.md`.
+
+## 7. Enmienda 1 (13/10/2026, antes de correr nada): se agrega la variante B
+
+**Por qué.** Al leer el README de TinyTroupe después de escribir este documento:
+- sus principios piden personas con «especificación detallada»: «age, occupation, skills, tastes, opinions»;
+- para estudios de mercado recomienda generar la población con `TinyPersonFactory.create_factory_from_demography`.
+
+La variante de §2, con residentes mínimos, puede ser injusta con la herramienta. Daniel eligió correr las dos.
+
+**La variante A** es la de §2, sin cambios. Se compara directo con MiroFish.
+
+**La variante B:**
+- **La población:** `TinyPersonFactory.create_factory_from_demography` genera **24 bogotanos** a partir de la distribución de
+  los adultos de Bogotá por sexo, edad y estrato (`DEMOGRAFIA_BOGOTA`, población sintética, Multipropósito 2021). El
+  modelo les inventa la personalidad, los gustos y las creencias, como recomienda el README.
+- **No se usa** el archivo `colombia.json` de TinyTroupe: lo generó un modelo («Synthesized from a chat with GPT-4o») y no
+  es de Bogotá.
+- **Lo demás, igual que A:** el contexto, las cinco preguntas, el prefijo y la lectura del «sí» o el «no».
+- **Cómo se cuenta:** el % de «sí» entre quienes respondieron, sin ponderar, porque la fábrica ya muestrea según la
+  demografía (`porcentaje_simple`). Si responden menos de 18 de 24, la pregunta queda sin cifra.
+- **La misma regla de §4** para cada variante.
+- **Predicción PT4:** la variante B tampoco cumple la regla, pero se equivoca menos que la A.
+
+**Gasto:** A, unos USD 0,20; B, unos USD 0,40, con la generación de las 24 personas. **Tope de USD 1 para las dos
+juntas:** A primero; si A se pasa, B no se corre.
+
+**Se corre:** A con `tinytroupe_residentes.py`; B con `tinytroupe_residentes.py --b`. Las salidas de B quedan en
+`data/processed/tinytroupe/fabrica/`.
+
+**Lo que se vio antes de esta enmienda:** el README y la guía de uso responsable de TinyTroupe. Esa guía dice que la
+herramienta «HAS NOT been shown to match real human behavior». Todavía no se ha llamado al modelo.

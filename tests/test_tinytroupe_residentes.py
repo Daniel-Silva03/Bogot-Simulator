@@ -53,6 +53,18 @@ def test_el_documento_es_el_pre_registro():
         assert pregunta in doc and f"{real:.0f} %" in doc
 
 
+def test_la_variante_b_usa_la_demografia_de_bogota_y_cuenta_sin_ponderar():
+    """Enmienda 1."""
+    d = tt.DEMOGRAFIA_BOGOTA["content"]["Demografía"]
+    for k in ("Sexo", "Edad", "Estrato socioeconómico de la vivienda"):
+        assert abs(sum(float(v.rstrip("%")) for v in d[k].values()) - 100) < 0.6, k
+    assert tt.N_B == 24 and tt.MIN_B == 18
+    assert tt.porcentaje_simple({str(i): "si" for i in range(18)}) == 100.0
+    assert tt.porcentaje_simple({str(i): ("si" if i < 6 else "no") for i in range(24)}) == 25.0
+    assert tt.porcentaje_simple({str(i): "si" for i in range(17)}) is None
+    assert tt.porcentaje_simple({**{str(i): "no" for i in range(20)}, "x": None}) == 0.0
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"TinyTroupe — {len(pruebas)} pruebas\n")

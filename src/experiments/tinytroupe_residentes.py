@@ -114,8 +114,72 @@ def correr() -> dict:
     return reg
 
 
+# ---------------------------------------------------------------- variante B (enmienda 1)
+N_B = 24
+MIN_B = 18                                                       # como 9 de 12: tres cuartos
+#: Enmienda 1: los adultos de Bogotá en la población sintética (Multipropósito 2021), por sexo, edad y estrato.
+DEMOGRAFIA_BOGOTA = {
+    "title": "Adultos de Bogotá, Colombia",
+    "description": "Distribución de la población adulta (18 años o más) de Bogotá, según la Encuesta Multipropósito 2021 "
+                   "del DANE.",
+    "source": "Población sintética del proyecto, construida con la Encuesta Multipropósito 2021 (DANE).",
+    "content": {"Demografía": {
+        "Ciudad": "Bogotá, Colombia",
+        "Sexo": {"Mujeres": "53.6%", "Hombres": "46.4%"},
+        "Edad": {"18-29": "21.1%", "30-44": "32.1%", "45-59": "26.0%", "60 o más": "20.9%"},
+        "Estrato socioeconómico de la vivienda": {"1": "8.7%", "2": "40.3%", "3": "34.7%", "4": "10.6%", "5": "3.5%",
+                                                  "6": "2.3%"},
+    }},
+}
+
+
+def porcentaje_simple(respuestas: dict[str, str | None], minimo: int = MIN_B) -> float | None:
+    """Enmienda 1: % de «sí» entre quienes respondieron, sin ponderar (la fábrica ya muestrea según la demografía)."""
+    ok = [r for r in respuestas.values() if r in ("si", "no")]
+    return None if len(ok) < minimo else round(100 * sum(r == "si" for r in ok) / len(ok), 1)
+
+
+def correr_b() -> dict:
+    """Enmienda 1: la población la genera la fábrica de TinyTroupe con la demografía de Bogotá."""
+    TRABAJO.mkdir(parents=True, exist_ok=True)
+    (TRABAJO / "config.ini").write_text(CONFIG_INI, encoding="utf-8")
+    os.chdir(TRABAJO)
+    os.environ["OPENAI_BASE_URL"] = "https://openrouter.ai/api/v1"
+    os.environ["OPENAI_API_KEY"] = os.environ["OPENROUTER_API_KEY"]
+    from tinytroupe.factory import TinyPersonFactory
+    inicio = mf.usado_usd()
+    print(f"uso de la clave al empezar (B): USD {inicio:.4f}", flush=True)
+    fabrica = TinyPersonFactory.create_factory_from_demography(
+        DEMOGRAFIA_BOGOTA, population_size=N_B, context="Adultos que viven en Bogotá, Colombia, en 2025.")
+    gente = fabrica.generate_people(number_of_people=N_B, parallelize=False)
+    print(f"   generadas {len(gente)} personas (gastado USD {mf.usado_usd() - inicio:.4f})", flush=True)
+    salida = SALIDA.parent / "fabrica"
+    salida.mkdir(parents=True, exist_ok=True)
+    (salida / "personas.json").write_text(json.dumps([g._persona for g in gente], ensure_ascii=False, indent=1,
+                                                     default=str), encoding="utf-8")
+    crudo = {clave: {} for clave, _, _ in mf.PREGUNTAS_RESIDENTES}
+    for a in gente:
+        if mf.excede(inicio, mf.usado_usd(), TOPE_USD):
+            raise mf.MiroFishError(f"se pasó del tope de USD {TOPE_USD} antes de {a.name}")
+        a.listen("Esto es lo que se sabe de la ciudad y de la Alcaldía en 2025:\n\n" + contexto())
+        for clave, pregunta, _ in mf.PREGUNTAS_RESIDENTES:
+            a.listen_and_act(mf.PREFIJO_ENTREVISTA + pregunta)
+            habla = a.pop_actions_and_get_contents_for("TALK", only_last_action=False) or []
+            crudo[clave][a.name] = " ".join(str(x) for x in habla)
+        print(f"   {a.name}: listo (gastado USD {mf.usado_usd() - inicio:.4f})", flush=True)
+    (salida / "respuestas.json").write_text(json.dumps(crudo, ensure_ascii=False, indent=1), encoding="utf-8")
+    porc = {c: porcentaje_simple({n: mf.leer_si_no(t) for n, t in r.items()}) for c, r in crudo.items()}
+    reg = {"variante": "B", "inicio_usd": inicio, "porcentajes": porc, "gasto_usd": round(mf.usado_usd() - inicio, 4)}
+    (salida / "registro.json").write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"porcentajes (B): {porc}\ngasto (B): USD {reg['gasto_usd']}", flush=True)
+    return reg
+
+
 if __name__ == "__main__":
     if not os.environ.get("OPENROUTER_API_KEY"):
         print("falta la variable de entorno OPENROUTER_API_KEY")
         sys.exit(1)
-    correr()
+    if "--b" in sys.argv:
+        correr_b()
+    else:
+        correr()
