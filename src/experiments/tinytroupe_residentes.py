@@ -19,6 +19,10 @@ DI-TT2. **La configuración de TinyTroupe** va en `config.ini` de la carpeta de 
     usan embeddings y no hacen falta para cinco preguntas.
 DI-TT3. **La respuesta** es el texto de las acciones TALK que siguen a cada pregunta, juntas. Si no hay TALK, cuenta como
     sin respuesta.
+DI-TT4. **Dos arreglos antes de la primera corrida completa** (13/10). Hecho: (1) la variante A falló sin gastar porque
+    TinyTroupe importa `IPython` al crear cada persona; se instaló. (2) La fábrica de la variante B se cortaba por largo
+    con `MAX_COMPLETION_TOKENS=4000` (unos USD 0,005 en intentos). Se sube a 16.000. El pre-registro no fijaba esa cifra, y
+    el modelo no cambia.
 """
 
 from __future__ import annotations
@@ -43,7 +47,7 @@ API_TYPE=openai
 MODEL=openai/gpt-6-luna
 REASONING_MODEL=openai/gpt-6-luna
 REASONING_EFFORT=low
-MAX_COMPLETION_TOKENS=4000
+MAX_COMPLETION_TOKENS=16000
 TIMEOUT=600
 MAX_ATTEMPTS=3
 CACHE_API_CALLS=True
