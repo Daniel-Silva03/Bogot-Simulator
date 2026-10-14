@@ -642,3 +642,89 @@ la pregunta numerada de cada estudio.
 - **El guardado no se ha calculado.** Queda para la validación pre-registrada del nivel 3.
 - **Con el lote 7, el banco suma 848 preguntas.** Las 373 del lote 7 son electorales y quedan fuera de la página (D21).
 
+
+## 17. Octavo lote: EPC 2025, las preguntas de opinión que no están en el catálogo (pre-registro, 14/10, antes de sortear)
+
+**Por qué:** el banco no tiene ninguna pregunta de la EPC 2025, que es la encuesta de Bogotá más reciente y del tema de la
+página. Lo pidió Daniel (mejora 1: una cifra más precisa en las preguntas nuevas).
+
+**Fuente:** la EPC 2025 de Bogotá Cómo Vamos, pública. 1.520 encuestados en 18 localidades (sin La Candelaria ni
+Sumapaz). Peso: `Factor1`.
+
+**Lo que se miró antes de escribir esto:**
+- el formulario de 2025 en PDF, con los textos y las escalas;
+- los nombres de columna y los códigos presentes en los datos, y cuántos tienen dato en cada pregunta.
+
+**Ningún porcentaje.**
+
+**Entran 26 preguntas en 13 familias.** Son las que están en los datos y fuera del catálogo (`verificacion_2025.csv`),
+y que tienen una escala con un lado favorable claro:
+
+| Familia | Preguntas | Escala | Favorable |
+|---|---|---|---|
+| Confianza en los servicios financieros digitales | `FIN_3` | confianza 1-5 | 4 y 5 |
+| Confianza en la inteligencia artificial | `CTI_3` | confianza 1-5 | 4 y 5 |
+| Impactos de la inteligencia artificial en el trabajo | `CTI_4` (más productivo), `CTI_5` (dificultará conseguir trabajo) | Nada … Totalmente, 1-5 | 4 y 5 |
+| Satisfacción con el colegio | `EDU_4` a `EDU_10`: profesores, infraestructura física, infraestructura tecnológica, material, alimentación escolar, procesos académicos, transporte escolar | satisfacción 1-5 | 4 y 5 |
+| Satisfacción con el servicio de salud | `SAL_1` | satisfacción 1-5 | 4 y 5 |
+| Salud de la primera infancia | `BOG_3` | satisfacción 1-5 | 4 y 5 |
+| Sistema de justicia | `JUS_1` | satisfacción 1-5 | 4 y 5 |
+| Estado de las vías vehiculares | `MOV_6` | satisfacción 1-5 | 4 y 5 |
+| Confianza en las instituciones | `CON_4` (Alcaldía), `CON_5` (Concejo), `CON_6` (Congreso), `CON_7` (Gobierno Nacional) | confianza 1-5 | 4 y 5 |
+| Comportamiento de los habitantes | `CCC_1` (normas de convivencia) | Muy mal … Muy bien, 1-5 | 4 y 5 |
+| Probabilidad de sanción | `CCC_16` (tránsito), `CCC_18` (dañar el espacio público), `CCC_20` (arrojar basura o escombros), `CCC_22` (incumplir créditos con bancos) | Nada … Totalmente probable, 1-5 | 4 y 5 |
+| Imagen del alcalde Galán | `GOB_4` | Desfavorable / Favorable | 2 |
+| Gestión del Congreso | `GOB_7` | gestión 1-5 | 4 y 5 |
+
+**«No sabe» y «no aplica»:** el 90 (no sabe, no recibió el servicio, no lo usa) y el 91 (no conoce al alcalde) no cuentan,
+como en los demás lotes (DI-BR1). En `categorias` llevan la etiqueta «No sabe» o «No aplica: …» para que la regla los
+reconozca (DI-BL20).
+
+**No entran:**
+- **las de selección múltiple** (los problemas de seguridad del barrio, los medios para informarse, los usos de la
+  inteligencia artificial, los temas que debe atender la administración, cómo afectan las obras del metro, las barreras
+  para estudiar): no tienen una escala con lado favorable;
+- **lo que no es opinión:** sexo, horas de cuidado, de dónde sacó un préstamo, el tipo de colegio, cuántos libros leyó, si
+  denunció un delito, el medio de transporte, si su vehículo es eléctrico, la tenencia de la vivienda, el conocimiento del
+  programa Bogotá Cómo Vamos;
+- **las que repiten el catálogo** (regla 3 de §12): `ENT_4`, «las plazas, parques o zonas verdes», es `EP1B_1`, `EP1B_3` y
+  `EP1B_6`;
+- **`EDU_11`, «acoso escolar (bullying)»:** en una batería de satisfacción, «¿qué tan satisfecho está con el acoso
+  escolar?» no tiene un sentido claro, y habría que inventarlo.
+
+**Texto en la página:** escrito a mano a partir del formulario, con la pregunta de la batería dentro de la frase y «Bogotá»
+donde dice «[ciudad]» (DI-BL21). Por ejemplo: «¿Qué tanto confía en el Congreso de la República?».
+
+**Familias:** la batería, como en los demás lotes: los ítems de una misma pregunta son una familia.
+
+**Sorteo:** regla 3 de DI-BA5, por familia, con la semilla **20261014**: la mitad de las familias, redondeando hacia arriba
+(7 de 13), al guardado.
+
+**Resultados reales, solo de práctica:** el cálculo de los demás lotes (`banco_lote3._calcular`).
+- **Peso:** `Factor1`.
+- **Sexo:** `DMO_1`.
+- **Edad:** `DMO_3_1`, en los cortes de la página.
+- **Estrato:** `DMO_4_1`.
+- **Localidad:** `LOCALIDAD`.
+- **Pares claros:** la regla DI-BR5.
+
+**Lo que se declara antes de sortear:**
+- **Varias preguntas son solo para una parte de la gente:**
+
+  | Pregunta | Quién la responde | Con dato |
+  |---|---|---|
+  | Inteligencia artificial | quien usa esas herramientas | unos 520-600 |
+  | Colegio | los hogares con estudiantes | 497; la alimentación escolar, 342 |
+  | Primera infancia | los hogares con niños menores de 6 años | 289 |
+
+  Con el «no aplica» fuera, varias pueden quedar por debajo de las **300 respuestas válidas** de la regla de estructura
+  (DI-BR5). **La regla de 300 no se cambia** en este lote.
+- **No es independiente de la población:** los encuestados de 2025 son donantes de la población 2022-2025. Para la
+  estimación del nivel no importa, porque usa la cifra de la ciudad, no a las personas. Se marca `independiente = False`.
+- **Los resultados sí se pueden subir:** la EPC es pública. `sorteo_lote8.csv` y `reales_practica_lote8.json` van a
+  GitHub, como los de los lotes 1 a 5.
+
+**Lo que este lote no cambia solo:** las candidatas de la página (DI-CO29). Sumarlas es otra configuración, con su prueba
+pre-registrada (`NIVEL_ACUERDO_LOTE8_SPECIFICATION.md`).
+
+**Código:** `src/experiments/banco_lote8.py`, con pruebas en `tests/test_banco_lote8.py`.
