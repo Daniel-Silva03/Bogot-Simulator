@@ -425,6 +425,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       se equivoca 4,73 por grupo y 4,82 con la cifra de la ciudad para todos: no pasa la regla. Pero acierta la dirección de
       las brechas (correlación 0,58; en edad, 91 % cuando la brecha pasa de 3 puntos). Los grupos de Bogotá se parecen: se
       apartan 2,3 puntos de la ciudad, menos que el error de nivel.
+    - **Rango según el acuerdo de las elegidas: no pasa (14/10, USD 0, `RANGO_ACUERDO_RESULTS.md`).** Un rango más angosto
+      cuando las preguntas de apoyo coinciden hace que la página se comprometa en 32 de 139 en vez de 19, pero acierta el 84 %
+      en vez del 89 % (la regla pedía 90 %). La página sigue con el rango de hoy. Es un intercambio que podría decidirse como
+      producto.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
