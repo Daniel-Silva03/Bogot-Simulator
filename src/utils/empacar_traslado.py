@@ -13,6 +13,7 @@ que se copian aparte, y lo pequeño que se produjo aquí y que este script junta
 No entra nada de `*/simulado/` (se rehace sin gasto) ni ejecutables.
 
     python src/utils/empacar_traslado.py                         # crea el zip en el Escritorio
+    python src/utils/empacar_traslado.py --sin-viz               # sin el tablero anterior (~550 MB): basta para la página
     python src/utils/empacar_traslado.py --extraer ZIP           # en el otro computador, dentro del repo
     python src/utils/empacar_traslado.py --extraer ZIP --sobrescribir
 """
@@ -32,17 +33,19 @@ FUERA = ("/simulado/",)
 EXTENSIONES_FUERA = (".exe", ".tmp")
 
 
-def archivos() -> list[str]:
-    """Lo que git ignora dentro de data/processed, menos lo simulado y los ejecutables, más EXTRA."""
+def archivos(sin_viz: bool = False) -> list[str]:
+    """Lo que git ignora dentro de data/processed, menos lo simulado y los ejecutables, más EXTRA. Con `sin_viz`, sin
+    `data/processed/viz/` (el tablero anterior, que la página no usa)."""
     r = subprocess.run(["git", "ls-files", "--others", "--ignored", "--exclude-standard", "data/processed"],
                        cwd=RAIZ, capture_output=True, text=True, check=True)
     lista = [f for f in r.stdout.splitlines()
-             if f and not any(x in f for x in FUERA) and not f.lower().endswith(EXTENSIONES_FUERA)]
+             if f and not any(x in f for x in FUERA) and not f.lower().endswith(EXTENSIONES_FUERA)
+             and not (sin_viz and f.startswith("data/processed/viz/"))]
     return sorted(lista + [e for e in EXTRA if (RAIZ / e).is_file()])
 
 
-def empacar(destino: Path) -> list[str]:
-    lista = archivos()
+def empacar(destino: Path, sin_viz: bool = False) -> list[str]:
+    lista = archivos(sin_viz)
     with zipfile.ZipFile(destino, "w", zipfile.ZIP_DEFLATED) as z:
         for f in lista:
             z.write(RAIZ / f, f)
@@ -70,6 +73,7 @@ def main(argv=None) -> int:
     ap.add_argument("--destino", type=Path, default=Path.home() / "Desktop" / f"bss_traslado_{date.today().isoformat()}.zip")
     ap.add_argument("--extraer", type=Path, help="zip a desempacar dentro del repositorio")
     ap.add_argument("--sobrescribir", action="store_true", help="al extraer, reemplaza lo que ya exista")
+    ap.add_argument("--sin-viz", action="store_true", help="sin el tablero anterior: basta para la página")
     args = ap.parse_args(argv)
     if args.extraer:
         puestos, saltados = extraer(args.extraer, args.sobrescribir)
@@ -77,7 +81,7 @@ def main(argv=None) -> int:
               + (" (usa --sobrescribir para reemplazarlos)" if saltados else ""))
         print("Ahora: python src/utils/revisar_datos.py")
         return 0
-    lista = empacar(args.destino)
+    lista = empacar(args.destino, args.sin_viz)
     peso = args.destino.stat().st_size / 1e6
     print(f"{len(lista)} archivos en {args.destino} ({peso:.1f} MB).")
     print("Cópialo al otro computador junto con data/raw/ y la carpeta del CNC; ver docs/TRASLADO.md.")

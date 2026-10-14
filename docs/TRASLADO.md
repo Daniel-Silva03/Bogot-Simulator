@@ -67,6 +67,28 @@ oficina, es una decisión aparte.
    ```
    y abrir `http://127.0.0.1:8765`.
 
+## 2b. Solo para correr la página (14/10/2026)
+
+Para alguien que solo quiere abrir la página en su computador: **no necesita `data/raw/` ni `CNC_datos/`.** La página lee
+la población ya construida, el mapa (que está en GitHub) y los resultados guardados de las encuestas del CNC.
+
+1. **En el computador de origen**, un paquete sin el tablero anterior (unos 20 MB en vez de 570):
+   ```
+   python src/utils/empacar_traslado.py --sin-viz
+   ```
+   **Ojo:** el zip lleva los resultados agregados de las encuestas políticas y electorales del CNC (D21). Se pasa solo por
+   un canal interno del CNC: nunca por correo externo, enlace público ni GitHub.
+2. **En el de destino**, los pasos 1, 2, 4 y 7 de §2: Python 3.11, clonar, instalar `requirements.txt`, extraer el zip y
+   revisar. Sin `data/raw/`, `revisar_datos.py` marca en `[FALTA]` las fuentes. No importa para la página: lo que debe
+   estar en `[OK ]` es la sección «LA PÁGINA ACTUAL».
+3. **Abrir la página:**
+   ```
+   python src/consulta/servidor.py --simulado     # sin clave ni gasto: respuestas de prueba
+   $env:OPENROUTER_API_KEY = "..."                # con una clave propia de OpenRouter, en esa terminal
+   python src/consulta/servidor.py                # con el modelo real
+   ```
+   y abrir `http://127.0.0.1:8765`. La clave es de quien la usa: nunca se escribe en un archivo ni se comparte por chat.
+
 ## 3. Si algo falla
 
 - **Falta una librería:** `pip install -r requirements.txt` dentro del venv.
