@@ -394,6 +394,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       población 2022-2024, la media vida de un año baja el error de la ciudad de 4,43 a 4,06. Es menos de 0,5, así que
       la página sigue juntando los años igual. En cinco preguntas 2025 se movió más de lo que ningún peso alcanza (buen
       camino, hambre, victimización). La cifra de Galán por año, que proponía el pre-registro, no se hace: Daniel la descartó.
+    - **Lote 8 del banco (EPC 2025): no pasa (14/10, USD 0,220, `NIVEL_ACUERDO_LOTE8_RESULTS.md`).** Sumar 15 preguntas
+      de la EPC 2025 a las candidatas deja el error igual (15,6 contra 15,7) y acierta menos al decidir (80 %). La página
+      sigue con las 139. Lo que mostró: la estimación se queda cerca del 50 % cuando no hay una pregunta casi igual. En
+      confianza en instituciones (reales de 10 % a 19 %) dio cerca de 50 %, y se equivocó por 30 a 44 puntos.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
