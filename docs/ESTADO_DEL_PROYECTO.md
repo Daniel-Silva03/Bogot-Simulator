@@ -402,6 +402,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       preguntas del catálogo entre las candidatas, el error baja de 15,6 a 15,3, y en las 10 de la EPC 2025 de 25,9 a 14,2;
       en las 129 de siempre sube de 14,8 a 15,4. La confianza en el Concejo pasa de 53 % a 20 % (real 13 %). La página ya
       estima con las 223.
+    - **Validación 2026: no pasa (14/10, USD 0,023, `VALIDACION_2026_RESULTS.md`).** Seis preguntas nuevas con resultado
+      publicado en 2026: cuatro del metro y dos de la Encuesta Distrital. El real cae en el rango en 3 de 6 (la regla pedía
+      4). Se equivoca menos que decir 50 % (16,8 contra 26,8), pero no decidió en ninguna. En el metro, con reales de 80 % a
+      93 %, dio de 56 % a 62 %. Corrección: una de las seis (el metro en 2028) sí estaba en el banco; el pre-registro decía
+      que no.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
