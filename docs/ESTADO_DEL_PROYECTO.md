@@ -407,6 +407,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       4). Se equivoca menos que decir 50 % (16,8 contra 26,8), pero no decidió en ninguna. En el metro, con reales de 80 % a
       93 %, dio de 56 % a 62 %. Corrección: una de las seis (el metro en 2028) sí estaba en el banco; el pre-registro decía
       que no.
+    - **Validación CNC 2026: no pasa (14/10, USD 0,031, `VALIDACION_CNC_2026_RESULTS.md`).** Siete preguntas de opinión de
+      las encuestas del CNC para Revista Cambio de enero y abril de 2026. El real cae en el rango en 5 de 7, y la única vez
+      que dijo «probablemente» acertó. Pero su error (12,7) no le gana a decir 50 % (10,6). Por D21 no se reporta ningún
+      porcentaje del CNC.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
