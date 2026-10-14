@@ -418,6 +418,9 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     - **Compresión hacia el medio (14/10, USD 0, `COMPRESION_RESULTS.md`).** Es la prueba de amplitud del marco de
       Artificial Societies. Las estimaciones se mueven menos que los reales (16,5 contra 23,9), pero la pendiente es 0,95:
       no es una escala aplanada, es falta de información. Estirarlas no baja el error (15,6 contra 15,3) y la página no cambia.
+    - **Efecto de la redacción: robusta (14/10, USD 0,075, `REDACCION_RESULTS.md`).** Diez preguntas escritas de tres formas.
+      La cifra cambia 2,2 puntos en promedio; en el benchmark de Artificial Societies, el mejor modelo de lenguaje cambia
+      6,2 y su sistema 1,4. Lo frágil es el alcance: una pregunta nacional salió «fuera» en dos de tres redacciones.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
