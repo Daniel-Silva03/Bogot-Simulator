@@ -110,6 +110,7 @@ import hashlib
 import json
 import math
 import os
+import time
 import re
 import sys
 import threading
@@ -472,7 +473,16 @@ class Cache:
             self.ruta.parent.mkdir(parents=True, exist_ok=True)
             tmp = self.ruta.with_suffix(".tmp")
             tmp.write_text(json.dumps(self.datos, ensure_ascii=False), encoding="utf-8")
-            os.replace(tmp, self.ruta)       # un corte a medio escribir no la corrompe
+            # un corte a medio escribir no la corrompe. En Windows, el antivirus o el indexador pueden tener el archivo
+            # abierto un instante y el reemplazo falla con «Acceso denegado» (14/10/2026): se reintenta unas veces.
+            for intento in range(10):
+                try:
+                    os.replace(tmp, self.ruta)
+                    break
+                except PermissionError:
+                    if intento == 9:
+                        raise
+                    time.sleep(0.2 * (intento + 1))
 
 
 def pedir(llamar: Llamar, cache: Cache, modelo: str, temp: float,
