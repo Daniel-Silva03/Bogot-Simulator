@@ -433,6 +433,13 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       baja el error por localidad de 7,94 a 7,65, menos que el medio punto pedido. El hallazgo es otro: el orden de las
       localidades que da el mapa con 2022-2024 casi no se relaciona con el de 2025 (Spearman 0,045). El mapa no sirve para
       decir qué localidad está mejor o peor.
+      Daniel pidió que la página lo diga en el mapa (`PAGINA_CONSULTA.md` §5.30).
+    - **Personas con su encuesta: no pasa por poco, pero es lo más cerca que se ha llegado (14/10, USD 0,056,
+      `PERSONAS_CON_ENCUESTA_RESULTS.md`).** Idea de Daniel: un agente por encuestado real de la EPC 2025, con sus 40
+      respuestas. En 6 preguntas escondidas acierta a cada persona mejor que una constante y que una regresión (21,9 contra
+      26,3 y 23,8), y el total mejor que la página (10,0 contra 12,2). Pero conserva solo el 56 % de la variación (la regla
+      pedía 60 %): en tres preguntas dijo que nadie confía o está satisfecho.
+    - **EPC 2026: descartada por ahora** (14/10, Daniel). No ha salido; la de 2025 se presentó el 4 de diciembre de 2025.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
