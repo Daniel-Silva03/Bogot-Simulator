@@ -728,3 +728,16 @@ donde dice «[ciudad]» (DI-BL21). Por ejemplo: «¿Qué tanto confía en el Con
 pre-registrada (`NIVEL_ACUERDO_LOTE8_SPECIFICATION.md`).
 
 **Código:** `src/experiments/banco_lote8.py`, con pruebas en `tests/test_banco_lote8.py`.
+
+### 17.1 Sorteo y resultados de práctica del lote 8 (14/10)
+
+- **Sorteo** (commit `00befa5`, antes de calcular):
+  - **práctica:** 6 familias y 16 preguntas: primera infancia, comportamiento frente a las normas de convivencia, las 4
+    de sanción, los impactos de la inteligencia artificial, las 7 del colegio y la imagen de Galán;
+  - **guardado:** 7 familias y 10 preguntas: las 4 de confianza en instituciones, la confianza en la inteligencia
+    artificial, los servicios financieros digitales, la gestión del Congreso, el sistema de justicia, el estado de las
+    vías y el servicio de salud.
+- **Resultados de práctica** (`reales_practica_lote8.json`): **1 de 16 queda fuera por la regla de estructura**, como se
+  previó: la primera infancia (`BOG_3`), con 254 respuestas válidas. **Quedan 15 utilizables**, con entre 314 y 1.490
+  respuestas válidas y 87 pares claros.
+- **Con el lote 8, el banco suma 874 preguntas.**
