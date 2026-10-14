@@ -429,6 +429,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       cuando las preguntas de apoyo coinciden hace que la página se comprometa en 32 de 139 en vez de 19, pero acierta el 84 %
       en vez del 89 % (la regla pedía 90 %). La página sigue con el rango de hoy. Es un intercambio que podría decidirse como
       producto.
+    - **Mapa apoyado en la ciudad: no pasa (14/10, USD 0, `MAPA_ENCOGIDO_RESULTS.md`).** El encogimiento de áreas pequeñas
+      baja el error por localidad de 7,94 a 7,65, menos que el medio punto pedido. El hallazgo es otro: el orden de las
+      localidades que da el mapa con 2022-2024 casi no se relaciona con el de 2025 (Spearman 0,045). El mapa no sirve para
+      decir qué localidad está mejor o peor.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
