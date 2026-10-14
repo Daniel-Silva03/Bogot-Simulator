@@ -415,6 +415,9 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       con las 238 preguntas con resultado, sobre embeddings del texto, se equivoca más que la de hoy (18,0 contra 15,3) y
       nunca se compromete. Luna elige mejor que el parecido del texto, y 238 ejemplos son pocos para aprender. La página
       sigue igual. Lo que queda es la opción B (gemelos con entrevistas), que es decisión de Daniel y su jefe.
+    - **Compresión hacia el medio (14/10, USD 0, `COMPRESION_RESULTS.md`).** Es la prueba de amplitud del marco de
+      Artificial Societies. Las estimaciones se mueven menos que los reales (16,5 contra 23,9), pero la pendiente es 0,95:
+      no es una escala aplanada, es falta de información. Estirarlas no baja el error (15,6 contra 15,3) y la página no cambia.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

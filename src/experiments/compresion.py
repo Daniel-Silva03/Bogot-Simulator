@@ -59,18 +59,20 @@ def compresion(s: np.ndarray, y: np.ndarray) -> dict:
 def main() -> int:
     from src.experiments import nivel_acuerdo_catalogo as nc
     from src.experiments import nivel_acuerdo_lote6 as n6
+    from src.experiments import nivel_acuerdo_lote8 as n8
     from src.experiments import nivel_acuerdo_validacion as nv
     from src.experiments import validacion_2026 as v26
     from src.experiments import validacion_cnc_2026 as vk
     d = json.loads(nc.SALIDA.read_text(encoding="utf-8"))
     p = pd.DataFrame(d["E"]["por_pregunta"])[["id", "familia", "total", "S"]].dropna()
     cand = nc.candidatas()[1]
+    obj = pd.concat(n8.objetivos(), ignore_index=True)
     s, y, fam = p.S.to_numpy(float), p.total.to_numpy(float), p.familia.to_numpy()
     comp = compresion(s, y)
-    hoy = n6._cifras(nv.evaluar(p.assign(fallo=False), cand, p, h=nc.H))
+    hoy = n6._cifras(nv.evaluar(p.assign(fallo=False), cand, obj, h=nc.H))
     s2 = fuera_de_muestra(s, y, fam)
     h2 = float(np.quantile(np.abs(s2 - y), CUANTIL))
-    est = n6._cifras(nv.evaluar(p.assign(S=s2, fallo=False), cand, p, h=h2))
+    est = n6._cifras(nv.evaluar(p.assign(S=s2, fallo=False), cand, obj, h=h2))
     a, b = ajustar(s, y)
     ext = {}
     for g, ruta, filtro in (("V_sin_V5", v26.SALIDA, lambda f: f["id"] != "V5"), ("V5", v26.SALIDA, lambda f: f["id"] == "V5"),
