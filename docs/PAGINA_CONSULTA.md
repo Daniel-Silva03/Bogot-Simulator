@@ -823,6 +823,20 @@ son las cifras con el rango que usa la página (§5 de los resultados, un contro
 **Verificado:** las 31 pruebas de `tests/test_consulta.py`. Las cifras del catálogo que usa el motor son las mismas de la
 prueba.
 
+## 5.30 El mapa dice que no sirve para ordenar localidades (14/10/2026, a pedido de Daniel)
+
+**Por qué:** adivinando la EPC 2025 con la población 2022-2024, el orden de las localidades del mapa casi no se relaciona con
+el de 2025 (Spearman 0,045, `MAPA_ENCOGIDO_RESULTS.md`).
+
+**Qué cambió:** el aviso va en tres lugares.
+- **Debajo del mapa,** en la leyenda: «no lo uses para ordenar localidades…».
+- **En la tabla «Localidad por localidad»:** «el orden no se sostiene de un año a otro: no lo leas como un ranking».
+- **En «Los límites»:** una línea nueva.
+
+No cambia ningún cálculo ni ningún color. Usa los estilos que ya existen (`.nota`).
+
+**Verificado:** las 31 pruebas de `tests/test_consulta.py`, y que el servidor sirve los tres textos.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

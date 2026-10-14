@@ -449,6 +449,7 @@ footer .marca{margin-bottom:16px}
         <li>No predice ni reemplaza una encuesta.</li>
         <li>Opina como Bogotá entre 2022 y 2025, promediada. Cada respuesta dice de qué años sale; algunas preguntas solo se hicieron en 2023, y las del gobierno de Galán, en 2024 y 2025.</li>
         <li>Unas 310 personas encuestadas por localidad en las preguntas de los cuatro años, menos en las demás (unas 80 en las que solo se hicieron en 2023): el mapa tiene márgenes anchos.</li>
+        <li>El mapa no sirve para ordenar localidades: en una prueba con la encuesta de 2025, el orden de las localidades casi no anticipó el del año siguiente.</li>
         <li>Sumapaz no tiene encuestados.</li>
         <li>En una pregunta nueva, la cifra es una estimación con un rango de unos ±23 puntos.</li></ul></article>
     </div>
@@ -621,7 +622,8 @@ function leyenda(){
     const c = clasificar(estado.resp);
     el.innerHTML = `<span class="ceja">Frente a la ciudad (${f2(estado.resp.ciudad.media)})</span>
       <div class="leyenda-cat">${['arriba','igual','abajo'].map(k => `<i class="muestra" style="background:${CAT[k]};margin:0"></i><span>${CAT_TXT[k]}${MARCA[k]}</span><b>${c[k].length}</b>`).join('')}</div>
-      <p class="nota">Cuenta como diferencia solo si el margen del 95 % de la localidad no incluye el promedio de la ciudad. El promedio de cada una, con su margen, está en la tabla y en su ficha.</p>`;
+      <p class="nota">Cuenta como diferencia solo si el margen del 95 % de la localidad no incluye el promedio de la ciudad. El promedio de cada una, con su margen, está en la tabla y en su ficha.</p>
+      <p class="nota"><b>Ojo:</b> no lo uses para ordenar localidades. En una prueba con la encuesta de 2025, el orden de las localidades de este mapa casi no anticipó el del año siguiente: sirve para ver la cifra de cada una con su margen, no para decir cuál está mejor o peor.</p>`;
   } else {
     el.innerHTML = `<span class="ceja">Personas de 18 años o más</span><div class="rampa" style="background:linear-gradient(90deg,${color(.1)},${color(.7)})"></div>
       <div class="ext"><span>menos</span><span class="mono">${fmt(maxAdultos)}</span></div>`;
@@ -655,7 +657,7 @@ function ranking(el, visibles){
   const ext = filas.flatMap(([,v]) => v.margen).concat(r.ciudad.media);
   const lo = Math.max(1, Math.floor(10*Math.min(...ext) - 1)/10), hi = Math.min(n, Math.ceil(10*Math.max(...ext) + 1)/10);
   const pos = v => 100*(v-lo)/(hi-lo);
-  el.innerHTML = `<div><h3>Localidad por localidad</h3><p class="sub">De mayor a menor promedio. La línea es la ciudad (${f2(r.ciudad.media)}); el trazo, el margen del 95 %. ▲ por encima y ▼ por debajo, solo si el margen no incluye a la ciudad.</p></div>
+  el.innerHTML = `<div><h3>Localidad por localidad</h3><p class="sub">De mayor a menor promedio. La línea es la ciudad (${f2(r.ciudad.media)}); el trazo, el margen del 95 %. ▲ por encima y ▼ por debajo, solo si el margen no incluye a la ciudad. El orden no se sostiene de un año a otro: no lo leas como un ranking.</p></div>
     <div role="list">
     <div class="tabla-cab" aria-hidden="true"><span>Localidad</span><span>Promedio y margen · eje de ${f1(lo)} a ${f1(hi)}</span><span>1 a ${n}</span></div>` + filas.map(([cod,v]) => {
       const marca = c.arriba.includes(cod) ? '▲' : c.abajo.includes(cod) ? '▼' : '';
