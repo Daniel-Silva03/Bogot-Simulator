@@ -398,6 +398,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       de la EPC 2025 a las candidatas deja el error igual (15,6 contra 15,7) y acierta menos al decidir (80 %). La página
       sigue con las 139. Lo que mostró: la estimación se queda cerca del 50 % cuando no hay una pregunta casi igual. En
       confianza en instituciones (reales de 10 % a 19 %) dio cerca de 50 %, y se equivocó por 30 a 44 puntos.
+    - **El catálogo como candidatas: pasa (14/10, USD 0,277, `NIVEL_ACUERDO_CATALOGO_RESULTS.md`, DI-CO39).** Con las 84
+      preguntas del catálogo entre las candidatas, el error baja de 15,6 a 15,3, y en las 10 de la EPC 2025 de 25,9 a 14,2;
+      en las 129 de siempre sube de 14,8 a 15,4. La confianza en el Concejo pasa de 53 % a 20 % (real 13 %). La página ya
+      estima con las 223.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

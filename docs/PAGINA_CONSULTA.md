@@ -805,6 +805,24 @@ anchos.
 encuesta». Se quedan las de pregunta nueva, voto y fuera de alcance, el rótulo «Dato medido · EPC …» del resultado y la
 tarjeta de «Cómo funciona».
 
+## 5.29 La estimación también se apoya en el catálogo (14/10/2026, DI-CO39)
+
+**Qué cambió:** las 84 preguntas medidas del catálogo entran a las candidatas de la estimación, con su cifra de la ciudad.
+Ahora son 223 candidatas (antes, 139).
+
+**Por qué:** sin una pregunta casi igual, la estimación se quedaba cerca del 50 %. En la confianza en el Concejo (real 13 %)
+daba 53 %; ahora se apoya en la imagen y la gestión del Concejo, y da 20 %. La prueba pre-registrada pasa
+(`NIVEL_ACUERDO_CATALOGO_RESULTS.md`):
+- **error:** de 15,6 a 15,3 en 139 preguntas;
+- **en las 10 de la EPC 2025:** de 25,9 a 14,2;
+- **en las 129 de siempre:** de 14,8 a 15,4, un poco peor.
+
+**El texto de la estimación** cita ahora 139 preguntas, 73 % de acierto del lado y 17 aciertos de 19 «probablemente», que
+son las cifras con el rango que usa la página (§5 de los resultados, un control no pre-registrado).
+
+**Verificado:** las 31 pruebas de `tests/test_consulta.py`. Las cifras del catálogo que usa el motor son las mismas de la
+prueba.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

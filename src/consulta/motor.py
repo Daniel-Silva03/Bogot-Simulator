@@ -312,6 +312,15 @@ DI-CO38. **La página usa la población 2022-2025** (13/10, `POBLACION_EPC2022_2
     instrucción sigue siendo la versión 5. La reformulación con este catálogo pasó su validación: 12 de 12, con Galán en
     sus preguntas y López como «nueva». Las de Galán llevan su nota (`nota_gobierno`); la del Concejo dice que es el de
     2024-2027. Las ramas de López en `nota_gobierno` se quedan, para la población 2022-2024.
+
+DI-CO39. **El catálogo también es candidata de la estimación** (14/10, `NIVEL_ACUERDO_CATALOGO_RESULTS.md`). Hecho: sin
+    una pregunta casi igual entre las 139 candidatas, la estimación se quedaba cerca del 50 %; en la confianza en las
+    instituciones (reales de 10 % a 19 %) daba unos 50 %. Con las 84 preguntas del catálogo como candidatas, la prueba
+    pre-registrada pasa: el error baja de 15,6 a 15,3 en 139 preguntas y de 25,9 a 14,2 en las 10 de la EPC 2025; en las
+    129 de siempre sube de 14,8 a 15,4. Decisión: al arrancar, el motor suma a las candidatas cada pregunta del catálogo,
+    con el porcentaje de su lado favorable en la ciudad (`_ciudad`, DI-CO18) y su texto. Supuesto: con el rango de la
+    página (DI-CO33), la prueba da 17 aciertos de 19 «probablemente», un control no pre-registrado; el texto cita esas
+    cifras.
 """
 
 from __future__ import annotations
@@ -369,10 +378,10 @@ H_ESTIMACION_K = {1: 23.9, 2: 22.9, 3: 21.7}                 # 3 = tres o más
 LLAMADA_TITULO = {"sí": "Probablemente sí", "no": "Probablemente no", "dividida": "Dividida"}
 ESTIMACION_TEXTO = ("Es una estimación, no una medición: sale de lo que la gente respondió de verdad a {n} preguntas "
                     "parecidas que sí se midieron, que eligió un modelo de lenguaje (aparecen debajo, con su resultado). "
-                    "En una prueba con 129 preguntas reales que no se habían usado para armarla, acertó si la mayoría "
-                    "estaba de acuerdo en el 71 % de los casos, y de las 13 veces que dijo «probablemente» acertó 12. "
+                    "En una prueba con 139 preguntas reales que no se habían usado para armarla, acertó si la mayoría "
+                    "estaba de acuerdo en el 73 % de los casos, y de las 19 veces que dijo «probablemente» acertó 17. "
                     "Esa prueba usó el texto original de cada encuesta, más claro que una pregunta escrita aquí: con la "
-                    "tuya puede acertar algo menos.")   # DI-CO29
+                    "tuya puede acertar algo menos.")   # DI-CO29, DI-CO39
 ESTIMACION_DIVIDIDA = (" El rango cruza el 50 %: con lo que hay medido no se puede decir de qué lado queda la "
                        "mayoría.")
 #: DI-CO30: la intención de voto (D21, nivel 3; VOTO_SIMULADO y VOTO_REGISTRADURIA).
@@ -644,6 +653,19 @@ class Motor:
         for l in sorted(set(self.loc)):
             m = loc_d == l
             self._conglo[int(l)] = (np.flatnonzero(m), pd.factorize(self.donante.conglomerado.to_numpy()[m])[0])
+        if self._candidatas is not None:                                         # DI-CO39
+            self._candidatas = pd.concat([self._candidatas, self._candidatas_catalogo()], ignore_index=True)
+
+    def _candidatas_catalogo(self) -> pd.DataFrame:
+        """DI-CO39: cada pregunta del catálogo como candidata de la estimación, con su cifra de la ciudad."""
+        from src.experiments import nivel_acuerdo_catalogo as nc
+        filas = []
+        for v in self.catalogo:
+            f = nc.fila_catalogo(self._vista[v], self._ciudad(v)[0]["alto"])
+            f["fuente_txt"] = ("Encuesta de Percepción Ciudadana, Bogotá Cómo Vamos, "
+                               + _texto_anios(sorted(self.anios.get(v, [2023]))))
+            filas.append(f)
+        return pd.DataFrame(filas)
 
     def _tono_por_grupo(self) -> tuple[dict, int]:
         """DI-CO14: (índice del tono general por grupo, cuántas preguntas lo forman)."""
