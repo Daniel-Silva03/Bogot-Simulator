@@ -444,6 +444,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       probabilidades en vez de una opción corrige el «nadie confía»: en el desarrollo, el error del total baja de 20,8 a 9,5.
       En la prueba final, con personas y preguntas nuevas, queda en 15,3 contra 15,0 de la página. Acierta muy bien en 4 de 8,
       y en las otras 4 queda 23 a 31 puntos por debajo: supone a la gente menos satisfecha de lo que está.
+    - **Personas en lo político (15/10, USD 0,43, `PERSONAS_POLITICA_RESULTS.md`).** En 10 preguntas de gobierno y del
+      alcalde, con 200 personas nuevas, el agente con su encuesta se equivoca 7,4 a 7,8 en el total contra 14,3 de la
+      página, y acierta casi exacto la gestión de Galán (26,2 contra 26,4). Completar el perfil con su vida real, un resumen o
+      una vida inventada no cambia nada. Falla por poco la regla de reparto (TVD 0,164; pedía 0,15). Las encuestas del CNC
+      quedan de lado por ahora (D21).
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
