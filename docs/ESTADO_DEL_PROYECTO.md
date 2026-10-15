@@ -440,6 +440,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       26,3 y 23,8), y el total mejor que la página (10,0 contra 12,2). Pero conserva solo el 56 % de la variación (la regla
       pedía 60 %): en tres preguntas dijo que nadie confía o está satisfecho.
     - **EPC 2026: descartada por ahora** (14/10, Daniel). No ha salido; la de 2025 se presentó el 4 de diciembre de 2025.
+    - **Personas pulidas: no pasa la prueba final (14-15/10, USD 0,80, `PERSONAS_PULIDAS_RESULTS.md`).** Pedir
+      probabilidades en vez de una opción corrige el «nadie confía»: en el desarrollo, el error del total baja de 20,8 a 9,5.
+      En la prueba final, con personas y preguntas nuevas, queda en 15,3 contra 15,0 de la página. Acierta muy bien en 4 de 8,
+      y en las otras 4 queda 23 a 31 puntos por debajo: supone a la gente menos satisfecha de lo que está.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
