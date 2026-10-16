@@ -93,3 +93,28 @@ S solo se reporta.
   - las 6 públicas, pregunta por pregunta;
   - las 7 del CNC, solo su error medio y cuántas aciertan el lado.
 - **Código:** `src/experiments/agentes_2026.py`, con su prueba. Resultados en `AGENTES_2026_RESULTS.md`.
+
+---
+
+## Enmienda 1 (16/10/2026, antes de ver ningún resultado): se cierra con lo que hay
+
+**Qué pasó:**
+- **El computador se quedó sin memoria** y Claude Code detuvo la corrida.
+- **Hasta ahí:**
+  - **Luna:** las 200 personas;
+  - **DeepSeek:** 150 de 200.
+- **DeepSeek costó nueve veces lo previsto** (unos USD 0,0046 por llamada): el gasto llegó a USD 0,77, contra USD 0,20
+  estimados.
+- **A la cuenta de OpenRouter le quedan unos USD 0,24.**
+
+**Decisión de Daniel:** cerrar la prueba con lo que hay, sin gastar más.
+
+**Qué cambia:**
+- **S (DeepSeek)** se calcula con sus 150 personas.
+- **M (los dos promediados)** usa, en las 50 personas sin DeepSeek, solo a Luna. Es lo que ya decía DI-AG2 para cuando uno de los
+  dos falla. Así M queda más cerca de L de lo que estaría con las 200 completas.
+- **La regla, las referencias y las predicciones no cambian.** La hipótesis de los dos modelos (M mejora a L en 1 punto) se
+  evalúa igual, sabiendo que con 50 personas sin DeepSeek es más difícil que se cumpla.
+
+**Cómo se calcula:** con `--solo-cache`, el script lee solo la caché y no llama al modelo. Lo que no está en la caché queda sin
+respuesta.

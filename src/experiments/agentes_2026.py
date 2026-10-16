@@ -118,6 +118,7 @@ def resumen(tot: dict[str, Optional[float]], real: dict[str, float]) -> dict:
 def main(argv: Optional[list] = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--simulado", action="store_true")
+    ap.add_argument("--solo-cache", action="store_true", help="enmienda 1: no llama al modelo; lo que falta queda vacío")
     a = ap.parse_args(argv)
     from src.experiments import personas_politica as pq
     from src.experiments import validacion_cnc_2026 as vk
@@ -138,7 +139,10 @@ def main(argv: Optional[list] = None) -> int:
     rng = np.random.default_rng(0)
     probs = {m: [] for m in MODELOS}
     for m, (modelo, extra) in MODELOS.items():
-        if a.simulado:
+        if a.solo_cache:
+            def llamar(mo, s, u, t):                                              # enmienda 1
+                return ""
+        elif a.simulado:
             llamar = lambda mo, s, u, t: json.dumps({x["clave"]: {str(c): float(p) for c, p in zip(x["validos"], rng.dirichlet(np.ones(len(x["validos"]))))} for x in e})  # noqa: E731
         else:
             llamar = e9.cliente_real(timeout=300, extra=extra)
@@ -147,6 +151,9 @@ def main(argv: Optional[list] = None) -> int:
                 raise RuntimeError(f"Se llegó al tope de USD {TOPE_USD}.")
             t = pq.perfil(i, datos, [], {}, con_vida=False)
             u = f"QUIÉN ES:\n{t}\n\nPREGUNTAS NUEVAS:\n{pq.preguntas_texto(e)}"
+            if a.solo_cache and e9.Cache.clave(modelo, pc.TEMPERATURA, sistema, u, 0) not in cache:
+                probs[m].append({x["clave"]: None for x in e})
+                continue
             texto, _ = e9.pedir(llamar, cache, modelo, pc.TEMPERATURA, sistema, u, 0)
             probs[m].append(pp.leer_prob(texto, e))
             if (j + 1) % 50 == 0:
