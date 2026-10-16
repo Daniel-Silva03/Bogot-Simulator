@@ -459,6 +459,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       resultado de una pregunta nueva, con la cifra, un rango de ±12,6 y los grupos. **Falta:** las dos validaciones de D22,
       con el modelo real, después de recargar la cuenta: que la reformulación reconozca lo político, y una prueba con preguntas
       políticas nuevas.
+    - **D23 (16/10): en lo político, el proyecto busca acercarse lo más posible a predecir 2026.** La percepción política se
+      trata como pregunta nueva, respondida por agentes, con el dato medido al lado; la intención de voto también se prueba con
+      agentes. Primera pieza pre-registrada: `VOTO_AGENTES_SPECIFICATION.md`, los agentes de la EPC contra la Registraduría en la
+      primera vuelta de 2026 en Bogotá. **Espera la recarga de OpenRouter** (unos USD 0,90).
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

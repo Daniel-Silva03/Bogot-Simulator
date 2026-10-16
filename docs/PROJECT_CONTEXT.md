@@ -1769,6 +1769,57 @@ Daniel y su jefe priorizan lo político y lo institucional.
 político y lo institucional» y «sí, empieza por lo que no gasta»). Abrirlo en la página espera las dos validaciones de la
 condición 1, y que se recargue la cuenta de OpenRouter.
 
+
+### D23 — En lo político, el proyecto busca acercarse lo más posible a predecir 2026
+
+**Fecha:** 16 de octubre de 2026
+**Decisión:** Para la percepción política y la intención de voto, el objetivo del proyecto pasa a ser **acercarse lo más
+posible a lo que la gente responde en 2026**: una estimación cercana, con su error medido, no una cifra exacta.
+- **Las preguntas de percepción política** (el alcalde, el gobierno, las instituciones) se tratan como **nuevas**: las
+  responden los agentes de D22, aunque la EPC haya medido algo parecido en 2024 y 2025. El dato medido se muestra al lado,
+  como punto de partida.
+- **La intención de voto también se prueba con agentes,** además de la estimación de hoy (D21, nivel 3).
+- **Se prueban, cada uno con su pre-registro:**
+  - más agentes (los 1.520 de la EPC 2025);
+  - el ajuste del total a la última encuesta publicada;
+  - un resumen de noticias para los agentes.
+- **La prueba más limpia:** pre-registrar lo que los agentes predicen para la EPC 2026 antes de que se publique (diciembre de
+  2026).
+
+**Justificación:** Daniel y su jefe buscan un «predictor» de lo político («acercarnos lo que más se pueda a un predictor,
+obviamente no podemos acercarnos a algo que nos dé una respuesta casi que acertada, pero sí que sea muy cercano»). En las
+pruebas, los agentes fueron lo que más se acercó en lo político (D22).
+
+**Lo que cambia del proyecto, dicho tal cual:** hasta aquí, «no es un predictor», salvo la intención de voto simulada (D21).
+Con D23, la percepción política entra en la misma excepción. Toda cifra de este tipo:
+- va con su error medido;
+- dice que es una suposición, no una medición;
+- **nunca se llama predicción sin su error al lado.**
+
+**Lo que no se promete:**
+- **una cifra casi exacta.** Con 200 agentes, el azar de la muestra ya da unos ±7 puntos, y en las pruebas el error fue de unos
+  8;
+- **ver un cambio brusco antes de que alguien lo mida.** Los agentes son personas de 2025.
+
+**Alternativas consideradas:**
+- *Seguir con el dato medido para la percepción del alcalde*: más exacto para 2024-2025, pero no dice nada de 2026.
+- *Las redes sociales para actualizar a los agentes:* quien opina en redes no representa a Bogotá, los datos son caros o están
+  cerrados, y son datos personales. Se deja para después, como señal agregada y solo si se valida contra encuestas.
+
+**Condiciones:**
+1. **Cada pieza se valida pre-registrada** antes de llegar a la página. La primera es la intención de voto con agentes
+   (`VOTO_AGENTES_SPECIFICATION.md`).
+2. **D21 sigue igual:**
+   - los agentes salen de la EPC;
+   - las respuestas individuales del CNC no van a un modelo de lenguaje;
+   - sus cifras agregadas solo se usan dentro del equipo.
+3. **La intención de voto con agentes es una simulación más.** La revisión jurídica del 7/10 cubre la intención de voto simulada
+   (D21). Antes de mostrar la de los agentes en la página, conviene confirmarlo con el área jurídica.
+
+**Estado:** **APPROVED** (Daniel, en conversación, 16 de octubre de 2026: «lo que nos interesa es que la percepción del alcalde
+no esté medida, que la mayoría de preguntas de percepción política e intenciones de voto sean nuevas y que nuestros agentes se
+acerquen a las respuestas del 2026», y «sí, escribe la D23»).
+
 ---
 
 # 40. DECISIONES ABIERTAS

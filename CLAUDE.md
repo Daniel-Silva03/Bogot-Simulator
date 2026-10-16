@@ -2,8 +2,9 @@
 
 Laboratorio de escenarios de opinión pública para Bogotá: una población sintética
 (agentes construidos cruzando encuestas públicas), un tablero interactivo y un motor
-de escenarios. **No es un predictor**, salvo la intención de voto simulada que abre D21: esa se valida
-pre-registrada antes de mostrarse, y nunca se publica sin la revisión jurídica. Proyecto de Daniel Silva en el Centro Nacional
+de escenarios. **No es un predictor**, salvo dos excepciones: la intención de voto simulada que abre D21, y la percepción
+política, donde desde D23 se busca acercarse lo más posible a 2026 con agentes. Las dos se validan pre-registradas antes de
+mostrarse, siempre con su error al lado, y lo electoral nunca se publica sin la revisión jurídica. Proyecto de Daniel Silva en el Centro Nacional
 de Consultoría (CNC).
 
 ## Antes de hacer nada
