@@ -449,6 +449,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       página, y acierta casi exacto la gestión de Galán (26,2 contra 26,4). Completar el perfil con su vida real, un resumen o
       una vida inventada no cambia nada. Falla por poco la regla de reparto (TVD 0,164; pedía 0,15). Las encuestas del CNC
       quedan de lado por ahora (D21).
+    - **Agentes en preguntas nuevas de 2026: no le ganan a la página (16/10, USD 0,85, `AGENTES_2026_RESULTS.md`).** Con las
+      13 preguntas de 2026, Luna se equivoca 15,2 contra 14,6 de la página. En las 7 del CNC gana (9,0 contra 12,7 y 10,6 de
+      decir 50 %), y en las del metro pierde. Promediar con DeepSeek empeora y cuesta nueve veces más. Cerrada con DeepSeek en
+      150 de 200 (enmienda 1).
+    - **Saldo de OpenRouter (16/10):** a la cuenta le quedan unos USD 0,24. Hay que recargarla antes de usar el modelo real.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
