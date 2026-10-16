@@ -313,6 +313,11 @@ DI-CO38. **La página usa la población 2022-2025** (13/10, `POBLACION_EPC2022_2
     sus preguntas y López como «nueva». Las de Galán llevan su nota (`nota_gobierno`); la del Concejo dice que es el de
     2024-2027. Las ramas de López en `nota_gobierno` se quedan, para la población 2022-2024.
 
+DI-CO40. **La estimación con agentes de D22** (16/10, `agentes.py`). `responder_agentes` estima una pregunta nueva con 200
+    encuestados reales de la EPC 2025, como D22 lo describe. Hasta que pasen las dos validaciones de D22 (condición 1), con el
+    modelo real devuelve un aviso y no llama a nadie (`AGENTES_CON_MODELO_REAL = False`); con el simulado responde al azar,
+    para mirar la página. La pide la página con un botón, en el resultado de una pregunta nueva.
+
 DI-CO39. **El catálogo también es candidata de la estimación** (14/10, `NIVEL_ACUERDO_CATALOGO_RESULTS.md`). Hecho: sin
     una pregunta casi igual entre las 139 candidatas, la estimación se quedaba cerca del 50 %; en la confianza en las
     instituciones (reales de 10 % a 19 %) daba unos 50 %. Con las 84 preguntas del catálogo como candidatas, la prueba
@@ -344,6 +349,8 @@ from src.experiments import experimento9 as e9            # noqa: E402
 from src.experiments import puente as pu                  # noqa: E402
 
 POBLACION = RAIZ / "data" / "processed" / "poblacion_epc2022_2025"                    # DI-CO38
+#: DI-CO40 / D22: la estimación con agentes solo corre con el modelo real cuando pasen sus dos validaciones
+AGENTES_CON_MODELO_REAL = False
 MARGINAL = RAIZ / "data" / "external" / "marginal_localidad_18mas.csv"
 CACHE = RAIZ / "data" / "processed" / "consulta" / "cache.json"
 N_BOOT = 200
@@ -804,6 +811,26 @@ class Motor:
                 "texto": ESTIMACION_TEXTO.format(n=len(ids)) + (ESTIMACION_DIVIDIDA if llam == "dividida" else ""),
                 "preguntas": [{"pregunta": r.pregunta_pagina, "fuente": r.fuente_txt, "porcentaje": round(float(r.total), 1)}
                               for r in elegidas.itertuples()]}
+
+    # ---------------------------------------------------------------- paso 2d: con agentes (D22, DI-CO40)
+    def responder_agentes(self, pregunta: str, escala: list[str]) -> dict:
+        """DI-CO40: la estimación con agentes de D22. Solo en modo simulado hasta que pasen las validaciones de D22."""
+        from src.consulta import agentes as ag
+        if not pregunta or len(escala) != 5:
+            raise ConsultaError("La estimación con agentes necesita el texto y cinco etiquetas.")
+        simulado = self.modelo == e9.MODELO_SIMULADO
+        if not simulado and not AGENTES_CON_MODELO_REAL:
+            return {"tipo": "invalida", "mensaje": ("La estimación con agentes todavía no está validada (D22): por ahora solo "
+                                                    "funciona con la página en modo simulado.")}
+        if getattr(self, "_agentes", None) is None:
+            self._agentes = ag.Agentes()
+        llamar = (ag.cliente_simulado() if simulado
+                  else e9.cliente_real(timeout=300, extra={"reasoning": {"effort": "low"}}))
+        cache = e9.Cache(ag.CACHE.with_name("cache_agentes_simulado.json") if simulado else ag.CACHE)
+        try:
+            return self._agentes.estimar(pregunta, escala, llamar, cache, e9.MODELO_SIMULADO if simulado else ag.MODELO)
+        except (OSError, http.client.HTTPException) as e:                       # DI-CO24
+            raise _servicio(e) from e
 
     # ---------------------------------------------------------------- paso 2c: intención de voto (DI-CO30)
     def _banco_voto(self) -> pd.DataFrame:

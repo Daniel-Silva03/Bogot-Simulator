@@ -837,6 +837,32 @@ No cambia ningún cálculo ni ningún color. Usa los estilos que ya existen (`.n
 
 **Verificado:** las 31 pruebas de `tests/test_consulta.py`, y que el servidor sirve los tres textos.
 
+## 5.31 Estimar con agentes, en modo simulado (16/10/2026, D22, DI-CO40)
+
+**Qué cambió:** en el resultado de una pregunta nueva aparece un panel «Experimental · para preguntas políticas e
+institucionales», con el botón «Estimar con 200 bogotanos reales».
+
+**Lo que muestra con los agentes:**
+- la cifra de Bogotá con su rango de ±12,6;
+- la llamada («probablemente sí», «no» o «dividida»);
+- las cifras por estrato, edad y sexo, con cuántos agentes hay en cada grupo;
+- una nota de que no hay mapa.
+
+**El motor** está en `src/consulta/agentes.py`: un panel fijo de 200 encuestados de la EPC 2025, con las llamadas en paralelo.
+
+**Lo que todavía no hace:**
+- **Con el modelo real devuelve un aviso y no llama a nadie** (`AGENTES_CON_MODELO_REAL = False`), hasta que pasen las dos
+  validaciones de D22.
+- **Con el simulado,** las respuestas son al azar: sirve para mirar la página, no para leer las cifras.
+- **No decide solo** si una pregunta es política: el botón aparece en toda pregunta nueva. Que la reformulación lo reconozca
+  es la primera validación de D22.
+
+**Verificado:**
+- las 31 pruebas de `tests/test_consulta.py` y las 3 de `tests/test_agentes_pagina.py`;
+- con el servidor en modo simulado, la ruta `/api/agentes` responde con la cifra, el rango y los grupos.
+
+**No se revisó en el navegador** por falta de memoria del equipo: queda para la revisión de Daniel.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

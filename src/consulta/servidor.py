@@ -116,6 +116,8 @@ def crear_servidor(motor: mo.Motor, pagina, puerto: int = PUERTO) -> ThreadingHT
                 with candado:
                     if self.path == "/api/reformular":
                         r = motor.reformular(str(d.get("pregunta", "")))
+                    elif self.path == "/api/agentes":                        # DI-CO40
+                        r = motor.responder_agentes(str(d.get("pregunta", ""))[:500], [str(x) for x in d.get("escala") or []])
                     elif self.path == "/api/responder":
                         if d.get("codigo"):
                             r = motor.responder_catalogo(str(d["codigo"]))

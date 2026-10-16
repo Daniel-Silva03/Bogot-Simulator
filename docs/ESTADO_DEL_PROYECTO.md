@@ -454,6 +454,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       decir 50 %), y en las del metro pierde. Promediar con DeepSeek empeora y cuesta nueve veces más. Cerrada con DeepSeek en
       150 de 200 (enmienda 1).
     - **Saldo de OpenRouter (16/10):** a la cuenta le quedan unos USD 0,24. Hay que recargarla antes de usar el modelo real.
+    - **D22 (16/10): las preguntas nuevas políticas e institucionales se estimarán con agentes.** Decisión escrita en
+      `PROJECT_CONTEXT.md` §39. Construido en modo simulado (`agentes.py`, DI-CO40, `PAGINA_CONSULTA.md` §5.31): un botón en el
+      resultado de una pregunta nueva, con la cifra, un rango de ±12,6 y los grupos. **Falta:** las dos validaciones de D22,
+      con el modelo real, después de recargar la cuenta: que la reformulación reconozca lo político, y una prueba con preguntas
+      políticas nuevas.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

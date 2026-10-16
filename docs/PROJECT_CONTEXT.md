@@ -1713,6 +1713,62 @@ como apoyo de cada estimación.
 estrato («sí, la aprobación jurídica cubre los grupos»). Antes de mostrarlos se validan con su pre-registro
 (`VOTO_GRUPOS_SPECIFICATION.md`).
 
+
+### D22 — Las preguntas nuevas políticas e institucionales se estiman con agentes armados con la encuesta de cada persona
+
+**Fecha:** 16 de octubre de 2026
+**Decisión:** Para las preguntas **nuevas** de tema **político o institucional**, la página estimará con **agentes**: 200
+encuestados reales de la EPC 2025, cada uno con sus 40 respuestas del catálogo y sus cuatro datos demográficos. Un modelo de
+lenguaje responde como cada persona, con la probabilidad de cada opción.
+- **Las demás preguntas nuevas** siguen con la estimación de hoy (D19, D20, DI-CO39).
+- **Lo que la página muestra con los agentes:**
+  - la cifra de Bogotá con un rango;
+  - las cifras por estrato, edad y sexo;
+  - sin mapa por localidad.
+
+**Justificación:** en las pruebas pre-registradas, los agentes le ganan a la página en lo político y lo institucional.
+- **`PERSONAS_POLITICA_RESULTS.md`:** 10 preguntas de gobierno y del alcalde, error del total de 7,4 a 7,8 contra 14,3 de la
+  página; acierta casi exacto la gestión de Galán (26,2 contra 26,4).
+- **`AGENTES_2026_RESULTS.md`:** 7 preguntas de opinión política nacional del CNC de 2026, nunca hechas a esas personas, error
+  de 9,0 contra 12,7 de la página y 10,6 de decir 50 %; acierta el lado en 6 de 7.
+
+Daniel y su jefe priorizan lo político y lo institucional.
+
+**Lo que se acepta, dicho tal cual:**
+- **No es un «pasó».** Ninguna prueba cumplió todas sus reglas.
+  - En lo político, la TVD quedó en 0,164; la regla pedía 0,15 o menos.
+  - En las 13 preguntas de 2026, los agentes empataron con la página (15,2 contra 14,6), porque perdieron en las del metro.
+- **Exagera en algunas preguntas:** sobreestima la imagen de Galán y la transparencia, y subestima el rumbo de la ciudad.
+- **Fuera de lo político tiene un sesgo pesimista** (`PERSONAS_PULIDAS_RESULTS.md`). Por eso se limita a lo político e
+  institucional.
+
+**Alternativas consideradas:**
+- *Seguir solo con la estimación de hoy*: más débil en lo político.
+- *Agentes para todas las preguntas nuevas*: peor fuera de lo político.
+- *Completar el perfil* con datos de su vida, un resumen o una vida inventada: no cambia nada en lo político
+  (`PERSONAS_POLITICA_RESULTS.md`).
+- *Promediar dos modelos*: empeora con DeepSeek (`AGENTES_2026_RESULTS.md`).
+
+**Condiciones, que son parte de la decisión:**
+1. **Antes de abrirlo en la página,** hacen falta dos validaciones pre-registradas, con el modelo real:
+   - que la reformulación reconozca cuándo una pregunta es política o institucional;
+   - una prueba de los agentes con preguntas políticas nuevas que no se hayan usado.
+2. **Mientras tanto,** se construye y se prueba solo en modo simulado.
+3. **Los agentes salen solo de la EPC,** pública y anónima. Con las encuestas del CNC no, mientras siga D21: sus respuestas
+   individuales no van a un modelo de lenguaje.
+4. **La intención de voto no se estima con agentes.**
+5. **La página dice cómo se estimó:** con 200 bogotanos reales de 2025, que responden según sus otras respuestas, con un
+   modelo de lenguaje. Es una suposición, no una medición.
+
+**Evidencia:**
+- `PERSONAS_CON_ENCUESTA_RESULTS.md`, `PERSONAS_PULIDAS_RESULTS.md`, `PERSONAS_POLITICA_RESULTS.md` y
+  `AGENTES_2026_RESULTS.md`;
+- el código en `src/consulta/agentes.py`.
+
+**Estado:** **APPROVED para construir en modo simulado** (Daniel, en conversación, 16 de octubre de 2026: «nos interesa más lo
+político y lo institucional» y «sí, empieza por lo que no gasta»). Abrirlo en la página espera las dos validaciones de la
+condición 1, y que se recargue la cuenta de OpenRouter.
+
 ---
 
 # 40. DECISIONES ABIERTAS

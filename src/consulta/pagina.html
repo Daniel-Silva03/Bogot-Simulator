@@ -178,6 +178,8 @@ textarea:focus{outline:none;border-color:var(--fosforo);box-shadow:0 0 0 1px var
 .banda svg{flex:none;width:18px;height:18px;color:var(--fosforo);margin-top:1px}
 /* D19 (DI-CO22): la estimación; punteada porque no es una medición */
 .estimacion{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:40px;align-items:center}
+.agentes-panel{margin-top:24px}
+#agentes .estimacion{margin:16px 0 20px}
 .estimacion.e-dividida{border:1px dashed var(--borde)}
 .estimacion.e-sí,.estimacion.e-no{border-color:var(--borde)}
 .est-cab{display:flex;flex-direction:column;gap:8px}
@@ -877,6 +879,12 @@ function mostrar(r){
         <div class="apoyo-rejilla">${e.preguntas.map(q => `<div class="dato-t"><span>${esc(q.pregunta)}</span>
           <b>${Math.round(q.porcentaje)} %</b><span class="nota">de acuerdo o «sí» · ${esc(q.fuente)}</span></div>`).join('')}</div></div>`
       : `<div class="panel sin-respuesta"><p class="sr-titulo">${esc(r.respuesta.titulo)}</p><p>${esc(r.respuesta.texto)}</p></div>`}
+      <div class="panel agentes-panel">
+        <span class="ceja">Experimental · para preguntas políticas e institucionales</span>
+        <p class="nota">Otra forma de estimar: 200 bogotanos reales encuestados en 2025 «responden» la pregunta, cada uno según sus otras respuestas. En las pruebas, en lo político se equivocó la mitad que la estimación de arriba.</p>
+        <div class="acciones"><button class="btn btn-fantasma" id="pedirAgentes">Estimar con 200 bogotanos reales</button></div>
+        <div id="agentes" aria-live="polite"></div>
+      </div>
       ${banda(r)}`;
     gr.innerHTML = `<span class="ceja">Para explorar · ${esc(r.tono_titulo)}</span>
       <p class="nota aviso-tono">${esc(r.tono_texto)}</p>
@@ -886,6 +894,8 @@ function mostrar(r){
       <p class="nota">Barras: qué tan más (claro) o menos (oscuro) favorable que el promedio de la ciudad suele responder cada grupo, en desviaciones estándar; la línea del centro es el promedio.</p>
       <p class="nota">${esc(r.fuente)}</p>`;
   }
+  const pa = $('#pedirAgentes');                                        /* DI-CO40 / D22 */
+  if (pa) pa.addEventListener('click', () => conAgentes(r, pa));
   el.querySelectorAll('.filtro[data-f]').forEach(b => b.addEventListener('click', () => {
     el.querySelectorAll('.filtro[data-f]').forEach(x => x.setAttribute('aria-pressed', x === b));
     estado.filtro = b.dataset.f; pintar();
@@ -897,6 +907,33 @@ function mostrar(r){
   }));
   titulosMapa(); pintar(); verResultado();
   [el, $('#lado'), gr].forEach(aparecer);
+}
+
+/* DI-CO40 / D22: la estimación con agentes, a pedido. Sin mapa: con 200 agentes no alcanza. */
+async function conAgentes(r, boton){
+  const el = $('#agentes'); boton.disabled = true; boton.textContent = 'Preguntando a 200 bogotanos…';
+  try {
+    const a = await api('/api/agentes', {pregunta: r.pregunta, escala: r.escala});
+    if (a.tipo === 'invalida') { el.innerHTML = `<p class="nota">${esc(a.mensaje)}</p>`; return; }
+    const de = Math.round(a.rango[0]), ha = Math.round(a.rango[1]), div = a.llamada === 'dividida';
+    const barras = Object.entries(a.grupos).map(([g, fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f =>
+      `<div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista"><i style="left:0;width:${Math.round(100*f.alto)}%;background:var(--ceja)"></i></span><span class="v">${Math.round(100*f.alto)} % <span class="nota">(${f.n})</span></span></div>`).join('')}</div>`).join('');
+    el.innerHTML = `<div class="estimacion e-${a.llamada}">
+        <div class="est-cab"><span class="ceja">Con agentes · no es una medición</span>
+          <p class="est-titulo">${esc(a.titulo)}</p>
+          ${div ? `<p class="lead-t">Estaría de acuerdo <span class="mono">entre ${de} % y ${ha} %</span>: el rango cruza la mitad.</p>`
+                : `<p class="cifra-grande">${Math.round(a.porcentaje)} %</p><p class="lead-t">estaría de acuerdo · <span class="mono">entre ${de} % y ${ha} %</span></p>`}</div>
+        <div class="est-rango">
+          <div class="rango-est" role="img" aria-label="Rango estimado con agentes entre ${de} y ${ha} por ciento; la línea marca el 50 %">
+            <i style="left:${a.rango[0]}%;width:${a.rango[1]-a.rango[0]}%"></i><em style="left:50%"></em><b style="left:${a.porcentaje}%"></b></div>
+          <div class="rango-etq"><span>0 %</span><span>50 % · la mitad</span><span>100 %</span></div>
+          <p class="nota">${esc(a.texto)}</p></div></div>
+      <span class="ceja">Por grupo · entre paréntesis, cuántos agentes hay en cada uno</span>
+      <div class="grupos">${barras}</div>
+      <p class="nota">${esc(a.sin_mapa)} Respondieron ${a.respondieron} de ${a.agentes}.</p>`;
+    aparecer(el); boton.classList.add('oculto');
+  } catch (e) { error(el, e.message); }
+  finally { boton.disabled = false; boton.textContent = 'Estimar con 200 bogotanos reales'; }
 }
 
 /* DI-CO36: el reparto de la ciudad, con las respuestas de la escala o agrupadas (negativa · neutral · positiva). */
