@@ -462,7 +462,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     - **D23 (16/10): en lo político, el proyecto busca acercarse lo más posible a predecir 2026.** La percepción política se
       trata como pregunta nueva, respondida por agentes, con el dato medido al lado; la intención de voto también se prueba con
       agentes. Primera pieza pre-registrada: `VOTO_AGENTES_SPECIFICATION.md`, los agentes de la EPC contra la Registraduría en la
-      primera vuelta de 2026 en Bogotá. **Espera la recarga de OpenRouter** (unos USD 0,90).
+      primera vuelta de 2026 en Bogotá. ~~**Espera la recarga de OpenRouter** (unos USD 0,90).~~
+    - **Voto con agentes: no sirven todavía (16/10, USD 0,064, `VOTO_AGENTES_RESULTS.md`).** Con 200 agentes, error de 8,1
+      entre los 11 candidatos (la regla pedía 5,4; la estimación de hoy, 3,4). Aciertan el ganador, Cepeda, pero reparten el voto
+      como en una elección abierta: no ven la polarización (Cepeda y De la Espriella, 81 % real). El modelo no conoce la campaña
+      de 2026. Siguiente, según D23: un resumen neutral de la campaña, o el ajuste a la última encuesta.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
