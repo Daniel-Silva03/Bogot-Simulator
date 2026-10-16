@@ -87,3 +87,16 @@ presidencial del 31 de mayo de 2026?».
   - ningún dato del CNC;
   - los resultados de la Registraduría son públicos.
 - **Código:** `src/experiments/voto_agentes.py`, con su prueba. Resultados en `VOTO_AGENTES_RESULTS.md`.
+
+---
+
+## Enmienda 1 (16/10/2026, antes de correr): solo 200 agentes
+
+**Decisión de Daniel:** usar solo los 200 agentes del panel para ahorrar («usemos 200 agentes para ahorrar»).
+
+**Qué cambia:**
+- **Sale el brazo A1520.** Era casi todo el gasto: 1.520 de las 1.721 llamadas.
+- **La regla se aplica a A200,** sin cambios: R1, EAM ≤ 5,4; R2, Cepeda primero; R3, los dos primeros en orden.
+- **La hipótesis de más agentes y PV3 no se evalúan.** Si más adelante interesa, irá con su propio pre-registro.
+
+**El gasto** baja de unos USD 0,90 a unos **USD 0,10** (201 llamadas, con el control de memoria). El tope sigue en USD 2.

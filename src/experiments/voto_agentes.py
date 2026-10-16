@@ -43,6 +43,7 @@ TOPE_USD = 2.0
 MODELO = "openai/gpt-6-luna"
 TEMPERATURA = 1.0
 PARALELO = 16
+BRAZOS = ("A200",)                                         # enmienda 1: sin A1520, para ahorrar
 PREGUNTA = "Si la primera vuelta de las elecciones presidenciales de 2026 fuera hoy, ¿por quién votaría?"
 MEMORIA = ("¿Qué porcentaje de los votos sacó cada candidato en Bogotá en la primera vuelta presidencial del 31 de mayo de "
            "2026? Responde con la lista de candidatos y sus porcentajes, o di que no lo sabes.")
@@ -123,10 +124,12 @@ def main(argv: Optional[list] = None) -> int:
     panel = ag.Agentes()
     base, d, _ = panel.datos
     todos = np.flatnonzero(base.cod_loc.between(1, 19).to_numpy())
-    perf_todos = [pq.perfil(i, panel.datos, [], {}, con_vida=False) for i in todos]
+    perf_todos = lambda: [pq.perfil(i, panel.datos, [], {}, con_vida=False) for i in todos]   # noqa: E731
     res = {}
-    for nombre_brazo, perfiles, peso in (("A200", panel.perfiles, panel.peso),
-                                        ("A1520", perf_todos, base.peso.to_numpy(float)[todos])):
+    brazos = {"A200": (panel.perfiles, panel.peso)}
+    if "A1520" in BRAZOS:
+        brazos["A1520"] = (perf_todos(), base.peso.to_numpy(float)[todos])
+    for nombre_brazo, (perfiles, peso) in brazos.items():
         tot = votar(perfiles, peso, ops, llamar, cache)
         res[nombre_brazo] = {**medir(normalizar(tot, cands), real), "blanco": round(100 * tot["Votaría en blanco"], 1),
                              "no_votaria": round(100 * tot["No votaría"], 1), "n": len(perfiles)}
@@ -135,7 +138,8 @@ def main(argv: Optional[list] = None) -> int:
     m = res[mejor]
     regla = {"R1": m["eam"] <= 5.4, "R2": m["primero"], "R3": m["dos_primeros"]}
     regla["sirven"] = all(regla.values())
-    pred = {"PV1": not regla["sirven"], "PV2": m["primero"], "PV3": not (res["A1520"]["eam"] <= res["A200"]["eam"] - 0.5)}
+    pred = {"PV1": not regla["sirven"], "PV2": m["primero"],
+            "PV3": (not (res["A1520"]["eam"] <= res["A200"]["eam"] - 0.5)) if "A1520" in res else "no se evalúa (enmienda 1)"}
     g = None if a.simulado else e9.gasto_registrado(cache)["costo_usd"]
     print(f"real: { {c: round(v, 1) for c, v in sorted(real.items(), key=lambda x: -x[1])[:6]} }")
     print(f"mejor: {mejor} | regla: {regla} | predicciones (PV4 se lee a mano): {pred} | gasto USD {g}")
