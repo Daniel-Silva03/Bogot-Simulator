@@ -471,6 +471,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       de la campaña y la encuesta Invamer del 21 de mayo, los 200 agentes se equivocan 3,5 (la estimación de hoy, 3,4) y aciertan
       a Cepeda primero y a De la Espriella segundo. No le ganan a copiar la encuesta (1,8): la diluyen hacia el centro. Su valor
       posible es repartir la cifra por grupos o en escenarios sin encuesta; eso falta medirlo.
+    - **Grupos y Galán 2026 (16/10, USD 0,092, `GRUPOS_Y_GALAN_2026_RESULTS.md`).** Por grupos, los agentes no reparten bien el voto:
+      error 6,6 contra 5,5 de no distinguir grupos, y solo el estrato en la dirección correcta. En Galán, el error medio queda en 6,6
+      (la regla pedía menos que el 4,5 de la EPC 2025). Sin opiniones de gobierno aciertan la aprobación de Guarumo (54,9 contra 53,3);
+      con ellas, la imagen de Global CB (46,9 contra 44,3).
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
