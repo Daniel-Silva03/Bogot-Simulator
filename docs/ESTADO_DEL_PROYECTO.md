@@ -515,6 +515,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       - Repetir el dato se equivoca 5,2; los agentes, 6,7.
       - El λ por dominio aprendió una regla falsa en gobierno (0,95) que empeoró 2025.
       - La regla que respalda: con dato medido, se muestra el dato.
+    - **Fase C aplazada:** un modelo de relaciones entre preguntas no puede dar el nivel de una pregunta que nadie respondió; solo
+      repartir por grupos una cifra ya conocida. Daniel eligió saltar a la D.
+    - **Fase D hecha (USD 0, `TEMPORAL_FASE_D_RESULTS.md`):** ningún método temporal sencillo (promedio de dos, tendencia,
+      encogimiento) le gana a repetir el último dato, ni en la EPC (4,6) ni en las series de Galán de Invamer y CB (3,4). Lo que
+      acerca a la cifra de hoy es una medición reciente: unos 3 puntos con el mes anterior, de 4,5 a 6 con un año.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
