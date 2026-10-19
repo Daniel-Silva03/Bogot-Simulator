@@ -498,6 +498,9 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       de 2026 nunca usadas: la imagen de Petro (cinco fechas) y si habló de política ayer (cuatro). Error medio 12,2, peor que
       decir 50 % (9,1). En Petro los agentes dicen unos 39 % todo el año y fallan el lado en tres de cinco; en «habló de
       política», 8,9 y el lado bien en las cuatro. No siguen la fecha. Los agentes siguen apagados con el modelo real.
+    - **Un resumen de actualidad no los corrige (19/10, USD 0,176, `ACTUALIDAD_EPC_RESULTS.md`).** Prueba hacia atrás: la gente
+      de la EPC 2024, con y sin un resumen de 2025, frente a la EPC 2025. Repetir 2024 se equivoca 7,7; los agentes, 10,9 sin
+      resumen y 10,1 con él, que los mueve poco y hacia el pesimismo (el rumbo de la ciudad subió y ellos lo bajaron). No pasa.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
