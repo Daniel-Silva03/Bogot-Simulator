@@ -549,6 +549,159 @@ def validar_2025() -> int:
     return 0
 
 
+#: Versión 6 (REFORMULACION_TEMA, 19/10): el campo «tema», para que D22 mande a los agentes las de tema político. Se agrega
+#: el párrafo de §2 antes de «Responde SOLO» y el campo al JSON; lo demás es la versión 5.
+TEMAS = ("politica", "ciudad")
+SISTEMA_V6 = SISTEMA_V5.replace(
+    "Responde SOLO con un JSON, sin texto alrededor:\n",
+    "Si el alcance es \"catalogo\" o \"nueva\", di también su \"tema\":\n"
+    "- \"politica\": evalúa a gobernantes o gobiernos (el alcalde, el presidente, el Concejo, los ediles), a instituciones "
+    "públicas (la Policía, la justicia, la Registraduría, la Personería), a partidos, la democracia, la corrupción, el rumbo "
+    "de la ciudad o del país, la participación ciudadana, o si la próxima administración debería continuar o cambiar.\n"
+    "- \"ciudad\": servicios, vida cotidiana, economía del hogar, seguridad que la persona vive, ambiente, cultura, y la "
+    "aprobación de una obra o una medida concreta en Bogotá, aunque la haya decidido un gobierno.\n"
+    "Si el alcance es \"voto\" o \"fuera\", \"tema\" es null.\n"
+    "Responde SOLO con un JSON, sin texto alrededor:\n").replace(
+    '"reformulada": "...", "escala"', '"tema": "politica|ciudad o null", "reformulada": "...", "escala"')
+assert SISTEMA_V6.count('"tema": "politica|ciudad o null"') == 1 and SISTEMA_V6.count("di también su") == 1
+
+
+def parsear_v3(texto: Optional[str], catalogo: dict[str, dict]) -> Optional[dict]:
+    """La lectura de la versión 2, más el tema: un «catalogo» o una «nueva» sin tema válido es inválida."""
+    r = parsear_v2(texto, catalogo)
+    if r is None:
+        return None
+    d = e9._json_de(texto)
+    tema = str(d.get("tema") or "").strip().lower() if isinstance(d, dict) else ""
+    if r["alcance"] in ("catalogo", "nueva"):
+        if tema not in TEMAS:
+            return None
+        return {**r, "tema": tema}
+    return {**r, "tema": None}
+
+
+def reformular_v3(pregunta: str, catalogo: dict[str, dict], llamar: Llamar, cache: e9.Cache, modelo: str = MODELO,
+                  notas: Optional[dict[str, str]] = None) -> tuple[Optional[dict], str]:
+    texto, _ = e9.pedir(llamar, cache, modelo, TEMPERATURA, SISTEMA_V6, prompt(pregunta, catalogo, notas), 0)
+    return parsear_v3(texto, catalogo), texto
+
+
+#: REFORMULACION_TEMA §3 B: (pregunta, tema esperado). T1-T16 políticas, T17-T30 de ciudad.
+PRUEBA_TEMA = tuple((p, "politica") for p in (
+    "¿Cómo califica la gente la gestión del alcalde Galán?",
+    "¿Las cosas en Bogotá van por buen camino?",
+    "¿Qué imagen tiene la gente del Concejo de Bogotá?",
+    "¿Qué tanto confía la gente en la Policía?",
+    "¿Cree la gente que hay mucha corrupción en la Alcaldía?",
+    "¿Aprueban los bogotanos la gestión del presidente de la República?",
+    "¿Cómo califican la gestión de Galán en movilidad?",
+    "¿La gente cree que la Alcaldía escucha a los ciudadanos?",
+    "¿Qué tan satisfechos están con la democracia en Colombia?",
+    "¿Confían los bogotanos en la Registraduría?",
+    "Pensando en las próximas elecciones, ¿preferiría que el próximo alcalde continúe con las prioridades de la actual "
+    "administración o que haga cambios en la gestión?",
+    "¿Qué imagen tiene la gente de Claudia López?",
+    "¿Confían los bogotanos en los partidos políticos?",
+    "¿Creen que la Personería defiende bien los derechos de los ciudadanos?",
+    "¿Cómo califican el trabajo de los ediles de su localidad?",
+    "¿Qué tan bien creen que funciona la justicia en Colombia?",
+)) + tuple((p, "ciudad") for p in (
+    "¿Qué tan satisfechos están con el servicio de agua?",
+    "¿Se siente segura la gente caminando por su barrio?",
+    "¿Les gustan los parques de la ciudad?",
+    "¿Apoyarían cobrar por entrar en carro al centro?",
+    "¿Están de acuerdo con construir la segunda línea del metro?",
+    "¿Qué tan satisfechos están con TransMilenio?",
+    "¿Cómo creen que va a estar la economía de su hogar el próximo año?",
+    "¿Apoyarían prohibir la venta de pólvora en diciembre?",
+    "¿Qué tan contaminado creen que está el aire de Bogotá?",
+    "¿Les gustaría que hubiera más ciclorrutas?",
+    "¿Qué tan satisfechos están con los colegios públicos?",
+    "¿Les preocupa perder el empleo este año?",
+    "¿Estarían de acuerdo con ampliar el pico y placa a todo el día?",
+    "¿Qué opinan del alumbrado navideño?",
+))
+
+
+def evaluar_tema(respuestas: list[Optional[dict]], prueba=PRUEBA_TEMA) -> dict:
+    """REFORMULACION_TEMA §4, RP1 a RP3."""
+    def bien(r, t):
+        return bool(r) and r.get("tema") == t
+    pol = [bien(r, t) for r, (_, t) in zip(respuestas, prueba) if t == "politica"]
+    ciu = [bien(r, t) for r, (_, t) in zip(respuestas, prueba) if t == "ciudad"]
+    val = sum(r is not None for r in respuestas)
+    crit = {"RP1": {"umbral": f"«politica» en ≥ 14 de {len(pol)}", "valor": sum(pol), "se_cumple": sum(pol) >= 14},
+            "RP2": {"umbral": f"«ciudad» en ≥ 12 de {len(ciu)}", "valor": sum(ciu), "se_cumple": sum(ciu) >= 12},
+            "RP3": {"umbral": f"válida en ≥ 28 de {len(respuestas)}", "valor": val, "se_cumple": val >= 28}}
+    return {"criterios": crit, "pasa": all(c["se_cumple"] for c in crit.values())}
+
+
+def validar_tema(simulado: bool = False) -> int:
+    """REFORMULACION_TEMA: la versión 6 en las 63 de REFORMULACION_2025 (R1-R12, RP4) y en las 30 de `PRUEBA_TEMA`."""
+    from src.consulta import motor as mo
+    base = PRUEBA_VOTO_V3 + tuple((p, a, c, None, None) for p, a, c in PRUEBA_MATIZ)
+    base = tuple((p, a, CAMBIO_ESPERADO_2025.get(p, c), t, cs) for p, a, c, t, cs in base)
+    previa = base + tuple((p, a, c, None, None) for p, a, c in PRUEBA_GOBIERNO_2025)
+    catalogo = cargar_catalogo(CATALOGO_2025)
+    notas = notas_gobierno(catalogo)
+    salida = SALIDA / ("tema_v6_simulado" if simulado else "tema_v6")
+    cache = e9.Cache(salida / "cache.json")
+    if simulado:
+        esperado = {p: (a, c, t, cs) for p, a, c, t, cs in previa} | {p: ("nueva", None, None, []) for p, _ in PRUEBA_TEMA}
+        temas = dict(PRUEBA_TEMA)
+
+        def llamar(modelo, sistema, usuario, temp):
+            preg = usuario.split("\n")[1]
+            a, c, t, cs = esperado.get(preg, ("nueva", None, None, []))
+            return json.dumps({"alcance": a, "codigo": c, "tema": temas.get(preg, "ciudad") if a in ("catalogo", "nueva")
+                               else None, "reformulada": preg, "tipo": t, "candidatos": cs or [],
+                               "escala": ["1", "2", "3", "4", "5"], "razon": "simulado"})
+        modelo = e9.MODELO_SIMULADO
+    else:
+        llamar, modelo = e9.cliente_real(), mo.MODELO_PAGINA
+    respuestas = []
+    try:
+        for p in [x[0] for x in previa] + [p for p, _ in PRUEBA_TEMA]:
+            if not simulado and e9.gasto_registrado(cache)["costo_usd"] >= 0.5:
+                raise e9.Experimento9Error("Se llegó al tope de USD 0,50.")
+            respuestas.append(reformular_v3(p, catalogo, llamar, cache, modelo, notas)[0])
+    except e9.Experimento9Error as e:
+        print(f"ERROR: {e}")
+        return 1
+    ra, rb = respuestas[:len(previa)], respuestas[len(previa):]
+    v = evaluar_voto(ra[:40], base[:40])
+    m = evaluar_matiz(ra[40:54])
+    vs8 = ra[0] is not None and ra[0]["alcance"] == "catalogo" and ra[0]["codigo"] == "VS8"
+    crit_a = {**v["criterios"], **m["criterios"], "R9": {"umbral": "«caminando por su barrio» → VS8", "valor": vs8,
+                                                         "se_cumple": vs8},
+              **evaluar_gobierno_2025(ra[54:])["criterios"]}
+    t = evaluar_tema(rb)
+    crit = {**t["criterios"], "RP4": {"umbral": "R1 a R12 se cumplen en las 63", "valor":
+                                       [k for k, c in crit_a.items() if not c["se_cumple"]] or "todas",
+                                       "se_cumple": all(c["se_cumple"] for c in crit_a.values())}}
+    pasa = all(c["se_cumple"] for c in crit.values())
+    for (p, a, c, _, cs), r in zip(previa, ra):
+        got = None if r is None else (r["alcance"], r.get("codigo"), r.get("tema"))
+        marca = "" if r and r["alcance"] == a and (a != "catalogo" or r.get("codigo") == c) else "   <-- distinto"
+        print(f"A {p[:68]:68} | esperado {a}{' ' + str(c) if c else ''} | obtuvo {got}{marca}")
+    for i, ((p, te), r) in enumerate(zip(PRUEBA_TEMA, rb), 1):
+        got = None if r is None else (r["alcance"], r.get("codigo"), r.get("tema"))
+        print(f"T{i} {p[:66]:66} | esperado {te} | obtuvo {got}{'' if r and r.get('tema') == te else '   <-- distinto'}")
+    for k, c in {**crit_a, **crit}.items():
+        print(f"  {k} {'se cumple' if c['se_cumple'] else 'NO se cumple'} — {c['umbral']} (valor {c['valor']})")
+    pred = {"PP1": pasa,
+            "PP2": all(i in (20, 21, 24, 29) for i, ((_, te), r) in enumerate(zip(PRUEBA_TEMA, rb), 1)
+                       if te == "ciudad" and not (r and r.get("tema") == te)),
+            "PP3": bool(rb[10]) and rb[10].get("tema") == "politica"}
+    g = e9.gasto_registrado(cache)["costo_usd"]
+    print(f"pasa: {pasa} | predicciones: {pred} | gasto USD {g:.4f}")
+    salida.mkdir(parents=True, exist_ok=True)
+    (salida / "resultado.json").write_text(json.dumps({"respuestas_a": ra, "respuestas_tema": rb, "criterios_a": crit_a,
+                                                      "criterios": crit, "pasa": pasa, "predicciones": pred, "gasto": g},
+                                                      ensure_ascii=False, indent=2), encoding="utf-8")
+    return 0
+
+
 def modelo_simulado(catalogo: dict[str, dict]) -> Llamar:
     """Contesta según la tabla de §3: sirve para probar el circuito, no para medir."""
     esperado = {p: (a, c) for p, a, c in PRUEBA}
@@ -567,7 +720,10 @@ def main(argv=None, entrada=input) -> int:
     ap.add_argument("pregunta", nargs="?", help="una pregunta para reformular")
     ap.add_argument("--validar", action="store_true", help="las 24 preguntas de §3")
     ap.add_argument("--simulado", action="store_true", help="modelo simulado, sin gasto")
+    ap.add_argument("--validar-tema", action="store_true", help="REFORMULACION_TEMA: la versión 6 (93 preguntas)")
     args = ap.parse_args(argv)
+    if args.validar_tema:
+        return validar_tema(args.simulado)
     if not args.validar and not args.pregunta:
         ap.error("pasa una pregunta o --validar")
     catalogo = cargar_catalogo()
