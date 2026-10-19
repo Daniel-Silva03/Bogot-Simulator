@@ -78,5 +78,25 @@
    "objetivos_2025": 23,
    "cubre_2025": 0.65
   }
+ },
+ "fase1": {
+  "regla": "R3",
+  "cumple_la_regla": false,
+  "provisional": true,
+  "por_dominio": {
+   "gobierno": {
+    "h": 10.0,
+    "h_con_cambio_de_gobierno": 15.0,
+    "cobertura_en_prueba": 0.696,
+    "casos_en_prueba": 23
+   },
+   "lo_demas": {
+    "h": 6.8,
+    "h_con_cambio_de_gobierno": 10.2,
+    "cobertura_en_prueba": 0.862,
+    "casos_en_prueba": 130
+   }
+  },
+  "fuente": "INTERVALOS_FASE1_RESULTS.md"
  }
 }

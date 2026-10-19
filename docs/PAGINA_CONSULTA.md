@@ -956,6 +956,16 @@ dejarlo sin ella.
 - `test_consulta.py` (35) y `test_agentes_pagina.py` (3);
 - en Edge sin ventana, con el servidor simulado, la pregunta de Galán en celular, sin errores de JavaScript.
 
+## 5.36 El rango del dato medido, provisional (19/10/2026, plan v3 Fase 1, DI-CO45)
+
+**Qué cambió:** el dato del catálogo agrega su rango «orientativo provisional», con lo que cubrió en la prueba año a año:
+- gobierno e instituciones: ±10 puntos, que cubrió el 70 % de 23 casos;
+- lo demás: ±7 puntos, que cubrió el 86 % de 130 casos.
+
+**Por qué «provisional»:** ninguna regla pre-registrada llegó al 70 % en gobierno (`INTERVALOS_FASE1_RESULTS.md`).
+
+**Verificado:** `test_consulta.py` (35) y `test_intervalos_fase1.py` (4).
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

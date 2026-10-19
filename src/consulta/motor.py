@@ -348,6 +348,10 @@ DI-CO44. **Cómo se dice qué es cada cifra** (19/10, plan v3, Fase 0). Hecho: l
     pasado, sin «8 de cada 10». Lo que no se hizo, por decisión de Daniel: mostrar junto a los agentes la medición anterior
     en las preguntas de Galán (plan v3 §4.3).
 
+DI-CO45. **El rango del dato medido, provisional** (19/10, plan v3 Fase 1, `INTERVALOS_FASE1_RESULTS.md`). Hecho: ninguna de
+    las tres reglas pre-registradas cubrió el 70 % en gobierno año a año; la conservadora (R3) llegó al 69,6 %. Decisión, como
+    decía la regla: R3 se muestra como «rango orientativo provisional», con la cobertura que tuvo y su número de casos.
+
 DI-CO39. **El catálogo también es candidata de la estimación** (14/10, `NIVEL_ACUERDO_CATALOGO_RESULTS.md`). Hecho: sin
     una pregunta casi igual entre las 139 candidatas, la estimación se quedaba cerca del 50 %; en la confianza en las
     instituciones (reales de 10 % a 19 %) daba unos 50 %. Con las 84 preguntas del catálogo como candidatas, la prueba
@@ -611,7 +615,19 @@ def como_hoy(codigo: str, anios: list[int], hoy: int = 2026) -> Optional[str]:
     return (f"Como cifra de hoy: el dato más reciente es de {ultimo}, de hace {hace}. En la EPC, repetir el dato del año "
             f"anterior se equivocó en promedio {k['error_medio']:.0f} puntos en preguntas {tema} ({k['n']} casos entre "
             "2022 y 2025). Es un promedio pasado, no una garantía: en un año movido puede ser bastante más."
-            + (" Con más de un año, el error suele crecer." if cuantos > 1 else ""))                  # DI-CO44
+            + (" Con más de un año, el error suele crecer." if cuantos > 1 else "") + _rango_hoy(codigo))  # DI-CO44, DI-CO45
+
+
+def _rango_hoy(codigo: str) -> str:
+    """DI-CO45: el rango orientativo provisional de la Fase 1 del plan v3, con lo que cubrió en la prueba año a año."""
+    import json as _json
+    try:
+        f1 = _json.loads((RAIZ / "config" / "incertidumbre.json").read_text(encoding="utf-8"))["fase1"]
+    except (OSError, ValueError, KeyError):
+        return ""
+    d = f1["por_dominio"]["gobierno" if codigo in rf.TEMA_POLITICO_CATALOGO else "lo_demas"]
+    return (f" Rango orientativo provisional: ±{d['h']:.0f} puntos; en una prueba año a año cubrió el "
+            f"{100 * d['cobertura_en_prueba']:.0f} % de {d['casos_en_prueba']} casos.")
 
 
 def vista(f: dict) -> dict:

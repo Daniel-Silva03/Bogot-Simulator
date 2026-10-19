@@ -529,7 +529,12 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     - **Fase 0 hecha (19/10, DI-CO44):** los agentes se presentan como «estimación exploratoria», con la fecha, los perfiles,
       el error histórico y el rango orientativo, sin prometer cobertura. Sin la medición anterior en Galán, por decisión de
       Daniel.
-    - **Siguiente: la Fase 1,** los intervalos con la EPC 2014-2025, año por año.
+    - ~~**Siguiente: la Fase 1,** los intervalos con la EPC 2014-2025, año por año.~~
+    - **Fase 1 hecha (USD 0, `INTERVALOS_FASE1_RESULTS.md`):** ninguna regla de rango cubre el 70 % en gobierno año a año.
+      - La conservadora llega al 69,6 % (84 % en total) y queda en la página como «rango orientativo provisional»: ±10 en
+        gobierno, ±7 en lo demás.
+      - 2025 sigue sin cubrirse (58 %): fue movido sin que cambiara el gobierno.
+    - **Siguiente: la Fase 2,** el registro de encuestas públicas de Galán con ficha técnica.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

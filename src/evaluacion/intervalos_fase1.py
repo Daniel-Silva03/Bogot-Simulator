@@ -14,6 +14,8 @@ DI-IV1. **Lo favorable de la serie larga** es p4 + p5 («buena» o «muy buena»
 DI-IV2. **Los gobiernos:** Petro 2012-2015, Peñalosa 2016-2019, López 2020-2023 y Galán 2024-2027; el Concejo cambia en los
     mismos años. Las preguntas del catálogo 2022-2025 marcan cambio de gobierno solo en 2023 → 2024.
 DI-IV3. **El percentil** es el de numpy (interpolación lineal), sobre los errores absolutos de los objetivos de años anteriores.
+DI-IV4. **El rango para la página** (§6): la regla elegida, con todos los errores hasta 2025, por dominio, se guarda en
+    `config/incertidumbre.json` (`fase1`), con la cobertura que tuvo en la prueba y su número de casos.
 """
 
 from __future__ import annotations
@@ -126,6 +128,21 @@ def main() -> int:
     t.round(2).to_csv(P / "benchmark" / "intervalos_fase1.csv", index=False, encoding="utf-8")
     (P / "benchmark" / "intervalos_fase1.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print(json.dumps(out, ensure_ascii=False, indent=1))
+    # DI-IV4: el rango de hoy por dominio, con todos los errores, y lo que cubrió en la prueba
+    p_all = float(np.quantile(t.error, 0.8))
+    hoy = {}
+    for dom, clave in ((GOB, "gobierno"), ("lo demás", "lo_demas")):
+        d = t[t.dominio == dom]
+        w = len(d) / (len(d) + K)
+        r2 = w * float(np.quantile(d.error, 0.8)) + (1 - w) * p_all
+        hoy[clave] = {"h": round(r2, 1), "h_con_cambio_de_gobierno": round(1.5 * r2, 1),
+                      "cobertura_en_prueba": cob[elegida][clave], "casos_en_prueba": int((e.dominio == dom).sum())}
+    ruta = RAIZ / "config" / "incertidumbre.json"
+    inc = json.loads(ruta.read_text(encoding="utf-8"))
+    inc["fase1"] = {"regla": elegida, "cumple_la_regla": cumple, "provisional": not cumple, "por_dominio": hoy,
+                    "fuente": "INTERVALOS_FASE1_RESULTS.md"}
+    ruta.write_text(json.dumps(inc, ensure_ascii=False, indent=1), encoding="utf-8")
+    print("rango de hoy:", json.dumps(hoy, ensure_ascii=False))
     return 0
 
 
