@@ -843,6 +843,7 @@ function mostrar(r){
         ${fuera(r.ciudad) ? `<p class="nota">Sin contar al ${fuera(r.ciudad)} % que no respondió, no sabía o no tenía opinión: las cifras y el mapa son de quienes sí.</p>` : ''}
         <p class="nota">Consulté a ${fmt(r.consultados)} personas sintéticas${r.anios.length === 1 ? ` (las que heredan a alguien encuestado en ${r.anios[0]})` : ''}.</p>
         ${r.nota ? `<p class="nota"><b>Ojo:</b> ${esc(r.nota)}</p>` : ''}
+        ${r.como_hoy ? `<p class="nota">${esc(r.como_hoy)}</p>` : ''}
       </div>
       <div class="panel">
         <span class="ceja">Cómo se reparte</span>
@@ -891,7 +892,7 @@ function mostrar(r){
       : `<div class="panel sin-respuesta"><p class="sr-titulo">${esc(r.respuesta.titulo)}</p><p>${esc(r.respuesta.texto)}</p></div>`}
       <div class="panel agentes-panel">
         <span class="ceja">Experimental · para preguntas políticas e institucionales</span>
-        <p class="nota">Otra forma de estimar: 200 bogotanos reales encuestados en 2025 «responden» la pregunta, cada uno según sus otras respuestas. En las pruebas políticas con preguntas que no se habían usado, se equivocó entre 10 y 12 puntos; repetir el último dato medido acertó más.</p>
+        <p class="nota">Otra forma de estimar: 200 bogotanos reales encuestados en 2025 «responden» la pregunta, cada uno según sus otras respuestas. En preguntas de ciudad que no se habían usado (el metro), se equivocó unos 23 puntos: aquí es menos fiable que en lo político.</p>
         <div class="acciones"><button class="btn btn-fantasma" id="pedirAgentes">Estimar con 200 bogotanos reales</button></div>
         <div id="agentes" aria-live="polite"></div>
       </div>
@@ -924,7 +925,7 @@ async function soloAgentes(r){
   const el = $('#resultado'); cargando(el, 'Preguntando a 200 bogotanos reales…');
   $('#enviar').disabled = true;
   try {
-    const a = await api('/api/agentes', {pregunta: r.pregunta_agentes, escala: r.escala});
+    const a = await api('/api/agentes', {pregunta: r.pregunta_agentes, escala: r.escala, tema: 'politica'});
     if (a.tipo === 'invalida') return error(el, a.mensaje);
     mostrar(a);
   } catch (e) { error(el, e.message); }
@@ -962,7 +963,7 @@ function htmlAgentes(a){
 async function conAgentes(r, boton){
   const el = $('#agentes'); boton.disabled = true; boton.textContent = 'Preguntando a 200 bogotanos…';
   try {
-    const a = await api('/api/agentes', {pregunta: r.pregunta, escala: r.escala});
+    const a = await api('/api/agentes', {pregunta: r.pregunta, escala: r.escala, tema: 'ciudad'});   /* DI-CO43: el botón es de las de ciudad */
     if (a.tipo === 'invalida') { el.innerHTML = `<p class="nota">${esc(a.mensaje)}</p>`; return; }
     el.innerHTML = htmlAgentes(a);
     aparecer(el); boton.classList.add('oculto');

@@ -1,0 +1,82 @@
+{
+ "fecha": "2026-10-19",
+ "metodo": "percentil 80 del error de las pruebas (DI-IF2)",
+ "clases": [
+  {
+   "clase": "mes",
+   "texto": "el dato es del mes anterior (CB, imagen de Galán, 2026)",
+   "n": 4,
+   "error_medio": 2.6,
+   "p80": null,
+   "pocos_casos": true
+  },
+  {
+   "clase": "dos_meses",
+   "texto": "el dato es de dos meses antes (Invamer, aprobación de Galán)",
+   "n": 7,
+   "error_medio": 3.9,
+   "p80": null,
+   "pocos_casos": true
+  },
+  {
+   "clase": "anio_gobierno",
+   "texto": "el dato es de un año antes, gobierno e instituciones (EPC)",
+   "n": 14,
+   "error_medio": 7.0,
+   "p80": 10.6,
+   "pocos_casos": false
+  },
+  {
+   "clase": "anio_resto",
+   "texto": "el dato es de un año antes, lo demás (EPC)",
+   "n": 130,
+   "error_medio": 4.0,
+   "p80": 6.8,
+   "pocos_casos": false
+  },
+  {
+   "clase": "agentes_politica",
+   "texto": "agentes, pregunta política nunca medida (Galán y CNC de 2026)",
+   "n": 17,
+   "error_medio": 11.3,
+   "p80": 19.5,
+   "pocos_casos": false
+  },
+  {
+   "clase": "agentes_ciudad",
+   "texto": "agentes, pregunta de ciudad nunca medida (el metro, 2026)",
+   "n": 5,
+   "error_medio": 22.8,
+   "p80": null,
+   "pocos_casos": true
+  },
+  {
+   "clase": "estimacion_politica",
+   "texto": "estimación de la página, pregunta política nunca medida",
+   "n": 9,
+   "error_medio": 12.3,
+   "p80": 20.9,
+   "pocos_casos": false
+  },
+  {
+   "clase": "estimacion_ciudad",
+   "texto": "estimación de la página, pregunta de ciudad nunca medida",
+   "n": 79,
+   "error_medio": 13.0,
+   "p80": null,
+   "pocos_casos": true
+  }
+ ],
+ "cobertura_2025": {
+  "anio_gobierno": {
+   "p80_ajustado_hasta_2024": 5.9,
+   "objetivos_2025": 8,
+   "cubre_2025": 0.38
+  },
+  "anio_resto": {
+   "p80_ajustado_hasta_2024": 6.3,
+   "objetivos_2025": 23,
+   "cubre_2025": 0.65
+  }
+ }
+}

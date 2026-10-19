@@ -1,0 +1,20 @@
+indicador,encuestadora,mes,valor,lo_que_se_cuenta,poblacion,muestra_bogota,fuente,comparabilidad
+aprobacion_galan,Invamer,2024-02,54,aprueba la gestión,Bogotá,,Noticias Caracol,exacta dentro de la serie
+aprobacion_galan,Invamer,2024-04,59,aprueba la gestión,Bogotá,,Noticias Caracol,exacta dentro de la serie
+aprobacion_galan,Invamer,2024-06,47,aprueba la gestión,Bogotá,,El Espectador,exacta dentro de la serie
+aprobacion_galan,Invamer,2024-08,50,aprueba la gestión,Bogotá,,Infobae 29/8/2024,exacta dentro de la serie
+aprobacion_galan,Invamer,2024-10,52,aprueba la gestión,Bogotá,,El Tiempo; El Colombiano (campo 4-13/10/2024),exacta dentro de la serie
+aprobacion_galan,Invamer,2024-12,47,aprueba la gestión,Bogotá,,Infobae 19/12/2024,exacta dentro de la serie
+aprobacion_galan,Invamer,2025-02,44,aprueba la gestión,Bogotá,,Valora Analitik; Qhubo (campo 14-23/2/2025),exacta dentro de la serie
+aprobacion_galan,Invamer,2025-04,42,aprueba la gestión,Bogotá,,El Espectador; Infobae 2/5/2025,exacta dentro de la serie
+aprobacion_galan,Invamer,2025-06,42,aprueba la gestión,Bogotá,400,Agencia PI (campo 7-16/6/2025),exacta dentro de la serie
+aprobacion_galan,Guarumo y EcoAnalítica,2026-04,53.3,aprueba la gestión,Bogotá (submuestra nacional),,El Tiempo; Infobae 30/4/2026 (campo 22-29/4/2026),cercana a Invamer: otra encuestadora
+imagen_galan,CB Global Data,2026-03,43.2,imagen positiva,Bogotá,,El Tiempo,exacta dentro de la serie
+imagen_galan,CB Global Data,2026-04,46.5,imagen positiva,Bogotá,,Semana 27/4/2026,exacta dentro de la serie
+imagen_galan,CB Global Data,2026-06,44.3,imagen positiva,Bogotá,,El Nuevo Siglo,exacta dentro de la serie
+imagen_galan,CB Global Data,2026-07,45.3,imagen positiva,Bogotá,,Infobae 21/7/2026,exacta dentro de la serie
+imagen_galan,CB Global Data,2026-08,49.0,imagen positiva,Bogotá,855-1314 por ciudad,Bloomberg Línea; El Nacional 24/8/2026,exacta dentro de la serie
+imagen_galan,CB Global Data,2026-09,45.5,imagen positiva,Bogotá,,Pulzo 30/9/2026 (derivada: agosto menos 3,5),exacta dentro de la serie
+gestion_galan_buena,EPC Bogotá Cómo Vamos,2024,42.3,buena o muy buena gestión,Bogotá,1521,EPC 2024 (cálculo propio),exacta dentro de la serie
+gestion_galan_buena,EPC Bogotá Cómo Vamos,2025,26.4,buena o muy buena gestión,Bogotá,1520,EPC 2025 (cálculo propio),exacta dentro de la serie
+imagen_galan,EPC Bogotá Cómo Vamos,2025,45.0,imagen favorable,Bogotá,1520,EPC 2025 (PERSONAS_POLITICA),cercana a CB: otra encuestadora

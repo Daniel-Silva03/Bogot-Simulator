@@ -520,6 +520,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     - **Fase D hecha (USD 0, `TEMPORAL_FASE_D_RESULTS.md`):** ningún método temporal sencillo (promedio de dos, tendencia,
       encogimiento) le gana a repetir el último dato, ni en la EPC (4,6) ni en las series de Galán de Invamer y CB (3,4). Lo que
       acerca a la cifra de hoy es una medición reciente: unos 3 puntos con el mes anterior, de 4,5 a 6 con un año.
+    - **Fase F hecha (USD 0, `INCERTIDUMBRE_FASE_F.md`):** el error de cada tipo de evidencia, en la página.
+      - El dato del catálogo dice qué tan viejo es y cuánto se equivoca como cifra de hoy (7 puntos en gobierno, 4 en lo demás).
+      - Los agentes, 11 en lo político (±19,5) y 23 en ciudad.
+      - Los intervalos hechos con el pasado no cubrieron 2025 (38 % en gobierno): fue un año movido.
+      - Registro de mediciones publicadas de Galán en `config/mediciones_publicadas.csv`, sin mostrar (DI-CO41).
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

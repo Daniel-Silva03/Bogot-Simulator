@@ -336,6 +336,12 @@ DI-CO42. **Los agentes se encienden con el modelo real, como experimento declara
     último dato acertó más (`agentes.ERROR_MEDIDO`). Es una excepción a D22, anotada como enmienda; no es una validación. Cada
     pregunta nueva con agentes son 200 llamadas, unos USD 0,05; la caché evita pagar dos veces la misma.
 
+DI-CO43. **La incertidumbre, con los errores reales** (19/10, Fase F, `INCERTIDUMBRE_FASE_F.md`). Hecho: repetir un dato de
+    hace un año se equivoca 7,0 en gobierno e instituciones y 4,0 en lo demás; los agentes, 11,3 en lo político nunca medido y
+    22,8 en lo de ciudad. Decisión: el dato del catálogo dice qué tan viejo es y cuánto se equivoca usarlo como cifra de hoy
+    (`como_hoy`), y los agentes llevan el error y el rango de su tema (`agentes.rango`, `agentes.error_medido`). Todo sale de
+    `config/incertidumbre.json`, que arma `src/evaluacion/incertidumbre_fase_f.py`.
+
 DI-CO39. **El catálogo también es candidata de la estimación** (14/10, `NIVEL_ACUERDO_CATALOGO_RESULTS.md`). Hecho: sin
     una pregunta casi igual entre las 139 candidatas, la estimación se quedaba cerca del 50 %; en la confianza en las
     instituciones (reales de 10 % a 19 %) daba unos 50 %. Con las 84 preguntas del catálogo como candidatas, la prueba
@@ -587,6 +593,20 @@ def nota_gobierno(codigo: str, anios: list[int]) -> Optional[str]:
     return f"Se midió en {_texto_anios(galan)}, con el alcalde Carlos Fernando Galán."
 
 
+def como_hoy(codigo: str, anios: list[int], hoy: int = 2026) -> Optional[str]:
+    """DI-CO43: qué tan viejo es el dato y cuánto se equivoca repetirlo como cifra de hoy (`config/incertidumbre.json`)."""
+    from src.consulta import agentes as ag
+    k = ag._clases().get("anio_gobierno" if codigo in rf.TEMA_POLITICO_CATALOGO else "anio_resto")
+    if not k or not anios:
+        return None
+    ultimo, cuantos = max(anios), hoy - max(anios)
+    tema = "de gobierno e instituciones" if codigo in rf.TEMA_POLITICO_CATALOGO else "de este tipo"
+    hace = "un año" if cuantos == 1 else f"{cuantos} años"
+    return (f"Como cifra de hoy: el dato más reciente es de {ultimo}, de hace {hace}. En la EPC, repetir el dato del año "
+            f"anterior se equivocó en promedio {k['error_medio']:.0f} puntos en preguntas {tema}, y en 8 de cada 10 casos, "
+            f"menos de {k['p80']:.0f}." + (" Con más de un año, puede ser más." if cuantos > 1 else ""))
+
+
 def vista(f: dict) -> dict:
     """DI-CO19: la pregunta como se muestra, sin las categorías que no son una opinión en su escala."""
     return {**f, "escala": [c for c in f["escala"] if not NO_SUSTANTIVA.search(str(f["etiquetas"][str(c)]))]}
@@ -820,6 +840,7 @@ class Motor:
                 "ciudad": ciudad,
                 "localidades": por_loc, "grupos": grupos, "anios": anios,
                 "nota": nota_gobierno(codigo, anios), "agrupada": agrupar(f),                  # DI-CO36
+                "como_hoy": como_hoy(codigo, anios),                                            # DI-CO43
                 "encuestados_mediana_localidad": n_loc,
                 "fuente": (f"Dato medido en la EPC {_texto_anios(anios)}, reponderado por la población sintética; "
                            f"unas {n_loc} personas encuestadas por localidad.")}
@@ -858,7 +879,7 @@ class Motor:
                               for r in elegidas.itertuples()]}
 
     # ---------------------------------------------------------------- paso 2d: con agentes (D22, DI-CO40)
-    def responder_agentes(self, pregunta: str, escala: list[str]) -> dict:
+    def responder_agentes(self, pregunta: str, escala: list[str], tema: str = "politica") -> dict:
         """DI-CO40: la estimación con agentes de D22. Solo en modo simulado hasta que pasen las validaciones de D22."""
         from src.consulta import agentes as ag
         if not pregunta or len(escala) != 5:
@@ -873,7 +894,8 @@ class Motor:
                   else e9.cliente_real(timeout=300, extra={"reasoning": {"effort": "low"}}))
         cache = e9.Cache(ag.CACHE.with_name("cache_agentes_simulado.json") if simulado else ag.CACHE)
         try:
-            return self._agentes.estimar(pregunta, escala, llamar, cache, e9.MODELO_SIMULADO if simulado else ag.MODELO)
+            return self._agentes.estimar(pregunta, escala, llamar, cache, e9.MODELO_SIMULADO if simulado else ag.MODELO,
+                                         tema="ciudad" if tema == "ciudad" else "politica")               # DI-AG-P7
         except (OSError, http.client.HTTPException) as e:                       # DI-CO24
             raise _servicio(e) from e
 

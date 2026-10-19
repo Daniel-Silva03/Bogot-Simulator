@@ -36,17 +36,20 @@ def test_el_panel_y_la_estimacion_simulada():
     c = e9.Cache(Path(tempfile.gettempdir()) / "bss_test_agentes.json")
     r = a.estimar("¿Confía usted en la Policía?", ESC, ag.cliente_simulado(), c, e9.MODELO_SIMULADO)
     assert r["tipo"] == "agentes" and r["respondieron"] == 200 and abs(sum(r["distribucion"]) - 1) < 1e-3
-    assert r["rango"][1] - r["rango"][0] <= 2 * ag.H + 0.1 and set(r["grupos"]) == {"estrato", "edad", "sexo"}
+    assert r["rango"][1] - r["rango"][0] <= 2 * ag.rango("politica") + 0.1 and set(r["grupos"]) == {"estrato", "edad", "sexo"}
     assert sum(g["n"] for g in r["grupos"]["sexo"]) == 200 and "no una medición" in r["texto"]
 
 
 def test_encendidos_con_el_error_a_la_vista():
     """DI-CO42 y DI-AG-P6: encendidos con el modelo real, como experimento, y el error medido junto a la cifra."""
     assert mo.AGENTES_CON_MODELO_REAL is True
-    assert "entre 10 y 12 puntos" in ag.ERROR_MEDIDO and "repetir el último dato medido acertó más" in ag.ERROR_MEDIDO
+    assert "entre 10 y 12 puntos" in ag.ERROR_MEDIDO                     # el respaldo de antes de la Fase F
     c = e9.Cache(Path(tempfile.gettempdir()) / "bss_test_agentes.json")
     r = ag.Agentes().estimar("¿Confía usted en la Policía?", ESC, ag.cliente_simulado(), c, e9.MODELO_SIMULADO)
-    assert r["error_medido"] == ag.ERROR_MEDIDO
+    assert r["error_medido"] == ag.error_medido("politica") and "preguntas políticas" in r["error_medido"]
+    # DI-AG-P7: el rango y el error salen de config/incertidumbre.json, por tema
+    assert abs((r["rango"][1] - r["rango"][0]) / 2 - ag.rango("politica")) < 0.2 or r["rango"][0] == 0 or r["rango"][1] == 100
+    assert ag.rango("ciudad") > ag.rango("politica") and "metro" in ag.error_medido("ciudad")
     html = (Path(__file__).resolve().parents[1] / "src" / "consulta" / "pagina.html").read_text(encoding="utf-8")
     assert "<b>Error medido:</b> ${esc(a.error_medido)}" in html and "Experimental · con agentes" in html
     assert "La mayoría no respondería ${op}" in html and "<p class=\"est-titulo\">${titulo}</p>" in html

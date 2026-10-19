@@ -26,6 +26,12 @@ DI-AG-P6. **El error, a la vista** (19/10/2026). Hecho: en las dos pruebas con p
     fue de 12,2 (`VALIDACION_AGENTES_D22`) y de 10,1 a 10,9 (`ACTUALIDAD_EPC`), y repetir el último dato medido acertó más
     (7,7 en la segunda; también en `GALAN_ACTUAL`). Decisión: `ERROR_MEDIDO` va junto a la cifra, con esas palabras. El rango
     de ±12,6 queda: es parecido a ese error.
+    **Corrección del 19/10 (Fase F, `INCERTIDUMBRE_FASE_F.md`):** «entre 10 y 12 puntos» valía para lo político; en las
+    preguntas de ciudad nunca medidas (el metro) el error fue 22,8. Y ±12,6 era angosto: con preguntas políticas nunca medidas,
+    el percentil 80 del error es 19,5. Desde la Fase F, el texto y el rango salen de `config/incertidumbre.json` según el tema
+    (DI-AG-P7). Lo de arriba no se borra: es lo que se decidió con lo que se sabía.
+DI-AG-P7. **Error y rango por tema** (Fase F). El rango es el percentil 80 del error de su clase; si la clase tiene pocos casos,
+    su error medio. Sin el archivo, quedan los valores de antes.
 """
 
 from __future__ import annotations
@@ -44,15 +50,42 @@ RAIZ = Path(__file__).resolve().parents[2]
 SEMILLA = 20261018
 N = 200
 PARALELO = 16
-H = 12.6                                                        # DI-AG-P3
+H = 12.6                                                        # DI-AG-P3; desde la Fase F, ver `rango` (DI-AG-P7)
+INCERTIDUMBRE = RAIZ / "config" / "incertidumbre.json"
 MODELO = "openai/gpt-6-luna"
 TEMPERATURA = 1.0
 CACHE = RAIZ / "data" / "processed" / "consulta" / "cache_agentes.json"
 TEXTO = ("Estimado con {n} bogotanos reales que respondieron la Encuesta de Percepción Ciudadana 2025: un modelo de lenguaje "
          "responde como cada uno, según sus otras respuestas. Es una suposición, no una medición; el rango es de ±{h:.0f}.")
-#: DI-AG-P6
+#: DI-AG-P6 (lo de antes de la Fase F; queda como respaldo si falta `config/incertidumbre.json`)
 ERROR_MEDIDO = ("En las pruebas con preguntas políticas que no se habían usado, este método se equivocó en promedio entre 10 y "
                 "12 puntos, y repetir el último dato medido acertó más. Está a prueba: no lo leas como un pronóstico.")
+
+
+def _clases() -> dict:
+    try:
+        return {c["clase"]: c for c in json.loads(INCERTIDUMBRE.read_text(encoding="utf-8"))["clases"]}
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
+def rango(tema: str = "politica") -> float:
+    """DI-AG-P7: el medio ancho del rango, según el tema."""
+    c = _clases().get("agentes_politica" if tema == "politica" else "agentes_ciudad")
+    return float(c["p80"] or c["error_medio"]) if c else H
+
+
+def error_medido(tema: str = "politica") -> str:
+    """DI-AG-P7: el error que va junto a la cifra, según el tema."""
+    c = _clases().get("agentes_politica" if tema == "politica" else "agentes_ciudad")
+    if not c:
+        return ERROR_MEDIDO
+    m = f"{c['error_medio']:.0f}"
+    if tema == "politica":
+        return (f"En {c['n']} preguntas políticas que no se habían usado, este método se equivocó en promedio {m} puntos, y "
+                "cuando ya había un dato medido, repetirlo acertó más. Está a prueba: no lo leas como un pronóstico.")
+    return (f"En {c['n']} preguntas de ciudad que no se habían usado (sobre el metro), este método se equivocó en promedio {m} "
+            "puntos. Fuera de lo político es aún menos fiable: tómalo solo como una idea.")
 
 
 class Agentes:
@@ -85,7 +118,7 @@ class Agentes:
         ops = "; ".join(f"{i}={e}" for i, e in enumerate(escala, 1)) + "; 9=No sabe"
         return f"QUIÉN ES:\n{perfil}\n\nPREGUNTAS NUEVAS:\nE1. {pregunta.strip()} Opciones: {ops}"
 
-    def estimar(self, pregunta: str, escala: list[str], llamar, cache, modelo: str = MODELO) -> dict:
+    def estimar(self, pregunta: str, escala: list[str], llamar, cache, modelo: str = MODELO, tema: str = "politica") -> dict:
         """La cifra de Bogotá, su rango, la distribución y los grupos."""
         from src.experiments import experimento9 as e9
         from src.experiments import personas_pulidas as pp
@@ -112,7 +145,8 @@ class Agentes:
             m = m & ok
             return round(float(np.sum(w[m] * pfav[m]) / np.sum(w[m])), 4) if m.any() else None
         pct = 100 * media(np.ones(len(w), bool))
-        lo, hi = max(0.0, pct - H), min(100.0, pct + H)
+        h = rango(tema)                                                       # DI-AG-P7
+        lo, hi = max(0.0, pct - h), min(100.0, pct + h)
         llamada = "sí" if lo > 50 else ("no" if hi < 50 else "dividida")
         grupos = {g: [{"grupo": o, "alto": media(etq == o), "n": int(((etq == o) & ok).sum())}
                       for o in mo.GRUPOS[g]["orden"] if ((etq == o) & ok).any()]
@@ -121,7 +155,7 @@ class Agentes:
                 "porcentaje": round(pct, 1), "rango": [round(lo, 1), round(hi, 1)], "llamada": llamada,
                 "titulo": mo.LLAMADA_TITULO[llamada], "distribucion": [round(x, 4) for x in dist], "grupos": grupos,
                 "respondieron": int(ok.sum()), "agentes": len(self.perfiles), "segundos": round(time.time() - t0, 1),
-                "texto": TEXTO.format(n=int(ok.sum()), h=H), "error_medido": ERROR_MEDIDO,
+                "texto": TEXTO.format(n=int(ok.sum()), h=h), "error_medido": error_medido(tema), "tema": tema,
                 "sin_mapa": ("Con 200 agentes quedan unos 11 por localidad: no alcanza para un mapa."),
                 "experimental": True}
 

@@ -921,6 +921,23 @@ políticas del catálogo (rumbo, corrupción, Concejo, votar) siguen mostrando s
   de JavaScript, y se lee en celular.
 - **No se probó con el modelo real en la página:** cada consulta gasta. La llamada es la misma de las pruebas que sí corrieron.
 
+## 5.34 La incertidumbre con los errores reales (19/10/2026, Fase F, DI-CO43, DI-AG-P7)
+
+**Qué cambió:**
+- **El dato del catálogo dice qué tan viejo es** y cuánto se equivoca usarlo como cifra de hoy («Como cifra de hoy: …»).
+- **Los agentes llevan el error y el rango de su tema:**
+  - **en lo político:** 11 puntos y ±19,5;
+  - **en el botón de ciudad:** 23 puntos (el metro) y ±22,8, con el aviso de que es menos fiable.
+- **Corrige** «entre 10 y 12» y el rango de ±12,6 (DI-AG-P6).
+- **De dónde salen las cifras:** `config/incertidumbre.json`; el detalle está en `INCERTIDUMBRE_FASE_F.md`.
+
+**Verificado:**
+- las pruebas de `test_consulta.py` (35), `test_agentes_pagina.py` (3) y `test_reformular_tema.py` (7);
+- en Edge sin ventana, con el servidor simulado:
+  - un dato de Galán del catálogo muestra «Como cifra de hoy»;
+  - una pregunta política con agentes muestra el error de 11 puntos y el rango nuevo;
+  - sin errores de JavaScript.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por
