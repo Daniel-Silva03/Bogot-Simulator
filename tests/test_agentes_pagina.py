@@ -49,6 +49,7 @@ def test_encendidos_con_el_error_a_la_vista():
     assert r["error_medido"] == ag.ERROR_MEDIDO
     html = (Path(__file__).resolve().parents[1] / "src" / "consulta" / "pagina.html").read_text(encoding="utf-8")
     assert "<b>Error medido:</b> ${esc(a.error_medido)}" in html and "Experimental · con agentes" in html
+    assert "La mayoría no respondería ${op}" in html and "<p class=\"est-titulo\">${titulo}</p>" in html
 
 
 def test_la_decision_esta_escrita():
