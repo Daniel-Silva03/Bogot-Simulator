@@ -40,13 +40,15 @@ def test_el_panel_y_la_estimacion_simulada():
     assert sum(g["n"] for g in r["grupos"]["sexo"]) == 200 and "no una medición" in r["texto"]
 
 
-def test_con_el_modelo_real_no_llama_hasta_validar():
-    """D22, condición 1."""
-    assert mo.AGENTES_CON_MODELO_REAL is False
-    m = mo.Motor.__new__(mo.Motor)
-    m.modelo = mo.MODELO_PAGINA
-    r = m.responder_agentes("¿Confía usted en la Policía?", ESC)
-    assert r["tipo"] == "invalida" and "D22" in r["mensaje"]
+def test_encendidos_con_el_error_a_la_vista():
+    """DI-CO42 y DI-AG-P6: encendidos con el modelo real, como experimento, y el error medido junto a la cifra."""
+    assert mo.AGENTES_CON_MODELO_REAL is True
+    assert "entre 10 y 12 puntos" in ag.ERROR_MEDIDO and "repetir el último dato medido acertó más" in ag.ERROR_MEDIDO
+    c = e9.Cache(Path(tempfile.gettempdir()) / "bss_test_agentes.json")
+    r = ag.Agentes().estimar("¿Confía usted en la Policía?", ESC, ag.cliente_simulado(), c, e9.MODELO_SIMULADO)
+    assert r["error_medido"] == ag.ERROR_MEDIDO
+    html = (Path(__file__).resolve().parents[1] / "src" / "consulta" / "pagina.html").read_text(encoding="utf-8")
+    assert "<b>Error medido:</b> ${esc(a.error_medido)}" in html and "Experimental · con agentes" in html
 
 
 def test_la_decision_esta_escrita():

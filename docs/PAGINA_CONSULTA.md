@@ -898,6 +898,29 @@ políticas del catálogo (rumbo, corrupción, Concejo, votar) siguen mostrando s
 - **El simulado no reformula de verdad:** manda todo como nueva. El caso de Galán del catálogo se probó en el motor y cargándolo
   directo en la página.
 
+## 5.33 Los agentes, encendidos con el modelo real y el error a la vista (19/10/2026, D22 enmienda, DI-CO42)
+
+**Qué cambió:**
+- **Con el modelo real, los agentes ya responden** (`AGENTES_CON_MODELO_REAL = True`): las de Galán, las políticas nuevas y el
+  botón de las demás nuevas.
+- **Junto a la cifra va el error medido:** «En las pruebas con preguntas políticas que no se habían usado, este método se
+  equivocó en promedio entre 10 y 12 puntos, y repetir el último dato medido acertó más. Está a prueba: no lo leas como un
+  pronóstico.»
+- **La ceja dice «Experimental · con agentes · no es una medición».**
+- **El panel de las preguntas nuevas** ya no dice que se equivoca la mitad que la estimación de arriba: dice el error de 10 a 12
+  puntos.
+
+**Por qué:** lo decidió Daniel con las validaciones a la vista. Es un experimento declarado, no una validación (D22, enmienda).
+
+**Lo que cuesta:** cada pregunta con agentes son 200 llamadas, unos USD 0,05. La caché no vuelve a cobrar la misma pregunta.
+
+**Verificado:**
+- las pruebas de `tests/test_consulta.py` (34), `tests/test_agentes_pagina.py` (3), `tests/test_reformular_tema.py` (7) y
+  `tests/test_reformular.py` (14);
+- en Edge sin ventana, con el servidor simulado, una pregunta de Galán: el error medido aparece debajo de la cifra, sin errores
+  de JavaScript, y se lee en celular.
+- **No se probó con el modelo real en la página:** cada consulta gasta. La llamada es la misma de las pruebas que sí corrieron.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

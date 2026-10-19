@@ -1769,6 +1769,17 @@ Daniel y su jefe priorizan lo político y lo institucional.
 político y lo institucional» y «sí, empieza por lo que no gasta»). Abrirlo en la página espera las dos validaciones de la
 condición 1, y que se recargue la cuenta de OpenRouter.
 
+**Enmienda (19 de octubre de 2026): encendido con el modelo real como experimento declarado, sin validar.**
+- **Las validaciones de la condición 1:**
+  - la de la reformulación pasó (`REFORMULACION_TEMA_APARTE_RESULTS.md`, 30 de 30);
+  - la de los agentes no pasó (`VALIDACION_AGENTES_D22_RESULTS.md`, error 12,2 contra 9,1 de decir 50 %);
+  - tampoco la prueba que se armó en su lugar (`ACTUALIDAD_EPC_RESULTS.md`, 10,1 contra 7,7 de repetir 2024).
+- **La decisión de Daniel:** «la segunda, enciéndelos con el error a la vista». Antes se le dijo que la condición no se cumplía,
+  y que repetir el último dato acertó más.
+- **Cómo queda:** `AGENTES_CON_MODELO_REAL = True` (DI-CO42). Junto a cada cifra va el error medido fuera de muestra (entre 10
+  y 12 puntos), que repetir el último dato acertó más y que no es un pronóstico (DI-AG-P6).
+- **Es una excepción, no un «pasó».** La condición 1 sigue sin cumplirse en los agentes.
+
 
 ### D23 — En lo político, el proyecto busca acercarse lo más posible a predecir 2026
 

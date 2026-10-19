@@ -5,8 +5,9 @@ D22: estimar una pregunta nueva política o institucional con agentes. 200 encue
 40 respuestas del catálogo y sus datos demográficos, responden la pregunta con la probabilidad de cada opción. La cifra de
 Bogotá y la de cada grupo salen de esas probabilidades, ponderadas con `Factor1`.
 
-Método validado en `PERSONAS_POLITICA_RESULTS.md` y `AGENTES_2026_RESULTS.md`. Mientras no pasen las validaciones de D22
-(condición 1), se usa solo en modo simulado.
+Método probado en `PERSONAS_POLITICA_RESULTS.md` y `AGENTES_2026_RESULTS.md`. Las dos validaciones fuera de muestra de D22 no
+pasaron (`VALIDACION_AGENTES_D22_RESULTS.md`, `ACTUALIDAD_EPC_RESULTS.md`); desde el 19/10/2026 se usa con el modelo real como
+experimento declarado, por decisión de Daniel (D22, enmienda; DI-AG-P6).
 
 DECISIONES DE IMPLEMENTACIÓN
 ============================
@@ -21,6 +22,10 @@ DI-AG-P3. **El rango es ±12,6:** el cuantil 80 % del error de los agentes en la
 DI-AG-P4. **Lo favorable** son las opciones 4 y 5 de la escala de la reformulación, como en la estimación de hoy (DI-CO22).
 DI-AG-P5. **Los grupos** son los de la página (estrato 1-2 / 3-4 / 5-6, los cinco tramos de edad y sexo), con los datos del
     encuestado de 2025. Con 200 agentes, un grupo puede tener 20 o 30 personas: se muestra cuántos hay en cada uno.
+DI-AG-P6. **El error, a la vista** (19/10/2026). Hecho: en las dos pruebas con preguntas que no se habían usado, el error medio
+    fue de 12,2 (`VALIDACION_AGENTES_D22`) y de 10,1 a 10,9 (`ACTUALIDAD_EPC`), y repetir el último dato medido acertó más
+    (7,7 en la segunda; también en `GALAN_ACTUAL`). Decisión: `ERROR_MEDIDO` va junto a la cifra, con esas palabras. El rango
+    de ±12,6 queda: es parecido a ese error.
 """
 
 from __future__ import annotations
@@ -44,8 +49,10 @@ MODELO = "openai/gpt-6-luna"
 TEMPERATURA = 1.0
 CACHE = RAIZ / "data" / "processed" / "consulta" / "cache_agentes.json"
 TEXTO = ("Estimado con {n} bogotanos reales que respondieron la Encuesta de Percepción Ciudadana 2025: un modelo de lenguaje "
-         "responde como cada uno, según sus otras respuestas. Es una suposición, no una medición. En 17 preguntas políticas "
-         "de prueba, este método se equivocó en promedio 8 puntos; el rango es de ±{h:.0f}.")
+         "responde como cada uno, según sus otras respuestas. Es una suposición, no una medición; el rango es de ±{h:.0f}.")
+#: DI-AG-P6
+ERROR_MEDIDO = ("En las pruebas con preguntas políticas que no se habían usado, este método se equivocó en promedio entre 10 y "
+                "12 puntos, y repetir el último dato medido acertó más. Está a prueba: no lo leas como un pronóstico.")
 
 
 class Agentes:
@@ -114,7 +121,7 @@ class Agentes:
                 "porcentaje": round(pct, 1), "rango": [round(lo, 1), round(hi, 1)], "llamada": llamada,
                 "titulo": mo.LLAMADA_TITULO[llamada], "distribucion": [round(x, 4) for x in dist], "grupos": grupos,
                 "respondieron": int(ok.sum()), "agentes": len(self.perfiles), "segundos": round(time.time() - t0, 1),
-                "texto": TEXTO.format(n=int(ok.sum()), h=H),
+                "texto": TEXTO.format(n=int(ok.sum()), h=H), "error_medido": ERROR_MEDIDO,
                 "sin_mapa": ("Con 200 agentes quedan unos 11 por localidad: no alcanza para un mapa."),
                 "experimental": True}
 

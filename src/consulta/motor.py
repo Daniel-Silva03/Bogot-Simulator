@@ -329,6 +329,13 @@ DI-CO41. **Quién responde según el tema** (19/10, `REFORMULACION_TEMA_APARTE_R
     agentes todavía no están validados, en vez de una cifra, hasta la segunda validación de D22. Si el tema no se puede leer, la
     pregunta sigue el camino de siempre.
 
+DI-CO42. **Los agentes se encienden con el modelo real, como experimento declarado** (19/10). Hecho: las dos validaciones
+    de la condición 1 de D22 que tocaban a los agentes no pasaron (`VALIDACION_AGENTES_D22_RESULTS.md`, error 12,2;
+    `ACTUALIDAD_EPC_RESULTS.md`, 10,1 contra 7,7 de repetir 2024). Decisión de Daniel, el 19/10: «la segunda, enciéndelos con el
+    error a la vista». `AGENTES_CON_MODELO_REAL = True`, y el resultado lleva junto a la cifra el error medido y que repetir el
+    último dato acertó más (`agentes.ERROR_MEDIDO`). Es una excepción a D22, anotada como enmienda; no es una validación. Cada
+    pregunta nueva con agentes son 200 llamadas, unos USD 0,05; la caché evita pagar dos veces la misma.
+
 DI-CO39. **El catálogo también es candidata de la estimación** (14/10, `NIVEL_ACUERDO_CATALOGO_RESULTS.md`). Hecho: sin
     una pregunta casi igual entre las 139 candidatas, la estimación se quedaba cerca del 50 %; en la confianza en las
     instituciones (reales de 10 % a 19 %) daba unos 50 %. Con las 84 preguntas del catálogo como candidatas, la prueba
@@ -360,8 +367,8 @@ from src.experiments import experimento9 as e9            # noqa: E402
 from src.experiments import puente as pu                  # noqa: E402
 
 POBLACION = RAIZ / "data" / "processed" / "poblacion_epc2022_2025"                    # DI-CO38
-#: DI-CO40 / D22: la estimación con agentes solo corre con el modelo real cuando pasen sus dos validaciones
-AGENTES_CON_MODELO_REAL = False
+#: DI-CO40 / D22: la estimación con agentes con el modelo real. Sus validaciones no pasaron: va encendida como experimento (DI-CO42)
+AGENTES_CON_MODELO_REAL = True                               # DI-CO42: experimento declarado, sin validar
 #: DI-CO41: las preguntas de Galán del catálogo las responden solo los agentes, con el alcalde nombrado
 GALAN_SOLO_AGENTES = {
     "GG3_GALAN": "¿Usted cómo califica la gestión del alcalde de Bogotá, Carlos Fernando Galán?",

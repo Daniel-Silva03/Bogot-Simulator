@@ -465,13 +465,12 @@ def test_galan_y_las_nuevas_politicas_van_a_los_agentes():
     assert set(mo.GALAN_SOLO_AGENTES) <= set(M.catalogo) and set(mo.GALAN_SOLO_AGENTES) <= rf.TEMA_POLITICO_CATALOGO
 
 
-def test_con_el_modelo_real_los_agentes_todavia_avisan():
-    """DI-CO40 y DI-CO41: hasta la segunda validación de D22, nada de cifras con el modelo real."""
-    real = mo.Motor(lambda *a: (_ for _ in ()).throw(AssertionError("no debe llamar")), mo.MODELO_PAGINA,
-                    donante=M.donante, anios=M.anios, agentes=M.agentes, catalogo=M.catalogo,
-                    cache=e9.Cache(Path(_tmp.name) / "real.json"))
-    r = real.responder_agentes(mo.GALAN_SOLO_AGENTES["GG3_GALAN"], ["a", "b", "c", "d", "e"])
-    assert not mo.AGENTES_CON_MODELO_REAL and r["tipo"] == "invalida" and "validada" in r["mensaje"]
+def test_los_agentes_estan_encendidos_como_experimento():
+    """DI-CO42: con el modelo real ya no hay aviso; la cifra va con su error medido (sin llamar al modelo en la prueba)."""
+    assert mo.AGENTES_CON_MODELO_REAL
+    import inspect
+    fuente = inspect.getsource(mo.Motor.responder_agentes)
+    assert "not AGENTES_CON_MODELO_REAL" in fuente                       # el interruptor sigue ahí, para apagarlos
 
 
 def test_la_pagina_lleva_la_ruta_de_los_agentes_sin_mapa():
