@@ -484,6 +484,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       Galán en CB de septiembre de 2026 (45,5, derivada de agosto 49,0 menos 3,5): la mezcla de perfiles se equivoca 6,9; el perfil
       completo con aviso de que su opinión es de 2025, 2,6, y le gana a repetir CB de agosto (3,5). El perfil completo solo, 1,4.
       Pero repetir la EPC 2025 (45,0) se equivoca 0,5: la imagen de Galán casi no se ha movido y el agente no le añade al dato.
+    - **La reformulación marca el tema, pero no pasa (19/10, USD 0,078, `REFORMULACION_TEMA_RESULTS.md`).** La versión 6
+      acierta el tema en 30 de 30 (16 políticas y 14 de ciudad), pero el párrafo nuevo movió un caso de alcance: «caminando
+      por su barrio» dejó de ir a VS8 (R9). La página sigue en la versión 5. Lo siguiente sería marcar el tema en una llamada
+      aparte, sin tocar la 5.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
