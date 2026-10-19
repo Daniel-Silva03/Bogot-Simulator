@@ -586,7 +586,7 @@ function clasificar(r){
 }
 
 function pintar(){
-  svg.classList.toggle('apagado', estado.modo === 'nueva' || estado.modo === 'voto');
+  svg.classList.toggle('apagado', estado.modo === 'nueva' || estado.modo === 'voto' || estado.modo === 'agentes');
   const visibles = estado.modo === 'catalogo' && estado.filtro && estado.filtro !== 'todas' ? clasificar(estado.resp)[estado.filtro] : null;
   URB.forEach(l => rutas[l.codigo].classList.toggle('atenuada', !!visibles && !visibles.includes(String(l.codigo))));
   const cls = estado.modo === 'catalogo' ? clasificar(estado.resp) : null;
@@ -602,7 +602,7 @@ function pintar(){
     }
   });
   leyenda(); seleccionar(estado.sel, true);
-  $('#velo').classList.toggle('oculto', estado.modo !== 'nueva' && estado.modo !== 'voto');
+  $('#velo').classList.toggle('oculto', estado.modo !== 'nueva' && estado.modo !== 'voto' && estado.modo !== 'agentes');
   if (estado.modo === 'nueva') {
     /* estado sin mapa: qué pasa, por qué y qué se puede hacer; en el encabezado, no encima del mapa */
     $('#velo').innerHTML = `<b>Esta pregunta no se colorea por localidad</b>
@@ -613,13 +613,16 @@ function pintar(){
   } else if (estado.modo === 'voto') {
     /* DI-CO30: las encuestas del CNC solo traen el total de Bogotá */
     $('#velo').innerHTML = `<b>La intención de voto no se colorea por localidad</b><span>${esc(estado.resp.sin_mapa)}</span>`;
+  } else if (estado.modo === 'agentes') {
+    /* DI-CO41: con 200 agentes no alcanza para un mapa */
+    $('#velo').innerHTML = `<b>Esta estimación no se colorea por localidad</b><span>${esc(estado.resp.sin_mapa)}</span>`;
   }
   lado(visibles);
 }
 
 function leyenda(){
   const el = $('#leyenda');
-  el.classList.toggle('oculto', estado.modo === 'nueva' || estado.modo === 'voto');
+  el.classList.toggle('oculto', estado.modo === 'nueva' || estado.modo === 'voto' || estado.modo === 'agentes');
   if (estado.modo === 'catalogo') {
     const c = clasificar(estado.resp);
     el.innerHTML = `<span class="ceja">Frente a la ciudad (${f2(estado.resp.ciudad.media)})</span>
@@ -639,7 +642,7 @@ function lado(visibles){
   const el = $('#lado');
   if (estado.modo === 'catalogo') return ranking(el, visibles);
   if (estado.modo === 'nueva') return explorar(el, estado.resp);
-  if (estado.modo === 'voto') {
+  if (estado.modo === 'voto' || estado.modo === 'agentes') {
     el.innerHTML = `<h3>Localidad por localidad</h3>
       <div class="vacio"><b>Sin tabla por localidad</b><span>${esc(estado.resp.sin_mapa)} El mapa muestra cuántos adultos viven en cada una.</span></div>`;
     return;
@@ -760,7 +763,8 @@ async function preguntar(texto){
   try {
     const r = await api('/api/reformular', {pregunta:q});
     mostrarEntendida(r);
-    if (r.alcance === 'catalogo') await responder({codigo:r.codigo});
+    if (r.ruta === 'agentes') await soloAgentes(r);                                            /* DI-CO41 */
+    else if (r.alcance === 'catalogo') await responder({codigo:r.codigo});
     else if (r.alcance === 'nueva') await responder({pregunta:r.reformulada, escala:r.escala, original:q});   /* DI-CO28: se estima con lo escrito */
     else if (r.alcance === 'voto') await responder({voto:{tipo:r.tipo, candidatos:r.candidatos, reformulada:r.reformulada}});   /* DI-CO30 */
     else { el.classList.add('oculto'); verResultado(); }
@@ -780,10 +784,11 @@ function mostrarEntendida(r){
     const b = $('#usar'); if (b) b.addEventListener('click', () => preguntar(r.reformulada));   /* DI-CO4 */
     aparecer(s); return;
   }
-  const texto = r.alcance === 'catalogo' ? r.pregunta_catalogo : r.reformulada;
-  s.innerHTML = `<div class="fila-ref"><span class="ceja">Así entendimos tu pregunta</span>${r.alcance === 'catalogo' ? '' : `<span class="insignia ${ins[0]}">${ins[1]}</span>`}</div>
+  const ag = r.ruta === 'agentes';                                                            /* DI-CO41 */
+  const texto = ag ? r.pregunta_agentes : r.alcance === 'catalogo' ? r.pregunta_catalogo : r.reformulada;
+  s.innerHTML = `<div class="fila-ref"><span class="ceja">Así entendimos tu pregunta</span>${ag ? `<span class="insignia ins-nueva">Pregunta política · con agentes</span>` : r.alcance === 'catalogo' ? '' : `<span class="insignia ${ins[0]}">${ins[1]}</span>`}</div>
     <p class="propuesta" id="entendida">${esc(texto)}</p>
-    ${r.nota ? `<p class="razon"><b>Ojo:</b> ${esc(r.nota)}</p>` : ''}
+    ${r.nota && !ag ? `<p class="razon"><b>Ojo:</b> ${esc(r.nota)}</p>` : ''}
     ${r.escala ? `<div class="escala-lista" aria-label="Escala de respuesta">${r.escala.map(e=>`<span>${esc(e)}</span>`).join('')}</div>` : ''}
     ${r.alcance === 'nueva' ? `<div class="acciones"><button class="btn btn-fantasma" id="editar" aria-expanded="false" aria-controls="edicion">Editar y volver a suponer</button></div>
       <div class="oculto" id="edicion"><label for="editada" class="ceja">Edita la pregunta</label><textarea id="editada" class="editable">${esc(r.reformulada)}</textarea>
@@ -795,7 +800,8 @@ function mostrarEntendida(r){
     });
     $('#resuponer').addEventListener('click', () => {
       const v = $('#editada').value.trim(); if (!v) return;
-      $('#entendida').textContent = v; responder({pregunta:v, escala:r.escala, original:v});
+      $('#entendida').textContent = v;
+      if (ag) soloAgentes({...r, pregunta_agentes:v}); else responder({pregunta:v, escala:r.escala, original:v});
     });
   }
   aparecer(s);
@@ -822,6 +828,10 @@ const anios = a => a.length > 1 ? a[0] + '–' + a[a.length-1] : a[0];
 function mostrar(r){
   const el = $('#resultado'), gr = $('#grupos'); el.classList.remove('oculto'); gr.classList.remove('oculto');
   estado = { ...estado, modo:r.tipo, resp:r, filtro:'todas' };
+  if (r.tipo === 'agentes') {                                            /* DI-CO41: sin mapa ni grupos de la población */
+    el.innerHTML = `<div class="panel">${htmlAgentes(r)}</div>`; gr.classList.add('oculto');
+    titulosMapa(); pintar(); verResultado(); [el, $('#lado')].forEach(aparecer); return;
+  }
   if (r.tipo === 'voto') { mostrarVoto(el, r); gr.classList.add('oculto'); titulosMapa(); pintar(); verResultado(); [el, $('#lado')].forEach(aparecer); return; }
   if (r.tipo === 'catalogo') {
     const n = r.escala.length, c = clasificar(r);
@@ -909,20 +919,30 @@ function mostrar(r){
   [el, $('#lado'), gr].forEach(aparecer);
 }
 
-/* DI-CO40 / D22: la estimación con agentes, a pedido. Sin mapa: con 200 agentes no alcanza. */
-async function conAgentes(r, boton){
-  const el = $('#agentes'); boton.disabled = true; boton.textContent = 'Preguntando a 200 bogotanos…';
+/* DI-CO41: las de Galán y las nuevas políticas, directo con los agentes. */
+async function soloAgentes(r){
+  const el = $('#resultado'); cargando(el, 'Preguntando a 200 bogotanos reales…');
+  $('#enviar').disabled = true;
   try {
-    const a = await api('/api/agentes', {pregunta: r.pregunta, escala: r.escala});
-    if (a.tipo === 'invalida') { el.innerHTML = `<p class="nota">${esc(a.mensaje)}</p>`; return; }
+    const a = await api('/api/agentes', {pregunta: r.pregunta_agentes, escala: r.escala});
+    if (a.tipo === 'invalida') return error(el, a.mensaje);
+    mostrar(a);
+  } catch (e) { error(el, e.message); }
+  finally { $('#enviar').disabled = false; }
+}
+
+/* DI-CO40 / D22: la estimación con agentes. Sin mapa: con 200 agentes no alcanza. */
+function htmlAgentes(a){
+    /* DI-CO41: el lado alto con las palabras de la escala («buena gestión», «de acuerdo»…) */
+    const alto = `respondería «${esc(a.escala[3].toLowerCase())}» o «${esc(a.escala[4].toLowerCase())}»`;
     const de = Math.round(a.rango[0]), ha = Math.round(a.rango[1]), div = a.llamada === 'dividida';
     const barras = Object.entries(a.grupos).map(([g, fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f =>
       `<div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista"><i style="left:0;width:${Math.round(100*f.alto)}%;background:var(--ceja)"></i></span><span class="v">${Math.round(100*f.alto)} % <span class="nota">(${f.n})</span></span></div>`).join('')}</div>`).join('');
-    el.innerHTML = `<div class="estimacion e-${a.llamada}">
+    return `<div class="estimacion e-${a.llamada}">
         <div class="est-cab"><span class="ceja">Con agentes · no es una medición</span>
           <p class="est-titulo">${esc(a.titulo)}</p>
-          ${div ? `<p class="lead-t">Estaría de acuerdo <span class="mono">entre ${de} % y ${ha} %</span>: el rango cruza la mitad.</p>`
-                : `<p class="cifra-grande">${Math.round(a.porcentaje)} %</p><p class="lead-t">estaría de acuerdo · <span class="mono">entre ${de} % y ${ha} %</span></p>`}</div>
+          ${div ? `<p class="lead-t"><span class="mono">Entre ${de} % y ${ha} %</span> ${alto}: el rango cruza la mitad.</p>`
+                : `<p class="cifra-grande">${Math.round(a.porcentaje)} %</p><p class="lead-t">${alto} · <span class="mono">entre ${de} % y ${ha} %</span></p>`}</div>
         <div class="est-rango">
           <div class="rango-est" role="img" aria-label="Rango estimado con agentes entre ${de} y ${ha} por ciento; la línea marca el 50 %">
             <i style="left:${a.rango[0]}%;width:${a.rango[1]-a.rango[0]}%"></i><em style="left:50%"></em><b style="left:${a.porcentaje}%"></b></div>
@@ -931,6 +951,15 @@ async function conAgentes(r, boton){
       <span class="ceja">Por grupo · entre paréntesis, cuántos agentes hay en cada uno</span>
       <div class="grupos">${barras}</div>
       <p class="nota">${esc(a.sin_mapa)} Respondieron ${a.respondieron} de ${a.agentes}.</p>`;
+}
+
+/* DI-CO40 / D22: la estimación con agentes, a pedido, debajo de una pregunta nueva. */
+async function conAgentes(r, boton){
+  const el = $('#agentes'); boton.disabled = true; boton.textContent = 'Preguntando a 200 bogotanos…';
+  try {
+    const a = await api('/api/agentes', {pregunta: r.pregunta, escala: r.escala});
+    if (a.tipo === 'invalida') { el.innerHTML = `<p class="nota">${esc(a.mensaje)}</p>`; return; }
+    el.innerHTML = htmlAgentes(a);
     aparecer(el); boton.classList.add('oculto');
   } catch (e) { error(el, e.message); }
   finally { boton.disabled = false; boton.textContent = 'Estimar con 200 bogotanos reales'; }
@@ -999,7 +1028,7 @@ function verRelacionada(q){
 
 function titulosMapa(){
   if (estado.modo === 'catalogo') { $('#mapaTitulo').textContent = 'Cómo respondería cada localidad'; $('#mapaSub').textContent = estado.resp.pregunta; }
-  else if (estado.modo === 'nueva' || estado.modo === 'voto') { $('#mapaTitulo').textContent = 'Bogotá por localidades'; $('#mapaSub').textContent = estado.resp.pregunta; }
+  else if (estado.modo === 'nueva' || estado.modo === 'voto' || estado.modo === 'agentes') { $('#mapaTitulo').textContent = 'Bogotá por localidades'; $('#mapaSub').textContent = estado.resp.pregunta; }
   else { $('#mapaTitulo').textContent = 'Bogotá por localidades'; $('#mapaSub').textContent = 'Información general. Toca una localidad. Sumapaz, rural y sin encuestados, queda fuera del mapa.'; }
 }
 

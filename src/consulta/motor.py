@@ -318,6 +318,17 @@ DI-CO40. **La estimación con agentes de D22** (16/10, `agentes.py`). `responder
     modelo real devuelve un aviso y no llama a nadie (`AGENTES_CON_MODELO_REAL = False`); con el simulado responde al azar,
     para mirar la página. La pide la página con un botón, en el resultado de una pregunta nueva.
 
+DI-CO41. **Quién responde según el tema** (19/10, `REFORMULACION_TEMA_APARTE_RESULTS.md`). Hecho: el tema en una llamada
+    aparte, después de la versión 5 intacta, acertó en 30 de 30. Decisión: `reformular` devuelve también `tema` y `ruta`.
+    - **Las nuevas de tema político** van a los agentes (D22), con la pregunta reformulada.
+    - **Las de Galán del catálogo** (`GG3_GALAN` y las tres `MICE_GALAN`) las responden **solo los agentes**, con el alcalde
+      nombrado (`GALAN_SOLO_AGENTES`); la página no muestra el dato medido. Lo decidió Daniel el 19/10: «quiero que las
+      preguntas de Galán solo respondan los agentes».
+    - **Las demás** siguen como antes: las del catálogo con su dato, las nuevas de ciudad con el puente.
+    Supuesto que se acepta: con el modelo real y `AGENTES_CON_MODELO_REAL = False`, esas preguntas muestran el aviso de que los
+    agentes todavía no están validados, en vez de una cifra, hasta la segunda validación de D22. Si el tema no se puede leer, la
+    pregunta sigue el camino de siempre.
+
 DI-CO39. **El catálogo también es candidata de la estimación** (14/10, `NIVEL_ACUERDO_CATALOGO_RESULTS.md`). Hecho: sin
     una pregunta casi igual entre las 139 candidatas, la estimación se quedaba cerca del 50 %; en la confianza en las
     instituciones (reales de 10 % a 19 %) daba unos 50 %. Con las 84 preguntas del catálogo como candidatas, la prueba
@@ -351,6 +362,16 @@ from src.experiments import puente as pu                  # noqa: E402
 POBLACION = RAIZ / "data" / "processed" / "poblacion_epc2022_2025"                    # DI-CO38
 #: DI-CO40 / D22: la estimación con agentes solo corre con el modelo real cuando pasen sus dos validaciones
 AGENTES_CON_MODELO_REAL = False
+#: DI-CO41: las preguntas de Galán del catálogo las responden solo los agentes, con el alcalde nombrado
+GALAN_SOLO_AGENTES = {
+    "GG3_GALAN": "¿Usted cómo califica la gestión del alcalde de Bogotá, Carlos Fernando Galán?",
+    "MICE1_GALAN": ("El gobierno de Bogotá, del alcalde Carlos Fernando Galán, está adelantando acciones que contribuyen a la "
+                    "transparencia y la garantía del derecho de acceso a la información pública."),
+    "MICE2_GALAN": ("El gobierno de Bogotá, del alcalde Carlos Fernando Galán, atiende y responde de manera efectiva a las "
+                    "necesidades y solicitudes de la ciudadanía."),
+    "MICE3_GALAN": ("El gobierno de Bogotá, del alcalde Carlos Fernando Galán, genera espacios de interacción y diálogo con la "
+                    "ciudadanía y promueve la participación en la formulación de planes y políticas públicas."),
+}
 MARGINAL = RAIZ / "data" / "external" / "marginal_localidad_18mas.csv"
 CACHE = RAIZ / "data" / "processed" / "consulta" / "cache.json"
 N_BOOT = 200
@@ -725,7 +746,24 @@ class Motor:
             r["pregunta_catalogo"] = f["pregunta"].strip()
             r["nota"] = nota_gobierno(r["codigo"], sorted(self.anios.get(r["codigo"], [2023])))   # DI-CO36
             r["escala"] = escala_visible(f)
-        return r
+        return self._ruta(r, pregunta[:500])
+
+    def _ruta(self, r: dict, pregunta: str) -> dict:
+        """DI-CO41: el tema (REFORMULACION_TEMA_APARTE) y quién responde. Las de Galán del catálogo y las nuevas de tema
+        político van a los agentes; las demás, como siempre."""
+        if r["alcance"] == "catalogo" and r["codigo"] in GALAN_SOLO_AGENTES:
+            return {**r, "tema": "politica", "ruta": "agentes", "pregunta_agentes": GALAN_SOLO_AGENTES[r["codigo"]]}
+        if r["alcance"] == "catalogo":
+            return {**r, "tema": "politica" if r["codigo"] in rf.TEMA_POLITICO_CATALOGO else "ciudad", "ruta": "catalogo"}
+        if r["alcance"] == "nueva":
+            try:
+                tema = rf.clasificar_tema(pregunta, r["reformulada"], self.llamar, self.cache, self.modelo)
+            except (OSError, http.client.HTTPException) as e:                   # DI-CO24
+                raise _servicio(e) from e
+            tema = tema or "ciudad"                     # sin tema legible, la pregunta sigue el camino de siempre
+            return {**r, "tema": tema, "ruta": "agentes" if tema == "politica" else "puente",
+                    "pregunta_agentes": r["reformulada"]}
+        return {**r, "tema": None, "ruta": r["alcance"]}
 
     # ---------------------------------------------------------------- paso 2a
     def responder_catalogo(self, codigo: str) -> dict:
@@ -979,6 +1017,9 @@ def cliente(simulado: bool = False):
                 return json.dumps({"alcance": "voto", "codigo": None, "tipo": "primera", "candidatos": [x],
                                    "reformulada": f"¿Votaría por {x} para presidente?", "razon": "simulado"})
             return ref(modelo, sistema, usuario, temp)
+        if sistema == rf.SISTEMA_TEMA:                                          # DI-CO41: el tema, sin gasto
+            pol = re.search(r"alcald|Galán|gobierno|Concejo|corrupci|Polic|confían|partido|president|Congres", usuario, re.I)
+            return json.dumps({"tema": "politica" if pol else "ciudad"})
         from src.experiments import nivel_parecidas_b as nb
         if sistema == nb.SISTEMA:                                               # DI-CO22: las tres primeras candidatas
             return json.dumps({"ids": re.findall(r"^- (\S+) \|", usuario, re.M)[:3], "razon": "simulado"})

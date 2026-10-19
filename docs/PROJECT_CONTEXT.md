@@ -1820,6 +1820,12 @@ Con D23, la percepción política entra en la misma excepción. Toda cifra de es
 no esté medida, que la mayoría de preguntas de percepción política e intenciones de voto sean nuevas y que nuestros agentes se
 acerquen a las respuestas del 2026», y «sí, escribe la D23»).
 
+**Enmienda (19 de octubre de 2026), a pedido de Daniel:** en las preguntas de **Galán** que el catálogo midió (la gestión del
+alcalde y las tres de transparencia, respuesta y participación), la página **no muestra el dato medido**: responden solo los
+agentes («quiero que las preguntas de Galán solo respondan los agentes»). Se aparta de lo que decía arriba («el dato medido se
+muestra al lado»). Se le advirtió antes que, en la imagen de Galán, repetir el dato de 2025 acertó más que los agentes (0,5 contra
+1,4 puntos, `GALAN_ACTUAL_RESULTS.md`). Implementación: DI-CO41.
+
 ---
 
 # 40. DECISIONES ABIERTAS

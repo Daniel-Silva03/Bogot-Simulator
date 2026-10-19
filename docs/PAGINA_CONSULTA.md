@@ -863,6 +863,41 @@ institucionales», con el botón «Estimar con 200 bogotanos reales».
 
 **No se revisó en el navegador** por falta de memoria del equipo: queda para la revisión de Daniel.
 
+## 5.32 Las preguntas políticas y las de Galán van solas a los agentes (19/10/2026, D22, D23, DI-CO41)
+
+**Qué cambió:** la página ya no espera el botón para las preguntas políticas.
+- **Las nuevas de tema político** (`REFORMULACION_TEMA_APARTE_RESULTS.md`, 30 de 30) van directo a los agentes. Ya no pasan por
+  el puente.
+- **Las de Galán del catálogo** (la gestión del alcalde y las tres de transparencia, respuesta y participación) las responden
+  **solo los agentes**, con el alcalde nombrado. La página no muestra el dato medido de la EPC. Lo decidió Daniel el 19/10:
+  «quiero que las preguntas de Galán solo respondan los agentes».
+- **Las demás no cambian:** las del catálogo con su dato y su mapa; las nuevas de ciudad con el puente y el botón de agentes.
+
+**Cómo se ve:**
+- la insignia «Pregunta política · con agentes»;
+- el resultado de los agentes, con la cifra dicha en las palabras de la escala («respondería "buena gestión" o "muy buena
+  gestión"»), no siempre «estaría de acuerdo»;
+- el mapa apagado, con «Esta estimación no se colorea por localidad» en el encabezado, no encima del mapa;
+- la tabla de localidades dice por qué no hay.
+
+**Lo que se acepta:** con el modelo real, mientras `AGENTES_CON_MODELO_REAL = False`, esas preguntas muestran el aviso de que los
+agentes todavía no están validados, en vez de una cifra. Se abre con la segunda validación de D22.
+
+**Lo que cuesta:** una llamada corta más por cada pregunta nueva (el tema), menos de un centavo.
+
+**Diferencia con lo que dice D23:** D23 pedía mostrar el dato medido al lado. Para las de Galán, Daniel decidió que no. Las otras
+políticas del catálogo (rumbo, corrupción, Concejo, votar) siguen mostrando su dato.
+
+**Verificado:**
+- las 34 pruebas de `tests/test_consulta.py` y las 7 de `tests/test_reformular_tema.py`;
+- en Edge sin ventana, con el servidor simulado, en escritorio (1400 px) y celular (390 px):
+  - una nueva política («¿Confían los bogotanos en la Fiscalía?») y una de Galán del catálogo llegan a los agentes;
+  - el mapa queda apagado con su explicación;
+  - sin errores de JavaScript;
+  - sin desplazamiento horizontal en celular.
+- **El simulado no reformula de verdad:** manda todo como nueva. El caso de Galán del catálogo se probó en el motor y cargándolo
+  directo en la página.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

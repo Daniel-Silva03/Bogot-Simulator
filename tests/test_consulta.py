@@ -434,6 +434,54 @@ def test_un_voto_mal_formado_es_error():
         raise AssertionError(t)
 
 
+def test_galan_y_las_nuevas_politicas_van_a_los_agentes():
+    """DI-CO41."""
+    from src.consulta import reformular as rf
+    vistos = []
+
+    def llamar(mod, s, u, t):
+        vistos.append(s)
+        preg = u.split("\n")[1]
+        if s == rf.SISTEMA_V5 and "Galán" in preg:
+            return json.dumps({"alcance": "catalogo", "codigo": "GG3_GALAN", "reformulada": "", "razon": "x"})
+        if s == rf.SISTEMA_V5 and "parques" in preg:
+            return json.dumps({"alcance": "catalogo", "codigo": "EP1B_3", "reformulada": "", "razon": "x"})
+        return LLAMAR(mod, s, u, t)
+    m = mo.Motor(llamar, MODELO, donante=M.donante, anios=M.anios, agentes=M.agentes, catalogo=M.catalogo,
+                 cache=e9.Cache(Path(_tmp.name) / "ruta.json"))
+    g = m.reformular("¿Cómo califica la gente la gestión de Galán?")
+    assert g["ruta"] == "agentes" and g["tema"] == "politica" and "Carlos Fernando Galán" in g["pregunta_agentes"]
+    assert len(g["escala"]) == 5 and vistos == [rf.SISTEMA_V5]                       # sin llamada del tema
+    p = m.reformular("¿Les gustan los parques?")
+    assert p["ruta"] == "catalogo" and p["tema"] == "ciudad"
+    vistos.clear()
+    n = m.reformular("¿Confían los bogotanos en la Fiscalía y el gobierno?")
+    assert n["alcance"] == "nueva" and n["ruta"] == "agentes" and n["pregunta_agentes"] == n["reformulada"]
+    assert vistos == [rf.SISTEMA_V5, rf.SISTEMA_TEMA]
+    c = m.reformular("¿Les gusta el alumbrado navideño?")
+    assert c["ruta"] == "puente" and c["tema"] == "ciudad"
+    v = m.reformular("¿Cuántos bogotanos votarían por Iván Cepeda?")
+    assert v["ruta"] == "voto" and v["tema"] is None
+    assert set(mo.GALAN_SOLO_AGENTES) <= set(M.catalogo) and set(mo.GALAN_SOLO_AGENTES) <= rf.TEMA_POLITICO_CATALOGO
+
+
+def test_con_el_modelo_real_los_agentes_todavia_avisan():
+    """DI-CO40 y DI-CO41: hasta la segunda validación de D22, nada de cifras con el modelo real."""
+    real = mo.Motor(lambda *a: (_ for _ in ()).throw(AssertionError("no debe llamar")), mo.MODELO_PAGINA,
+                    donante=M.donante, anios=M.anios, agentes=M.agentes, catalogo=M.catalogo,
+                    cache=e9.Cache(Path(_tmp.name) / "real.json"))
+    r = real.responder_agentes(mo.GALAN_SOLO_AGENTES["GG3_GALAN"], ["a", "b", "c", "d", "e"])
+    assert not mo.AGENTES_CON_MODELO_REAL and r["tipo"] == "invalida" and "validada" in r["mensaje"]
+
+
+def test_la_pagina_lleva_la_ruta_de_los_agentes_sin_mapa():
+    html = (Path(__file__).resolve().parents[1] / "src" / "consulta" / "pagina.html").read_text(encoding="utf-8")
+    assert "if (r.ruta === 'agentes') await soloAgentes(r);" in html and "async function soloAgentes" in html
+    assert "estado.modo === 'nueva' || estado.modo === 'voto' || estado.modo === 'agentes'" in html
+    assert "Pregunta política · con agentes" in html and "function htmlAgentes" in html
+    assert "no es una medición" in html[html.index("function htmlAgentes"):]
+
+
 def test_la_pagina_muestra_el_voto_sin_mapa():
     html = (Path(__file__).resolve().parents[1] / "src" / "consulta" / "pagina.html").read_text(encoding="utf-8")
     assert "r.alcance === 'voto'" in html and "Intención de voto · estimación" in html and "function mostrarVoto" in html
