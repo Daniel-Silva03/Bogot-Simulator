@@ -15,6 +15,8 @@ from src.consulta import reformular as rf
 
 FALLOS = []
 CAT = {"GG3_GALAN": {"variable": "GG3_GALAN"}}
+#: sha256 de SISTEMA_V5 en 1788634, antes de la versión 6 y de la llamada aparte
+HUELLA_V5 = "3adfce3e69f46fb2"
 
 
 def check(nombre, cuerpo):
@@ -58,6 +60,41 @@ def test_la_prueba_tiene_16_y_14_y_la_regla():
     mal[0] = mal[1] = mal[2] = None
     v = rf.evaluar_tema(mal)
     assert not v["criterios"]["RP1"]["se_cumple"] and v["criterios"]["RP3"]["valor"] == 27
+
+
+def test_aparte_no_toca_la_v5_y_usa_las_definiciones_de_la_v6():
+    import hashlib
+    # la versión 5 tal como pasó REFORMULACION_2025 (huella tomada el 19/10, antes de la llamada aparte)
+    assert hashlib.sha256(rf.SISTEMA_V5.encode("utf-8")).hexdigest()[:16] == HUELLA_V5
+    defs = rf.SISTEMA_V6.split("di también su \"tema\":\n")[1].split("Si el alcance es \"voto\"")[0]
+    assert defs in rf.SISTEMA_TEMA and "politica|ciudad" in rf.SISTEMA_TEMA
+
+
+def test_aparte_catalogo_por_lista_y_nueva_por_llamada():
+    llamadas = []
+
+    def llamar(m, s, u, t):
+        llamadas.append(s)
+        return json.dumps({"tema": "politica"})
+    ruta = Path(__file__).resolve().parent / "_cache_tema_aparte.json"
+    cache = rf.e9.Cache(ruta)
+    try:
+        cat = rf.tema_de({"alcance": "catalogo", "codigo": "AG1", "reformulada": ""}, "p", llamar, cache, "simulado")
+        ciu = rf.tema_de({"alcance": "catalogo", "codigo": "SP1", "reformulada": ""}, "p", llamar, cache, "simulado")
+        assert cat["tema"] == "politica" and ciu["tema"] == "ciudad" and not llamadas
+        nue = rf.tema_de({"alcance": "nueva", "codigo": None, "reformulada": "¿x?"}, "¿confían en la Fiscalía?", llamar,
+                         cache, "simulado")
+        assert nue["tema"] == "politica" and llamadas == [rf.SISTEMA_TEMA]
+        assert rf.tema_de({"alcance": "fuera", "codigo": None, "reformulada": ""}, "p", llamar, cache, "x")["tema"] is None
+    finally:
+        ruta.unlink(missing_ok=True)
+
+
+def test_aparte_son_30_nuevas():
+    p = [x for x, _ in rf.PRUEBA_TEMA_APARTE]
+    viejas = {x for x, _ in rf.PRUEBA_TEMA} | {x[0] for x in rf.PRUEBA_VOTO_V3 + rf.PRUEBA_MATIZ + rf.PRUEBA_GOBIERNO_2025}
+    assert len(p) == len(set(p)) == 30 and not set(p) & viejas
+    assert sum(t == "politica" for _, t in rf.PRUEBA_TEMA_APARTE) == 16
 
 
 if __name__ == "__main__":

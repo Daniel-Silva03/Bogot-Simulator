@@ -702,6 +702,129 @@ def validar_tema(simulado: bool = False) -> int:
     return 0
 
 
+#: REFORMULACION_TEMA_APARTE (19/10): el tema en una llamada aparte, después de la versión 5, que queda intacta. Las del
+#: catálogo no llaman: su tema sale de esta lista (las de gobierno del catálogo 2022-2025).
+TEMA_POLITICO_CATALOGO = frozenset({"AG1", "GG7", "CC2", "PE_EL1", "GG3_GALAN", "CC5A_GALAN", "MICE1_GALAN", "MICE2_GALAN",
+                                    "MICE3_GALAN"})
+SISTEMA_TEMA = (
+    "Ayudas a una página que simula cómo respondería la población de Bogotá preguntas de opinión. Te doy una pregunta, como la "
+    "escribió una persona y como quedó reformulada. Di si su tema es político o de ciudad:\n"
+    + SISTEMA_V6.split("di también su \"tema\":\n")[1].split("Si el alcance es \"voto\"")[0]
+    + "Responde SOLO con un JSON, sin texto alrededor: {\"tema\": \"politica|ciudad\"}"
+)
+
+
+def clasificar_tema(pregunta: str, reformulada: str, llamar: Llamar, cache: e9.Cache, modelo: str = MODELO) -> Optional[str]:
+    """El tema de una pregunta nueva, o None si la respuesta no es válida."""
+    u = f"PREGUNTA DE LA PERSONA:\n{pregunta.strip()}\n\nREFORMULADA:\n{reformulada.strip()}"
+    texto, _ = e9.pedir(llamar, cache, modelo, TEMPERATURA, SISTEMA_TEMA, u, 0)
+    d = e9._json_de(texto)
+    t = str(d.get("tema") or "").strip().lower() if isinstance(d, dict) else ""
+    return t if t in TEMAS else None
+
+
+def tema_de(r: Optional[dict], pregunta: str, llamar: Llamar, cache: e9.Cache, modelo: str = MODELO) -> Optional[dict]:
+    """La respuesta de la versión 5 con su tema: el del catálogo por la lista, el de una nueva por la llamada aparte.
+    «voto» y «fuera» quedan sin tema. Una nueva cuyo tema no se pudo leer devuelve None."""
+    if r is None:
+        return None
+    if r["alcance"] == "catalogo":
+        return {**r, "tema": "politica" if r["codigo"] in TEMA_POLITICO_CATALOGO else "ciudad"}
+    if r["alcance"] == "nueva":
+        t = clasificar_tema(pregunta, r["reformulada"], llamar, cache, modelo)
+        return {**r, "tema": t} if t else None
+    return {**r, "tema": None}
+
+
+#: REFORMULACION_TEMA_APARTE §3: 30 preguntas que no se usaron antes. A1-A16 políticas, A17-A30 de ciudad.
+PRUEBA_TEMA_APARTE = tuple((p, "politica") for p in (
+    "¿Qué tan bien está haciendo su trabajo el alcalde?",
+    "¿Ha aumentado la corrupción en Bogotá en el último año?",
+    "¿La gente tiene buena opinión del Concejo?",
+    "¿La administración de Galán es transparente?",
+    "¿Confían los bogotanos en la Fiscalía?",
+    "¿Qué tanto confía la gente en el Ejército?",
+    "¿Cómo califican el trabajo de la Secretaría de Seguridad?",
+    "¿Qué opinan del gobierno de Gustavo Petro?",
+    "¿Creen que los congresistas representan bien a los ciudadanos?",
+    "¿Cómo califican la gestión de Galán frente al racionamiento de agua?",
+    "¿Confían los bogotanos en la Procuraduría?",
+    "¿Creen que las elecciones en Colombia son limpias?",
+    "¿Qué tan satisfechos están con la gestión de su alcalde local?",
+    "¿Cree la gente que el país va por buen camino?",
+    "¿Qué imagen tiene la gente de la Contraloría?",
+    "¿Les gustaría que el próximo alcalde mantenga el plan de seguridad de Galán?",
+)) + tuple((p, "ciudad") for p in (
+    "¿Qué tan satisfechos están con la recolección de basuras?",
+    "¿Qué tan seguros se sienten en Bogotá?",
+    "¿Están contentos con la oferta cultural de la ciudad?",
+    "¿Estarían de acuerdo con peatonalizar la carrera Séptima?",
+    "¿Apoyarían una tarifa más baja de TransMilenio para estudiantes?",
+    "¿Qué tan satisfechos están con los hospitales públicos?",
+    "¿A la gente le cuesta llegar a fin de mes?",
+    "¿Apoyarían construir edificios más altos en su barrio?",
+    "¿Qué tan limpios creen que están los ríos de Bogotá?",
+    "¿A la gente le gusta vivir en Bogotá?",
+    "¿Apoyarían que cierren más vías los domingos para la ciclovía?",
+    "¿Qué tan satisfechos están con los jardines infantiles?",
+    "¿Estarían de acuerdo con cobrar peajes a la salida de Bogotá?",
+    "¿Qué opinan del ruido de las fiestas en los barrios?",
+))
+
+
+def validar_tema_aparte(simulado: bool = False) -> int:
+    """REFORMULACION_TEMA_APARTE: la versión 5 y, después, el tema, en las 30 de `PRUEBA_TEMA_APARTE`."""
+    from src.consulta import motor as mo
+    catalogo = cargar_catalogo(CATALOGO_2025)
+    notas = notas_gobierno(catalogo)
+    salida = SALIDA / ("tema_aparte_simulado" if simulado else "tema_aparte")
+    cache = e9.Cache(salida / "cache.json")
+    if simulado:
+        temas = dict(PRUEBA_TEMA_APARTE)
+
+        def llamar(modelo, sistema, usuario, temp):
+            preg = usuario.split("\n")[1]
+            if sistema == SISTEMA_TEMA:
+                return json.dumps({"tema": temas.get(preg, "ciudad")})
+            return json.dumps({"alcance": "nueva", "codigo": None, "reformulada": preg, "tipo": None, "candidatos": [],
+                               "escala": ["1", "2", "3", "4", "5"], "razon": "simulado"})
+        modelo = e9.MODELO_SIMULADO
+    else:
+        llamar, modelo = e9.cliente_real(), mo.MODELO_PAGINA
+    v5, respuestas = [], []
+    try:
+        for p, _ in PRUEBA_TEMA_APARTE:
+            if not simulado and e9.gasto_registrado(cache)["costo_usd"] >= 0.3:
+                raise e9.Experimento9Error("Se llegó al tope de USD 0,30.")
+            r = reformular_v2(p, catalogo, llamar, cache, modelo, SISTEMA_V5, notas)[0]
+            v5.append(r)
+            respuestas.append(tema_de(r, p, llamar, cache, modelo))
+    except e9.Experimento9Error as e:
+        print(f"ERROR: {e}")
+        return 1
+    t = evaluar_tema(respuestas, PRUEBA_TEMA_APARTE)
+    crit = {k.replace("RP", "RA"): c for k, c in t["criterios"].items()}
+    pasa = all(c["se_cumple"] for c in crit.values())
+    for i, ((p, te), r0, r) in enumerate(zip(PRUEBA_TEMA_APARTE, v5, respuestas), 1):
+        got = None if r is None else (r["alcance"], r.get("codigo"), r.get("tema"))
+        print(f"A{i} {p[:66]:66} | esperado {te} | obtuvo {got}{'' if r and r.get('tema') == te else '   <-- distinto'}"
+              f"{'' if r0 else ' (v5 inválida)'}")
+    for k, c in crit.items():
+        print(f"  {k} {'se cumple' if c['se_cumple'] else 'NO se cumple'} — {c['umbral']} (valor {c['valor']})")
+    pol_cat = sum(bool(r) and r["alcance"] == "catalogo" and r["tema"] == "politica" for r in respuestas[:16])
+    pred = {"PA1": pasa,
+            "PA2": all(i in (16, 20, 21, 24, 27, 29) for i, ((_, te), r) in enumerate(zip(PRUEBA_TEMA_APARTE, respuestas), 1)
+                       if not (r and r.get("tema") == te)),
+            "PA3": pol_cat >= 3}
+    g = e9.gasto_registrado(cache)["costo_usd"]
+    print(f"pasa: {pasa} | políticas al catálogo: {pol_cat} | predicciones: {pred} | gasto USD {g:.4f}")
+    salida.mkdir(parents=True, exist_ok=True)
+    (salida / "resultado.json").write_text(json.dumps({"v5": v5, "respuestas": respuestas, "criterios": crit, "pasa": pasa,
+                                                      "predicciones": pred, "gasto": g}, ensure_ascii=False, indent=2),
+                                           encoding="utf-8")
+    return 0
+
+
 def modelo_simulado(catalogo: dict[str, dict]) -> Llamar:
     """Contesta según la tabla de §3: sirve para probar el circuito, no para medir."""
     esperado = {p: (a, c) for p, a, c in PRUEBA}
@@ -721,7 +844,10 @@ def main(argv=None, entrada=input) -> int:
     ap.add_argument("--validar", action="store_true", help="las 24 preguntas de §3")
     ap.add_argument("--simulado", action="store_true", help="modelo simulado, sin gasto")
     ap.add_argument("--validar-tema", action="store_true", help="REFORMULACION_TEMA: la versión 6 (93 preguntas)")
+    ap.add_argument("--validar-tema-aparte", action="store_true", help="REFORMULACION_TEMA_APARTE: el tema en otra llamada")
     args = ap.parse_args(argv)
+    if args.validar_tema_aparte:
+        return validar_tema_aparte(args.simulado)
     if args.validar_tema:
         return validar_tema(args.simulado)
     if not args.validar and not args.pregunta:
