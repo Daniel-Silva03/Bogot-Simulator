@@ -534,7 +534,13 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       - La conservadora llega al 69,6 % (84 % en total) y queda en la página como «rango orientativo provisional»: ±10 en
         gobierno, ±7 en lo demás.
       - 2025 sigue sin cubrirse (58 %): fue movido sin que cambiara el gobierno.
-    - **Siguiente: la Fase 2,** el registro de encuestas públicas de Galán con ficha técnica.
+    - ~~**Siguiente: la Fase 2,** el registro de encuestas públicas de Galán con ficha técnica.~~
+    - **Fase 2 hecha (USD 0, `REGISTRO_ENCUESTAS_FASE2.md`):** 19 mediciones de Galán en 5 series que no se mezclan
+      (`config/mediciones_publicadas.csv`).
+      - Cada dato dice de dónde salió; lo que falta queda «pendiente».
+      - La prensa casi no trae la ficha técnica; la de Guarumo se completó desde su informe (664 en Bogotá).
+      - Las series no se cruzan en el tiempo: no se agrega nada todavía.
+    - **Siguiente: la Fase 3,** el experimento de contexto numérico estructurado para los agentes (USD 0,50-1,00).
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
