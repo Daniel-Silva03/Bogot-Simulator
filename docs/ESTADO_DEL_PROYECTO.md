@@ -488,6 +488,9 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       acierta el tema en 30 de 30 (16 políticas y 14 de ciudad), pero el párrafo nuevo movió un caso de alcance: «caminando
       por su barrio» dejó de ir a VS8 (R9). La página sigue en la versión 5. Lo siguiente sería marcar el tema en una llamada
       aparte, sin tocar la 5.
+    - **El tema en una llamada aparte: pasa (19/10, USD 0,025, `REFORMULACION_TEMA_APARTE_RESULTS.md`).** Con la versión 5
+      intacta, el tema de las del catálogo sale de una lista fija y el de las nuevas, de una llamada corta. 30 de 30 en preguntas
+      nuevas. Es la primera validación de la condición 1 de D22. Falta conectarlo al motor (con su DI-CO) y la segunda validación.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
