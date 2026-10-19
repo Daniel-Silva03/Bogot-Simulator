@@ -504,6 +504,12 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     - **Encendidos de todos modos, con el error a la vista (19/10, DI-CO42, `PAGINA_CONSULTA.md` §5.33).** Decisión de Daniel:
       los agentes responden con el modelo real, como experimento declarado, con «se equivocó entre 10 y 12 puntos, y repetir el
       último dato medido acertó más» junto a la cifra. Es una excepción a D22 (enmienda), no una validación.
+  - **D24: el plan de mejoras del predictor, por fases (19/10, `PLAN_MEJORAS_PREDICTOR_BOGOTA.md`).**
+    - **Fase A hecha (USD 0, `BENCHMARK_FASE_A.md`):** todas las pruebas en un benchmark único.
+      - Repetir el dato del año anterior en la EPC se equivoca 4,3; en gobierno e instituciones, 7,0.
+      - En pregunta ya medida, la persistencia les gana a los agentes.
+      - Los agentes ganan solo con la pregunta escondida en la misma ola (7,4 contra 14,3).
+    - **Siguiente: la Fase B, el selector de métodos,** con su pre-registro.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

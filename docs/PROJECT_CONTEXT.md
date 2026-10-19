@@ -1837,6 +1837,28 @@ agentes («quiero que las preguntas de Galán solo respondan los agentes»). Se 
 muestra al lado»). Se le advirtió antes que, en la imagen de Galán, repetir el dato de 2025 acertó más que los agentes (0,5 contra
 1,4 puntos, `GALAN_ACTUAL_RESULTS.md`). Implementación: DI-CO41.
 
+### D24 — Se sigue el plan de mejoras del predictor, por fases
+
+**Fecha:** 19 de octubre de 2026
+**Decisión:** el trabajo para acercar el simulador a un predictor sigue `docs/PLAN_MEJORAS_PREDICTOR_BOGOTA.md`, fase por fase:
+- **A:** benchmark único.
+- **B:** selector de métodos.
+- **C:** modelo conjunto de la EPC.
+- **D:** actualización temporal.
+- **E:** experimentos con agentes.
+- **F:** incertidumbre y registro.
+
+Cada método compite con repetir el último dato comparable, en datos reservados, y cada fase se le muestra a Daniel antes de pasar
+a la siguiente.
+
+**Justificación:** las pruebas del 19/10 mostraron que repetir el último dato les gana a los agentes cuando existe, y que ni la
+instrucción, ni la calibración, ni el resumen de noticias los corrigieron. El plan propone aprender cuándo merece confianza cada
+método antes de hacer más sofisticados a los agentes.
+**Origen:** el plan lo escribió otra IA a partir de `docs/PROMPT_IDEAS_PREDICTOR.md`, y Daniel pidió seguirlo.
+**Alternativas consideradas:** seguir probando variantes de agentes una por una (lo que se hizo hasta el 19/10).
+**Evidencia:** `docs/BENCHMARK_FASE_A.md`.
+**Estado:** **APPROVED** (Daniel, en conversación, 19 de octubre de 2026: «sigue el siguiente .md»). Fase A hecha el mismo día.
+
 ---
 
 # 40. DECISIONES ABIERTAS
