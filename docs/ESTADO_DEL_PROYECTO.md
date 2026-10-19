@@ -480,6 +480,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       importante: sin instrucción, con solo la encuesta nacional de Guarumo, los agentes dan a Cepeda 50,2 en Bogotá (real 53,6):
       corrigen la encuesta del país (46,1) hacia la ciudad y aciertan el ganador. Le ganan a copiar la encuesta, pero apenas a decir
       50 % (3,4 contra 3,6).
+    - **Galán hoy: los agentes no le ganan a la EPC 2025 (19/10, USD 0,050, `GALAN_ACTUAL_RESULTS.md`).** Contra la imagen de
+      Galán en CB de septiembre de 2026 (45,5, derivada de agosto 49,0 menos 3,5): la mezcla de perfiles se equivoca 6,9; el perfil
+      completo con aviso de que su opinión es de 2025, 2,6, y le gana a repetir CB de agosto (3,5). El perfil completo solo, 1,4.
+      Pero repetir la EPC 2025 (45,0) se equivoca 0,5: la imagen de Galán casi no se ha movido y el agente no le añade al dato.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
