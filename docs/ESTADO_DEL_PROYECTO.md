@@ -540,7 +540,12 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       - Cada dato dice de dónde salió; lo que falta queda «pendiente».
       - La prensa casi no trae la ficha técnica; la de Guarumo se completó desde su informe (664 en Bogotá).
       - Las series no se cruzan en el tiempo: no se agrega nada todavía.
-    - **Siguiente: la Fase 3,** el experimento de contexto numérico estructurado para los agentes (USD 0,50-1,00).
+    - ~~**Siguiente: la Fase 3,** el experimento de contexto numérico estructurado para los agentes (USD 0,50-1,00).~~
+    - **Fase 3 hecha (USD 0,183, `CONTEXTO_FASE3_RESULTS.md`):** no se conserva.
+      - En 9 preguntas de gobierno, los agentes con contexto (el dato de la ciudad y la serie de Invamer) se equivocan 7,6,
+        contra 8,0 sin él y 9,0 de la persistencia. Pero la ventaja depende de uno o dos casos.
+      - El caso que decide es la gestión de Galán en 2025: los agentes dijeron 29 (real 26,4) y la persistencia, 42.
+      - Línea cerrada, como dice el plan.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
