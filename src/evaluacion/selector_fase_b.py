@@ -4,7 +4,7 @@ Persistencia, agentes y la combinación P + λ·(G − P), con λ elegido en un 
 
 Uso:
     python src/evaluacion/selector_fase_b.py --simulado    # sin gasto: prueba el circuito
-    python src/evaluacion/selector_fase_b.py               # con el modelo real (tope USD 2)
+    python src/evaluacion/selector_fase_b.py               # con el modelo real (tope USD 1)
 
 DECISIONES DE IMPLEMENTACIÓN
 ============================
@@ -35,7 +35,7 @@ sys.path.insert(0, str(RAIZ))
 from src.experiments import experimento9 as e9            # noqa: E402
 
 SALIDA = RAIZ / "data" / "processed" / "benchmark"
-TOPE_USD = 2.0
+TOPE_USD = 1.0                                                   # enmienda 1 del pre-registro: Daniel pidió tope de USD 1
 TANDA = 20
 PARES = (("P1", 2023, 2024), ("P2", 2024, 2025))
 REJILLA = np.round(np.arange(0, 1.0001, 0.05), 2)

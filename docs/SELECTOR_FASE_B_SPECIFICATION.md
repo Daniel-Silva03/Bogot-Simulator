@@ -92,3 +92,8 @@ medido se muestra el dato, y los agentes quedan para lo que no tiene dato.
 - **Al modelo** van los perfiles de la EPC 2023 y 2024 (pública, anónima), las preguntas y la nota.
 - **Código:** `src/evaluacion/selector_fase_b.py`, con su prueba. Resultados en `SELECTOR_FASE_B_RESULTS.md`; las cifras por
   pregunta, en `data/processed/benchmark/selector_fase_b.csv`.
+
+## Enmienda 1 (19/10/2026, antes de llamar al modelo): tope de USD 1
+
+Daniel pidió correrla con tope de USD 1, en vez de 2. Nada más cambia. Si se llega al tope antes de terminar, la corrida se
+detiene, lo respondido queda en la caché y se reporta como incompleta: no se evalúa con una parte de las preguntas.
