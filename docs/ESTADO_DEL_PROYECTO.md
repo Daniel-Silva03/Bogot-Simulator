@@ -525,6 +525,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       - Los agentes, 11 en lo político (±19,5) y 23 en ciudad.
       - Los intervalos hechos con el pasado no cubrieron 2025 (38 % en gobierno): fue un año movido.
       - Registro de mediciones publicadas de Galán en `config/mediciones_publicadas.csv`, sin mostrar (DI-CO41).
+  - **Plan v3 (`PLAN_SIGUIENTE_PREDICTOR_BOGOTA_V3.md`), que respeta las decisiones de producto.**
+    - **Fase 0 hecha (19/10, DI-CO44):** los agentes se presentan como «estimación exploratoria», con la fecha, los perfiles,
+      el error histórico y el rango orientativo, sin prometer cobertura. Sin la medición anterior en Galán, por decisión de
+      Daniel.
+    - **Siguiente: la Fase 1,** los intervalos con la EPC 2014-2025, año por año.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.

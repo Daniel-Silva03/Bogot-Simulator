@@ -477,6 +477,7 @@ def test_el_dato_del_catalogo_dice_que_tan_viejo_es():
     """DI-CO43."""
     r = M.responder_catalogo("GG3_GALAN")
     assert "Como cifra de hoy: el dato más reciente es de 2025" in r["como_hoy"] and "gobierno e instituciones" in r["como_hoy"]
+    assert "8 de cada 10" not in r["como_hoy"] and "no una garantía" in r["como_hoy"]                          # DI-CO44
     html = (Path(__file__).resolve().parents[1] / "src" / "consulta" / "pagina.html").read_text(encoding="utf-8")
     assert "${esc(r.como_hoy)}" in html and "tema: 'ciudad'" in html and "tema: 'politica'" in html
 

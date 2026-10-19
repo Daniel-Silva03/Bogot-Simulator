@@ -938,6 +938,24 @@ políticas del catálogo (rumbo, corrupción, Concejo, votar) siguen mostrando s
   - una pregunta política con agentes muestra el error de 11 puntos y el rango nuevo;
   - sin errores de JavaScript.
 
+## 5.35 Cómo se dice qué es cada cifra (19/10/2026, plan v3, Fase 0, DI-CO44, DI-AG-P8)
+
+**Qué cambió en el resultado de los agentes:**
+- **La etiqueta:** «Estimación exploratoria de los agentes · no es una encuesta».
+- **El título** dice «En la simulación, la mayoría (no) respondería…».
+- **El rango** es «orientativo»: el texto aclara que no es un margen de error ni garantiza que la cifra real caiga dentro.
+- **El error** va como «Error histórico», con el número de pruebas y la aclaración de que no garantiza la precisión.
+- **Al final:** «Simulado el [fecha], con perfiles de la EPC 2025».
+
+**El dato del catálogo:** dice su error como promedio pasado (con el número de casos), sin «8 de cada 10».
+
+**Lo que no se hizo:** mostrar la medición anterior junto a los agentes en las preguntas de Galán (plan v3 §4.3). Daniel decidió
+dejarlo sin ella.
+
+**Verificado:**
+- `test_consulta.py` (35) y `test_agentes_pagina.py` (3);
+- en Edge sin ventana, con el servidor simulado, la pregunta de Galán en celular, sin errores de JavaScript.
+
 ## 6. Límites que la página dice
 
 No predice ni reemplaza una encuesta; ~~opina como Bogotá en 2023; unas 80 personas por

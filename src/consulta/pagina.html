@@ -938,17 +938,19 @@ function htmlAgentes(a){
     const alto = `respondería «${esc(a.escala[3].toLowerCase())}» o «${esc(a.escala[4].toLowerCase())}»`;
     /* El título dice la conclusión con las palabras de la escala, no «probablemente sí / no» (a pedido de Daniel, 19/10) */
     const op = `«${esc(a.escala[3].toLowerCase())}» o «${esc(a.escala[4].toLowerCase())}»`;
-    const titulo = {sí: `La mayoría respondería ${op}`, no: `La mayoría no respondería ${op}`,
-                    dividida: `No se sabe si la mayoría respondería ${op}`}[a.llamada] || esc(a.titulo);
+    /* DI-CO44: es lo que dice la simulación, no lo que piensa Bogotá */
+    const titulo = {sí: `En la simulación, la mayoría respondería ${op}`, no: `En la simulación, la mayoría no respondería ${op}`,
+                    dividida: `En la simulación, no se sabe si la mayoría respondería ${op}`}[a.llamada] || esc(a.titulo);
     const de = Math.round(a.rango[0]), ha = Math.round(a.rango[1]), div = a.llamada === 'dividida';
     const barras = Object.entries(a.grupos).map(([g, fs]) => `<div class="grupo"><h4>${esc(D.grupos[g])}</h4>${fs.map(f =>
       `<div class="barra-g"><span>${esc(f.grupo)}</span><span class="pista"><i style="left:0;width:${Math.round(100*f.alto)}%;background:var(--ceja)"></i></span><span class="v">${Math.round(100*f.alto)} % <span class="nota">(${f.n})</span></span></div>`).join('')}</div>`).join('');
     return `<div class="estimacion e-${a.llamada}">
-        <div class="est-cab"><span class="ceja">Experimental · con agentes · no es una medición</span>
+        <div class="est-cab"><span class="ceja">Estimación exploratoria de los agentes · no es una encuesta</span>
           <p class="est-titulo">${titulo}</p>
-          ${div ? `<p class="lead-t"><span class="mono">Entre ${de} % y ${ha} %</span> ${alto}: el rango cruza la mitad.</p>`
-                : `<p class="cifra-grande">${Math.round(a.porcentaje)} %</p><p class="lead-t">${alto} · <span class="mono">entre ${de} % y ${ha} %</span></p>`}
-          ${a.error_medido ? `<p class="razon"><b>Error medido:</b> ${esc(a.error_medido)}</p>` : ''}</div>
+          ${div ? `<p class="lead-t">Rango orientativo: <span class="mono">entre ${de} % y ${ha} %</span> ${alto}; cruza la mitad.</p>`
+                : `<p class="cifra-grande">${Math.round(a.porcentaje)} %</p><p class="lead-t">${alto} · rango orientativo <span class="mono">${de}–${ha} %</span></p>`}
+          ${a.error_medido ? `<p class="razon"><b>Error histórico:</b> ${esc(a.error_medido)}</p>` : ''}
+          ${a.fecha_simulacion ? `<p class="nota">Simulado el ${esc(a.fecha_simulacion)}, con perfiles de la ${esc(a.perfiles)}.</p>` : ''}</div>
         <div class="est-rango">
           <div class="rango-est" role="img" aria-label="Rango estimado con agentes entre ${de} y ${ha} por ciento; la línea marca el 50 %">
             <i style="left:${a.rango[0]}%;width:${a.rango[1]-a.rango[0]}%"></i><em style="left:50%"></em><b style="left:${a.porcentaje}%"></b></div>

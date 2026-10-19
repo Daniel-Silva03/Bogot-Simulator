@@ -342,6 +342,12 @@ DI-CO43. **La incertidumbre, con los errores reales** (19/10, Fase F, `INCERTIDU
     (`como_hoy`), y los agentes llevan el error y el rango de su tema (`agentes.rango`, `agentes.error_medido`). Todo sale de
     `config/incertidumbre.json`, que arma `src/evaluacion/incertidumbre_fase_f.py`.
 
+DI-CO44. **Cómo se dice qué es cada cifra** (19/10, plan v3, Fase 0). Hecho: los intervalos del pasado no cubrieron 2025.
+    Decisión: los agentes se presentan como «estimación exploratoria», con la fecha de la simulación, la encuesta de los
+    perfiles y su error histórico, y el rango como orientativo (DI-AG-P8); el dato del catálogo dice su error como promedio
+    pasado, sin «8 de cada 10». Lo que no se hizo, por decisión de Daniel: mostrar junto a los agentes la medición anterior
+    en las preguntas de Galán (plan v3 §4.3).
+
 DI-CO39. **El catálogo también es candidata de la estimación** (14/10, `NIVEL_ACUERDO_CATALOGO_RESULTS.md`). Hecho: sin
     una pregunta casi igual entre las 139 candidatas, la estimación se quedaba cerca del 50 %; en la confianza en las
     instituciones (reales de 10 % a 19 %) daba unos 50 %. Con las 84 preguntas del catálogo como candidatas, la prueba
@@ -603,8 +609,9 @@ def como_hoy(codigo: str, anios: list[int], hoy: int = 2026) -> Optional[str]:
     tema = "de gobierno e instituciones" if codigo in rf.TEMA_POLITICO_CATALOGO else "de este tipo"
     hace = "un año" if cuantos == 1 else f"{cuantos} años"
     return (f"Como cifra de hoy: el dato más reciente es de {ultimo}, de hace {hace}. En la EPC, repetir el dato del año "
-            f"anterior se equivocó en promedio {k['error_medio']:.0f} puntos en preguntas {tema}, y en 8 de cada 10 casos, "
-            f"menos de {k['p80']:.0f}." + (" Con más de un año, puede ser más." if cuantos > 1 else ""))
+            f"anterior se equivocó en promedio {k['error_medio']:.0f} puntos en preguntas {tema} ({k['n']} casos entre "
+            "2022 y 2025). Es un promedio pasado, no una garantía: en un año movido puede ser bastante más."
+            + (" Con más de un año, el error suele crecer." if cuantos > 1 else ""))                  # DI-CO44
 
 
 def vista(f: dict) -> dict:

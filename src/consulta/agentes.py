@@ -32,6 +32,10 @@ DI-AG-P6. **El error, a la vista** (19/10/2026). Hecho: en las dos pruebas con p
     (DI-AG-P7). Lo de arriba no se borra: es lo que se decidió con lo que se sabía.
 DI-AG-P7. **Error y rango por tema** (Fase F). El rango es el percentil 80 del error de su clase; si la clase tiene pocos casos,
     su error medio. Sin el archivo, quedan los valores de antes.
+DI-AG-P8. **Cómo se dice qué es la cifra** (plan v3, Fase 0, 19/10/2026). Hecho: los intervalos del pasado no cubrieron 2025
+    (`INCERTIDUMBRE_FASE_F.md`). Decisión: la cifra se llama «estimación exploratoria», lleva la fecha de la simulación y la
+    encuesta de los perfiles, el error histórico va como «error histórico» (no «margen») y el rango se dice orientativo, sin
+    prometer que cubra.
 """
 
 from __future__ import annotations
@@ -55,8 +59,10 @@ INCERTIDUMBRE = RAIZ / "config" / "incertidumbre.json"
 MODELO = "openai/gpt-6-luna"
 TEMPERATURA = 1.0
 CACHE = RAIZ / "data" / "processed" / "consulta" / "cache_agentes.json"
-TEXTO = ("Estimado con {n} bogotanos reales que respondieron la Encuesta de Percepción Ciudadana 2025: un modelo de lenguaje "
-         "responde como cada uno, según sus otras respuestas. Es una suposición, no una medición; el rango es de ±{h:.0f}.")
+#: DI-AG-P8 (plan v3, Fase 0): qué es la cifra, sin llamar «margen» al rango ni prometer cobertura
+TEXTO = ("Simulación con {n} perfiles de bogotanos reales de la Encuesta de Percepción Ciudadana 2025: un modelo de lenguaje "
+         "responde como cada uno, según sus otras respuestas. No es una encuesta nueva a residentes de Bogotá. El rango de "
+         "±{h:.0f} es orientativo: no es un margen de error ni garantiza que la cifra real caiga dentro.")
 #: DI-AG-P6 (lo de antes de la Fase F; queda como respaldo si falta `config/incertidumbre.json`)
 ERROR_MEDIDO = ("En las pruebas con preguntas políticas que no se habían usado, este método se equivocó en promedio entre 10 y "
                 "12 puntos, y repetir el último dato medido acertó más. Está a prueba: no lo leas como un pronóstico.")
@@ -82,10 +88,11 @@ def error_medido(tema: str = "politica") -> str:
         return ERROR_MEDIDO
     m = f"{c['error_medio']:.0f}"
     if tema == "politica":
-        return (f"En {c['n']} preguntas políticas que no se habían usado, este método se equivocó en promedio {m} puntos, y "
-                "cuando ya había un dato medido, repetirlo acertó más. Está a prueba: no lo leas como un pronóstico.")
-    return (f"En {c['n']} preguntas de ciudad que no se habían usado (sobre el metro), este método se equivocó en promedio {m} "
-            "puntos. Fuera de lo político es aún menos fiable: tómalo solo como una idea.")
+        return (f"en {c['n']} preguntas políticas que no se habían usado, este método se equivocó en promedio {m} puntos, y "
+                "cuando ya había un dato medido, repetirlo acertó más. Ese desempeño pasado no garantiza la precisión de esta "
+                "estimación.")
+    return (f"en {c['n']} preguntas de ciudad que no se habían usado (sobre el metro), este método se equivocó en promedio {m} "
+            "puntos. Fuera de lo político es aún menos fiable, y ese desempeño pasado no garantiza nada para esta pregunta.")
 
 
 class Agentes:
@@ -156,6 +163,7 @@ class Agentes:
                 "titulo": mo.LLAMADA_TITULO[llamada], "distribucion": [round(x, 4) for x in dist], "grupos": grupos,
                 "respondieron": int(ok.sum()), "agentes": len(self.perfiles), "segundos": round(time.time() - t0, 1),
                 "texto": TEXTO.format(n=int(ok.sum()), h=h), "error_medido": error_medido(tema), "tema": tema,
+                "fecha_simulacion": time.strftime("%d/%m/%Y"), "perfiles": "EPC 2025",                   # DI-AG-P8
                 "sin_mapa": ("Con 200 agentes quedan unos 11 por localidad: no alcanza para un mapa."),
                 "experimental": True}
 

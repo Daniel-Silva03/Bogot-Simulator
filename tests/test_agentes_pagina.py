@@ -37,7 +37,7 @@ def test_el_panel_y_la_estimacion_simulada():
     r = a.estimar("¿Confía usted en la Policía?", ESC, ag.cliente_simulado(), c, e9.MODELO_SIMULADO)
     assert r["tipo"] == "agentes" and r["respondieron"] == 200 and abs(sum(r["distribucion"]) - 1) < 1e-3
     assert r["rango"][1] - r["rango"][0] <= 2 * ag.rango("politica") + 0.1 and set(r["grupos"]) == {"estrato", "edad", "sexo"}
-    assert sum(g["n"] for g in r["grupos"]["sexo"]) == 200 and "no una medición" in r["texto"]
+    assert sum(g["n"] for g in r["grupos"]["sexo"]) == 200 and "No es una encuesta nueva" in r["texto"]
 
 
 def test_encendidos_con_el_error_a_la_vista():
@@ -51,8 +51,10 @@ def test_encendidos_con_el_error_a_la_vista():
     assert abs((r["rango"][1] - r["rango"][0]) / 2 - ag.rango("politica")) < 0.2 or r["rango"][0] == 0 or r["rango"][1] == 100
     assert ag.rango("ciudad") > ag.rango("politica") and "metro" in ag.error_medido("ciudad")
     html = (Path(__file__).resolve().parents[1] / "src" / "consulta" / "pagina.html").read_text(encoding="utf-8")
-    assert "<b>Error medido:</b> ${esc(a.error_medido)}" in html and "Experimental · con agentes" in html
-    assert "La mayoría no respondería ${op}" in html and "<p class=\"est-titulo\">${titulo}</p>" in html
+    assert "<b>Error histórico:</b> ${esc(a.error_medido)}" in html and "Estimación exploratoria de los agentes" in html
+    assert "no garantiza" in r["error_medido"] and "orientativo" in r["texto"] and "margen" in r["texto"]       # DI-AG-P8
+    assert r["perfiles"] == "EPC 2025" and len(r["fecha_simulacion"]) == 10
+    assert "En la simulación, la mayoría no respondería ${op}" in html and "<p class=\"est-titulo\">${titulo}</p>" in html
 
 
 def test_la_decision_esta_escrita():
