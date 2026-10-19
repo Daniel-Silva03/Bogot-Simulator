@@ -509,7 +509,12 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       - Repetir el dato del año anterior en la EPC se equivoca 4,3; en gobierno e instituciones, 7,0.
       - En pregunta ya medida, la persistencia les gana a los agentes.
       - Los agentes ganan solo con la pregunta escondida en la misma ola (7,4 contra 14,3).
-    - **Siguiente: la Fase B, el selector de métodos,** con su pre-registro.
+    - ~~**Siguiente: la Fase B, el selector de métodos,** con su pre-registro.~~
+    - **Fase B hecha (USD 0,686, `SELECTOR_FASE_B_RESULTS.md`):** no pasa.
+      - En 81 preguntas de la EPC, con años reservados, el λ aprendido para mover el dato medido hacia los agentes es 0.
+      - Repetir el dato se equivoca 5,2; los agentes, 6,7.
+      - El λ por dominio aprendió una regla falsa en gobierno (0,95) que empeoró 2025.
+      - La regla que respalda: con dato medido, se muestra el dato.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
