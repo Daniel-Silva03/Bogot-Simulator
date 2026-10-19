@@ -47,6 +47,8 @@ MODELO = "openai/gpt-6-luna"
 TEMPERATURA = 1.0
 TOPE_USD = 1.0
 ESCONDIDAS = ("CON_4", "CON_5", "CON_7", "GOB_7", "MOV_6", "FIN_3")
+#: ACTUALIDAD_EPC: sexo (1=hombre), edad y estrato de 2024, con los nombres de 2025 (revisado en las etiquetas del .dta)
+ALIAS_DEMOGRAFIA = {2024: {"DMO_1": "SEXO", "DMO_3_1": "CS2", "DMO_4_1": "CS2_1"}}
 PAGINA_ERROR = 12.2                                          # §2: el error de la página en estas 6
 LOCALIDADES = {1: "Usaquén", 2: "Chapinero", 3: "Santa Fe", 4: "San Cristóbal", 5: "Usme", 6: "Tunjuelito", 7: "Bosa",
                8: "Kennedy", 9: "Fontibón", 10: "Engativá", 11: "Suba", 12: "Barrios Unidos", 13: "Teusaquillo",
@@ -106,19 +108,27 @@ def a_100(c: float, validos: list[int]) -> float:
 
 def datos_2025():
     """(base con peso y localidad, datos con columnas en mayúsculas, el perfil por pregunta: [(texto, columna, ficha)])."""
+    return datos(2025)
+
+
+def datos(anio: int = 2025):
+    """Lo mismo que `datos_2025` para la ola de otro año (ACTUALIDAD_EPC: los agentes de 2024)."""
     from src.population import armonizar_epc as ae
     from src.population import poblacion_epc_olas as po
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        base, ola = ae.cargar_ola(2025)
+        base, ola = ae.cargar_ola(anio)
     d = ola["datos"].copy()
     d.columns = [c.upper() for c in d.columns]
+    for nuevo, viejo in ALIAS_DEMOGRAFIA.get(anio, {}).items():          # ACTUALIDAD_EPC: los mismos nombres que en 2025
+        if nuevo not in d.columns and viejo in d.columns:
+            d[nuevo] = d[viejo]
     cat = json.loads((po.SALIDA_2025 / "catalogo.json").read_text(encoding="utf-8"))["dentro"]
     inv = pd.read_csv(ae.INVENTARIO)
-    inv = inv[(inv.estado == "ok") & (inv.anio == 2025)].set_index("variable").codigo
+    inv = inv[(inv.estado == "ok") & (inv.anio == anio)].set_index("variable").codigo
     perfil = []
     for f in cat:
-        if 2025 not in f["anios"]:
+        if anio not in f["anios"]:
             continue
         base_v = po.GALAN[f["variable"]][0] if f["variable"] in po.GALAN else f["variable"]
         c = str(inv[base_v]).upper()
