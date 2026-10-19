@@ -475,6 +475,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       error 6,6 contra 5,5 de no distinguir grupos, y solo el estrato en la dirección correcta. En Galán, el error medio queda en 6,6
       (la regla pedía menos que el 4,5 de la EPC 2025). Sin opiniones de gobierno aciertan la aprobación de Guarumo (54,9 contra 53,3);
       con ellas, la imagen de Global CB (46,9 contra 44,3).
+    - **Que no diluyan la encuesta: ni la instrucción ni la calibración (19/10, USD 0,193, `NO_DILUIR_RESULTS.md`).** Las dos
+      mejoran la primera vuelta (2,37 y 1,84 contra 3,49) y empeoran la segunda vuelta en Bogotá (15,2 y 7,5 contra 3,4). Lo
+      importante: sin instrucción, con solo la encuesta nacional de Guarumo, los agentes dan a Cepeda 50,2 en Bogotá (real 53,6):
+      corrigen la encuesta del país (46,1) hacia la ciudad y aciertan el ganador. Le ganan a copiar la encuesta, pero apenas a decir
+      50 % (3,4 contra 3,6).
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
