@@ -76,7 +76,10 @@ preguntas de gobierno, los agentes se equivocan 8,7 y la persistencia 7,4.
 1. **El acierto con Galán 2025 parece un caso, no una capacidad.**
    - Con López (2022 → 2023), la opinión casi no se movió y los agentes la bajaron 8 puntos sin razón.
    - Cuando llegó Galán (2023 → 2024), la opinión subió 11 puntos y los agentes no lo vieron: repitieron el nivel de López.
-   - En 2025 los agentes bajaron a Galán y la opinión también bajó. Coincide con su tendencia a bajar al alcalde, más que con
+   - En 2025 los agentes bajaron a Galán y la opinión también bajó.
+   - **Corrección (20/10, `EXPECTED_PARROT_RESULTS.md`, no pre-registrada):** el panel de 200 de 2024 calificaba bien a Galán en
+     31,5 %, no en 42,3 % como toda la EPC 2024. Los agentes partían de ahí: su «acierto» de 2025 es sobre todo azar de la
+     muestra de 200. Repetir el dato de ese mismo panel habría tenido un error de 5,1, no de 16. Coincide con su tendencia a bajar al alcalde, más que con
      una lectura del cambio.
 2. **Los agentes tienden a castigar al alcalde de turno:** lo bajaron en 2023 y en 2025, y no lo subieron cuando subió. En 2025
    acertaron porque la opinión bajó.

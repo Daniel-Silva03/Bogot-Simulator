@@ -50,6 +50,9 @@ esta línea: no se agrega más contexto ni se agranda el panel.
    sin contexto, dijeron 29 (3 de error).
    - En esa pregunta los agentes vieron la caída; en las demás no le ganan a la persistencia con claridad.
    - Es un solo caso, pero es justo el que más le importa al jefe de Daniel.
+   - **Corrección (20/10, `EXPECTED_PARROT_RESULTS.md`, no pre-registrada):** el panel de 200 de 2024 calificaba bien a Galán en
+     31,5 %, no en 42,3 % como toda la EPC 2024. Los agentes partían de ahí: su «acierto» de 2025 es sobre todo azar de la
+     muestra de 200. Repetir el dato de ese mismo panel habría tenido un error de 5,1, no de 16.
 2. **El contexto mejora poco a los agentes** (7,97 → 7,56) **y no corrige su sesgo,** que sube a +4,0.
    - Siguen altos en transparencia, respuesta y participación, que cayeron a la mitad en 2025. Parte de esa caída puede ser del
      cambio de cuestionario.

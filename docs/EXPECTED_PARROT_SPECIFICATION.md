@@ -116,3 +116,6 @@ empresas, con modelos del mismo nivel, dan lo mismo.
 El primer intento se cayó en la primera tanda de 50 agentes de A: con los modelos reales, EDSL no trae la columna de costo que
 usaba el código para el tope. **No se guardó ninguna respuesta.** Se gastó menos de un centavo. El tope ahora se mide con lo que
 OpenRouter dice que gastó nuestra clave, antes y después de cada tanda (DI-EP4). Nada más cambia.
+
+El segundo intento también se cayó sin gasto: a EDSL le faltaba el paquete `openai`, que usa para hablar con OpenRouter, y las
+llamadas no salieron. Se instaló en `venv_edsl` (`pip install openai`), se probó con un agente y se corrió.

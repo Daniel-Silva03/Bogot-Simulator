@@ -572,6 +572,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
   - **Expected Parrot (sugerencia del jefe de Daniel, 20/10).** Pre-registrado (`EXPECTED_PARROT_SPECIFICATION.md`): los mismos
     perfiles como agentes de EDSL, en local con nuestra clave. A: ¿da lo mismo que la página? B: Galán 2025 con perfiles
     de 2024 y cuatro modelos baratos (enmienda 1: luna, Haiku, Gemini Flash Lite, DeepSeek). Unos USD 0,20, tope 0,50.
+    - **Hecho (USD 0,355, `EXPECTED_PARROT_RESULTS.md`):** EDSL da lo mismo que la página y ningún modelo es mejor que el
+      nuestro. **Hallazgo no pre-registrado:** el panel de 200 de 2024 calificaba bien a Galán en 31,5 % (toda la EPC: 42,3):
+      el «acierto» de 2025 es sobre todo azar de la muestra. La mejora a la vista es de muestra (más agentes o ajustar el
+      panel a su respuesta anterior), no de modelo. EDSL necesita `openai` en `venv_edsl`.
   - **Enfoque:** Daniel evalúa centrar lo que entrega en la percepción política (un monitor: lo medido, la prensa con
     ficha, los agentes para lo nuevo y la prueba de diciembre). Siguiente frente, después de Expected Parrot.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
