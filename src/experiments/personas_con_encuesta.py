@@ -48,7 +48,9 @@ TEMPERATURA = 1.0
 TOPE_USD = 1.0
 ESCONDIDAS = ("CON_4", "CON_5", "CON_7", "GOB_7", "MOV_6", "FIN_3")
 #: ACTUALIDAD_EPC y la Fase B: sexo (1=hombre), edad y estrato de 2023 y 2024, con los nombres de 2025 (revisado en las etiquetas del .dta)
-ALIAS_DEMOGRAFIA = {2023: {"DMO_1": "CS1", "DMO_3_1": "CS2", "DMO_4_1": "CS21"},
+#: REPLICA_ALCALDE: 2022 usa los mismos nombres que 2023 (revisado en las etiquetas el 20/10)
+ALIAS_DEMOGRAFIA = {2022: {"DMO_1": "CS1", "DMO_3_1": "CS2", "DMO_4_1": "CS21"},
+                    2023: {"DMO_1": "CS1", "DMO_3_1": "CS2", "DMO_4_1": "CS21"},
                     2024: {"DMO_1": "SEXO", "DMO_3_1": "CS2", "DMO_4_1": "CS2_1"}}
 PAGINA_ERROR = 12.2                                          # §2: el error de la página en estas 6
 LOCALIDADES = {1: "Usaquén", 2: "Chapinero", 3: "Santa Fe", 4: "San Cristóbal", 5: "Usme", 6: "Tunjuelito", 7: "Bosa",

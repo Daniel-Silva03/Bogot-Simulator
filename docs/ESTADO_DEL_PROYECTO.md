@@ -546,6 +546,10 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
         contra 8,0 sin él y 9,0 de la persistencia. Pero la ventaja depende de uno o dos casos.
       - El caso que decide es la gestión de Galán en 2025: los agentes dijeron 29 (real 26,4) y la persistencia, 42.
       - Línea cerrada, como dice el plan.
+  - **Plan v4 (`PLAN_SIGUIENTE_PREDICTOR_BOGOTA_V4.md`, 20/10).** Daniel eligió el Paso 1; el Paso 3 (texto del rango) no se hace.
+    - **Paso 1 pre-registrado (`REPLICA_ALCALDE_SPECIFICATION.md`):** ¿se repite el acierto con Galán? 15 objetivos de gobierno en
+      tres transiciones (2022 → 2023 → 2024 → 2025), con la gestión del alcalde en las tres. En el conjunto completo ya se sabe
+      que no (Fase B). Falta correrlo: 400 llamadas, unos USD 0,20.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
