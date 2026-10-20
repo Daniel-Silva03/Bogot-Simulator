@@ -559,6 +559,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       1 punto a la persistencia, también sin el alcalde. Unos USD 0,30.
     - **Paso 3 pre-registrado (`ALCALDE_SIN_NOMBRE_SPECIFICATION.md`):** diagnóstico, la pregunta del alcalde con y sin el
       nombre de Galán: ¿pesimismo o valor central? Unos USD 0,05.
+    - **Paso 2 congelado (20/10, USD 0,254):** `config/prospectiva_epc2026/`. Se evalúa cuando salga la EPC 2026, con
+      `prospectiva_epc2026.evaluar`, después de revisar qué preguntas siguen siendo comparables (§5 del pre-registro).
+    - **Paso 3 hecho (USD 0,043, `ALCALDE_SIN_NOMBRE_RESULTS.md`):** ni pesimismo ni valor central. Con la misma pregunta
+      en el perfil, los agentes repiten la respuesta de su persona (seguimiento 72), y el nombre mueve 2 puntos. La cifra
+      de Galán en la página (27 %) es casi la de la EPC 2025 (26,4 %).
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
