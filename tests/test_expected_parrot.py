@@ -35,11 +35,11 @@ def test_la_lectura():
     res = {"A_luna_2025": {"panel": 2025, "modelo": "m", "respuestas": ["Buena gestión", "Mala gestión", "Mala gestión",
                                                                        "Regular gestión"], "costo_usd": 0},
            "B_luna_2024": {"panel": 2024, "modelo": "m", "respuestas": ["Buena gestión"] + ["Mala gestión"] * 3, "costo_usd": 0},
-           "B_sonnet_2024": {"panel": 2024, "modelo": "m", "respuestas": ["Buena gestión"] * 4, "costo_usd": 0}}
+           "B_haiku_2024": {"panel": 2024, "modelo": "m", "respuestas": ["Buena gestión"] * 4, "costo_usd": 0}}
     out = ep.leer(res, d)
     assert out["corridas"]["A_luna_2025"]["cifra"] == 25.0 and out["lectura"]["RA_equivalente"]
-    assert out["corridas"]["B_luna_2024"]["ve_la_caida"] and not out["corridas"]["B_sonnet_2024"]["ve_la_caida"]
-    assert out["lectura"]["RB_ven_la_caida"] == 1 and out["lectura"]["RC_modelo_fuerte_mejor_que_luna"] == []
+    assert out["corridas"]["B_luna_2024"]["ve_la_caida"] and not out["corridas"]["B_haiku_2024"]["ve_la_caida"]
+    assert out["lectura"]["RB_ven_la_caida"] == 1 and out["lectura"]["RC_otro_modelo_mejor_que_luna"] == []
 
 
 def test_el_umbral_es_el_punto_medio():

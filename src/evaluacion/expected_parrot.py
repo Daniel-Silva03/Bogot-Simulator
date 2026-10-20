@@ -1,7 +1,7 @@
 """
 ¿Pasa lo mismo con Expected Parrot? (`docs/EXPECTED_PARROT_SPECIFICATION.md`). Los mismos perfiles de la EPC, como agentes de EDSL,
 con la pregunta de la gestión de Galán: A, equivalencia con la página (perfiles 2025); B, la caída de 2025 con perfiles de 2024 y
-tres modelos.
+cuatro modelos baratos (enmienda 1).
 
 EDSL va en su propio ambiente (`venv_edsl`, `pip install edsl==1.0.9`), así que esto corre en tres pasos:
     python src/evaluacion/expected_parrot.py exportar                   # con el venv del proyecto
@@ -33,7 +33,7 @@ from typing import Optional
 
 RAIZ = Path(__file__).resolve().parents[2]
 SALIDA = RAIZ / "data" / "processed" / "benchmark" / "expected_parrot"
-TOPE_USD = 2.0
+TOPE_USD = 0.5                                                    # enmienda 1: solo modelos baratos
 TANDA = 50
 OPCIONES = ["Muy mala gestión", "Mala gestión", "Regular gestión", "Buena gestión", "Muy buena gestión"]
 FAVORABLES = {"Buena gestión", "Muy buena gestión"}
@@ -42,8 +42,9 @@ NOTA_B = ("Lo que sabes de esta persona es de 2024. Esta pregunta es de finales 
 CORRIDAS = [  # (nombre, panel, modelo)
     ("A_luna_2025", 2025, "openai/gpt-6-luna"),
     ("B_luna_2024", 2024, "openai/gpt-6-luna"),
-    ("B_sonnet_2024", 2024, "anthropic/claude-sonnet-5.5"),
-    ("B_gemini_2024", 2024, "google/gemini-4-argon"),
+    ("B_haiku_2024", 2024, "anthropic/claude-haiku-5.5"),       # enmienda 1: modelos baratos de otras empresas
+    ("B_gemini_2024", 2024, "google/gemini-3.5-flash-lite"),
+    ("B_deepseek_2024", 2024, "deepseek/deepseek-v4.1-flash"),
 ]
 #: Las referencias, ya medidas antes de este pre-registro
 PAGINA_2025 = 27.21          # ALCALDE_SIN_NOMBRE, condición A
@@ -140,7 +141,7 @@ def leer(res: dict, d: dict) -> dict:
     b = [v for k, v in out.items() if k.startswith("B_") and "ve_la_caida" in v]
     luna = out.get("B_luna_2024", {}).get("error")
     lectura["RB_ven_la_caida"] = sum(v["ve_la_caida"] for v in b)
-    lectura["RC_modelo_fuerte_mejor_que_luna"] = [k for k, v in out.items() if k in ("B_sonnet_2024", "B_gemini_2024")
+    lectura["RC_otro_modelo_mejor_que_luna"] = [k for k, v in out.items() if k.startswith("B_") and k != "B_luna_2024"
                                                   and luna is not None and v.get("error") is not None
                                                   and v["error"] <= luna - 3]
     lectura["predicciones"] = {"PX1": lectura["RA_equivalente"], "PX2": lectura["RB_ven_la_caida"] >= 2}

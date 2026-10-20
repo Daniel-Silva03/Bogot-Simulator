@@ -91,3 +91,22 @@ una opción válida.
   - `evaluar`, con el venv del proyecto.
 
   Las pruebas están en `tests/test_expected_parrot.py`. Resultados en `EXPECTED_PARROT_RESULTS.md`.
+
+## Enmienda 1 (20 de octubre de 2026, antes de correr nada): solo modelos baratos
+
+Daniel pidió usar modelos baratos. **Se cambia antes de llamar a ningún modelo:**
+- **En B, los modelos fuertes** (Claude Sonnet 5.5 y Gemini 4 Argon) **se reemplazan por tres baratos de otras empresas:**
+
+  | Modelo | Empresa | Entrada / salida, USD por millón de tokens |
+  |---|---|---|
+  | `anthropic/claude-haiku-5.5` | Anthropic | 0,10 / 0,50 (igual que el nuestro) |
+  | `google/gemini-3.5-flash-lite` | Google | 0,30 / 2,50 |
+  | `deepseek/deepseek-v4.1-flash` | DeepSeek | 0,03 / 0,12 |
+
+  B queda con 4 corridas: la nuestra y estas tres.
+- **RC** pasa a ser: otro modelo es mejor que el nuestro si su error en B es al menos 3 puntos menor que el de B-luna.
+- **PX2** queda igual: al menos 2 de los modelos ven la caída (ahora de 4).
+- **Gasto:** 1.000 llamadas, **unos USD 0,20, con tope de USD 0,50.**
+
+**Lo que se pierde:** la prueba ya no responde si un modelo **más capaz** ve lo que el nuestro no ve. Solo responde si otras
+empresas, con modelos del mismo nivel, dan lo mismo.

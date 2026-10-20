@@ -571,7 +571,7 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       persistencia en todo, salvo el alcalde (31 contra 26,4: espera una recuperación) y el rumbo (45 contra 48).
   - **Expected Parrot (sugerencia del jefe de Daniel, 20/10).** Pre-registrado (`EXPECTED_PARROT_SPECIFICATION.md`): los mismos
     perfiles como agentes de EDSL, en local con nuestra clave. A: ¿da lo mismo que la página? B: Galán 2025 con perfiles
-    de 2024 y tres modelos (luna, Claude Sonnet 5.5, Gemini 4 Argon). Unos USD 1,5, tope 2. EDSL va en `venv_edsl`.
+    de 2024 y cuatro modelos baratos (enmienda 1: luna, Haiku, Gemini Flash Lite, DeepSeek). Unos USD 0,20, tope 0,50.
   - **Enfoque:** Daniel evalúa centrar lo que entrega en la percepción política (un monitor: lo medido, la prensa con
     ficha, los agentes para lo nuevo y la prueba de diciembre). Siguiente frente, después de Expected Parrot.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
