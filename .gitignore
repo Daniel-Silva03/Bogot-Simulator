@@ -15,6 +15,7 @@
 # --- entornos y caché de Python ---
 venv/
 .venv/
+venv_edsl/
 env/
 ENV/
 __pycache__/

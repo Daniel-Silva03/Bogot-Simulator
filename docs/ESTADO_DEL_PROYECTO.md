@@ -569,6 +569,11 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     verificados, sin DANE ni CNC, sin las afirmaciones de los roles que los datos desmienten. Unos USD 0,02.
     - **Congelado (20/10, USD 0,006):** `config/prospectiva_epc2026/panel_expertos.csv`. El panel queda cerca de la
       persistencia en todo, salvo el alcalde (31 contra 26,4: espera una recuperación) y el rumbo (45 contra 48).
+  - **Expected Parrot (sugerencia del jefe de Daniel, 20/10).** Pre-registrado (`EXPECTED_PARROT_SPECIFICATION.md`): los mismos
+    perfiles como agentes de EDSL, en local con nuestra clave. A: ¿da lo mismo que la página? B: Galán 2025 con perfiles
+    de 2024 y tres modelos (luna, Claude Sonnet 5.5, Gemini 4 Argon). Unos USD 1,5, tope 2. EDSL va en `venv_edsl`.
+  - **Enfoque:** Daniel evalúa centrar lo que entrega en la percepción política (un monitor: lo medido, la prensa con
+    ficha, los agentes para lo nuevo y la prueba de diciembre). Siguiente frente, después de Expected Parrot.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
