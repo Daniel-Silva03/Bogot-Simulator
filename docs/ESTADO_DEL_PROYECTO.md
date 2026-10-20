@@ -579,6 +579,9 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
   - **Parrot con toda la muestra, pre-registrado (`PARROT_MUESTRA_COMPLETA_SPECIFICATION.md`):** cada persona de la EPC es un
     agente (unas 1.500 por año), solo luna. La gestión del alcalde en 2022 → 2023 → 2024 → 2025, y Galán 2026 congelado.
     ¿Aportan los agentes sin el azar del panel de 200? Unos USD 0,40, tope 1.
+    - **Corrido, parcial (USD 1,03, se llegó al tope; `PARROT_MUESTRA_COMPLETA_RESULTS.md`):** los agentes no aportan. Pierden
+      con repetir el dato en López 2023 (4,9 contra 2,0) y en la llegada de Galán (22 contra 11). Con toda la muestra bajan
+      al alcalde 7 a 11 puntos siempre. T2 quedó con 500 de 1.521 y F (Galán 2026) no corrió: falta un visto bueno.
   - **Enfoque:** Daniel evalúa centrar lo que entrega en la percepción política (un monitor: lo medido, la prensa con
     ficha, los agentes para lo nuevo y la prueba de diciembre). Siguiente frente, después de Expected Parrot.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
