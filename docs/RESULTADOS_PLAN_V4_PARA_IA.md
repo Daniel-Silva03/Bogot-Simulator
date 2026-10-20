@@ -138,6 +138,10 @@ alcalde y del Concejo empeoró a los agentes:
 2. **Los agentes tienden a bajarle la nota al alcalde de turno.** No es un sesgo hacia arriba en todo el gobierno: con el alcalde,
    el error fue hacia abajo en 2 de 3 años. Hacia arriba están en transparencia, respuesta y participación, y en la corrupción (que, al ser
    negativa, es un sesgo pesimista).
+   - **Corrección (20/10, después del plan v5):** «castigar al alcalde» es una lectura de más. Las tres cifras de los agentes
+     (25, 31 y 29) se quedan cerca del 30 % mientras lo real va de 26 a 42: es tan compatible con un valor central como con
+     pesimismo. Se prueba en `ALCALDE_SIN_NOMBRE_SPECIFICATION.md`.
+
 3. **La corrupción da el error más grande, pero no es estable:** 25 puntos de más en 2023, 8 de más en 2024 y 6 de menos en 2025.
 4. **Dar más información de la misma persona no ayuda:** su calificación del alcalde empeoró rumbo y corrupción.
 5. **Con lo que hay, en gobierno, repetir el último dato acierta más que los agentes,** igual que en el conjunto completo. Y la

@@ -80,6 +80,9 @@ preguntas de gobierno, los agentes se equivocan 8,7 y la persistencia 7,4.
      una lectura del cambio.
 2. **Los agentes tienden a castigar al alcalde de turno:** lo bajaron en 2023 y en 2025, y no lo subieron cuando subió. En 2025
    acertaron porque la opinión bajó.
+   - **Corrección (20/10, después del plan v5):** «castigar al alcalde» es una lectura de más. Las tres cifras de los agentes
+     (25, 31 y 29) se quedan cerca del 30 % mientras lo real va de 26 a 42: es tan compatible con un valor central como con
+     pesimismo. Se prueba en `ALCALDE_SIN_NOMBRE_SPECIFICATION.md`.
 3. **La corrupción es su error más grande:** dijeron 61 en 2023, cuando lo real fue 36. Ven más corrupción de la que la gente
    reporta.
 4. **Comparación declarada en §5 (rumbo y corrupción 2023 → 2024):** con el perfil de la Fase B, sin el alcalde y el Concejo, los

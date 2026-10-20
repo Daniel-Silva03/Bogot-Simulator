@@ -553,6 +553,12 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
     - **Paso 1 hecho (USD 0,167, `REPLICA_ALCALDE_RESULTS.md`): no se repite.** En los 15, agentes 8,7 contra 7,4 de la
       persistencia; ganan solo en 2023 → 2024. En el alcalde ganan 1 de 3 (Galán 2025); con López los bajaron sin razón y con
       la llegada de Galán no vieron la subida. La página no cambia. Queda la prueba hacia adelante con la EPC 2026.
+  - **Plan v5 (`PLAN_SIGUIENTE_PREDICTOR_BOGOTA_V5.md`, 20/10).** No corregir el sesgo todavía; congelar la prueba hacia adelante.
+    - **Paso 2 pre-registrado (`PROSPECTIVA_EPC2026_SPECIFICATION.md`):** las predicciones de los agentes (EPC 2025) para 7
+      preguntas de gobierno de la EPC 2026, congeladas en `config/prospectiva_epc2026/` antes de que salga. Ganan si mejoran
+      1 punto a la persistencia, también sin el alcalde. Unos USD 0,30.
+    - **Paso 3 pre-registrado (`ALCALDE_SIN_NOMBRE_SPECIFICATION.md`):** diagnóstico, la pregunta del alcalde con y sin el
+      nombre de Galán: ¿pesimismo o valor central? Unos USD 0,05.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
     eligió Luna: ±23,9, ±22,9 o ±21,7. En las 129, la página decide en 13 en vez de 11, y acierta 12. Que las elegidas
     coincidan no predice el error (Spearman 0,00). Para decidir más haría falta una estimación más precisa.
