@@ -576,6 +576,9 @@ las 21 del lote 5, error 9,9 contra 13,6. **En la página desde el 5/10 (DI-CO23
       nuestro. **Hallazgo no pre-registrado:** el panel de 200 de 2024 calificaba bien a Galán en 31,5 % (toda la EPC: 42,3):
       el «acierto» de 2025 es sobre todo azar de la muestra. La mejora a la vista es de muestra (más agentes o ajustar el
       panel a su respuesta anterior), no de modelo. EDSL necesita `openai` en `venv_edsl`.
+  - **Parrot con toda la muestra, pre-registrado (`PARROT_MUESTRA_COMPLETA_SPECIFICATION.md`):** cada persona de la EPC es un
+    agente (unas 1.500 por año), solo luna. La gestión del alcalde en 2022 → 2023 → 2024 → 2025, y Galán 2026 congelado.
+    ¿Aportan los agentes sin el azar del panel de 200? Unos USD 0,40, tope 1.
   - **Enfoque:** Daniel evalúa centrar lo que entrega en la percepción política (un monitor: lo medido, la prensa con
     ficha, los agentes para lo nuevo y la prueba de diciembre). Siguiente frente, después de Expected Parrot.
   - **El rango variable pasó por poco (8/10, `RANGO_VARIABLE_RESULTS.md`, USD 0).** El rango depende de cuántas preguntas
