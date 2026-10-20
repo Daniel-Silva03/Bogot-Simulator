@@ -18,7 +18,8 @@ DI-EP2. **El agente de EDSL** lleva el perfil completo de la página como su ún
     cada agente elige una opción, sin comentario.
 DI-EP3. **La cifra** es el porcentaje ponderado (peso de la encuesta) de «Buena gestión» o «Muy buena gestión» entre los agentes que
     eligieron una opción válida.
-DI-EP4. **El tope** se revisa cada 50 agentes, con el costo que reporta EDSL; si se llega a él, la corrida queda incompleta y no
+DI-EP4. **El tope** se revisa cada 50 agentes, con lo que OpenRouter dice que gastó nuestra clave (EDSL no siempre conoce el
+    precio de los modelos de OpenRouter); si se llega a él, la corrida queda incompleta y no
     se empieza otra.
 """
 
@@ -96,6 +97,7 @@ def correr(simulado: bool) -> int:
         m = Model("test", service_name="test", canned_response="Buena gestión") if simulado else Model(modelo, service_name="open_router", temperature=1.0)
         perfiles = d["paneles"][str(anio)]
         resp, costo, ejemplo = [], 0.0, None
+        inicio = 0.0 if simulado else usado()
         for i in range(0, len(perfiles), TANDA):                                              # DI-EP4
             if not simulado and gasto + costo >= TOPE_USD:
                 print(f"Se llegó al tope de USD {TOPE_USD} en {nombre}: queda incompleta.")
@@ -105,7 +107,7 @@ def correr(simulado: bool) -> int:
             r = q.by(agentes).by(m).run(disable_remote_inference=True, disable_remote_cache=True, cache=False, verbose=False,
                                         print_exceptions=False)
             resp += r.select("answer.alcalde").to_list()
-            costo += float(sum(c or 0 for c in r.select("raw_model_response.alcalde_cost").to_list()))
+            costo = 0.0 if simulado else usado() - inicio                                    # DI-EP4
             ejemplo = ejemplo or (r.select("prompt.alcalde_system_prompt").to_list()[0],
                                   r.select("prompt.alcalde_user_prompt").to_list()[0])
         costo = None if simulado else costo
@@ -116,6 +118,15 @@ def correr(simulado: bool) -> int:
         print(f"{nombre}: {sum(x is not None for x in resp)} de {len(resp)} respondieron; USD {costo}", flush=True)
     print(f"gasto total USD {round(gasto, 4)}")
     return 0
+
+
+def usado() -> float:
+    """DI-EP4: lo gastado con nuestra clave según OpenRouter (USD). Es una consulta sin costo."""
+    import urllib.request
+    req = urllib.request.Request("https://openrouter.ai/api/v1/key",
+                                 headers={"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"})
+    with urllib.request.urlopen(req, timeout=30) as f:
+        return float(json.load(f)["data"]["usage"])
 
 
 def cifra(respuestas: list, pesos: list[float]) -> Optional[float]:

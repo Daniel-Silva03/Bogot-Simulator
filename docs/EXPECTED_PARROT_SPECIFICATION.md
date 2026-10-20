@@ -110,3 +110,9 @@ Daniel pidió usar modelos baratos. **Se cambia antes de llamar a ningún modelo
 
 **Lo que se pierde:** la prueba ya no responde si un modelo **más capaz** ve lo que el nuestro no ve. Solo responde si otras
 empresas, con modelos del mismo nivel, dan lo mismo.
+
+## Nota de ejecución (20 de octubre de 2026, sin datos vistos)
+
+El primer intento se cayó en la primera tanda de 50 agentes de A: con los modelos reales, EDSL no trae la columna de costo que
+usaba el código para el tope. **No se guardó ninguna respuesta.** Se gastó menos de un centavo. El tope ahora se mide con lo que
+OpenRouter dice que gastó nuestra clave, antes y después de cada tanda (DI-EP4). Nada más cambia.
