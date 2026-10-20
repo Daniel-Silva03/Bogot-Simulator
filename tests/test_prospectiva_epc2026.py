@@ -59,6 +59,24 @@ def test_las_medidas_del_diagnostico():
     assert r["lectura"]["siguen_su_respuesta"]["B"] == "la siguen poco" and r["lectura"]["el_nombre_mueve"]
 
 
+def test_el_panel_combina_sin_extremos():
+    from src.evaluacion import panel_expertos_epc2026 as pe
+    assert pe.combinar([10, 20, 30, 40, 90]) == 30.0
+    assert pe.combinar([10, None, 30, 40, None]) == 30.0 and pe.combinar([10, None, None, 40, None]) is None
+
+
+def test_el_panel_solo_ve_datos_publicos_verificados():
+    from src.consulta import reformular as rf
+    from src.evaluacion import panel_expertos_epc2026 as pe
+    pre = pe.prensa()
+    assert len(pre) == 17 and not any("CNC" in x or "EPC Bogotá Cómo Vamos, 2024" in x for x in pre)
+    cat = rf.cargar_catalogo(rf.CATALOGO_2025)
+    d = pe.datos("GG3_GALAN", cat["GG3_GALAN"], pe.series_epc()["GG3_GALAN"], pre)
+    assert "- 2014:" in d and "- 2025:" in d and "Claudia López" in d and "Guarumo" in d
+    d2 = pe.datos("AG1", cat["AG1"], pe.series_epc()["AG1"], pre)
+    assert "- 2022:" in d2 and "Guarumo" not in d2
+
+
 if __name__ == "__main__":
     pruebas = [v for k, v in list(globals().items()) if k.startswith("test_")]
     print(f"Prospectiva EPC 2026 y alcalde sin nombre — {len(pruebas)} pruebas\n")
